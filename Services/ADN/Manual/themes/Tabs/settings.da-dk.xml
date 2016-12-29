@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<settings>
+  <theme>
+    <predefined>true</predefined>
+  </theme>
+  <strings>
+    <topicSpinnerText>Indlæser...</topicSpinnerText>
+  </strings>
+  <topic>
+    <strings>
+      <notfoundText>Emne ikke fundet</notfoundText>
+      <notfoundTitle>Emne ikke fundet</notfoundTitle>
+    </strings>
+    <collapsibleSections>
+      <expandAll>
+        <label>Vis alle</label>
+      </expandAll>
+      <collapseAll>
+        <label>Skjul alle</label>
+      </collapseAll>
+    </collapsibleSections>
+  </topic>
+  <toc>
+    <label>Indhold</label>
+  </toc>
+  <index>
+    <label>Stikord</label>
+    <strings>
+      <notfound>Der blev ikke fundet nogle stikord.</notfound>
+    </strings>
+  </index>
+  <search>
+    <label>Søg</label>
+    <strings>
+      <helpMessage>Du kan bruge logiske operatorer i søgestregen: #{and}, #{or}, #{not}. Eksempler: fodbold #{or} hockey, sport #{and} #{not} baseball</helpMessage>
+      <loading>Indlæser søgemaskine...</loading>
+      <loaderror>Fejl: Kunne ikke indlæse søgemaskine.</loaderror>
+      <disabled>Søg er deaktiveret.</disabled>
+      <notfound>Ingen emner fundet.</notfound>
+      <correcting>Mente du: #{query}</correcting>
+    </strings>
+    <buttons>
+      <go>
+        <label>Søg</label>
+      </go>
+      <help>
+        <label>Hjælp</label>
+      </help>
+      <highlight>
+        <label>Marker søgeord i tekst</label>
+      </highlight>
+    </buttons>
+    <options>
+      <operators>
+        <and>OG</and>
+        <or>ELLER</or>
+        <not>IKKE</not>
+      </operators>
+    </options>
+  </search>
+  <context>
+    <strings>
+      <title>Emner for "#{key}": "#{value}"</title>
+      <notfound>Ingen emner fundet.</notfound>
+      <notsupported>Nøglen "#{key}" er ikke understøttet.</notsupported>
+    </strings>
+  </context>
+  <buttons>
+    <btnPoweredBy>
+      <label>Leveret&amp;nbsp;af&amp;nbsp;Doc-To-Help&amp;nbsp;®</label>
+    </btnPoweredBy>
+    <btnGotoPrev>
+      <label>Forrige emne</label>
+    </btnGotoPrev>
+    <btnGotoNext>
+      <label>Næste emne</label>
+    </btnGotoNext>
+    <btnGotoHome>
+      <label>Hjem</label>
+    </btnGotoHome>
+    <btnPrint>
+      <label>Udskriv emne</label>
+    </btnPrint>
+    <btnEmail>
+      <label>E-mail</label>
+    </btnEmail>
+  </buttons>
+</settings>

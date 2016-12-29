@@ -89,6 +89,21 @@ class ilAuthContainerMDB2 extends Auth_Container_MDB2
 	 */
 	function fetchData($username, $password, $isChallengeResponse = false)
 	{
+		// adn-patch start
+		// Check online test access code
+		include_once("./Services/ADN/EP/classes/class.adnAssignment.php");
+
+		if (adnAssignment::isValidAccessCode(
+			ilUtil::stripSlashes($_POST['username']),
+			ilUtil::stripSlashes($_POST['password'])))
+		{
+			$_SESSION["adn_online_test"] = true;
+			$_SESSION["adn_test_user"] = ilUtil::stripSlashes($_POST['username']);
+			$_SESSION["adn_access_code"] = ilUtil::stripSlashes($_POST['password']);
+			return true;
+		}
+		// adn-patch end
+
 		$usr_id = ilObjUser::_lookupId($username);
 		$auth_mode = ilObjUser::_lookupAuthMode($usr_id);
 		$auth_id = ilAuthUtils::_getAuthMode($auth_mode);

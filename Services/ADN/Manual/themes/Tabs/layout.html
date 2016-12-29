@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<link rel="stylesheet" type="text/css" media="all" href="theme.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="screen.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="splitter.css" />
+	<link rel="stylesheet" type="text/css" media="print" href="print.css" />
+	<link rel="stylesheet" type="text/css" media="all" href="topic.css" class="apply-to-frame" />
+	<link rel="stylesheet" type="text/css" media="all" href="custom-icons.css" class="apply-to-frame" />
+	<link rel="stylesheet" type="text/css" media="all" href="user.css" class="apply-to-frame" />
+	<script type="text/javascript" src="theme.js"></script>
+	<script type="text/javascript" src="splitter.js"></script>
+	<script type="text/javascript" src="search-addons.js"></script>
+</head>
+<body>
+	<div id="pageHeader" class="abs fill-h crop ui-widget ui-state-hover">
+		<table id="pageHeaderFrame" border="0" cellpadding="0" cellspacing="0"><tr><td id="pageHeaderLogoCell">
+			<img id="pageHeaderLogo" src="images/d2h_logo_placeholder.png" alt="Logo" class="logo" />
+		</td><td id="pageHeaderTextCell">
+			<h1 id="pageHeaderText"></h1>
+		</td></tr></table>
+	</div>
+	<div id="pageMain" class="abs fill-h">
+		<div id="pageSide" class="abs fill-v"><div id="pageSideInner">
+			<div id="pageSideTabs" class="abs fill-h fill-v">
+				<ul id="pageSideTabsHeader">
+					<li><a id="tocLabel" href="#tocTab">Contents</a></li>
+					<li><a id="indexLabel" href="#indexTab">Index</a></li>
+					<li><a id="searchLabel" href="#searchTab">Search</a></li>
+				</ul>
+				<div id="pageSideTabsContent" class="abs">
+					<div id="tocTab" class="abs fill-v fill-h scroll"><ul id="toc"></ul></div>
+					<div id="indexTab" class="abs fill-v fill-h">
+						<div id="indexFilter" class="abs fill-h">
+							<div id="indexFilterInputBlock">
+								<input type="text" id="indexFilterInput" title="Filter" class="ui-widget-content" />
+							</div>
+						</div>
+						<ul id="index" class="abs fill-h scroll" data-input="#indexFilterInput"></ul>
+					</div>
+					<div id="searchTab" class="abs fill-v fill-h">
+						<div id="searchFilter" class="abs fill-h">
+							<div id="searchFilterInputBlock">
+								<input type="text" id="searchFilterInput" class="ui-widget-content" />
+							</div>
+							<img src="images/empty.gif" alt="Search" title="Search" id="searchGoButton" class="ui-icon ui-icon-search" />
+							<img src="images/empty.gif" alt="Help" title="Help" id="searchHelpButton" class="ui-icon ui-icon-help" />
+							<img src="images/empty.gif" alt="Highlight" title="Highlight search hits" id="searchHighlightButton" class="ui-icon ui-icon-lightbulb" />
+							<div id="searchHelpMessage" style="display:none;">You can use logical operations in the search string: AND, OR, NOT. Examples: football OR hockey, sports AND NOT baseball</div>
+						</div>
+						<ul id="search" class="abs fill-h scroll" data-input="#searchFilterInput"></ul>
+					</div>
+				</div>
+			</div>
+		</div></div>
+		<div id="pageSplitter" class="abs fill-v ui-state-default">
+			<span id="pageSplitterIcon" class="ui-icon ui-icon-grip-dotted-vertical"></span>
+			<div id="pageSplitterButton" class="abs ui-button-icon-only ui-corner-right ui-state-default">
+				<span id="pageSplitterButtonHide" class="ui-icon ui-icon-triangle-1-w"></span>
+				<span id="pageSplitterButtonShow" class="ui-icon ui-icon-triangle-1-e" style="display:none;"></span>
+			</div>
+		</div>
+		<div id="pageContent" class="content abs fill-v"><div id="pageContentInner">
+			<div id="topBar" class="ui-widget ui-widget-header ui-corner-all" style="text-align: right;">
+				<span class="buttonset">
+					<button id="btnGotoPrev">Previous</button>
+					<button id="btnGotoNext">Next</button>
+				</span>
+				<span class="buttonset">
+					<button id="btnGotoHome">Home</button>
+				</span>
+				<span class="buttonset">
+					<button id="btnPrint">Print</button>
+					<button id="btnEmail">Email</button>
+				</span>
+				<button id="btnPoweredBy" onclick="window.open('http://www.doctohelp.com', '_blank').focus()">Created&nbsp;with&nbsp;Doc-To-Help&nbsp;®</button>
+			</div>
+			<div id="topicBlock" class="content-topic abs fill-h scroll ui-corner-all" style="display:none;">
+				<div id="topicBar">
+					<div id="breadcrumbs" style="display:none;"></div>
+					<div id="collapsibleAll" style="display:none;">
+						<span id="expandAll"><span class="icon"></span><a class="label">Expand All</a></span>
+						<span id="collapseAll"><span class="icon"></span><a class="label">Collapse All</a></span>
+					</div>
+				</div>
+				<div id="topic"></div>
+			</div>
+			<div id="topicSpinner" class="abs fill-h fill-v">
+				<div class="ui-widget-overlay"></div>
+				<div id="topicSpinnerMessage" class="ui-corner-all ui-widget ui-widget-content spinner abs">
+					<img src="images/spinner.gif" alt="Loading..." width="32" height="32" />
+					<span id="topicSpinnerText">Loading...</span>
+				</div>
+			</div>
+		</div></div>
+	</div>
+</body>
+</html>

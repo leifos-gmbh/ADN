@@ -1,0 +1,30 @@
+﻿.nethelp-toc, .nethelp-toc ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+.nethelp-toc ul {
+	margin-left: 15px;
+}
+.nethelp-toc li {
+	margin: 1px 0;
+}
+.nethelp-toc .inner {
+	/* fix for IE7: toc-item text is wraped to next line without this rule */
+	/* fix for IE8: toc-item icon is not clickable without this rule */
+	padding: 1px 0;
+}
+.nethelp-toc-icon {
+	float: left;
+}
+.nethelp-toc ul, .nethelp-toc li {
+	clear: both;
+}
+.nethelp-toc-text {
+	display: block;
+	margin-left: 16px;
+	cursor: pointer;
+}
+.nethelp-toc .inner-selected {
+	font-weight: bold;
+}

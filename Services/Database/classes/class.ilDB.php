@@ -2531,5 +2531,69 @@ abstract class ilDB extends PEAR
 		return $this->sub_type;
 	}
 
+	// adn-patch start
+
+	/**
+	 * Add a primary key to a table
+	 *
+	 * @param	string		table name
+	 * @param	array		fields for primary key
+	 * @param	string		key name
+	 */
+	function addForeignKey($a_name, $a_table, $a_fields, $a_ref_table, $a_ref_fields)
+	{
+		$manager = $this->db->loadModule('Manager');
+
+		// check constraint name
+		if (!$this->checkIndexName($a_name))
+		{
+			$this->raisePearError("ilDB Error: addForeignKey(".$a_table.",".$a_name.")<br />".
+				$this->error_str);
+		}
+
+
+		$fields = implode($a_fields, ",");
+		$ref_fields = implode($a_ref_fields, ",");
+		$c_name = $this->foreignKeyName($a_table, $a_name);
+
+		$q = "ALTER TABLE $a_table ".
+			" ADD CONSTRAINT $c_name FOREIGN KEY ($fields) ".
+			" REFERENCES $a_ref_table ($ref_fields) ".
+			" ON DELETE NO ACTION".
+			" ON UPDATE NO ACTION";
+		$r = $this->query($q);
+
+		return $this->handleError($r, "addForeignKey(".$a_table.")");
+	}
+
+	/**
+	 * Foreign key name
+	 *
+	 * @param
+	 * @return
+	 */
+	function foreignKeyName($a_table, $a_name)
+	{
+		return $a_table."_".$a_name;
+	}
+
+	/**
+	 * Drop foreign key
+	 *
+	 * @param
+	 * @return
+	 */
+	function dropForeignKey($a_table, $a_name)
+	{
+		$q = "ALTER TABLE $a_table DROP FOREIGN KEY ".
+			$this->foreignKeyName($a_table, $a_name);
+		$r = $this->query($q);
+
+		return $this->handleError($r, "dropForeignKey(".$a_table.")");
+	}
+
+
+	// adn-patch end
+
 } //end Class
 ?>

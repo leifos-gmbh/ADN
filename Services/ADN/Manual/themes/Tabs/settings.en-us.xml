@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<settings>
+	<theme>
+		<predefined>true</predefined>
+	</theme>
+	<strings>
+		<topicSpinnerText>Loading...</topicSpinnerText>
+	</strings>
+	<topic>
+		<strings>
+			<notfoundText>Topic not found</notfoundText>
+			<notfoundTitle>Topic not found</notfoundTitle>
+		</strings>
+		<collapsibleSections>
+			<expandAll>
+				<label>Expand All</label>
+			</expandAll>
+			<collapseAll>
+				<label>Collapse All</label>
+			</collapseAll>
+		</collapsibleSections>
+	</topic>
+	<toc>
+		<label>Contents</label>
+	</toc>
+	<index>
+		<label>Index</label>
+		<strings>
+			<notfound>No keywords found.</notfound>
+		</strings>
+	</index>
+	<search>
+		<label>Search</label>
+		<strings>
+			<helpMessage>You can use logical operations: #{and}, #{or}, #{not}. Examples: football #{or} hockey, sports #{and} #{not} baseball</helpMessage>
+			<loading>Loading search engine...</loading>
+			<loaderror>Error: Search engine failed to load.</loaderror>
+			<disabled>Search is disabled.</disabled>
+			<notfound>No topics found.</notfound>
+			<correcting>Did you mean: #{query}</correcting>
+		</strings>
+		<buttons>
+			<go>
+				<label>Search</label>
+			</go>
+			<help>
+				<label>Help</label>
+			</help>
+			<highlight>
+				<label>Highlight search hits</label>
+			</highlight>
+		</buttons>
+		<options>
+			<operators>
+				<and>AND</and>
+				<or>OR</or>
+				<not>NOT</not>
+			</operators>
+		</options>
+	</search>
+	<context>
+		<strings>
+			<title>Topics for "#{key}": "#{value}"</title>
+			<notfound>No topics found.</notfound>
+			<notsupported>The key "#{key}" is not supported.</notsupported>
+		</strings>
+	</context>
+	<buttons>
+		<btnPoweredBy>
+			<label>Created&amp;nbsp;with&amp;nbsp;Doc-To-Help&amp;nbsp;®</label>
+		</btnPoweredBy>
+		<btnGotoPrev>
+			<label>Previous</label>
+		</btnGotoPrev>
+		<btnGotoNext>
+			<label>Next</label>
+		</btnGotoNext>
+		<btnGotoHome>
+			<label>Home</label>
+		</btnGotoHome>
+		<btnPrint>
+			<label>Print</label>
+		</btnPrint>
+		<btnEmail>
+			<label>Email</label>
+		</btnEmail>
+	</buttons>
+</settings>

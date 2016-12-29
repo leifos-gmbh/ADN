@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<settings>
+	<theme>
+		<predefined>true</predefined>
+	</theme>
+	<strings>
+		<pageHeaderText></pageHeaderText>
+		<topicSpinnerText>Идет загрузка...</topicSpinnerText>
+	</strings>
+	<topic>
+		<strings>
+			<notfoundText>Документ не найден</notfoundText>
+			<notfoundTitle>Документ не найден</notfoundTitle>
+		</strings>
+		<collapsibleSections>
+			<expandAll>
+				<label>Развернуть всё</label>
+			</expandAll>
+			<collapseAll>
+				<label>Свернуть всё</label>
+			</collapseAll>
+		</collapsibleSections>
+	</topic>
+	<toc>
+		<label>Содержание</label>
+	</toc>
+	<index>
+		<label>Индекс</label>
+		<strings>
+			<notfound>Термин не найден.</notfound>
+		</strings>
+	</index>
+	<search>
+		<label>Поиск</label>
+		<strings>
+			<helpMessage>В запросе можно использовать ключевые слова: #{and}, #{or}, #{not}. Примеры: football #{or} hockey, sports #{and} #{not} baseball</helpMessage>
+			<loading>Загрузка поисковой системы...</loading>
+			<loaderror>Ошибка: не удалось загрузить поисковую систему.</loaderror>
+			<disabled>Поиск недоступен.</disabled>
+			<notfound>Не найдено ни одного документа.</notfound>
+			<correcting>Возможно, вы имели в виду: #{query}</correcting>
+		</strings>
+		<buttons>
+			<go>
+				<label>Найти</label>
+			</go>
+			<help>
+				<label>Справка</label>
+			</help>
+			<highlight>
+				<label>Выделять искомые слова в документах</label>
+			</highlight>
+		</buttons>
+    <options>
+      <operators>
+        <and>И</and>
+        <or>ИЛИ</or>
+        <not>НЕ</not>
+      </operators>
+    </options>
+  </search>
+	<context>
+		<strings>
+			<title>Документы для "#{key}": "#{value}"</title>
+			<notfound>Не найдено ни одного документа.</notfound>
+			<notsupported>Параметр "#{key}" не поддерживается.</notsupported>
+		</strings>
+	</context>
+	<buttons>
+		<btnPoweredBy>
+			<label>Создано&amp;nbsp;в&amp;nbsp;Doc-To-Help&amp;nbsp;®</label>
+		</btnPoweredBy>
+		<btnGotoPrev>
+			<label>Предыдущий документ</label>
+		</btnGotoPrev>
+		<btnGotoNext>
+			<label>Следующий документ</label>
+		</btnGotoNext>
+		<btnGotoHome>
+			<label>Главная</label>
+		</btnGotoHome>
+		<btnPrint>
+			<label>Печать</label>
+		</btnPrint>
+		<btnEmail>
+			<label>Отправить по почте</label>
+		</btnEmail>
+	</buttons>
+</settings>

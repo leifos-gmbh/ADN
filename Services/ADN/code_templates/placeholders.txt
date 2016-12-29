@@ -1,0 +1,14 @@
+Example Training Organizer:
+
+txt_class_name: training organizer
+ClassName: TrainingOrganizer
+class_name: training_organizer
+class_instance_var: training_organizer
+txt_property_name: name (first property, often name or title, " " word separated)
+property_var: name (first property, often name or title, "_" word separated)
+property_type: string
+Property: Name
+save_par: to_id (The parameter that is saved as $_GET parameter through requests)
+table_name: adn_ta_train_organ
+property_db_type: text
+

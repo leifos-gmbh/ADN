@@ -1,0 +1,65 @@
+﻿/* common styles */
+body {
+	margin: 0;
+	padding: 0;
+	font-family: Verdana,Arial,sans-serif;
+	font-size: 10pt;
+	line-height: normal;
+}
+a img {
+	border: 0 none;
+}
+a[href], a[data-ref] {
+	cursor: pointer;
+	text-decoration: none;
+}
+a[href]:hover, a[data-ref]:hover {
+	text-decoration: underline;
+}
+
+/* jQuery UI fix */
+.ui-widget {
+	font-size: 1em;
+}
+.ui-icon-empty {
+	background-position: 16px 16px;
+}
+
+/* topic */
+#topic, #topicBar {
+	padding: 5px 20px;
+}
+#topicBar {
+	padding-bottom: 0;
+}
+
+/* collapsible */
+.collapsible-header {
+	cursor: pointer;
+}
+.collapsible-header .ui-icon, .collapsible-header .custom-icon {
+	float: left;
+	clear: left;
+}
+.collapsible-highlight {
+	background-color: #efefef;
+}
+#expandAll, #collapseAll {
+	display: block;
+	float: left;
+	margin-right: 10px;
+	cursor: pointer;
+}
+#expandAll .ui-icon, #collapseAll .ui-icon,
+#expandAll .custom-icon, #collapseAll .custom-icon {
+	float: left;
+}
+
+/* frame */
+#topic .topic-frame {
+	position: absolute;
+	top: 2px;
+	bottom: 2px;
+	left: 2px;
+	right: 2px;
+}

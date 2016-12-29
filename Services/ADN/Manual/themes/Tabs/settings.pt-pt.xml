@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<settings>
+	<theme>
+		<predefined>true</predefined>
+	</theme>
+	<strings>
+		<pageHeaderText></pageHeaderText>
+		<topicSpinnerText>Carrgando...</topicSpinnerText>
+	</strings>
+	<topic>
+		<strings>
+			<notfoundText>Tópico não encontrado</notfoundText>
+			<notfoundTitle>Tópico não encontrado</notfoundTitle>
+		</strings>
+		<collapsibleSections>
+			<expandAll>
+				<label>Expandir todos</label>
+			</expandAll>
+			<collapseAll>
+				<label>Colapsar todos</label>
+			</collapseAll>
+		</collapsibleSections>
+	</topic>
+	<toc>
+		<label>Conteúdo</label>
+	</toc>
+	<index>
+		<label>Índice</label>
+		<strings>
+			<notfound>Nenhuma palavra-chave encontrada.</notfound>
+		</strings>
+	</index>
+	<search>
+		<label>Procurar</label>
+		<strings>
+			<helpMessage>Você pode usar operações lógicas no string de procura com os termos: #{and}, #{or}, #{not}. Por examplo: futebol #{or} basquete, esportes #{and} #{not} futebol.</helpMessage>
+			<loading>Carregando mecanismo de procura...</loading>
+			<loaderror>Erro: falha carregando o mecanismo de procura.</loaderror>
+			<disabled>Procura desabilitada.</disabled>
+			<notfound>Nenhum tópico encontrado.</notfound>
+			<correcting>Você quis dizer: #{query}</correcting>
+		</strings>
+		<buttons>
+			<go>
+				<label>Procurar</label>
+			</go>
+			<help>
+				<label>Ajuda</label>
+			</help>
+			<highlight>
+				<label>Destacar itens encontrados</label>
+			</highlight>
+		</buttons>
+    <options>
+      <operators>
+        <and>AND</and>
+        <or>OR</or>
+        <not>NOT</not>
+      </operators>
+    </options>
+  </search>
+	<context>
+		<strings>
+			<title>Tópicos para "#{key}": "#{value}"</title>
+			<notfound>Nenhum tópico encontrado.</notfound>
+			<notsupported>A chave "#{key}" não foi reconhecida.</notsupported>
+		</strings>
+	</context>
+	<buttons>
+		<btnPoweredBy>
+			<label>Criado&amp;nbsp;com&amp;nbsp;Doc-To-Help&amp;nbsp;®</label>
+		</btnPoweredBy>
+		<btnGotoPrev>
+			<label>Anterior</label>
+		</btnGotoPrev>
+		<btnGotoNext>
+			<label>Próximo</label>
+		</btnGotoNext>
+		<btnGotoHome>
+			<label>Inicial</label>
+		</btnGotoHome>
+		<btnPrint>
+			<label>Imprimir</label>
+		</btnPrint>
+		<btnEmail>
+			<label>Email</label>
+		</btnEmail>
+	</buttons>
+</settings>
