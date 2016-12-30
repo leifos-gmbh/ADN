@@ -347,7 +347,11 @@ class ilStartUpGUI
 		// browser does not accept cookies
 		if (isset($_GET['cookies']) && $_GET['cookies'] == 'nocookies')
 		{
+			// adn-patch start (out-commented)
+			/*
 			ilUtil::sendFailure($lng->txt("err_no_cookies"));
+			*/
+			// adn-patch end
 		}
 
 		if(strlen($page_editor_html))
@@ -790,11 +794,15 @@ class ilStartUpGUI
 		include_once 'Services/Registration/classes/class.ilRegistrationSettings.php';
 		if (ilRegistrationSettings::_lookupRegistrationType() != IL_REG_DISABLED)
 		{
+			// adn-patch start (out-commented)
+			/*
 			$rtpl->setCurrentBlock("new_registration");
 			$rtpl->setVariable("REGISTER", $lng->txt("registration"));
 			$rtpl->setVariable("CMD_REGISTER",
 				$this->ctrl->getLinkTargetByClass("ilaccountregistrationgui", ""));
 			$rtpl->parseCurrentBlock();
+			*/
+			// adn-patch end
 		}
 		// allow password assistance? Surpress option if Authmode is not local database
 		if ($ilSetting->get("password_assistance"))

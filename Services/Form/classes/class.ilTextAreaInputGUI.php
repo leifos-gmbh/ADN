@@ -44,6 +44,15 @@ class ilTextAreaInputGUI extends ilSubEnabledFormPropertyGUI
 	protected $rtesupport;
 	protected $use_tags_for_rte_only = true;
 
+	// adn-patch start
+
+	protected $special_characters;
+	protected $add_js_meta;
+	protected $form_id;
+
+	// adn-patch end
+
+
 	/**
 	 * @var int
 	 */
@@ -534,7 +543,58 @@ class ilTextAreaInputGUI extends ilSubEnabledFormPropertyGUI
 				$this->getHiddenTag($this->getPostVar(), $this->getValue()));
 		}
 
-		
+		// adn-patch start
+
+		if($this->hasSpecialCharacters())
+		{
+			$ttpl->setCurrentBlock("bbcode_buttons");
+			$tags = array();
+
+			$static_tags = array("f", "u", "h", "t");
+			foreach($static_tags as $tag)
+			{
+				$ttpl->setVariable("BBCODE_BUTTON_INDEX", sizeof($tags));
+				$ttpl->setVariable("BBCODE_BUTTON_CAPTION", "[".$tag."]");
+				$ttpl->setVariable("BBCODE_FIELD", $this->getFieldId());
+				$ttpl->parseCurrentBlock();
+
+				$tags[] = "'[".$tag."]'";
+				$tags[] = "'[/".$tag."]'";
+			}
+
+			include_once "Services/ADN/AD/classes/class.adnCharacter.php";
+			$chars = adnCharacter::getAllCharacters();
+			if($chars)
+			{
+				foreach($chars as $idx => $char)
+				{
+					$ttpl->setVariable("BBCODE_BUTTON_INDEX", sizeof($tags));
+					$ttpl->setVariable("BBCODE_BUTTON_CAPTION", $char["name"]);
+					$ttpl->setVariable("BBCODE_FIELD", $this->getFieldId());
+					$ttpl->parseCurrentBlock();
+
+					$tags[] = "'".$char["name"]."'";
+					$tags[] = "''";
+				}
+			}
+
+			if($this->addJSMeta())
+			{
+				$ttpl->setCurrentBlock("bbcode_meta");
+				$ttpl->setVariable("BBCODE_TAGS", implode(",", $tags));
+				$ttpl->setVariable("BBCODE_FORM", "form_".$this->getFormId());
+				$ttpl->parseCurrentBlock();
+
+				global $tpl;
+				$tpl->addJavascript("Services/COPage/phpBB/3_0_5/editor.js");
+			}
+
+			$ttpl->setCurrentBlock("bbcode");
+			$ttpl->parseCurrentBlock();
+		}
+
+		// adn-patch end
+
 		$a_tpl->setCurrentBlock("prop_generic");
 		$a_tpl->setVariable("PROP_GENERIC", $ttpl->get());
 		$a_tpl->parseCurrentBlock();
@@ -664,4 +724,61 @@ class ilTextAreaInputGUI extends ilSubEnabledFormPropertyGUI
 	{
 		$this->initial_rte_width = $initial_rte_width;
 	}
+
+	// adn-patch start
+
+	/**
+	 * Toggle rendering of special characters
+	 *
+	 * @param bool $a_value
+	 * @param bool $a_add_js_meta
+	 */
+	public function setSpecialCharacters($a_value, $a_add_js_meta = false)
+	{
+		$this->special_characters = (bool)$a_value;
+		$this->add_js_meta = (bool)$a_add_js_meta;
+	}
+
+	/**
+	 * Are special characters to be rendered?
+	 *
+	 * @return bool
+	 */
+	public function hasSpecialCharacters()
+	{
+		return $this->special_characters;
+	}
+
+	/**
+	 * Add js meta data to template?
+	 *
+	 * @return bool
+	 */
+	public function addJsMeta()
+	{
+		return $this->add_js_meta;
+	}
+
+	/**
+	 * Set current form id
+	 *
+	 * @param string $a_value
+	 */
+	public function setFormId($a_value)
+	{
+		$this->form_id = (string)$a_value;
+	}
+
+	/**
+	 * Get current form id
+	 *
+	 * @return bool
+	 */
+	public function getFormId()
+	{
+		return $this->form_id;
+	}
+
+	// adn-patch end
+
 }

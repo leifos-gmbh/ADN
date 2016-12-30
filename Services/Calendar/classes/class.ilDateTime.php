@@ -401,6 +401,17 @@ class ilDateTime
 				break;
 				
 			case IL_CAL_FKT_GETDATE:
+
+				// adn-patch start
+
+				// #1029: IL_CAL_DATETIME will fail if date has more than 4 digits...
+				if($a_date["year"] && $a_date["year"] > 9999)
+				{
+					$a_date["year"] = date("Y");
+				}
+
+				// adn-patch end
+
 				if (!isset($a_date['seconds']))
 				{
 					$a_date['seconds'] = false;

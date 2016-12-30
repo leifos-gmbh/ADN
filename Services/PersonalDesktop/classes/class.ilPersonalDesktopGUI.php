@@ -73,6 +73,11 @@ class ilPersonalDesktopGUI
 	{
 		global $ilSetting, $rbacsystem, $ilErr;
 
+		// adn-patch start
+		ilUtil::redirect("ilias.php?baseClass=adnBaseGUI");
+		return;
+		// adn-patch end
+
 		$next_class = $this->ctrl->getNextClass();
 		$this->ctrl->setReturn($this, "show");
 

@@ -194,6 +194,9 @@ class ilTable2GUI extends ilTableGUI
 				if (is_object($ilUser))
 				{
 					$limit = $ilUser->getPref("hits_per_page");
+					// adn-patch start
+					$limit = 20;
+					// adn-patch end
 				}
 				else
 				{
@@ -1689,6 +1692,32 @@ echo "ilTabl2GUI->addSelectionButton() has been deprecated with 4.2. Please try 
 		}
 		else
 		{
+			// adn-patch start
+			if($this->filter)
+			{
+				foreach($this->filter as $item)
+				{
+					if(!is_array($item) && $item != "")
+					{
+						$has_active_filter = true;
+					}
+					else if(is_array($item) && implode("", $item) != "")
+					{
+						$has_active_filter = true;
+					}
+					if($has_active_filter)
+					{
+						break;
+					}
+				}
+				if($has_active_filter)
+				{
+					$this->setNoEntriesText($lng->txt("adn_no_entries_filter"));
+				}
+			}
+			// adn-patch end
+
+
 			// add standard no items text (please tell me, if it messes something up, alex, 29.8.2008)
 			$no_items_text = (trim($this->getNoEntriesText()) != '')
 				? $this->getNoEntriesText()
@@ -2418,6 +2447,24 @@ echo "ilTabl2GUI->addSelectionButton() has been deprecated with 4.2. Please try 
 				$this->tpl->parseCurrentBlock();
 			}
 		}
+
+		// adn-patch start
+		if(is_array($this->legend))
+		{
+			$this->tpl->setCurrentBlock("legend_item");
+			foreach($this->legend as $sign => $caption)
+			{
+				$this->tpl->setVariable("LEGEND_SIGN", $sign);
+				$this->tpl->setVariable("LEGEND_CAPTION", $caption);
+				$this->tpl->parseCurrentBlock();
+			}
+
+			$this->tpl->setCurrentBlock("legend");
+			$this->tpl->setVariable("LEGEND_TITLE", $lng->txt("legend"));
+			$this->tpl->parseCurrentBlock();
+		}
+		// adn-patch end
+
 	}
 	
 	/**

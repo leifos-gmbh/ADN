@@ -5842,5 +5842,23 @@ class ilObjUser extends ilObject
 		
 		return $res;
 	}
+
+	// adn-patch start
+	public function getSign()
+	{
+		include_once './Services/User/classes/class.ilUserDefinedFields.php';
+		$definition = ilUserDefinedFields::_getInstance();
+		$sign_id = $definition->fetchFieldIdFromName("sign");
+
+		if($sign_id)
+		{
+			return isset($this->user_defined_data['f_'.$sign_id]) ?
+				$this->user_defined_data['f_'.$sign_id] :
+				'';
+		}
+		return '';
+	}
+	// adn-patch end
+
 } // END class ilObjUser
 ?>
