@@ -809,11 +809,6 @@ class ilMainMenuGUI
 	
 	function getHTML()
 	{
-		// adn-patch start
-		include_once("./Services/ADN/UI/classes/class.adnMainMenuGUI.php");
-		$adn_menu = new adnMainMenuGUI();
-		return $adn_menu->getHTML();
-		// adn-patch end
 
 		// this is a workaround for bugs like 14016
 		// the main menu does not need the YUI connection, but many other
@@ -821,6 +816,12 @@ class ilMainMenuGUI
 		// which still uses YUI. This should be migrated to jQuery with a future major release
 		include_once "Services/YUI/classes/class.ilYuiUtil.php";
 		ilYUIUtil::initConnection();
+
+		// adn-patch start
+		include_once("./Services/ADN/UI/classes/class.adnMainMenuGUI.php");
+		$adn_menu = new adnMainMenuGUI($this);
+		return $adn_menu->getHTML();
+		// adn-patch end
 
 		$this->setTemplateVars();
 

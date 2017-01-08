@@ -82,14 +82,19 @@ class adnMainMenuGUI
 	/**
 	 * Constructor
 	 */
-	function __construct()
+	function __construct($a_mm_gui)
 	{
-		global $lng;
+		global $lng, $tpl;
 
-		$lng->loadLanguageModule("adn");
+		$this->mm_gui = $a_mm_gui;
 
-		// get template object
-		$this->tpl = new ilTemplate("tpl.adn_main_menu.html", true, true, "Services/ADN/UI");
+
+		if ($a_mm_gui != null)
+		{
+			$this->tpl = $this->mm_gui->tpl;
+			$lng->loadLanguageModule("adn");
+			$tpl->addCss("./Services/ADN/UI/css/adn.css");
+		}
 	}
 
 	/**
@@ -221,11 +226,63 @@ class adnMainMenuGUI
 	}
 
 	/**
+	 * Get HTML
+	 *
+	 * @param
+	 * @return
+	 */
+	function getHTML()
+	{
+		global $lng, $ilias;
+
+
+
+		$this->tpl->setVariable("MAIN_MENU_LIST_ENTRIES", $this->getMenuEntries());
+
+		$link_dir = (defined("ILIAS_MODULE"))
+			? "../"
+			: "";
+
+		include_once "Services/jQuery/classes/class.iljQueryUtil.php";
+		iljQueryUtil::initjQuery();
+
+		include_once 'Services/MediaObjects/classes/class.ilPlayerUtil.php';
+		ilPlayerUtil::initMediaElementJs();
+
+		$this->tpl->setCurrentBlock("userisloggedin");
+		$this->tpl->setVariable("TXT_LOGIN_AS",$lng->txt("login_as"));
+		$user_img_src = $ilias->account->getPersonalPicturePath("small", true);
+		$user_img_alt = $ilias->account->getFullname();
+		$this->tpl->setVariable("USER_IMG", ilUtil::img($user_img_src, $user_img_alt));
+		$this->tpl->setVariable("USR_LINK_PROFILE", "ilias.php?baseClass=ilPersonalDesktopGUI&cmd=jumpToProfile");
+		$this->tpl->setVariable("USR_TXT_PROFILE", $lng->txt("personal_profile"));
+		$this->tpl->setVariable("USR_LINK_SETTINGS", "ilias.php?baseClass=ilPersonalDesktopGUI&cmd=jumpToSettings");
+		$this->tpl->setVariable("USR_TXT_SETTINGS", $lng->txt("personal_settings"));
+		$this->tpl->setVariable("TXT_LOGOUT2",$lng->txt("logout"));
+		$this->tpl->setVariable("LINK_LOGOUT2", $link_dir."logout.php?lang=".$ilias->account->getCurrentLanguage());
+		$this->tpl->setVariable("USERNAME",$ilias->account->getFullname());
+		$this->tpl->setVariable("LOGIN",$ilias->account->getLogin());
+		$this->tpl->setVariable("MATRICULATION",$ilias->account->getMatriculation());
+		$this->tpl->setVariable("EMAIL",$ilias->account->getEmail());
+		$this->tpl->parseCurrentBlock();
+
+		$this->tpl->setVariable("LOCATION_STYLESHEET", ilUtil::getStyleSheetLocation());
+
+
+		$this->tpl->setVariable("TXT_MAIN_MENU", $lng->txt("main_menu"));
+
+		$this->tpl->parseCurrentBlock();
+
+		return $this->tpl->get();
+	}
+
+
+	/**
 	 * Get main menu HTML
 	 *
 	 * @return string HTML code
 	 */
-	function getHTML()
+	function getMenuEntries()
 	{
 		global $rbacsystem, $lng, $tree, $ilUser, $ilSetting;
 
@@ -235,52 +292,52 @@ class adnMainMenuGUI
 			return "";
 		}
 
+		$mm_tpl = new ilTemplate("tpl.adn_main_menu.html", true, true, "Services/ADN/UI");
+
 		foreach ($this->getAllMenuItems() as $menu => $items)
 		{
-			$this->tpl->setCurrentBlock("submenu");
-			$this->tpl->setVariable("SUBMENU",
-				$this->getSubMenu($menu));
-			$this->tpl->parseCurrentBlock();
+			$this->renderSubMenu($mm_tpl, $menu);
 		}
-		
-		// account information
-		if ($_SESSION["AccountId"] != ANONYMOUS_USER_ID)
+		return $mm_tpl->get();
+
+
+
+		$tpl->setCurrentBlock("cust_menu");
+		$tpl->setVariable("TXT_CUSTOM",
+			lfCustomMenu::lookupTitle("it", $menu["id"], $ilUser->getLanguage(), true));
+		$tpl->setVariable("MM_CLASS", "MMInactive");
+
+		if (is_file("./templates/default/images/mm_down_arrow.png"))
 		{
-			$this->tpl->setCurrentBlock("userisloggedin");
-			$this->tpl->setVariable("TXT_LOGIN_AS",$lng->txt("login_as"));
-			$this->tpl->setVariable("TXT_LOGOUT2",$lng->txt("logout"));
-			$this->tpl->setVariable("LINK_LOGOUT2", "logout.php?lang=".
-				$ilUser->getCurrentLanguage());
-			$this->tpl->setVariable("USERNAME",$ilUser->getFullname());
-			$this->tpl->parseCurrentBlock();
-
-			$this->tpl->setVariable("TXT_LOGOUT", $lng->txt("logout"));
+			$tpl->setVariable("ARROW_IMG", ilUtil::getImagePath("mm_down_arrow.png"));
 		}
-		
-		$this->tpl->setVariable("LOCATION_STYLESHEET", ilUtil::getStyleSheetLocation());
-		$this->tpl->setVariable("HEADER_BG_IMAGE", ilUtil::getImagePath("HeaderBackground.gif"));
+		else
+		{
+			$tpl->setVariable("ARROW_IMG", ilUtil::getImagePath("mm_down_arrow.gif"));
+		}
+		$tpl->setVariable("CUSTOM_CONT_OV", $gl->getHTML());
+		$tpl->setVariable("MM_ID", $menu["id"]);
+		$tpl->parseCurrentBlock();
+		$tpl->setCurrentBlock("c_item");
+		$tpl->parseCurrentBlock();
 
-		$this->tpl->parseCurrentBlock();
-
-		return $this->tpl->get();
 	}
 
 	/**
-	 * Get submenu
+	 * Rebder sub menu
 	 *
-	 * @param string $a_menu
-	 * @return string
+	 * @param $a_mm_tpl
+	 * @param $a_menu
 	 */
-	function getSubMenu($a_menu)
+	function renderSubMenu($a_mm_tpl, $a_menu)
 	{
 		global $lng, $rbacsystem, $ilSetting;
 
-		include_once("./Services/UIComponent/AdvancedSelectionList/".
-			"classes/class.ilAdvancedSelectionListGUI.php");
-		$selection = new ilAdvancedSelectionListGUI();
-		$selection->setFormSelectMode("url_ref_id", "ilNavHistorySelect", true,
-			"goto.php?target=navi_request", "ilNavHistory", "ilNavHistoryForm",
-			"_top", $lng->txt("go"), "ilNavHistorySubmit");
+		$a_mm_tpl->setCurrentBlock("submenu");
+
+		include_once("./Services/UIComponent/GroupedList/classes/class.ilGroupedListGUI.php");
+		$gl = new ilGroupedListGUI();
+		$gl->setAsDropDown(true);
 
 		if($a_menu != "md")
 		{
@@ -290,13 +347,8 @@ class adnMainMenuGUI
 		{
 			$caption = $lng->txt("adn_ad");
 		}
-		$selection->setListTitle($caption);
-
-		$selection->setId("menu_".$a_menu);
-		$selection->setSelectionHeaderClass("MMInactive");
-		$selection->setHeaderIcon(ilAdvancedSelectionListGUI::NO_ICON);
-		$selection->setItemLinkClass("small");
-		$selection->setUseImages(false);
+		$a_mm_tpl->setVariable("TXT_SUBMENU", $caption);
+		$a_mm_tpl->setVariable("SUBMENU_ID", "menu_".$a_menu);
 
 		$maintenance = $ilSetting->get("adn_maintenance");
 
@@ -309,25 +361,229 @@ class adnMainMenuGUI
 				continue;
 			}
 
-			$selection->addItem(
-				$lng->txt("adn_".$item), $item,
+			$gl->addEntry(
+				$lng->txt("adn_".$item),
 				"ilias.php?baseClass=adnBaseGUI&amp;cmd=processMenuItem&amp;".
-				"menu_item=".$item, "", "", "_top");
+				"menu_item=".$item);
 		}
 
 		// add ILIAS administration to administration submenu
 		if ($a_menu == "md" && $rbacsystem->checkAccess("visible,read", SYSTEM_FOLDER_ID))
 		{
-			$selection->addItem(
-				"ILIAS ".$lng->txt("administration"), "il_adm",
-				"ilias.php?baseClass=ilAdministrationGUI",
-				 "", "", "_top");
+			global $tree;
+
+			//$adm_nodes = $tree->getChilds(SYSTEM_FOLDER_ID);
+			//var_dump($adm_nodes); exit;
+			$gl->addEntry(
+				"ILIAS ".$lng->txt("administration"),
+				"ilias.php?baseClass=ilAdministrationGUI&cmd=jump&ref_id=".SYSTEM_FOLDER_ID);
 		}
 
-		$html = $selection->getHTML();
-
-		return $html;
+		$a_mm_tpl->setVariable("SUBMENU", $gl->getHTML());
+		$a_mm_tpl->parseCurrentBlock();
 	}
+
+	/**
+	 * Add admin menu to left nav bar
+	 *
+	 * @param
+	 */
+	function addAdminMenu()
+	{
+		global $tpl, $tree, $rbacsystem, $lng;
+
+		include_once("./Services/UIComponent/GroupedList/classes/class.ilGroupedListGUI.php");
+		$gl = new ilGroupedListGUI();
+
+		$objects = $tree->getChilds(SYSTEM_FOLDER_ID);
+		foreach($objects as $object)
+		{
+			$new_objects[$object["title"].":".$object["child"]]
+				= $object;
+			//have to set it manually as translation type of main node cannot be "sys" as this type is a orgu itself.
+			if($object["type"] == "orgu")
+				$new_objects[$object["title"].":".$object["child"]]["title"] = $lng->txt("obj_orgu");
+		}
+
+		// add entry for switching to repository admin
+		// note: please see showChilds methods which prevents infinite look
+		$new_objects[$lng->txt("repository_admin").":".ROOT_FOLDER_ID] =
+			array(
+				"tree" => 1,
+				"child" => ROOT_FOLDER_ID,
+				"ref_id" => ROOT_FOLDER_ID,
+				"depth" => 3,
+				"type" => "root",
+				"title" => $lng->txt("repository_admin"),
+				"description" => $lng->txt("repository_admin_desc"),
+				"desc" => $lng->txt("repository_admin_desc"),
+			);
+
+//$nd = $tree->getNodeData(SYSTEM_FOLDER_ID);
+//var_dump($nd);
+		$new_objects[$lng->txt("general_settings").":".SYSTEM_FOLDER_ID] =
+			array(
+				"tree" => 1,
+				"child" => SYSTEM_FOLDER_ID,
+				"ref_id" => SYSTEM_FOLDER_ID,
+				"depth" => 2,
+				"type" => "adm",
+				"title" => $lng->txt("general_settings"),
+			);
+		ksort($new_objects);
+
+		// determine items to show
+		$items = array();
+		foreach ($new_objects as $c)
+		{
+			// check visibility
+			if ($tree->getParentId($c["ref_id"]) == ROOT_FOLDER_ID && $c["type"] != "adm" &&
+				$_GET["admin_mode"] != "repository")
+			{
+				continue;
+			}
+			// these objects may exist due to test cases that didnt clear
+			// data properly
+			if ($c["type"] == "" || $c["type"] == "objf" ||
+				$c["type"] == "xxx")
+			{
+				continue;
+			}
+			$accessible = $rbacsystem->checkAccess('visible,read', $c["ref_id"]);
+			if (!$accessible)
+			{
+				continue;
+			}
+			if ($c["ref_id"] == ROOT_FOLDER_ID &&
+				!$rbacsystem->checkAccess('write', $c["ref_id"]))
+			{
+				continue;
+			}
+			if ($c["type"] == "rolf" && $c["ref_id"] != ROLE_FOLDER_ID)
+			{
+				continue;
+			}
+			$items[] = $c;
+		}
+
+		$titems = array();
+		foreach ($items as $i)
+		{
+			$titems[$i["type"]] = $i;
+		}
+
+		// admin menu layout
+		$layout = array(
+			1 => array(
+				"basic" =>
+					array("adm", "stys", "adve", "lngf", "hlps", "accs", "cmps", "extt"),
+				"user_administration" =>
+					array("usrf", 'tos', "rolf", "auth", "ps", "orgu"),
+				"learning_outcomes" =>
+					array("skmg", "cert", "trac")
+			),
+			2 => array(
+				"user_services" =>
+					array("pdts", "prfa", "nwss", "awra", "cadm", "cals", "mail"),
+				"content_services" =>
+					array("seas", "mds", "tags", "taxs", 'ecss', "pays", "otpl"),
+				"maintenance" =>
+					array('sysc', "recf", 'logs', "root")
+			),
+			3 => array(
+				"container" =>
+					array("reps", "crss", "grps", "prgs"),
+				"content_objects" =>
+					array("bibs", "blga", "chta", "excs", "facs", "frma",
+						"lrss", "mcts", "mobs", "svyf", "assf", "wbrs", "wiks")
+			)
+		);
+
+		// now get all items and groups that are accessible
+		$groups = array();
+		for ($i = 1; $i <= 3; $i++)
+		{
+			$groups[$i] = array();
+			foreach ($layout[$i] as $group => $entries)
+			{
+				$groups[$i][$group] = array();
+				$entries_since_last_sep = false;
+				foreach ($entries as $e)
+				{
+					if ($e == "---" || $titems[$e]["type"] != "")
+					{
+						if ($e == "---" && $entries_since_last_sep)
+						{
+							$groups[$i][$group][] = $e;
+							$entries_since_last_sep = false;
+						}
+						else if ($e != "---")
+						{
+							$groups[$i][$group][] = $e;
+							$entries_since_last_sep = true;
+						}
+					}
+				}
+			}
+		}
+
+		include_once("./Services/UIComponent/GroupedList/classes/class.ilGroupedListGUI.php");
+		$gl = new ilGroupedListGUI();
+
+		for ($i = 1; $i <= 3; $i++)
+		{
+			if ($i > 1)
+			{
+//				$gl->nextColumn();
+			}
+			foreach ($groups[$i] as $group => $entries)
+			{
+				if (count($entries) > 0)
+				{
+					$gl->addGroupHeader($lng->txt("adm_".$group));
+
+					foreach ($entries as $e)
+					{
+						if ($e == "---")
+						{
+							$gl->addSeparator();
+						}
+						else
+						{
+							$path = ilObject::_getIcon("", "tiny", $titems[$e]["type"]);
+							$icon = ($path != "")
+								? ilUtil::img($path)." "
+								: "";
+
+							if ($_GET["admin_mode"] == "settings" && $titems[$e]["ref_id"] == ROOT_FOLDER_ID)
+							{
+								$gl->addEntry($icon.$titems[$e]["title"],
+									"ilias.php?baseClass=ilAdministrationGUI&amp;ref_id=".
+									$titems[$e]["ref_id"]."&amp;admin_mode=repository",
+									"_top", "", "", "mm_adm_rep",
+									ilHelp::getMainMenuTooltip("mm_adm_rep"),
+									"bottom center", "top center", false);
+							}
+							else
+							{
+								$gl->addEntry($icon.$titems[$e]["title"],
+									"ilias.php?baseClass=ilAdministrationGUI&amp;ref_id=".
+									$titems[$e]["ref_id"]."&amp;cmd=jump",
+									"_top", "", "", "mm_adm_".$titems[$e]["type"],
+									ilHelp::getMainMenuTooltip("mm_adm_".$titems[$e]["type"]),
+									"bottom center", "top center", false);
+							}
+						}
+					}
+				}
+			}
+		}
+
+		//$gl->addSeparator();
+
+		$tpl->setLeftNavContent("<div id='adn_adm_side_menu'>".$gl->getHTML()."</div>");
+	}
+
 }
 
 ?>

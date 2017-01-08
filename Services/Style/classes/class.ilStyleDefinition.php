@@ -481,7 +481,7 @@ class ilStyleDefinition extends ilSaxParser
 		$all_styles = array();
 		
 		$templates = $styleDefinition->getAllTemplates();
-		
+
 		foreach ($templates as $template)
 		{
 			// get styles definition for template
