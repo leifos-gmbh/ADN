@@ -1,7 +1,7 @@
 <?php
 /* Copyright (c) 2010 Leifos, GPL, see docs/LICENSE */
 
-require_once "./classes/class.ilObject.php";
+require_once "./Services/Object/classes/class.ilObject.php";
 
 /**
  * Settings/Permission object class for ADN examination scoring

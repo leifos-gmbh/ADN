@@ -236,7 +236,7 @@ class ilAdministrationGUI
 //					}
 					$this->showTree();
 						
-					$this->ctrl->setReturn($this, "return");					
+					$this->ctrl->setReturn($this, "return");
 					$ret = $this->ctrl->forwardCommand($this->gui_obj);
 					$html = $this->gui_obj->getHTML();
 

@@ -11701,7 +11701,7 @@ a.ilTreeView {
   padding: 0px;
 }
 .navbar-brand {
-  display: none;
+  display: none !important;
 }
 #ilTopNav {
   margin-left: 0;

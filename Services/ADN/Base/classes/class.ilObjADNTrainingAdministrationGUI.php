@@ -1,7 +1,7 @@
 <?php
 /* Copyright (c) 2010 Leifos, GPL, see docs/LICENSE */
 
-include_once("./classes/class.ilObjectGUI.php");
+include_once("./Services/Object/classes/class.ilObjectGUI.php");
 
 /**
  * Settings/Permission object GUI class for ADN training administration
@@ -41,12 +41,10 @@ class ilObjADNTrainingAdministrationGUI extends ilObjectGUI
 		$cmd = $this->ctrl->getCmd();
 
 		$this->prepareOutput();
-
 		if(!$ilAccess->checkAccess('read','',$this->object->getRefId()))
 		{
 			$ilErr->raiseError($this->lng->txt('no_permission'),$ilErr->WARNING);
 		}
-
 		switch($next_class)
 		{
 			case 'ilpermissiongui':

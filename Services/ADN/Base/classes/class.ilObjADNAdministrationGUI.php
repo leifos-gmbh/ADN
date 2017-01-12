@@ -1,7 +1,7 @@
 <?php
 /* Copyright (c) 2010 Leifos, GPL, see docs/LICENSE */
 
-include_once("./classes/class.ilObjectGUI.php");
+include_once("./Services/Object/classes/class.ilObjectGUI.php");
 
 /**
  * Settings/Permission object GUI class for ADN administration

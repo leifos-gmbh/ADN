@@ -233,7 +233,7 @@ class ilAccessHandler
 		$this->current_info->clear();
 		$ilBench->stop("AccessControl", "0400_clear_info");
 		
-		
+
         // get stored result (internal memory based cache)
 		$cached = $this->doCacheCheck($a_permission, $a_cmd, $a_ref_id, $a_user_id);
 		if ($cached["hit"])
@@ -298,7 +298,7 @@ class ilAccessHandler
 			$this->storeAccessResult($a_permission, $a_cmd, $a_ref_id, false, $a_user_id);
 			return false;
 		}
-		
+
 		// Check object activation
 		$act_check = $this->doActivationCheck($a_permission, $a_cmd, $a_ref_id, $a_user_id);
 		if(!$act_check)
@@ -312,7 +312,6 @@ class ilAccessHandler
 		$par_check = $this->doPathCheck($a_permission, $a_cmd, $a_ref_id, $a_user_id);
 		if (!$par_check)
 		{
-			
 			$this->current_info->addInfoItem(IL_NO_PERMISSION, $lng->txt("status_no_permission"));
 			$this->storeAccessResult($a_permission, $a_cmd, $a_ref_id, false, $a_user_id);
 			return false;
@@ -714,7 +713,9 @@ class ilAccessHandler
 		// check for a deactivated plugin
 		if ($objDefinition->isPluginTypeName($a_type) && !$objDefinition->isPlugin($a_type))
 		{
-			return false;
+			// adn-patch start (out-commented)
+			//return false;
+			// adn-patch end
 		}
 		if(!$a_type)
 		{

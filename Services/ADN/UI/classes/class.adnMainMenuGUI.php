@@ -471,10 +471,11 @@ class adnMainMenuGUI
 		{
 			$titems[$i["type"]] = $i;
 		}
-
 		// admin menu layout
 		$layout = array(
 			1 => array(
+				"adn" =>
+					array("xaad", "xaec","xaed", "xaes", "xaep", "xacp", "xata", "xamd", "xast"),
 				"basic" =>
 					array("adm", "stys", "adve", "lngf", "hlps", "accs", "cmps", "extt"),
 				"user_administration" =>
