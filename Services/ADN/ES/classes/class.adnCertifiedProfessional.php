@@ -996,29 +996,53 @@ class adnCertifiedProfessional extends adnDBBase
 	{
 		global $ilDB;
 
-		$sql = "SELECT id,last_name,first_name,birthdate,citizenship,subject_area,".
-			"registered_by_wmo_id,".
-			"blocked_until,pa_country,pa_street,pa_street_no,pa_postal_code,pa_city,".
-			"foreign_certificate,".
-			"last_ta_event_id,ilias_user_id".
-			" FROM adn_cp_professional";
+		$sql = "SELECT a.id,a.last_name,a.first_name,a.birthdate,a.citizenship,a.subject_area,".
+			"a.registered_by_wmo_id,".
+			"a.blocked_until,a.pa_country,a.pa_street,a.pa_street_no,a.pa_postal_code,a.pa_city,".
+			"a.foreign_certificate,".
+			"a.last_ta_event_id,a.ilias_user_id".
+			" FROM adn_cp_professional a ";
+
+		// cr-008 start
+		if (is_array($a_filter) && is_array($a_filter["equal"]) && count($a_filter["equal"]) > 0)
+		{
+			$on = "";
+			if (isset($a_filter["equal"]["last_name"]))
+			{
+				$on.= " AND a.last_name = b.last_name";
+			}
+			if (isset($a_filter["equal"]["pa_city"]))
+			{
+				$on.= " AND a.pa_city = b.pa_city";
+			}
+			if (isset($a_filter["equal"]["pa_street"]))
+			{
+				$on.= " AND a.pa_street = b.pa_street";
+			}
+			if (isset($a_filter["equal"]["birthdate"]))
+			{
+				$on.= " AND a.birthdate = b.birthdate";
+			}
+			$sql.= " JOIN adn_cp_professional b ON (a.id <> b.id ".$on.") ";
+		}
+		// cr-008 end
 
 		$where = array();
 
 		// archived?
 		if(!$a_with_archived)
 		{
-			$where[] = "archived < ".$ilDB->quote(1, "integer");
+			$where[] = "a.archived < ".$ilDB->quote(1, "integer");
 		}
 
 		// name filter
 		if(isset($a_filter["last_name"]) && $a_filter["last_name"])
 		{
-			$where[] = $ilDB->like("last_name", "text", "%".$a_filter["last_name"]."%");
+			$where[] = $ilDB->like("a.last_name", "text", "%".$a_filter["last_name"]."%");
 		}
 		if(isset($a_filter["first_name"]) && $a_filter["first_name"])
 		{
-			$where[] = $ilDB->like("first_name", "text", "%".$a_filter["first_name"]."%");
+			$where[] = $ilDB->like("a.first_name", "text", "%".$a_filter["first_name"]."%");
 		}
 
 		// birthdate
@@ -1026,12 +1050,12 @@ class adnCertifiedProfessional extends adnDBBase
 		{
 			if($a_filter["birthdate"]["from"])
 			{
-				$where[] = "birthdate >= ".
+				$where[] = "a.birthdate >= ".
 					$ilDB->quote($a_filter["birthdate"]["from"]->get(IL_CAL_DATE));
 			}
 			if($a_filter["birthdate"]["to"])
 			{
-				$where[] = "birthdate <= ".
+				$where[] = "a.birthdate <= ".
 					$ilDB->quote($a_filter["birthdate"]["to"]->get(IL_CAL_DATE));
 			}
 		}
@@ -1039,20 +1063,20 @@ class adnCertifiedProfessional extends adnDBBase
 		// subject area
 		if(isset($a_filter["subject_area"]) && $a_filter["subject_area"])
 		{
-			$where[] = "subject_area = ".$ilDB->quote($a_filter["subject_area"], "text");
+			$where[] = "a.subject_area = ".$ilDB->quote($a_filter["subject_area"], "text");
 		}
 
 		// registered by
 		if(isset($a_filter["registered_by"]) && $a_filter["registered_by"])
 		{
-			$where[] = "registered_by_wmo_id = ".
+			$where[] = "a.registered_by_wmo_id = ".
 				$ilDB->quote($a_filter["registered_by"], "integer");
 		}
 
 		// registered for exam
 		if(isset($a_filter["registered_for_exam"]) && $a_filter["registered_for_exam"])
 		{
-			$where[] = "registered_for_exam = ".
+			$where[] = "a.registered_for_exam = ".
 				$ilDB->quote($a_filter["registered_for_exam"], "integer");
 		}
 		if (isset($a_filter["id"]) && $a_filter["id"])
@@ -1060,7 +1084,7 @@ class adnCertifiedProfessional extends adnDBBase
 			$ids = (is_array($a_filter["id"]))
 				? $a_filter["id"]
 				: array($a_filter["id"]);
-			$where[] = $ilDB->in("id", $ids, false, "integer");
+			$where[] = $ilDB->in("a.id", $ids, false, "integer");
 		}
 		if(sizeof($where))
 		{

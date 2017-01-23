@@ -4680,3 +4680,9 @@ if (!$ilDB->tableColumnExists("adn_ep_assignment", "scoring_update_user"))
 			"default" => "", "fixed" => false));
 
 ?>
+
+<#155>
+<?php
+	$ilCtrlStructureReader->getStructure();
+?>
+

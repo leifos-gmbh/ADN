@@ -777,3 +777,11 @@ adn#:#adn_report_legal_remedies#:#Gegen diese Entscheidung kann innerhalb eines 
 adn#:#adn_failed_sum#:#Nicht bestanden (Gesamtpunktzahl)
 adn#:#adn_certificate_issued_on_warning#:#Sind Sie sicher, dass ein anderes Jahr für die Ausstellung der Bescheinigung als das laufende Jahr gewählt werden soll?
 administration#:#adm_adn#:#ADN
+adn#:#adn_ad_personal_data#:#Personendaten
+adn#:#adn_ad_equal_last_name#:#Gleicher Nachname
+adn#:#adn_ad_equal_birthdate#:#Gleiches Geburtsdatum
+adn#:#adn_ad_equal_city#:#Gleicher Wohnort
+adn#:#adn_ad_equal_street#:#Gleiche Straße
+adn#:#adn_exam_candidate#:#Prüfungskandidat
+adn#:#adn_certificates#:#Bescheinigungen
+adn#:#adn_invoices#:#Kostenbescheide

@@ -16,6 +16,10 @@ DB Storage Engine Patch
 Password Storage
 ================
 
+Admin Einstellungen
+===================
+- Passwort mit Buchstaben/Ziffern raus
+- Passwortänderung bei Erstzugriff raus
 
 Other
 =====
