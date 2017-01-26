@@ -607,6 +607,19 @@ class adnAnswerSheet extends adnDBBase
 		return self::lookupProperty($a_id, "nr");
 	}
 
+	// cr-008 start
+	/**
+	 * Lookup event
+	 *
+	 * @param int $a_id
+	 * @return string
+	 */
+	public static function lookupEvent($a_id)
+	{
+		return self::lookupProperty($a_id, "ep_exam_event_id");
+	}
+	// cr-008 end
+
 	/**
 	 * Build complete sheet data
 	 *

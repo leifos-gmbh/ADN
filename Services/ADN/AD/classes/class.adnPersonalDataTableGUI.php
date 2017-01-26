@@ -117,7 +117,7 @@ class adnPersonalDataTableGUI extends ilTable2GUI
 		$this->tpl->setVariable("VAL_LAST_NAME", $a_set["last_name"]);
 		$this->tpl->setVariable("VAL_FIRST_NAME", $a_set["first_name"]);
 		$this->tpl->setVariable("VAL_BIRTHDATE", ilDatePresentation::formatDate(
-			new ilDate($a_set["birthdate"], IL_CAL_DATE)));
+			new ilDate($a_set["birthdate"], IL_CAL_DATE))." ".$a_set["birthdate"]);
 		$this->tpl->setVariable("VAL_CITY", $a_set["pa_city"]);
 		$this->tpl->setVariable("VAL_STREET", $a_set["pa_street"]." ".$a_set["pa_street_no"]);
 		$this->tpl->setVariable("VAL_ID", $a_set["id"]);
