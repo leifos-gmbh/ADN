@@ -4685,4 +4685,7 @@ if (!$ilDB->tableColumnExists("adn_ep_assignment", "scoring_update_user"))
 <?php
 	$ilCtrlStructureReader->getStructure();
 ?>
-
+<#156>
+<?php
+	$ilCtrlStructureReader->getStructure();
+?>

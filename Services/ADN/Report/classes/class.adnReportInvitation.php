@@ -275,5 +275,21 @@ class adnReportInvitation extends adnReport
 		
 		return $map;
 	}
+
+	// cr-008 start
+	/**
+	 * Delete
+	 *
+	 * @param int $a_cand candidate id
+	 */
+	function delete($a_cand)
+	{
+		$outfile = $this->getDataDir().'/'.$this->getEvent()->getId().'_'.$a_cand;
+		if (is_file($outfile))
+		{
+			unlink($outfile);
+		}
+	}
+	// cr-008 end
 }
 ?>

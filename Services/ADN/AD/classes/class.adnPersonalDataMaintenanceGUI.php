@@ -19,16 +19,44 @@ class adnPersonalDataMaintenanceGUI
 	 */
 	protected $pid;
 
+	protected $mode;
+
+	const MODE_ALL = "all";
+	const MODE_CAND = "cand";
+	const MODE_CERT = "cert";
+
 	/**
 	 * Constructor
 	 */
 	function __construct()
 	{
-		global $lng;
+		global $lng, $ilCtrl;
 
 		$this->pid = (int) $_GET["pid"];
 		$this->lng = $lng;
+
+		$this->mode = $_GET["mode"];
+		if ($_GET["mode"] == "")
+		{
+			$this->mode	= self::MODE_ALL;
+		}
+		$ilCtrl->saveParameter($this, "mode");
+
 	}
+
+	/**
+	 * Set mode
+	 *
+	 * @param string $a_mode
+	 */
+	function setMode($a_mode)
+	{
+		global $ilCtrl;
+
+		$this->mode = $a_mode;
+		$ilCtrl->setParameter($this, "mode", $a_mode);
+	}
+
 
 
 	/**
@@ -54,6 +82,7 @@ class adnPersonalDataMaintenanceGUI
 					case "applyFilter":
 					case "resetFilter":
 					case "showPersonalDataDetails":
+					case "jumpToList":
 						if(adnPerm::check(adnPerm::AD, adnPerm::READ))
 						{
 							$this->$cmd();
@@ -61,7 +90,8 @@ class adnPersonalDataMaintenanceGUI
 						break;
 					
 					// commands that need write permission
-					case "":
+					case "delete":
+					case "confirmDeletion":
 						if(adnPerm::check(adnPerm::AD, adnPerm::WRITE))
 						{
 							$this->$cmd();
@@ -73,20 +103,45 @@ class adnPersonalDataMaintenanceGUI
 		}
 	}
 
+	//
+	// All personal data
+	//
+
 	/**
 	 * List personal data
 	 */
 	protected function listPersonalData()
 	{
-		global $tpl;
+		global $tpl, $ilCtrl;
+
+		$this->setTabs();
 
 		// table of countries
 		include_once("./Services/ADN/AD/classes/class.adnPersonalDataTableGUI.php");
-		$table = new adnPersonalDataTableGUI($this, "listPersonalData");
+		$table = new adnPersonalDataTableGUI($this, "listPersonalData", $this->mode);
 		
 		// output table
 		$tpl->setContent($table->getHTML());
 	}
+
+	/**
+	 * Jump to list (called by goto procedure)
+	 */
+	function jumpToList()
+	{
+		if ($_GET["target"] == "candd")
+		{
+			$this->setMode(self::MODE_CAND);
+
+		}
+		if ($_GET["target"] == "certd")
+		{
+			$this->setMode(self::MODE_CERT);
+		}
+		$_POST["registered_by"] = (int) $_GET["wmo_id"];
+		$this->applyFilter();
+	}
+
 
 	/**
 	 * Apply filter settings (from table gui)
@@ -94,7 +149,7 @@ class adnPersonalDataMaintenanceGUI
 	protected function applyFilter()
 	{
 		include_once("./Services/ADN/AD/classes/class.adnPersonalDataTableGUI.php");
-		$table = new adnPersonalDataTableGUI($this, "listPersonalData");
+		$table = new adnPersonalDataTableGUI($this, "listPersonalData", $this->mode);
 		$table->resetOffset();
 		$table->writeFilterToSession();
 
@@ -107,21 +162,77 @@ class adnPersonalDataMaintenanceGUI
 	protected function resetFilter()
 	{
 		include_once("./Services/ADN/AD/classes/class.adnPersonalDataTableGUI.php");
-		$table = new adnPersonalDataTableGUI($this, "listPersonalData");
+		$table = new adnPersonalDataTableGUI($this, "listPersonalData", $this->mode);
 		$table->resetOffset();
 		$table->resetFilter();
 
 		$this->listPersonalData();
 	}
+	
+	/**
+	 * Get action for current mode
+	 *
+	 * @return string action
+	 */
+	/*
+	function getActionForMode()
+	{
+		if ($this->mode == self::MODE_CAND)
+		{
+			return "listExamCandidates";
+		}
+		else if ($this->mode == self::MODE_CERT)
+		{
+			return "listExamCertifiedProfessionals";
+		}
+		return "listPersonalData";
+	}*/
+	
+
+	//
+	// Exam Candidates
+	//
+
+	/**
+	 * List personal data
+	 */
+	protected function listExamCandidates()
+	{
+		global $tpl;
+
+		$this->setMode(self::MODE_CAND);
+
+		$this->setTabs();
+
+		// table of countries
+		include_once("./Services/ADN/AD/classes/class.adnPersonalDataTableGUI.php");
+		$table = new adnPersonalDataTableGUI($this, "listPersonalData", $this->mode);
+
+		// output table
+		$tpl->setContent($table->getHTML());
+	}
+
+	//
+	// Details
+	//
 
 	/**
 	 * Show personal data details
 	 */
 	function showPersonalDataDetails()
 	{
-		global $tpl, $lng;
+		global $tpl, $lng, $ilTabs, $ilCtrl;
+
+		$ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listPersonalData"));
+
 
 		$dtpl = new ilTemplate("tpl.pd_details.html", true, true, "Services/ADN/AD");
+
+		include_once("./Services/ADN/ES/classes/class.adnCertifiedProfessional.php");
+		$p = new adnCertifiedProfessional($this->pid);
+		$dtpl->setVariable("TXT_PERSONAL_DATA", $lng->txt("adn_ad_personal_data"));
+		$dtpl->setVariable("NAME", $p->getFirstName()." ".$p->getLastName());
+		$dtpl->setVariable("ID", $this->pid);
 
 		// certificates
 
@@ -131,62 +242,190 @@ class adnPersonalDataMaintenanceGUI
 		//- adn_cp_invoice (Kostenbescheide)
 		//- adn_es_certificate (Bescheinigungen)
 
-		/*
-		// exam invitations (stored in adn_ep_assignment)
-		$dtpl->setCurrentBlock("dblock");
-		$dtpl->setVariable("HEAD_TITLE", $lng->txt("adn_ep_ins"));
-		$dtpl->parseCurrentBlock();*/
-
 		include_once("./Services/UIComponent/GroupedList/classes/class.ilGroupedListGUI.php");
 
-		// exam candidates
-		$dtpl->setCurrentBlock("dblock");
-		$dtpl->setVariable("HEAD_TITLE", $lng->txt("adn_exam_candidate"));
+		// exam invitations (stored in report/inv)
+		$items = array();
 		include_once("./Services/ADN/EP/classes/class.adnAssignment.php");
 		include_once("./Services/ADN/EP/classes/class.adnExaminationEvent.php");
-		$li = new ilGroupedListGUI();
 		foreach (adnAssignment::getAllAssignments(array("user_id" => $this->pid)) as $ass)
 		{
-			$li->addEntry(adnExaminationEvent::lookupName($ass["ep_exam_event_id"]));
+			if ($ass["invited_on"] != "")
+			{
+				$items[] = adnExaminationEvent::lookupName($ass["ep_exam_event_id"]);
+			}
 		}
-		$dtpl->setVariable("LIST", $li->getHTML());
-		$dtpl->parseCurrentBlock();
+		$this->outputBlock($dtpl, $lng->txt("adn_ep_ins"), $items);
+
+		// exam candidates
+		$items = array();
+		include_once("./Services/ADN/EP/classes/class.adnAssignment.php");
+		include_once("./Services/ADN/EP/classes/class.adnExaminationEvent.php");
+		foreach (adnAssignment::getAllAssignments(array("user_id" => $this->pid)) as $ass)
+		{
+			$items[] = adnExaminationEvent::lookupName($ass["ep_exam_event_id"]);
+		}
+		$this->outputBlock($dtpl, $lng->txt("adn_exam_candidate"), $items);
 
 		// answer sheets
-		$dtpl->setCurrentBlock("dblock");
-		$dtpl->setVariable("HEAD_TITLE", $lng->txt("adn_answer_sheets"));
+		$items = array();
 		include_once("./Services/ADN/EP/classes/class.adnAnswerSheetAssignment.php");
 		include_once("./Services/ADN/EP/classes/class.adnAnswerSheet.php");
-		$li = new ilGroupedListGUI();
 		foreach (adnAnswerSheetAssignment::getAllSheets($this->pid) as $s)
 		{
-			$li->addEntry(adnAnswerSheet::lookupName($s["ep_answer_sheet_id"]).
+			$items[] = adnAnswerSheet::lookupName($s["ep_answer_sheet_id"]).
 				", ".adnExaminationEvent::lookupName(adnAnswerSheet::lookupEvent($s["ep_answer_sheet_id"])).
-				", ".$this->lng->txt("adn_generated_on").": ".ilDatePresentation::formatDate(new ilDateTime($s["generated_on"], IL_CAL_DATETIME))
-			);
+				", ".$this->lng->txt("adn_generated_on").": ".ilDatePresentation::formatDate(new ilDateTime($s["generated_on"], IL_CAL_DATETIME));
 		}
-		$dtpl->setVariable("LIST", $li->getHTML());
-		$dtpl->parseCurrentBlock();
+		$this->outputBlock($dtpl, $lng->txt("adn_answer_sheets"), $items);
 
 		// certificates
-		$dtpl->setCurrentBlock("dblock");
-		$dtpl->setVariable("HEAD_TITLE", $lng->txt("adn_certificates"));
+		$items = array();
 		include_once("./Services/ADN/ES/classes/class.adnCertificate.php");
-		$li = new ilGroupedListGUI();
-		foreach (adnCertificate::getAllCertificates(array("user_id" => $this->pid)) as $cert)
+		foreach (adnCertificate::getAllCertificates(array("user_id" => $this->pid), true, true) as $cert)
 		{
 			$c = new adnCertificate($cert["id"]);
-			$li->addEntry($c->getFullCertificateNumber().", ".$this->lng->txt("adn_valid_until").": ".ilDatePresentation::formatDate($c->getValidUntil()));
+			$items[] = $c->getFullCertificateNumber().", ".$this->lng->txt("adn_valid_until").": ".ilDatePresentation::formatDate($c->getValidUntil());
 		}
-		$dtpl->setVariable("LIST", $li->getHTML());
-		$dtpl->parseCurrentBlock();
+		$this->outputBlock($dtpl, $lng->txt("adn_certificates"), $items);
+
+		// score notifications
+		$items = array();
+		include_once("./Services/ADN/EP/classes/class.adnAssignment.php");
+		include_once("./Services/ADN/EP/classes/class.adnExaminationEvent.php");
+		foreach (adnAssignment::getAllAssignments(array("user_id" => $this->pid)) as $ass)
+		{
+			include_once './Services/ADN/Report/classes/class.adnReportScoreNotificationLetter.php';
+			if(adnReportScoreNotificationLetter::hasFile($ass["ep_exam_event_id"], $ass["id"]))
+			{
+				$items[] = adnExaminationEvent::lookupName($ass["ep_exam_event_id"]);
+			}
+		}
+		$this->outputBlock($dtpl, $lng->txt("adn_es_sns"), $items);
 
 		// invoices
-		$dtpl->setCurrentBlock("dblock");
-		$dtpl->setVariable("HEAD_TITLE", $lng->txt("adn_invoices"));
-		$dtpl->parseCurrentBlock();
+		$items = array();
+		include_once("./Services/ADN/ES/classes/class.adnCertificate.php");
+		include_once './Services/ADN/Report/classes/class.adnReportInvoice.php';
+		foreach (adnCertificate::getAllCertificates(array("user_id" => $this->pid), true, true) as $cert)
+		{
+			if (adnReportInvoice::hasInvoice($cert["id"]))
+			{
+				$c = new adnCertificate($cert["id"]);
+				$items[] = $c->getFullCertificateNumber() . ", " . $this->lng->txt("adn_valid_until") . ": " . ilDatePresentation::formatDate($c->getValidUntil());
+			}
+		}
+		$this->outputBlock($dtpl, $lng->txt("adn_invoices"), $items);
 
 		$tpl->setContent($dtpl->get());
+	}
+
+	/**
+	 * Output list
+	 *
+	 * @param ilTemplate $a_tpl
+	 * @param ilGroupedListGUI $a_li
+	 */
+	protected function outputBlock(ilTemplate $a_tpl, $a_txt , $a_items)
+	{
+		global $lng;
+
+		$a_tpl->setCurrentBlock("dblock");
+		$a_tpl->setVariable("HEAD_TITLE", $a_txt);
+
+		if (count($a_items) > 0)
+		{
+			$li = new ilGroupedListGUI();
+			foreach ($a_items as $i)
+			{
+				$li->addEntry($i);
+			}
+			$html = $li->getHTML();
+		}
+		else
+		{
+			$html = "<i>".$lng->txt("adn_no_entries")."</i>";
+		}
+
+		$a_tpl->setVariable("LIST", $html);
+		$a_tpl->parseCurrentBlock();
+	}
+
+	//
+	// Deletion
+	//
+
+	/**
+	 * Confirm
+	 */
+	function delete()
+	{
+		global $ilCtrl, $tpl, $lng;
+
+		if (!is_array($_POST["id"]) || count($_POST["id"]) == 0)
+		{
+			ilUtil::sendInfo($lng->txt("no_checkbox"), true);
+			$ilCtrl->redirect($this, "listPersonalData");
+		}
+		else
+		{
+			include_once("./Services/Utilities/classes/class.ilConfirmationGUI.php");
+			$cgui = new ilConfirmationGUI();
+			$cgui->setFormAction($ilCtrl->getFormAction($this));
+			$cgui->setHeaderText($lng->txt("adn_really_delete_pd"));
+			$cgui->setCancel($lng->txt("cancel"), "listPersonalData");
+			$cgui->setConfirm($lng->txt("delete"), "confirmDeletion");
+
+			include_once("./Services/ADN/ES/classes/class.adnCertifiedProfessional.php");
+
+			foreach ($_POST["id"] as $i)
+			{
+				$p = new adnCertifiedProfessional($i);
+				$cgui->addItem("id[]", $i, $p->getFirstName() . " " . $p->getLastName() ." [".$p->getId()."]");
+			}
+
+			$tpl->setContent($cgui->getHTML());
+		}
+	}
+
+
+	/**
+	 * Confirmed deletion
+	 */
+	function confirmDeletion()
+	{
+		global $ilCtrl, $lng;
+
+		include_once("./Services/ADN/ES/classes/class.adnCertifiedProfessional.php");
+
+		if (is_array($_POST["id"]))
+		{
+			foreach ($_POST["id"] as $id)
+			{
+				$p = new adnCertifiedProfessional($id);
+				$p->delete();
+			}
+			ilUtil::sendSuccess($lng->txt("msg_obj_modified"));
+		}
+
+		$ilCtrl->redirect($this, "listPersonalData");
+	}
+
+	/**
+	 * Set tabs
+	 */
+	function setTabs()
+	{
+		global $ilTabs, $ilCtrl, $lng;
+
+		$ilCtrl->setParameter($this, "mode", self::MODE_ALL);
+		$ilTabs->addTab(self::MODE_ALL, $lng->txt("adn_ad_pd_all"), $ilCtrl->getLinkTarget($this, "listPersonalData"));
+		$ilCtrl->setParameter($this, "mode", self::MODE_CAND);
+		$ilTabs->addTab(self::MODE_CAND, $lng->txt("adn_ad_pd_cand"), $ilCtrl->getLinkTarget($this, "listPersonalData"));
+		$ilCtrl->setParameter($this, "mode", self::MODE_CERT);
+		$ilTabs->addTab(self::MODE_CERT, $lng->txt("adn_ad_pd_cert"), $ilCtrl->getLinkTarget($this, "listPersonalData"));
+		$ilTabs->activateTab($this->mode);
+		$ilCtrl->setParameter($this, "mode", $this->mode);
 	}
 
 

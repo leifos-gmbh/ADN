@@ -1952,7 +1952,6 @@ class ilMail
 		$rcp_to_list = $this->parseRcptOfMailingLists($a_rcp_to, true);
 		$rcp_cc_list = $this->parseRcptOfMailingLists($a_rcp_cc, true);
 		$rcp_bc_list = $this->parseRcptOfMailingLists($a_rcp_bc, true);
-			
 		$rcp_to = $rcp_cc = $rcp_bc = array();		
 		foreach($rcp_to_list as $mlist_id => $mlist_rec)
 		{

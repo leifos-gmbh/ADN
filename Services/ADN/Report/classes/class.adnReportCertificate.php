@@ -44,7 +44,22 @@ class adnReportCertificate extends adnReport
 			ilUtil::getDataDir().'/adn/report/cer/'.$a_cert_id.'.pdf'
 		);
 	}
-	
+
+	// cr-008
+	/**
+	 * Delete certificate file
+	 * @param int $a_cert_id
+	 */
+	public static function deleteCertificate($a_cert_id)
+	{
+		$file = ilUtil::getDataDir().'/adn/report/cer/'.$a_cert_id.'.pdf';
+		if (file_exists($file))
+		{
+			unlink($file);
+		}
+	}
+	// cr-008
+
 	/**
 	 * Get invoice
 	 * @param int $a_cert_id

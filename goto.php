@@ -158,6 +158,11 @@ if(!ilStartUpGUI::_checkGoto($_GET["target"]))
 //
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+// adn-patch cr-008 start
+include_once("./Services/ADN/Base/classes/class.adnGotoHandler.php");
+adnGotoHandler::_goto($_GET["target"]);
+// adn-patch cr-008 end
+
 switch($target_type)
 {
 	// exception, must be kept for now

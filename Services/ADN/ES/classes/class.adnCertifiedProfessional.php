@@ -939,6 +939,94 @@ class adnCertifiedProfessional extends adnDBBase
 			
 			if($in_use)
 			{
+				// cr-008 start
+				$this->setFirstName(null);
+				$this->setLastName(null);
+				$this->setBirthdate(new ilDate());
+				$this->setCitizenship(null);
+				$this->setPostalCountry(null);
+				$this->setPostalCode(null);
+				$this->setPostalCity(null);
+				$this->setPostalStreet(null);
+				$this->setPostalStreetNumber(null);
+				$this->setShippingLastName(null);
+				$this->setShippingFirstName(null);
+				$this->setShippingCountry(null);
+				$this->setShippingCode(null);
+				$this->setShippingCity(null);
+				$this->setShippingStreet(null);
+				$this->setShippingStreetNumber(null);
+				$this->setPhone(null);
+				$this->setEmail(null);
+				$this->setComment(null);
+				$this->setLastEvent(null);
+
+				// delete all invitations
+				include_once("./Services/ADN/Report/classes/class.adnReportInvitation.php");
+				foreach (adnAssignment::getAllAssignments(array("user_id" => $this->getId())) as $ass)
+				{
+					if ($ass["invited_on"] != "")
+					{
+						$inv = new adnReportInvitation($ass["ep_exam_event_id"]);
+						$inv->delete($this->getId());
+					}
+				}
+
+				// delete all answer sheets
+				include_once("./Services/ADN/Report/classes/class.adnReportAnswerSheet.php");
+				include_once("./Services/ADN/EP/classes/class.adnAnswerSheet.php");
+				include_once("./Services/ADN/EP/classes/class.adnExaminationEvent.php");
+				foreach (adnAssignment::getAllAssignments(array("user_id" => $this->getId())) as $ass)
+				{
+					$exam_event  = new adnExaminationEvent($ass["ep_exam_event_id"]);
+					foreach (adnAnswerSheetAssignment::getAllSheets($this->getId(), $ass["ep_exam_event_id"]) as $s)
+					{
+						$as_rep = new adnReportAnswerSheet($exam_event);
+						$as_rep->deleteSheet($this->getId(), $s["ep_answer_sheet_id"]);
+					}
+				}
+
+				// archive/delete all certificates
+				include_once("./Services/ADN/Report/classes/class.adnReportCertificate.php");
+				foreach (adnCertificate::getAllCertificates(array("user_id" => $this->getId()), true, true) as $cert)
+				{
+					$c = new adnCertificate($cert["id"]);
+
+					// delete certificate file
+					adnReportCertificate::deleteCertificate($cert["id"]);
+
+					if (!$c->isArchived())
+					{
+						// archivate certificate
+						$c->delete();
+					}
+				}
+
+				// delete all score notifications
+				include_once("./Services/ADN/EP/classes/class.adnAssignment.php");
+				include_once("./Services/ADN/EP/classes/class.adnExaminationEvent.php");
+				foreach (adnAssignment::getAllAssignments(array("user_id" => $this->getId())) as $ass)
+				{
+					include_once './Services/ADN/Report/classes/class.adnReportScoreNotificationLetter.php';
+					if(adnReportScoreNotificationLetter::hasFile($ass["ep_exam_event_id"], $ass["id"]))
+					{
+						adnReportScoreNotificationLetter::deleteFile($ass["ep_exam_event_id"], $ass["id"]);
+					}
+				}
+
+				// delete all invoices
+				include_once("./Services/ADN/ES/classes/class.adnCertificate.php");
+				include_once './Services/ADN/Report/classes/class.adnReportInvoice.php';
+				foreach (adnCertificate::getAllCertificates(array("user_id" => $this->pid), true, true) as $cert)
+				{
+					if (adnReportInvoice::hasInvoice($cert["id"]))
+					{
+						adnReportInvoice::deleteInvoice($cert["id"]);
+					}
+				}
+				// cr-008 end
+
+
 				// remove assignments / invitations / sheet assignments from FUTURE exam events
 				include_once "Services/ADN/EP/classes/class.adnAssignment.php";
 				include_once "Services/ADN/EP/classes/class.adnAnswerSheetAssignment.php";
@@ -997,7 +1085,7 @@ class adnCertifiedProfessional extends adnDBBase
 		global $ilDB;
 
 		$sql = "SELECT a.id,a.last_name,a.first_name,a.birthdate,a.citizenship,a.subject_area,".
-			"a.registered_by_wmo_id,".
+			"a.registered_by_wmo_id, a.create_date, ".
 			"a.blocked_until,a.pa_country,a.pa_street,a.pa_street_no,a.pa_postal_code,a.pa_city,".
 			"a.foreign_certificate,".
 			"a.last_ta_event_id,a.ilias_user_id".
