@@ -591,6 +591,10 @@ class adnTrainingProvider extends adnDBBase
 			if(is_array($all) && sizeof($all))
 			{
 				$this->setArchived(true);
+				// cr-008 start
+				$this->setEmail("xxx");
+				$this->setContact("xxx");
+				// cr-008 end
 				$this->update();
 				
 				// archive the events which have taken place
@@ -608,8 +612,11 @@ class adnTrainingProvider extends adnDBBase
 					foreach($all as $instructor_id => $name)
 					{
 						$instructor = new adnInstructor($instructor_id);
-						$instructor->setArchived(true);
-						$instructor->update();
+						// cr-0008 start
+						//$instructor->setArchived(true);
+						//$instructor->update();
+						$instructor->archive();
+						// cr-0008 end
 					}
 				}				
 			}
