@@ -154,7 +154,7 @@ class adnAssignment extends adnDBBase
 	/**
 	 * Set score mc
 	 *
-	 * @param	int	$a_val	score mc
+	 * @param	int $a_val	score mc
 	 */
 	public function setScoreMc($a_val)
 	{
@@ -164,7 +164,7 @@ class adnAssignment extends adnDBBase
 	/**
 	 * Get score mc
 	 *
-	 * @return	int	score mc
+	 * @return	float	score mc
 	 */
 	public function getScoreMc()
 	{
@@ -174,7 +174,7 @@ class adnAssignment extends adnDBBase
 	/**
 	 * Set score case
 	 *
-	 * @param	int	$a_val	score case
+	 * @param	float	$a_val	score case
 	 */
 	public function setScoreCase($a_val)
 	{
@@ -184,7 +184,7 @@ class adnAssignment extends adnDBBase
 	/**
 	 * Get score case
 	 *
-	 * @return	int	score case
+	 * @return	float	score case
 	 */
 	public function getScoreCase()
 	{
@@ -213,11 +213,11 @@ class adnAssignment extends adnDBBase
 
 	/**
 	 * Get result sum of mc and case questions
-	 * @return int
+	 * @return float
 	 */
 	public function getScoreSum()
 	{
-		return (int) $this->score_mc + $this->score_case;
+		return (float) $this->score_mc + $this->score_case;
 	}
 
 	/**
@@ -344,8 +344,8 @@ class adnAssignment extends adnDBBase
 		$this->setUser($set["cp_professional_id"]);
 		$this->setInvitedOn(new ilDate($set["invited_on"], IL_CAL_DATE, ilTimeZone::UTC));		
 		$this->setHasParticipated($set["has_participated"]);
-		$this->setScoreMc($set["score_mc"]);
-		$this->setScoreCase($set["score_case"]);
+		$this->setScoreMc($set["score_mc"] / 10);
+		$this->setScoreCase($set["score_case"] / 10);
 		$this->setResultMc($set["result_mc"]);
 		$this->setResultCase($set["result_case"]);
 		$this->setNotifiedOn($set["notified_on"]);
@@ -368,8 +368,8 @@ class adnAssignment extends adnDBBase
 			"ep_exam_event_id" => array("integer", $this->getEvent()),
 			"cp_professional_id" => array("integer", $this->getUser()),
 			"has_participated" => array("integer", $this->getHasParticipated()),
-			"score_mc" => array("integer", $this->getScoreMc()),
-			"score_case" => array("integer", $this->getScoreCase()),
+			"score_mc" => array("integer", $this->getScoreMc() * 10),
+			"score_case" => array("integer", $this->getScoreCase() * 10),
 			"result_mc" => array("integer", $this->getResultMc()),
 			"result_case" => array("integer", $this->getResultCase()),
 			"notified_on" => array("timestamp", $this->getNotifiedOn()),
@@ -517,6 +517,9 @@ class adnAssignment extends adnDBBase
 
 		while($row = $ilDB->fetchAssoc($res))
 		{
+			$row['score_mc'] /= 10;
+			$row['score_case'] /= 10;
+			
 			// add user fields
 			if (is_array($a_user_fields))
 			{
@@ -537,8 +540,9 @@ class adnAssignment extends adnDBBase
 					 min(array((int) $row["result_mc"], (int) $row["result_case"]));
 				
 				// if total score is below required value result is set to failed
-				if($row["result_total"] == self::SCORE_PASSED &&
-					$row["score_mc"]+$row["score_case"] < self::TOTAL_SCORE_REQUIRED)
+				if(
+					$row["result_total"] == self::SCORE_PASSED &&
+					($row["score_mc"] + $row["score_case"]) < self::TOTAL_SCORE_REQUIRED)
 				{
 					$row["result_total"] = self::SCORE_FAILED_SUM;
 				}
