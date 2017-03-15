@@ -2358,6 +2358,9 @@ class ilObjUser extends ilObject
     }
     function getProfileIncomplete()
     {
+		// begin-patch adn
+		return false;
+		// end-patch adn
 		if($this->id == ANONYMOUS_USER_ID)
 		{
 			return false;
