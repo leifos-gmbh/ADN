@@ -1,0 +1,11 @@
+// 
+// German Language File for MediaGalleryObject Plugin
+//
+
+<!-- language file start -->
+new_account_rcps#:#Empfänger für Benachrichtigungen
+new_account_rcps_info#:#Bitte tragen sie die E-Mail-Adressen der Personen ein, die benachrichtigt werden sollen, wenn neue ADN-Benutzerkonten generiert werden. 
+new_account_rcps_tbl#:#Benachrichtigungen beim Erstellen neuer Benutzerkonten
+mail_new_user#:#Ein neuer ADN-Benutzer wurde angelegt
+mail_new_user_body#:#Ein neues Benutzerkonto wurde angelegt.
+mail_body_profile#:#Die Profildaten des Benutzerkontos sind: 
