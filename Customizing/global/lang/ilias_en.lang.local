@@ -735,3 +735,6 @@ adn#:#adn_ad_last_certificate#:#Letztes Zertifikat
 adn#:#adn_ad_wmo#:#WSD
 adn#:#adn_new_delete_candidates_mess#:#Sehr geehrter Mitarbeiter {WSD},<br /><br />in Ihrer WSD stehen folgende Nutzer zur Löschung an:<br />{USER}<br /><br />Diese Nachricht wurde automatisch erstellt.
 adn#:#adn_new_delete_candidates_subj#:#ADN Löschung von personenbezogenen Daten
+adn#:#adn_ad_add_person#:#Person hinzufügen
+adn#:#adn_add_certificate#:#Bescheinigung hinzufügen
+adn#:#adn_save_and_add_certificate#:#Speichern und Bescheinigung hinzufügen

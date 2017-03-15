@@ -408,6 +408,7 @@ abstract class ilDB extends PEAR
 
 		if (MDB2::isError($a_res))
 		{
+			echo ($a_res->userinfo); exit;
 			if ($a_level == "")
 			{
 				$a_level = $this->error_class->FATAL;

@@ -15,8 +15,20 @@
  */
 class adnPreparationCandidateGUI
 {
+	// cr-008 start
+	const MODE_CANDIDATE = "";
+	const MODE_GENERAL = "general";
+	// cr-008 end
+
 	// current candidate object
 	protected $candidate = null;
+
+	// cr-008 start
+	/**
+	 * @var string
+	 */
+	protected $mode = "";
+	// cr-008 end
 	
 	/**
 	 * Constructor
@@ -24,9 +36,13 @@ class adnPreparationCandidateGUI
 	public function __construct()
 	{
 		global $ilCtrl;
-		
-		// save candidate ID through requests
-		$ilCtrl->saveParameter($this, array("cd_id"));
+
+		// save candidate ID through requests, cr-008 added mode
+		$ilCtrl->saveParameter($this, array("cd_id", "mode"));
+
+		// cr-008 start
+		$this->mode = $_GET["mode"];
+		// cr-008 end
 		
 		$this->readCandidate();
 	}
@@ -38,7 +54,16 @@ class adnPreparationCandidateGUI
 	{
 		global $ilCtrl, $lng, $tpl;
 
-		$tpl->setTitle($lng->txt("adn_ep")." - ".$lng->txt("adn_ep_ecs"));
+		// cr-008 start
+		if ($this->mode == self::MODE_GENERAL)
+		{
+			$tpl->setTitle($lng->txt("adn_ad_add_person"));
+		}
+		else
+		{
+			$tpl->setTitle($lng->txt("adn_ep") . " - " . $lng->txt("adn_ep_ecs"));
+		}
+		// cr-008 end
 		
 		$next_class = $ilCtrl->getNextClass();
 
@@ -57,6 +82,9 @@ class adnPreparationCandidateGUI
 					case "listCandidatesToggle":
 					case "applyFilter":
 					case "resetFilter":
+					// cr-008 start
+					case "listPersonData":
+					// cr-008 end
 						if(adnPerm::check(adnPerm::EP, adnPerm::READ))
 						{
 							$this->$cmd();
@@ -76,6 +104,7 @@ class adnPreparationCandidateGUI
 					case "applyTrainingEventFilter":
 					case "resetTrainingEventFilter":
 					case "saveLastTraining":
+					case "saveCandidateAndAddCertificate":
 						if(adnPerm::check(adnPerm::EP, adnPerm::WRITE))
 						{
 							$this->$cmd();
@@ -122,6 +151,13 @@ class adnPreparationCandidateGUI
 	protected function listCandidates()
 	{
 		global $tpl, $ilToolbar, $lng, $ilCtrl;
+
+		// cr-008 start
+		if ($this->mode == self::MODE_GENERAL)
+		{
+			return $this->listPersonData();
+		}
+		// cr-008 end
 
 		// professional / prospects toggles
 		include_once "Services/Form/classes/class.ilPropertyFormGUI.php";
@@ -418,9 +454,22 @@ class adnPreparationCandidateGUI
 			$holdback_by->setValue($wmo_id);
 
 			$form->addCommandButton("saveCandidate", $lng->txt("save"));
-			$form->addCommandButton("saveCandidateAndEditTraining",
-				$lng->txt("adn_save_and_edit_training"));
-			$form->addCommandButton("listCandidates", $lng->txt("cancel"));
+
+			// cr-008 start
+			if ($this->mode == self::MODE_GENERAL)
+			{
+				$form->addCommandButton("saveCandidateAndAddCertificate",
+					$lng->txt("adn_save_and_add_certificate"));
+				$form->addCommandButton("listPersonData", $lng->txt("cancel"));
+			}
+			else
+			{
+				$form->addCommandButton("saveCandidateAndEditTraining",
+					$lng->txt("adn_save_and_edit_training"));
+				$form->addCommandButton("listCandidates", $lng->txt("cancel"));
+			}
+			// cr-008 end
+
 			$form->setTitle($lng->txt("adn_add_candidate"));
 		}
 		else
@@ -572,12 +621,25 @@ class adnPreparationCandidateGUI
 				{
 					// show success message and return to list
 					ilUtil::sendSuccess($lng->txt("adn_candidate_created"), true);
-					$ilCtrl->redirect($this, "listCandidates");
+
+					// cr-008 start
+					if (self::MODE_GENERAL)
+					{
+						$this->listPersonData();
+					}
+					else
+					{
+						$ilCtrl->redirect($this, "listCandidates");
+					}
+					// cr-008 end
 				}
 				else
 				{
 					$this->readCandidate($candidate->getId());
 					$ilCtrl->setParameter($this, "cd_id", $this->candidate->getId());
+					// cr-008 start
+					$this->cd_id = $this->candidate->getId();
+					// cr-008 end
 					return true;
 				}
 			}
@@ -1042,8 +1104,7 @@ class adnPreparationCandidateGUI
 		}
 		else
 		{
-			$ilTabs->setBackTarget($lng->txt("back"),
-				$ilCtrl->getLinkTarget($this, "listCandidates"));
+			$ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listCandidates"));
 			
 			// display confirmation message
 			include_once("./Services/Utilities/classes/class.ilConfirmationGUI.php");
@@ -1084,6 +1145,33 @@ class adnPreparationCandidateGUI
 		ilUtil::sendSuccess($lng->txt("adn_candidate_deleted"), true);
 		$ilCtrl->redirect($this, "listCandidates");
 	}
+
+	// cr-008 start
+	/**
+	 * List personal data
+	 */
+	function listPersonData()
+	{
+		global $ilCtrl;
+
+		$ilCtrl->redirectByClass(array("adnBaseGUI", "adnAdministrationGUI", "adnPersonalDataMaintenanceGUI"), "listPersonalData");
+	}
+
+	/**
+	 * Save candidate and edit last training
+	 */
+	protected function saveCandidateAndAddCertificate()
+	{
+		global $ilCtrl;
+
+		if($this->saveCandidate(true))
+		{
+			$ilCtrl->setParameterByClass("adnCertificateScoringGUI", "cd_id", $this->cd_id);
+			$ilCtrl->redirectByClass(array("adnBaseGUI", "adnExaminationScoringGUI", "adnCertificateScoringGUI"), "createCertificate");
+		}
+	}
+
+	// cr-008 end
 }
 
 ?>

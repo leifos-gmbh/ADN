@@ -21,8 +21,8 @@ class adnCertificateScoringGUI
 	{
 		global $ilCtrl;
 		
-		// save certificate ID through requests
-		$ilCtrl->saveParameter($this, array("ct_id", "ev_id", "ass_id"));
+		// save certificate ID through requests cr-008 added cd_id
+		$ilCtrl->saveParameter($this, array("ct_id", "ev_id", "ass_id", "cd_id"));
 		
 		// $this->readCertificate();
 	}
@@ -145,6 +145,13 @@ class adnCertificateScoringGUI
 
 		$event_id = (int)$_GET["ev_id"];
 
+		// cr-008 start
+		if ($event_id == 0)
+		{
+			$ilCtrl->redirectByClass(array("adnBaseGUI", "adnAdministrationGUI", "adnPersonalDataMaintenanceGUI"), "listPersonalData");
+		}
+		// cr-008 end
+
 		$ilCtrl->setParameter($this, "ev_id", $event_id);
 
 		// table of candidates
@@ -219,14 +226,24 @@ class adnCertificateScoringGUI
 
 		// assignment
 		$assignment_id = (int)$_GET["ass_id"];
-		include_once("./Services/ADN/EP/classes/class.adnAssignment.php");
-		$assignment = new adnAssignment($assignment_id);
-		$ilCtrl->setParameter($this, "ass_id", $assignment_id);
+		// cr-008 start
+		if ($assignment_id > 0)
+		{
+			include_once("./Services/ADN/EP/classes/class.adnAssignment.php");
+			$assignment = new adnAssignment($assignment_id);
+			$ilCtrl->setParameter($this, "ass_id", $assignment_id);
 
-		// candidate
-		$candidate_id = $assignment->getUser();
-		include_once("./Services/ADN/ES/classes/class.adnCertifiedProfessional.php");
-		$candidate = new adnCertifiedProfessional($candidate_id);
+			// candidate
+			$candidate_id = $assignment->getUser();
+			include_once("./Services/ADN/ES/classes/class.adnCertifiedProfessional.php");
+			$candidate = new adnCertifiedProfessional($candidate_id);
+		}
+		else
+		{
+			include_once("./Services/ADN/ES/classes/class.adnCertifiedProfessional.php");
+			$candidate = new adnCertifiedProfessional($_GET["cd_id"]);
+		}
+		// cr-008 end
 
 		// certificate
 		if ($a_mode == "edit")
@@ -241,9 +258,15 @@ class adnCertificateScoringGUI
 		$form->setFormAction($ilCtrl->getFormAction($this, "listCandidates"));
 
 		// title
-		include_once("./Services/ADN/EP/classes/class.adnExaminationEvent.php");
-		$title = "<div class=\"small\" style=\"font-weight:normal; margin-bottom:5px;\">".
-			adnExaminationEvent::lookupName($assignment->getEvent())."</div>";
+		// cr-008 start
+		if ($assignment_id > 0)
+		{
+			include_once("./Services/ADN/EP/classes/class.adnExaminationEvent.php");
+			$title = "<div class=\"small\" style=\"font-weight:normal; margin-bottom:5px;\">" .
+				adnExaminationEvent::lookupName($assignment->getEvent()) . "</div>";
+		}
+		// cr-008 end
+
 		if ($a_mode == "create")
 		{
 			$title .= $lng->txt("adn_create_certificate");
@@ -427,14 +450,14 @@ class adnCertificateScoringGUI
 		include_once("./Services/ADN/ED/classes/class.adnSubjectArea.php");
 
 		// get assignment
-		$assignment_id = (int)$_GET["ass_id"];
-		include_once("./Services/ADN/EP/classes/class.adnAssignment.php");
-		$assignment = new adnAssignment($assignment_id);
+		//$assignment_id = (int)$_GET["ass_id"];
+		//include_once("./Services/ADN/EP/classes/class.adnAssignment.php");
+		//$assignment = new adnAssignment($assignment_id);
 
 		// get candidate
-		$candidate_id = $assignment->getUser();
-		include_once("./Services/ADN/ES/classes/class.adnCertifiedProfessional.php");
-		$candidate = new adnCertifiedProfessional($candidate_id);
+		//$candidate_id = $assignment->getUser();
+		//include_once("./Services/ADN/ES/classes/class.adnCertifiedProfessional.php");
+		//$candidate = new adnCertifiedProfessional($candidate_id);
 
 		// check input
 		if ($form->checkInput())
@@ -504,15 +527,25 @@ class adnCertificateScoringGUI
 
 		include_once("./Services/ADN/ED/classes/class.adnSubjectArea.php");
 
-		// get assignment
-		$assignment_id = (int)$_GET["ass_id"];
-		include_once("./Services/ADN/EP/classes/class.adnAssignment.php");
-		$assignment = new adnAssignment($assignment_id);
+		// cr-008 start
+		if ($_GET["ass_id"] > 0)
+		{
+			// get assignment
+			$assignment_id = (int)$_GET["ass_id"];
+			include_once("./Services/ADN/EP/classes/class.adnAssignment.php");
+			$assignment = new adnAssignment($assignment_id);
 
-		// get candidate
-		$candidate_id = $assignment->getUser();
-		include_once("./Services/ADN/ES/classes/class.adnCertifiedProfessional.php");
-		$candidate = new adnCertifiedProfessional($candidate_id);
+			// get candidate
+			$candidate_id = $assignment->getUser();
+		}
+		else
+		{
+			$candidate_id = $_GET["cd_id"];
+		}
+		// cr-008 end
+
+		//include_once("./Services/ADN/ES/classes/class.adnCertifiedProfessional.php");
+		//$candidate = new adnCertifiedProfessional($candidate_id);
 
 		// check input
 		if ($form->checkInput())
@@ -525,8 +558,11 @@ class adnCertificateScoringGUI
 			// certified professional
 			$cert->setCertifiedProfessionalId($candidate_id);
 
-			// examination
-			$cert->setExaminationId($assignment->getEvent());
+			// examination cr-008 added if
+			if ($_GET["ass_id"] > 0)
+			{
+				$cert->setExaminationId($assignment->getEvent());
+			}
 
 			// certificate types
 			foreach(adnCertificate::getCertificateTypes() as $id => $caption)
@@ -560,7 +596,16 @@ class adnCertificateScoringGUI
 
 			// show success message and return to list
 			ilUtil::sendSuccess($lng->txt("adn_certificate_saved"), true);
-			$ilCtrl->redirect($this, "listCandidates");
+			// cr-008 start
+			if ($_GET["ass_id"] > 0)
+			{
+				$ilCtrl->redirect($this, "listCandidates");
+			}
+			else
+			{
+				$ilCtrl->redirectByClass(array("adnBaseGUI", "adnAdministrationGUI", "adnPersonalDataMaintenanceGUI"), "listPersonalData");
+			}
+			// cr-008 end
 		}
 
 		// input not valid: show form again

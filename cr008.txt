@@ -1,3 +1,12 @@
+8 Sachkundige mit im Ausland aisgestellter Bescheinigung im System ohne Prüfung erfassen
+
+Sachkundige/Bescheinigung wird direkt angelegt.
+
+Tabelle adn_cp_professional
+- Datensatz abhängig von adn_md_country (ok), adn_md_wmo.id (ok) und optional! adn_ta_event.id (letzte Schulung)
+
+Tabelle adn_es_certificate
+- Datensatz abhängig von adn_md_wmo (ok), adn_cp_professional (ok) und ep_exam_event (field ep_exam_id can be null)
 
 
 12 Mehrfach vorhandene Sachkundige / Interessenten / Kandidaten entfernen

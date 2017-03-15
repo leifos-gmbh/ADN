@@ -112,7 +112,16 @@ class adnPersonalDataMaintenanceGUI
 	 */
 	protected function listPersonalData()
 	{
-		global $tpl, $ilCtrl;
+		global $tpl, $ilCtrl, $ilToolbar, $lng;
+
+		if ($this->mode == self::MODE_ALL)
+		{
+			include_once("./Services/ADN/EP/classes/class.adnPreparationCandidateGUI.php");
+			$ilCtrl->setParameterByClass("adnpreparationcandidategui", "mode", adnPreparationCandidateGUI::MODE_GENERAL);
+			$ilToolbar->addButton($lng->txt("adn_ad_add_person"),
+				$ilCtrl->getLinkTargetByClass(array("adnbasegui", "adnexaminationpreparationgui", "adnpreparationcandidategui"), "createCandidate")
+			);
+		}
 
 		$this->setTabs();
 
