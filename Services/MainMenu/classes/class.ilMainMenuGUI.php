@@ -817,7 +817,7 @@ class ilMainMenuGUI
 		include_once "Services/YUI/classes/class.ilYuiUtil.php";
 		ilYUIUtil::initConnection();
 
-		// adn-patch start
+		// adn-patchadn start
 		include_once("./Services/ADN/UI/classes/class.adnMainMenuGUI.php");
 		$adn_menu = new adnMainMenuGUI($this);
 		return $adn_menu->getHTML();

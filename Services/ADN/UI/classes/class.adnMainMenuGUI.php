@@ -256,6 +256,16 @@ class adnMainMenuGUI
 		include_once 'Services/MediaObjects/classes/class.ilPlayerUtil.php';
 		ilPlayerUtil::initMediaElementJs();
 
+
+		include_once("./Modules/SystemFolder/classes/class.ilObjSystemFolder.php");
+		$header_top_title = ilObjSystemFolder::_getHeaderTitle();
+		if (trim($header_top_title) != "" && $this->tpl->blockExists("header_top_title"))
+		{
+			$this->tpl->setCurrentBlock("header_top_title");
+			$this->tpl->setVariable("TXT_HEADER_TITLE", $header_top_title);
+			$this->tpl->parseCurrentBlock();
+		}
+
 		$this->tpl->setCurrentBlock("userisloggedin");
 		$this->tpl->setVariable("TXT_LOGIN_AS",$lng->txt("login_as"));
 		$user_img_src = $ilias->account->getPersonalPicturePath("small", true);
