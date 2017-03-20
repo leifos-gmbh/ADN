@@ -52005,7 +52005,7 @@ $pk_fields = array("child");
 $ilDB->addPrimaryKey("tree", $pk_fields);
 
 $in_fields = array("child");
-$ilDB->addIndex("tree", $in_fields, "i1", false);
+#$ilDB->addIndex("tree", $in_fields, "i1", false);
 
 $in_fields = array("parent");
 $ilDB->addIndex("tree", $in_fields, "i2", false);
