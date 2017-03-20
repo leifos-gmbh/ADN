@@ -15596,7 +15596,7 @@ $in_fields = array("expires");
 $ilDB->addIndex("dav_lock", $in_fields, "i3", false);
 
 $in_fields = array("token");
-$ilDB->addUniqueConstraint("dav_lock", $in_fields, "c1");
+#$ilDB->addUniqueConstraint("dav_lock", $in_fields, "c1");
 
 
 //
@@ -34240,7 +34240,7 @@ $pk_fields = array("id");
 $ilDB->addPrimaryKey("prg_usr_progress", $pk_fields);
 
 $in_fields = array("assignment_id","prg_id","usr_id");
-$ilDB->addUniqueConstraint("prg_usr_progress", $in_fields, "con");
+#$ilDB->addUniqueConstraint("prg_usr_progress", $in_fields, "con");
 
 $ilDB->createSequence("prg_usr_progress", 1);
 
@@ -52371,7 +52371,7 @@ $in_fields = array("anonymous_id");
 $ilDB->addIndex("tst_active", $in_fields, "i3", false);
 
 $in_fields = array("user_fi","test_fi","anonymous_id");
-$ilDB->addUniqueConstraint("tst_active", $in_fields, "uc1");
+#$ilDB->addUniqueConstraint("tst_active", $in_fields, "uc1");
 
 $ilDB->createSequence("tst_active", 1);
 
