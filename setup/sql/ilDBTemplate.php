@@ -45214,7 +45214,7 @@ $pk_fields = array("seqnodeid","id");
 $ilDB->addPrimaryKey("sahs_sc13_seq_templ", $pk_fields);
 
 $in_fields = array("seqnodeid","id");
-$ilDB->addIndex("sahs_sc13_seq_templ", $in_fields, "i1", false);
+#$ilDB->addIndex("sahs_sc13_seq_templ", $in_fields, "i1", false);
 
 
 //
