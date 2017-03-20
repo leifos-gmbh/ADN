@@ -2559,9 +2559,9 @@ abstract class ilDB extends PEAR
 
 		$q = "ALTER TABLE $a_table ".
 			" ADD CONSTRAINT $c_name FOREIGN KEY ($fields) ".
-			" REFERENCES $a_ref_table ($ref_fields) ".
-			" ON DELETE NO ACTION".
-			" ON UPDATE NO ACTION";
+			" REFERENCES $a_ref_table ($ref_fields) ";
+			#" ON DELETE NO ACTION".
+			#" ON UPDATE NO ACTION";
 		$r = $this->query($q);
 
 		return $this->handleError($r, "addForeignKey(".$a_table.")");
