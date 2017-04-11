@@ -3032,6 +3032,19 @@ class ilObjUser extends ilObject
 
 		return $styles;
 	}
+	
+	public static function moveAllUsersToStyle($a_to_skin, $a_to_style)
+	{
+		global $ilDB;
+		
+		$query = 'SELECT distinct(usr_id) usrs from usr_data';
+		$res  = $ilDB->query($query);
+		while($row = $res->fetchRow(DB_FETCHMODE_OBJECT))
+		{
+			self::_writePref($row->usrs, "skin", $a_to_skin);
+			self::_writePref($row->usrs, "style", $a_to_style);
+		}
+	}
 
 	/**
 	* skins and styles

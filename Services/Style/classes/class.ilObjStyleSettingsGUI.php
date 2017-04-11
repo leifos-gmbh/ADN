@@ -355,21 +355,7 @@ class ilObjStyleSettingsGUI extends ilObjectGUI
 		}
 		else
 		{
-			$all_styles = ilStyleDefinition::getAllSkinStyles();
-			
-			// get all user assigned styles
-			$all_user_styles = ilObjUser::_getAllUserAssignedStyles();
-			
-			// move users that are not assigned to
-			// currently existing style
-			foreach($all_user_styles as $style)
-			{
-				if (!in_array($style, $all_styles))
-				{
-					$style_arr = explode(":", $style);
-					ilObjUser::_moveUsersToStyle($style_arr[0],$style_arr[1],$to[0],$to[1]);
-				}
-			}
+			ilObjUser::moveAllUsersToStyle($to[0], $to[1]);
 		}
 		
 		ilUtil::sendSuccess($this->lng->txt("msg_obj_modified"), true);
