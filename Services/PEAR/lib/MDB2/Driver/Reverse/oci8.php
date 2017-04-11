@@ -201,7 +201,7 @@ class MDB2_Driver_Reverse_oci8 extends MDB2_Driver_Reverse_Common
                      AND (index_name=%s OR index_name=%s)
                      AND index_name NOT IN (
                            SELECT constraint_name
-                             FROM dba_constraints
+                             FROM all_constraints
                             WHERE (table_name = '.$db->quote($table, 'text').' OR table_name='.$db->quote(strtoupper($table), 'text').")
                               AND constraint_type in ('P','U')
                          )
@@ -246,7 +246,7 @@ class MDB2_Driver_Reverse_oci8 extends MDB2_Driver_Reverse_Common
             }
         }
         $result->free();
-        if (empty($definition['fields'])) {
+        if (empty($definition['fields']) && 0) {
             return $db->raiseError(MDB2_ERROR_NOT_FOUND, null, null,
                 'it was not specified an existing table index', __FUNCTION__);
         }

@@ -1029,6 +1029,10 @@ abstract class ilDB extends PEAR
 	 */
 	public function dropIndexByFields($a_table, $a_fields)
 	{
+		if(!$this->tableExists($a_table))
+		{
+			return true;
+		}
 		$manager = $this->db->loadModule('Manager');
 		$reverse = $this->db->loadModule('Reverse');
 		if($manager)
@@ -1036,10 +1040,19 @@ abstract class ilDB extends PEAR
 			foreach($manager->listTableIndexes($a_table) as $idx_name)
 			{
 				$def = $reverse->getTableIndexDefinition($a_table,$idx_name);
+				$this->handleError($def);	
 				$idx_fields = array_keys((array) $def['fields']);
+				$GLOBALS['ilLog']->dump($idx_fields);
+				$GLOBALS['ilLog']->dump($idx_name);
 				
 				if($idx_fields === $a_fields)
 				{
+					if($this->getDBType() == 'oracle')
+					{
+						$idx_parts = explode('_',$idx_name);
+						$idx_name = $idx_parts[count($idx_parts)-1];
+					}
+
 					return $this->dropIndex($a_table, $idx_name);
 				}
 			}
@@ -1154,6 +1167,11 @@ abstract class ilDB extends PEAR
 				}
 				if ($all_in)
 				{
+					if($this->getDBType() == 'oracle')
+					{
+						$parts = explode('_',$c['name']);
+						$c['name'] = $parts[count($parts)-1];
+					}
 					return $this->dropUniqueConstraint($a_table, $c['name']);
 				}
 			}
