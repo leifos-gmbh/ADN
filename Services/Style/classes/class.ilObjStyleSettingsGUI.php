@@ -355,6 +355,8 @@ class ilObjStyleSettingsGUI extends ilObjectGUI
 		}
 		else
 		{
+			$all_styles = ilStyleDefinition::getAllSkinStyles();
+			
 			// get all user assigned styles
 			$all_user_styles = ilObjUser::_getAllUserAssignedStyles();
 			
