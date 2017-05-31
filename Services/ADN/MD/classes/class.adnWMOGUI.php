@@ -383,22 +383,24 @@ class adnWMOGUI
 		$bbank->setMaxLength(50);
 		$form->addItem($bbank);
 
-		if($this->office->getBankCode())
+		if(!$a_create)
 		{
-			$bcode = new ilNumberInputGUI($lng->txt("adn_bank_code"), "bcode");
-			$bcode->setMaxLength(20);
-			$bcode->setSize(20);
-			$form->addItem($bcode);
-		}
+			if($this->office->getBankCode())
+			{
+				$bcode = new ilNumberInputGUI($lng->txt("adn_bank_code"), "bcode");
+				$bcode->setMaxLength(20);
+				$bcode->setSize(20);
+				$form->addItem($bcode);
+			}
 
-		if($this->office->getBankAccount())
-		{
-			$baccount = new ilNumberInputGUI($lng->txt("adn_bank_account"), "baccount");
-			$baccount->setMaxLength(20);
-			$baccount->setSize(20);
-			$form->addItem($baccount);
+			if($this->office->getBankAccount())
+			{
+				$baccount = new ilNumberInputGUI($lng->txt("adn_bank_account"), "baccount");
+				$baccount->setMaxLength(20);
+				$baccount->setSize(20);
+				$form->addItem($baccount);
+			}
 		}
-		
 
 		$biban = new ilTextInputGUI($lng->txt("adn_bank_iban"), "biban");
 		$biban->setRequired(true);
