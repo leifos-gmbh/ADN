@@ -687,7 +687,7 @@ adn#:#adn_download_notification_letter#:#Antwortschreiben herunterladen
 adn#:#adn_create_notification_letters#:#Antwortschreiben erstellen
 adn#:#adn_invoice#:#Kostenbescheid
 adn#:#adn_due_date#:#Datum der Fälligkeit
-adn#:#adn_zuev_number#:#Codierung (ZÜV-Nummer)
+adn#:#adn_zuev_number#:#Verwendungszweck
 adn#:#adn_type_of_cost#:#Kostengegenstand
 adn#:#adn_list_access_codes#:#Liste Benutzerzugänge
 adn#:#adn_report_salutation_m#:#Sehr geehrter Herr
