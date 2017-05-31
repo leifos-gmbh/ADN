@@ -281,8 +281,8 @@ adn#:#adn_country_code#:#Kennzeichen
 adn#:#adn_country_updated#:#Land wurde gespeichert.
 adn#:#adn_country_created#:#Land wurde hinzugefügt.
 adn#:#adn_country_deleted#:#Land wurde gelöscht.
-adn#:#adn_wmos#:#Wasserschifffahrtsdirektionen
-adn#:#adn_wmo#:#Wasserschifffahrtsdirektion
+adn#:#adn_wmos#:#GDWS
+adn#:#adn_wmo#:#GDWS
 adn#:#adn_wmo_code#:#Behördenkennziffer
 adn#:#adn_add_wmo#:#WSD hinzufügen
 adn#:#adn_url#:#Internet
