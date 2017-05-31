@@ -125,7 +125,7 @@ abstract class adnReport
 		$map['rgt_wmo_street'] = $wmo->getPostalStreet().' '.$wmo->getPostalStreetNumber();
 		$map['rgt_wmo_city'] = $wmo->getPostalZip().' '.$wmo->getPostalCity();
 		$map['rgt_wmo_phone'] = $wmo->getPhone();
-		$map['rgt_wmo_fax'] = $wmo->getFax();
+		$map['rgt_wmo_fax'] = strlen($wmo->getFax()) ? $wmo->getFax() : '-';
 		$map['rgt_wmo_mail'] = $wmo->getEmail();
 		$map['rgt_wmo_url'] = $wmo->getURL();
 		
@@ -134,7 +134,7 @@ abstract class adnReport
 		$map['rgt_iss_identifier'] = $ilUser->getSign();
 		$map['rgt_iss_name'] = $ilUser->getFullname();
 		$map['rgt_iss_phone'] = $ilUser->getPhoneOffice();
-		$map['rgt_iss_fax'] = $ilUser->getFax();
+		$map['rgt_iss_fax'] = strlen($ilUser->getFax()) ? $ilUser->getFax() : '-'; 
 
 		if(ilStr::strLen($ilUser->getEmail()) > self::MAX_RIGHT_COL_LENGTH)
 		{
