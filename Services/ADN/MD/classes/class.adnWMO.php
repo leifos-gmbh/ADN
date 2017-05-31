@@ -561,7 +561,7 @@ class adnWMO extends adnDBBase
 			// do not force decimals
 			// $a_value = number_format($a_value, 2, ".", "");
 
-			$this->cost[$a_type] = array("no" => (int)$a_no,
+			$this->cost[$a_type] = array("no" => $a_no,
 				"desc" => (string)$a_desc,
 				"value" => $a_value);
 		}
@@ -682,7 +682,7 @@ class adnWMO extends adnDBBase
 		foreach($costs as $type => $id)
 		{
 			$cost = $this->getCost($type);
-			$fields[$id."_nr"] = array("integer", $cost["no"]);
+			$fields[$id."_nr"] = array("text", $cost["no"]);
 			$fields[$id."_description"] = array("text", $cost["desc"]);
 			$fields[$id."_cost"] = array("integer", $cost["value"]*100);
 		}
