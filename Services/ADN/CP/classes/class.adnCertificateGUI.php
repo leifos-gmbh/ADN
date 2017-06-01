@@ -977,7 +977,7 @@ class adnCertificateGUI
 		}
 		include_once("./Services/ADN/Report/classes/class.adnReportCertificate.php");
 		ilUtil::deliverFile(
-			adnReportCertificate::getCertificate((int)$_REQUEST['ct_id']),
+			adnReportCertificate::lookupCertificate((int)$_REQUEST['ct_id']),
 			"Verlaengerung.pdf",
 			'application/pdf'
 		);
@@ -997,7 +997,7 @@ class adnCertificateGUI
 		}
 		include_once("./Services/ADN/Report/classes/class.adnReportCertificate.php");
 		ilUtil::deliverFile(
-			adnReportCertificate::getCertificate((int)$_REQUEST['ct_id']),
+			adnReportCertificate::lookupCertificate((int)$_REQUEST['ct_id']),
 			"Ersatzausfertigung.pdf",
 			'application/pdf'
 		);

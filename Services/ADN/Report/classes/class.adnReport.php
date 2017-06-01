@@ -41,6 +41,15 @@ abstract class adnReport
 			$this->datadir = ilUtil::getDataDir().'/'.$this->basedir.'/'.$this->getRelativeDataDir());
 		$GLOBALS['ilLog']->write(__METHOD__.': '.$this->datadir);
 	}
+	
+	/**
+	 * Get a certificate if available
+	 * @return adnCertificate | null
+	 */
+	public function getCertificate()
+	{
+		return null;
+	}
 
 
 	/**
@@ -121,6 +130,15 @@ abstract class adnReport
 		{
 			$map['rgt_wmo_name'] = "<br>";
 		}
+		
+		if($this->getCertificate() instanceof adnCertificate)
+		{
+			$full_nr = $wmo->getCode()."-".
+				str_pad($this->getCertificate()->getNumber(), 3, "0", STR_PAD_LEFT)."-".
+				$this->getCertificate()->getIssuedOn()->get(IL_CAL_FKT_DATE,'Y');
+			$map['rgt_cert_number'] = $full_nr;
+		}
+		
 		$map['rgt_wmo_name'] .= $title;
 		$map['rgt_wmo_street'] = $wmo->getPostalStreet().' '.$wmo->getPostalStreetNumber();
 		$map['rgt_wmo_city'] = $wmo->getPostalZip().' '.$wmo->getPostalCity();
