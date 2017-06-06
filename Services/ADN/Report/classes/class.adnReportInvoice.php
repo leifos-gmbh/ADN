@@ -276,7 +276,8 @@ class adnReportInvoice extends adnReport
 		$map['code'] = $this->getCode();
 		
 		$map['iban'] = $this->getWMO()->getBankIBAN();
-		$map['bic'] = $this->getWMO()->getBankBIC().', '.$this->getWMO()->getBankInstitute();
+		$map['bic'] = $this->getWMO()->getBankBIC();
+		$map['account'] = $this->getWMO()->getBankInstitute();
 		
 		$map['rcp_salutation'] = 
 			$lng->txt('adn_report_salutation_'.$this->getPro()->getSalutation()).' '.

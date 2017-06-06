@@ -34,4 +34,20 @@
 		array("type" => "text", "length" => 10, "notnull" => false,
 			"default" => "", "fixed" => false));
 ?>
+<#7>
+<?php
+if (!$ilDB->tableColumnExists("adn_md_wmo", "subtitle"))
+{
+	$ilDB->addTableColumn("adn_md_wmo", "subtitle", array(
+		"notnull" => true,
+		"length" => 64,
+		"type" => "text"));
+}
+?>
+<#8>
+<?php
 
+	$ilDB->modifyTableColumn('adn_md_wmo', 'bank',
+		array("type" => "text", "length" => 64, "notnull" => false,
+			"default" => "", "fixed" => false));
+?>

@@ -114,7 +114,7 @@ abstract class adnReport
 	 */
 	public function addStandardRightColumn($map,$wsd)
 	{
-		global $ilUser;
+		global $ilUser, $lng;
 		
 		include_once './Services/ADN/MD/classes/class.adnWMO.php';
 		include_once './Services/Calendar/classes/class.ilCalendarUtil.php';
@@ -139,7 +139,16 @@ abstract class adnReport
 			$map['rgt_cert_number'] = $full_nr;
 		}
 		
+		// banking details
+		$info = $lng->txt('adn_banking_details').':';
+		$info .= ("\n".$wmo->getBankInstitute());
+		$info .= ("\n".$lng->txt('adn_bank_iban').': '.$wmo->getBankIBAN());
+		$info .= ("\n".$lng->txt('adn_bank_bic').': '.$wmo->getBankBIC());
+		
+		$map['rgt_bank_account_info'] = $info;
+		
 		$map['rgt_wmo_name'] .= $title;
+		$map['rgt_wmo_subtitle'] = $wmo->getSubtitle();
 		$map['rgt_wmo_street'] = $wmo->getPostalStreet().' '.$wmo->getPostalStreetNumber();
 		$map['rgt_wmo_city'] = $wmo->getPostalZip().' '.$wmo->getPostalCity();
 		$map['rgt_wmo_phone'] = $wmo->getPhone();

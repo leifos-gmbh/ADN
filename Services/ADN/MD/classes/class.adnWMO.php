@@ -15,6 +15,7 @@ class adnWMO extends adnDBBase
 {
 	protected $id; // [int]
 	protected $name; // [string]
+	protected $subtitle; // [string]
 	protected $code; // [string]
 	protected $postal_street; // [string]
 	protected $postal_street_no; // [int]
@@ -114,6 +115,24 @@ class adnWMO extends adnDBBase
 	public function getName()
 	{
 		return $this->name;
+	}
+	
+	/**
+	 * Set subtitle
+	 * @param string $a_subtitle
+	 */
+	public function setSubtitle($a_subtitle)
+	{
+		$this->subtitle = $a_subtitle;
+	}
+	
+	/**
+	 * get subtitle
+	 * @return string
+	 */
+	public function getSubtitle()
+	{
+		return $this->subtitle;
 	}
 
 	/**
@@ -611,7 +630,7 @@ class adnWMO extends adnDBBase
 			return;
 		}
 
-		$res = $ilDB->query("SELECT code_nr,name,street,street_no,postal_code,city,visit_street,".
+		$res = $ilDB->query("SELECT code_nr,name,subtitle,street,street_no,postal_code,city,visit_street,".
 			"visit_street_no,visit_postal_code,visit_city,bank,bank_id,account_id,bic,iban,phone,".
 			"fax,email,internet,cert_nr,cert_description,cert_cost,duplicate_nr,duplicate_description,".
 			"duplicate_cost,ext_nr,ext_description,ext_cost,exam_nr,exam_description,exam_cost".
@@ -621,6 +640,7 @@ class adnWMO extends adnDBBase
 		
 		$this->setCode($set["code_nr"]);
 		$this->setName($set["name"]);
+		$this->setSubtitle($set['subtitle']);
 		$this->setPostalStreet($set["street"]);
 		$this->setPostalStreetNumber($set["street_no"]);
 		$this->setPostalZip($set["postal_code"]);
@@ -657,6 +677,7 @@ class adnWMO extends adnDBBase
 	{
 		$fields = array("code_nr" => array("text", $this->getCode()),
 			"name" => array("text", $this->getName()),
+			'subtitle' => array('text', $this->getSubtitle()), 
 			"street" => array("text", $this->getPostalStreet()),
 			"street_no" => array("text", $this->getPostalStreetNumber()),
 			"postal_code" => array("text", $this->getPostalZip()),
@@ -787,7 +808,7 @@ class adnWMO extends adnDBBase
 	{
 		global $ilDB;
 
-		$sql = "SELECT id,code_nr,name".
+		$sql = "SELECT id,code_nr,name,subtitle".
 			" FROM adn_md_wmo";
 		if(!$a_with_archived)
 		{

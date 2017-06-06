@@ -249,7 +249,7 @@ class adnReportScoreNotificationLetter extends adnReport
 			$count_created++;
 			
 			$current_form = $form[$this->getStatus($assignment,$cand)];
-	
+			
 			$writer->xmlStartTag('action',
 				array(
 					'method'	=> 'fillPdfTemplate'

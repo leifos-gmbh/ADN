@@ -152,6 +152,7 @@ class adnWMOGUI
 			include_once("./Services/ADN/MD/classes/class.adnWMO.php");
 			$office = new adnWMO();
 			$office->setName($form->getInput("name"));
+			$office->setSubtitle($form->getInput('subtitle'));
 			$office->setCode($form->getInput("code"));
 			$office->setPhone($form->getInput("fon"));
 			$office->setFax($form->getInput("fax"));
@@ -225,6 +226,7 @@ class adnWMOGUI
 		if($form->checkInput())
 		{
 			$this->office->setName($form->getInput("name"));
+			$this->office->setSubtitle($form->getInput('subtitle'));
 			$this->office->setCode($form->getInput("code"));
 			$this->office->setPhone($form->getInput("fon"));
 			$this->office->setFax($form->getInput("fax"));
@@ -295,6 +297,11 @@ class adnWMOGUI
 		$name->setRequired(true);
 		$name->setMaxLength(100);
 		$form->addItem($name);
+
+		$stitle = new ilTextInputGUI($lng->txt("adn_subtitle"), "subtitle");
+		$stitle->setRequired(true);
+		$stitle->setMaxLength(100);
+		$form->addItem($stitle);
 
 		$code = new ilTextInputGUI($lng->txt("adn_wmo_code"), "code");
 		$code->setRequired(true);
@@ -380,7 +387,7 @@ class adnWMOGUI
 
 		$bbank = new ilTextInputGUI($lng->txt("adn_bank"), "bbank");
 		$bbank->setRequired(true);
-		$bbank->setMaxLength(50);
+		$bbank->setMaxLength(64);
 		$form->addItem($bbank);
 
 		if(!$a_create)
@@ -522,6 +529,7 @@ class adnWMOGUI
 		else
 		{
 			$name->setValue($this->office->getName());
+			$stitle->setValue($this->office->getSubtitle());
 			$code->setValue($this->office->getCode());
 			$fon->setValue($this->office->getPhone());
 			$fax->setValue($this->office->getFax());

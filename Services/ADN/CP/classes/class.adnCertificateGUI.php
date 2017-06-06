@@ -282,6 +282,10 @@ class adnCertificateGUI
 		foreach ($wmos as $wmo)
 		{
 			$options[$wmo["id"]] = $wmo["name"];
+			if(strlen($wmo['subtitle']))
+			{
+				$options[$wmo['id']] .= (' ('.$wmo['subtitle'].')');
+			}
 		}
 		$wmo = new ilSelectInputGUI($lng->txt("adn_issued_by"), "issued_by_wmo");
 		$wmo->setOptions($options);
