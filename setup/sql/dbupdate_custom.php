@@ -39,9 +39,13 @@
 if (!$ilDB->tableColumnExists("adn_md_wmo", "subtitle"))
 {
 	$ilDB->addTableColumn("adn_md_wmo", "subtitle", array(
-		"notnull" => true,
+		"notnull" => false,
 		"length" => 64,
-		"type" => "text"));
+		"type" => "text",
+		"default" => '',
+		'fixed' => true
+		)
+	);
 }
 ?>
 <#8>
