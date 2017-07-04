@@ -963,6 +963,7 @@ class adnCertifiedProfessional extends adnDBBase
 
 				// delete all invitations
 				include_once("./Services/ADN/Report/classes/class.adnReportInvitation.php");
+				include_once "Services/ADN/EP/classes/class.adnAssignment.php";
 				foreach (adnAssignment::getAllAssignments(array("user_id" => $this->getId())) as $ass)
 				{
 					if ($ass["invited_on"] != "")
@@ -976,6 +977,7 @@ class adnCertifiedProfessional extends adnDBBase
 				include_once("./Services/ADN/Report/classes/class.adnReportAnswerSheet.php");
 				include_once("./Services/ADN/EP/classes/class.adnAnswerSheet.php");
 				include_once("./Services/ADN/EP/classes/class.adnExaminationEvent.php");
+				include_once "Services/ADN/EP/classes/class.adnAssignment.php";
 				foreach (adnAssignment::getAllAssignments(array("user_id" => $this->getId())) as $ass)
 				{
 					$exam_event  = new adnExaminationEvent($ass["ep_exam_event_id"]);
