@@ -55,3 +55,7 @@ if (!$ilDB->tableColumnExists("adn_md_wmo", "subtitle"))
 		array("type" => "text", "length" => 64, "notnull" => false,
 			"default" => "", "fixed" => false));
 ?>
+<#9>
+<?php
+$ilCtrlStructureReader->getStructure();
+?>

@@ -76,7 +76,7 @@ class adnMainMenuGUI
 	const AD_ICP = "ad_icp";	// import professionals
 
 	// cr-008 start
-	const AD_PDM = "ad_pdm";	// maintenance personal data
+	const CP_PDM = "cp_pdm";	// maintenance personal data
 	// cr-008 end
 
 
@@ -164,7 +164,10 @@ class adnMainMenuGUI
 			$items[adnMainMenuGUI::CP] = array(
 					adnMainMenuGUI::CP_CTS,
 					adnMainMenuGUI::CP_CPR,
-					adnMainMenuGUI::CP_DIR
+					adnMainMenuGUI::CP_DIR,
+					// cr-008 start
+					adnMainMenuGUI::CP_PDM
+					// cr-008 end
 				);
 		}
 
@@ -193,9 +196,6 @@ class adnMainMenuGUI
 
 			if(adnPerm::check(adnPerm::AD, adnPerm::READ))
 			{
-				// cr-008 start
-				$items[adnMainMenuGUI::MD][] = adnMainMenuGUI::AD_PDM;
-				// cr-008 end
 				$items[adnMainMenuGUI::MD][] = adnMainMenuGUI::AD_MNT;
 				$items[adnMainMenuGUI::MD][] = adnMainMenuGUI::AD_CHR;
 				$items[adnMainMenuGUI::MD][] = adnMainMenuGUI::AD_USR;

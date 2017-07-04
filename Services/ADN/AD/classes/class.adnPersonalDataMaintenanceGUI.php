@@ -64,7 +64,9 @@ class adnPersonalDataMaintenanceGUI
 	 */
 	public function executeCommand()
 	{
-		global $ilCtrl;
+		global $ilCtrl, $tpl, $lng;
+
+		$tpl->setTitle($lng->txt("adn_cp")." - ".$lng->txt("adn_cp_pdm"));
 		
 		$next_class = $ilCtrl->getNextClass();
 		// forward command to next gui class in control flow
@@ -83,7 +85,7 @@ class adnPersonalDataMaintenanceGUI
 					case "resetFilter":
 					case "showPersonalDataDetails":
 					case "jumpToList":
-						if(adnPerm::check(adnPerm::AD, adnPerm::READ))
+						if(adnPerm::check(adnPerm::CP, adnPerm::READ))
 						{
 							$this->$cmd();
 						}
@@ -92,7 +94,7 @@ class adnPersonalDataMaintenanceGUI
 					// commands that need write permission
 					case "delete":
 					case "confirmDeletion":
-						if(adnPerm::check(adnPerm::AD, adnPerm::WRITE))
+						if(adnPerm::check(adnPerm::CP, adnPerm::WRITE))
 						{
 							$this->$cmd();
 						}

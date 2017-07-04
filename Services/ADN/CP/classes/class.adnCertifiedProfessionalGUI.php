@@ -14,6 +14,9 @@
  * @ilCtrl_Calls adnCertifiedProfessionalGUI: adnCertificateGUI
  * @ilCtrl_Calls adnCertifiedProfessionalGUI: adnCertifiedProfessionalDirectoryGUI
  * @ilCtrl_Calls adnCertifiedProfessionalGUI: adnCertifiedProfessionalDataGUI
+ * cr-008 start
+ * @ilCtrl_Calls adnCertifiedProfessionalGUI: adnPersonalDataMaintenanceGUI
+ * cr-008 end
  */
 class adnCertifiedProfessionalGUI
 {
@@ -53,6 +56,14 @@ class adnCertifiedProfessionalGUI
 					$ilCtrl->setCmdClass("adncertifiedprofessionaldatagui");
 					$ilCtrl->setCmd("listProfessionals");
 					break;
+
+				// cr-008 start
+				case adnMainMenuGUI::CP_PDM:
+					$ilCtrl->setCmdClass("adnpersonaldatamaintenancegui");
+					$ilCtrl->setCmd("listPersonalData");
+					break;
+				// cr-008 end
+
 			}
 			$next_class = $ilCtrl->getNextClass();
 		}
@@ -87,6 +98,15 @@ class adnCertifiedProfessionalGUI
 				$dir_gui = new adnCertifiedProfessionalDataGUI();
 				$ilCtrl->forwardCommand($dir_gui);
 				break;
+
+			// cr-008 start
+			case "adnpersonaldatamaintenancegui":
+				include_once("./Services/ADN/AD/classes/class.adnPersonalDataMaintenanceGUI.php");
+				$pdm_gui = new adnPersonalDataMaintenanceGUI();
+				$ilCtrl->forwardCommand($pdm_gui);
+				break;
+			// cr-008 end
+
 		}
 
 		adnBaseGUI::setHelpButton($ilCtrl->getCmdClass());

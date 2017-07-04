@@ -722,7 +722,7 @@ adn#:#adn_failed_sum#:#Failed (Total Points)
 adn#:#adn_certificate_issued_on_warning#:#Are you sure you want to choose a different year as issued on date?
 administration#:#adm_adn#:#ADN
 adn#:#adn_no_entries#:#Keine Einträge
-adn#:#adn_ad_pdm#:#Manage Personal Data
+adn#:#adn_cp_pdm#:#Manage Personal Data
 adn#:#adn_really_delete_pd#:#Sollen die folgenden Sachkundigen/Interessenten/Kandidaten wirklich gelöscht werden?
 adn#:#adn_ad_wmo_created#:#Angelegt durch
 adn#:#adn_personal_data_notification#:#ADN Benachrichtigung über Löschkandidaten
