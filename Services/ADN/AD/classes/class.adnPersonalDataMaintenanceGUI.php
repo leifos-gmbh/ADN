@@ -291,7 +291,7 @@ class adnPersonalDataMaintenanceGUI
 		// certificates
 		$items = array();
 		include_once("./Services/ADN/ES/classes/class.adnCertificate.php");
-		foreach (adnCertificate::getAllCertificates(array("user_id" => $this->pid), true, true) as $cert)
+		foreach (adnCertificate::getAllCertificates(array("cp_professional_id" => $this->pid), true, true) as $cert)
 		{
 			$c = new adnCertificate($cert["id"]);
 			$items[] = $c->getFullCertificateNumber().", ".$this->lng->txt("adn_valid_until").": ".ilDatePresentation::formatDate($c->getValidUntil());
@@ -316,7 +316,7 @@ class adnPersonalDataMaintenanceGUI
 		$items = array();
 		include_once("./Services/ADN/ES/classes/class.adnCertificate.php");
 		include_once './Services/ADN/Report/classes/class.adnReportInvoice.php';
-		foreach (adnCertificate::getAllCertificates(array("user_id" => $this->pid), true, true) as $cert)
+		foreach (adnCertificate::getAllCertificates(array("cp_professional_id" => $this->pid), true, true) as $cert)
 		{
 			if (adnReportInvoice::hasInvoice($cert["id"]))
 			{

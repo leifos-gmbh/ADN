@@ -943,7 +943,7 @@ class adnCertifiedProfessional extends adnDBBase
 				$this->setFirstName(null);
 				$this->setLastName(null);
 				$this->setBirthdate(new ilDate());
-				$this->setCitizenship(null);
+				//$this->setCitizenship(null);
 				$this->setPostalCountry(null);
 				$this->setPostalCode(null);
 				$this->setPostalCity(null);
@@ -988,7 +988,7 @@ class adnCertifiedProfessional extends adnDBBase
 
 				// archive/delete all certificates
 				include_once("./Services/ADN/Report/classes/class.adnReportCertificate.php");
-				foreach (adnCertificate::getAllCertificates(array("user_id" => $this->getId()), true, true) as $cert)
+				foreach (adnCertificate::getAllCertificates(array("cp_professional_id" => $this->getId()), true, true) as $cert)
 				{
 					$c = new adnCertificate($cert["id"]);
 
@@ -1017,7 +1017,7 @@ class adnCertifiedProfessional extends adnDBBase
 				// delete all invoices
 				include_once("./Services/ADN/ES/classes/class.adnCertificate.php");
 				include_once './Services/ADN/Report/classes/class.adnReportInvoice.php';
-				foreach (adnCertificate::getAllCertificates(array("user_id" => $this->pid), true, true) as $cert)
+				foreach (adnCertificate::getAllCertificates(array("cp_professional_id" => $this->getId()), true, true) as $cert)
 				{
 					if (adnReportInvoice::hasInvoice($cert["id"]))
 					{
