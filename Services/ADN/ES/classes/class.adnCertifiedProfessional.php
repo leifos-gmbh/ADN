@@ -968,7 +968,10 @@ class adnCertifiedProfessional extends adnDBBase
 				{
 					if ($ass["invited_on"] != "")
 					{
-						$inv = new adnReportInvitation($ass["ep_exam_event_id"]);
+						include_once("./Services/ADN/EP/classes/class.adnExaminationEvent.php");
+						$inv = new adnReportInvitation(
+							new adnExaminationEvent($ass['ep_exam_event_id'])
+						);
 						$inv->delete($this->getId());
 					}
 				}
