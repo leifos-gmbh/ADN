@@ -59,3 +59,12 @@ if (!$ilDB->tableColumnExists("adn_md_wmo", "subtitle"))
 <?php
 $ilCtrlStructureReader->getStructure();
 ?>
+<#10>
+<?php
+
+$query = 'update adn_ep_assignment set score_case = score_case * 10';
+$res = $ilDB->manipulate($query);
+$query = 'update adn_ep_assignment set score_mc = score_mc * 10';
+$res = $ilDB->manipulate($query);
+
+?>
