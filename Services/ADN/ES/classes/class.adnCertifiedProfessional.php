@@ -994,6 +994,7 @@ class adnCertifiedProfessional extends adnDBBase
 
 				// archive/delete all certificates
 				include_once("./Services/ADN/Report/classes/class.adnReportCertificate.php");
+				include_once './Services/ADN/ES/classes/class.adnCertificate.php';
 				foreach (adnCertificate::getAllCertificates(array("cp_professional_id" => $this->getId()), true, true) as $cert)
 				{
 					$c = new adnCertificate($cert["id"]);
