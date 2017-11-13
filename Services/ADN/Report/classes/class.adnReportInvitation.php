@@ -269,7 +269,7 @@ class adnReportInvitation extends adnReport
 		$map['exam_date'] = sprintf(
 			$lng->txt('adn_date_long'),
 			$weekday,
-			$exam->get(IL_CAL_FKT_DATE,'d.m.Y').' '.$exam->get(IL_CAL_FKT_DATE,'H:i')
+			$exam->get(IL_CAL_FKT_DATE,'d.m.Y').', '.$exam->get(IL_CAL_FKT_DATE,'H:i')
 			).' '.$lng->txt('adn_report_date_clock');
 		
 		
