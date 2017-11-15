@@ -234,8 +234,8 @@ class adnScoringGUI
 		$mc->setDecimals(1);
 		$mc->setRequired(true);
 		$mc->setMinValue(0);
-		$mc->setSize(4);
-		$mc->setMaxLength(4);
+		$mc->setSize(5);
+		$mc->setMaxLength(5);
 		if ($assignment->getScoreMc() != null)
 		{
 			$mc->setValue($assignment->getScoreMc());
@@ -260,8 +260,8 @@ class adnScoringGUI
 			$case->setDecimals(1);
 			$case->setRequired(true);
 			$case->setMinValue(0);
-			$case->setSize(4);
-			$case->setMaxLength(4);
+			$case->setSize(5);
+			$case->setMaxLength(5);
 			$case->setValue($assignment->getScoreCase());
 			$form->addItem($case);
 		}
