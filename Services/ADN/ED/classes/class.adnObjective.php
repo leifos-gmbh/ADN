@@ -325,11 +325,17 @@ class adnObjective extends adnDBBase
 				{
 					foreach($all as $sobj_id => $name)
 					{
+						ilLoggerFactory::getLogger('adn')->info('Validating: ' . $sobj_id);
 						if(
 							sizeof(adnQuestionTargetNumbers::getBySubobjective($sobj_id)) ||
 							sizeof(adnExaminationQuestion::getBySubobjective($sobj_id)))
 						{
+							ilLoggerFactory::getLogger('adn')->info('Validating: ' . $sobj_id . ' is in use.');
 							$in_use = true;
+						}
+						else
+						{
+							ilLoggerFactory::getLogger('adn')->info('Validating: ' . $sobj_id . ' is in not use.');
 						}
 					}
 				}
