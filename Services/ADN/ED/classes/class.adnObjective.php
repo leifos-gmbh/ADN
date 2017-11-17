@@ -325,7 +325,9 @@ class adnObjective extends adnDBBase
 				{
 					foreach($all as $sobj_id => $name)
 					{
-						if(sizeof(adnExaminationQuestion::getBySubobjective($sobj_id)))
+						if(
+							sizeof(adnQuestionTargetNumbers::getBySubobjective($sobj_id)) ||
+							sizeof(adnExaminationQuestion::getBySubobjective($sobj_id)))
 						{
 							$in_use = true;
 						}
