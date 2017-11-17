@@ -789,8 +789,8 @@ adn#:#adn_no_entries#:#Keine Einträge
 adn#:#adn_cp_pdm#:#Personenbezogene Daten
 adn#:#adn_really_delete_pd#:#Sollen die folgenden Sachkundigen/Interessenten/Kandidaten wirklich gelöscht werden?
 adn#:#adn_ad_wmo_created#:#Angelegt durch
-adn#:#adn_personal_data_notification#:#ADN Benachrichtigung über Löschkandidaten
-adn#:#adn_personal_data_notification_desc#:#Die WSDen werden über anstehende Löschkandidaten (Sachkundige und Prüfungskandidaten) informiert.
+common#:#adn_personal_data_notification#:#ADN Benachrichtigung über Löschkandidaten
+common#:#adn_personal_data_notification_desc#:#Die WSDen werden über anstehende Löschkandidaten (Sachkundige und Prüfungskandidaten) informiert.
 adn#:#adn_ad_pd_all#:#Alle
 adn#:#adn_ad_pd_cand#:#Prüfungskandidaten (älter 2 Jahre)
 adn#:#adn_ad_pd_cert#:#Sachkundige (älter 7 Jahre)
