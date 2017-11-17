@@ -340,6 +340,14 @@ class adnObjective extends adnDBBase
 			}
 			else
 			{
+				// delete subobjectives
+				include_once './Services/ADN/ED/classes/class.adnSubobjective.php';
+				foreach(adnSubobjective::lookupIdByObjective($id) as $subobjective_id)
+				{
+					$subobjective = new adnSubobjective($subobjective_id);
+					$subobjective->delete();
+				}
+				
 				$ilDB->manipulate("UPDATE adn_ep_sheet_question".
 					" SET ed_objective_id = NULL".
 					" WHERE ed_objective_id = ".$ilDB->quote($id, "integer"));

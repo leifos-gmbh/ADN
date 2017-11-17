@@ -32,6 +32,28 @@ class adnSubobjective extends adnDBBase
 			$this->read();
 		}
 	}
+	
+	/**
+	 * Get ids by objective 
+	 * @global ilDB $ilDB
+	 * @param int $a_objective
+	 * @return int[]
+	 */
+	public static function lookupIdByObjective($a_objective)
+	{
+		global $ilDB;
+		
+		$query = 'SELECT id from adn_ed_subobjective '.
+			'WHERE ed_objective_id = ' . $ilDB->quote($a_objective, 'integer');
+		$res = $ilDB->query($query);
+		
+		$ids = array();
+		while($row = $res->fetchRow(DB_FETCHMODE_OBJECT))
+		{
+			$ids[] = $row->id;
+		}
+		return $ids;
+	}
 
 	/**
 	 * Set id
