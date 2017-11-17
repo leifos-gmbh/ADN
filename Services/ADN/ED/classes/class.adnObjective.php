@@ -311,7 +311,8 @@ class adnObjective extends adnDBBase
 
 			include_once "Services/ADN/ED/classes/class.adnExaminationQuestion.php";
 			include_once "Services/ADN/ED/classes/class.adnQuestionTargetNumbers.php";
-			if(sizeof(adnQuestionTargetNumbers::getByObjective($id)) ||
+			if(
+				sizeof(adnQuestionTargetNumbers::getByObjective($id)) ||
 				sizeof(adnExaminationQuestion::getByObjective($id)))
 			{
 				$in_use = true;
@@ -365,9 +366,11 @@ class adnObjective extends adnDBBase
 				$ilDB->manipulate("DELETE FROM adn_ed_target_nr_obj".
 					" WHERE ed_objective_id = ".$ilDB->quote($id, "integer"));
 				$ilDB->manipulate("DELETE FROM adn_ed_subobjective".
-					" WHERE ed_objective_id = ".$ilDB->quote($id, "integer"));
+					" WHERE ed_objective_id = ".$ilDB->quote($id, "integer").' '.
+					' AND archived < 1 ');
 				$ilDB->manipulate("DELETE FROM adn_ed_objective".
-					" WHERE id = ".$ilDB->quote($id, "integer"));
+					" WHERE id = ".$ilDB->quote($id, "integer").' '.
+					' AND archived < 1 ');
 				$this->setId(null);
 			}
 			return true;
