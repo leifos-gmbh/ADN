@@ -345,7 +345,7 @@ class adnObjective extends adnDBBase
 				// delete subobjectives
 				include_once './Services/ADN/ED/classes/class.adnSubobjective.php';
 				ilLoggerFactory::getLogger('adn')->info('reading subobjectives for ' . $id);
-				foreach(adnSubobjective::lookupIdByObjective($id) as $subobjective_id)
+				foreach((array) adnSubobjective::getSubobjectivesSelect($id) as $subobjective_id => $name)
 				{
 					ilLoggerFactory::getLogger('adn')->info('---- deleting subobjective: ' . $subobjective_id);
 					$subobjective = new adnSubobjective($subobjective_id);
