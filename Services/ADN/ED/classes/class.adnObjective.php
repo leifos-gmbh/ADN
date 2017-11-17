@@ -321,10 +321,10 @@ class adnObjective extends adnDBBase
 			if(!$in_use)
 			{
 				include_once "./Services/ADN/ED/classes/class.adnSubobjective.php";
-				$all = adnSubobjective::getSubobjectivesSelect($id);
+				$all = adnSubobjective::lookupIdByObjective($id);
 				if(sizeof($all))
 				{
-					foreach($all as $sobj_id => $name)
+					foreach($all as $sobj_id)
 					{
 						ilLoggerFactory::getLogger('adn')->info('Validating: ' . $sobj_id);
 						if(
@@ -352,7 +352,7 @@ class adnObjective extends adnDBBase
 				// delete subobjectives
 				include_once './Services/ADN/ED/classes/class.adnSubobjective.php';
 				ilLoggerFactory::getLogger('adn')->info('reading subobjectives for ' . $id);
-				foreach((array) adnSubobjective::getSubobjectivesSelect($id) as $subobjective_id => $name)
+				foreach((array) adnSubobjective::lookupIdByObjective($id) as $subobjective_id)
 				{
 					ilLoggerFactory::getLogger('adn')->info('---- deleting subobjective: ' . $subobjective_id);
 					$subobjective = new adnSubobjective($subobjective_id);
