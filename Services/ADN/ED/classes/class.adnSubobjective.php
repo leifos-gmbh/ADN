@@ -256,12 +256,13 @@ class adnSubobjective extends adnDBBase
 			// U.PV.3.4: check if subobjective is used in any question
 
 			$in_use = false;
-
+			
 			include_once "Services/ADN/ED/classes/class.adnExaminationQuestion.php";
 			include_once "Services/ADN/ED/classes/class.adnQuestionTargetNumbers.php";
 			if(sizeof(adnQuestionTargetNumbers::getBySubobjective($id)) ||
 				sizeof(adnExaminationQuestion::getBySubobjective($id)))
 			{
+				ilLoggerFactory::getLogger('adn')->info('------ subobjective is in use.');
 				$in_use = true;
 			}
 
@@ -272,6 +273,7 @@ class adnSubobjective extends adnDBBase
 			}
 			else
 			{
+				ilLoggerFactory::getLogger('adn')->info('------ deleting subobjective.');
 				$ilDB->manipulate("DELETE FROM adn_ed_target_nr_obj".
 					" WHERE ed_subobjective_id = ".$ilDB->quote($id, "integer"));
 				$ilDB->manipulate("DELETE FROM adn_ed_subobjective".

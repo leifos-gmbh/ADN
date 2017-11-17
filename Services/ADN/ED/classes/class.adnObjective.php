@@ -344,12 +344,15 @@ class adnObjective extends adnDBBase
 			{
 				// delete subobjectives
 				include_once './Services/ADN/ED/classes/class.adnSubobjective.php';
+				ilLoggerFactory::getLogger('adn')->info('reading subobjectives for ' . $id);
 				foreach(adnSubobjective::lookupIdByObjective($id) as $subobjective_id)
 				{
+					ilLoggerFactory::getLogger('adn')->info('---- deleting subobjective: ' . $subobjective_id);
 					$subobjective = new adnSubobjective($subobjective_id);
 					$subobjective->delete();
 				}
 				
+				ilLoggerFactory::getLogger('adn')->info('-- deleting objectives for' . $id);
 				$ilDB->manipulate("UPDATE adn_ep_sheet_question".
 					" SET ed_objective_id = NULL".
 					" WHERE ed_objective_id = ".$ilDB->quote($id, "integer"));
