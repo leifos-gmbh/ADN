@@ -155,7 +155,7 @@ class adnSubobjective extends adnDBBase
 		$this->setTopic($set["topic"]);
 		$this->setNumber($set["nr"]);
 
-		parent::read($a_id, "adn_ed_subobjective");
+		parent::read($id, "adn_ed_subobjective");
 	}
 
 	/**
