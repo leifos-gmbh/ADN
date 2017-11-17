@@ -449,7 +449,7 @@ class adnCertificate extends adnDBBase
 					$rec["type_".$k]);
 			}
 
-			parent::read($id, "adn_es_certificate");
+			parent::read($this->getId(), "adn_es_certificate");
 		}
 	}
 
