@@ -311,7 +311,8 @@ class adnObjective extends adnDBBase
 
 			include_once "Services/ADN/ED/classes/class.adnExaminationQuestion.php";
 			include_once "Services/ADN/ED/classes/class.adnQuestionTargetNumbers.php";
-			if(sizeof(adnQuestionTargetNumbers::getByObjective($id)) ||
+			if(
+				sizeof(adnQuestionTargetNumbers::getByObjective($id)) ||
 				sizeof(adnExaminationQuestion::getByObjective($id)))
 			{
 				$in_use = true;
@@ -320,16 +321,22 @@ class adnObjective extends adnDBBase
 			if(!$in_use)
 			{
 				include_once "./Services/ADN/ED/classes/class.adnSubobjective.php";
-				$all = adnSubobjective::getSubobjectivesSelect($id);
+				$all = adnSubobjective::lookupIdByObjective($id);
 				if(sizeof($all))
 				{
-					foreach($all as $sobj_id => $name)
+					foreach($all as $sobj_id)
 					{
+						ilLoggerFactory::getLogger('adn')->info('Validating: ' . $sobj_id);
 						if(
 							sizeof(adnQuestionTargetNumbers::getBySubobjective($sobj_id)) ||
 							sizeof(adnExaminationQuestion::getBySubobjective($sobj_id)))
 						{
+							ilLoggerFactory::getLogger('adn')->info('Validating: ' . $sobj_id . ' is in use.');
 							$in_use = true;
+						}
+						else
+						{
+							ilLoggerFactory::getLogger('adn')->info('Validating: ' . $sobj_id . ' is in not use.');
 						}
 					}
 				}
@@ -344,21 +351,26 @@ class adnObjective extends adnDBBase
 			{
 				// delete subobjectives
 				include_once './Services/ADN/ED/classes/class.adnSubobjective.php';
-				foreach(adnSubobjective::lookupIdByObjective($id) as $subobjective_id)
+				ilLoggerFactory::getLogger('adn')->info('reading subobjectives for ' . $id);
+				foreach((array) adnSubobjective::lookupIdByObjective($id) as $subobjective_id)
 				{
+					ilLoggerFactory::getLogger('adn')->info('---- deleting subobjective: ' . $subobjective_id);
 					$subobjective = new adnSubobjective($subobjective_id);
 					$subobjective->delete();
 				}
 				
+				ilLoggerFactory::getLogger('adn')->info('-- deleting objectives for' . $id);
 				$ilDB->manipulate("UPDATE adn_ep_sheet_question".
 					" SET ed_objective_id = NULL".
 					" WHERE ed_objective_id = ".$ilDB->quote($id, "integer"));
 				$ilDB->manipulate("DELETE FROM adn_ed_target_nr_obj".
 					" WHERE ed_objective_id = ".$ilDB->quote($id, "integer"));
 				$ilDB->manipulate("DELETE FROM adn_ed_subobjective".
-					" WHERE ed_objective_id = ".$ilDB->quote($id, "integer"));
+					" WHERE ed_objective_id = ".$ilDB->quote($id, "integer").' '.
+					' AND archived < 1 ');
 				$ilDB->manipulate("DELETE FROM adn_ed_objective".
-					" WHERE id = ".$ilDB->quote($id, "integer"));
+					" WHERE id = ".$ilDB->quote($id, "integer").' '.
+					' AND archived < 1 ');
 				$this->setId(null);
 			}
 			return true;
