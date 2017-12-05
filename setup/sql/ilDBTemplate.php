@@ -4095,8 +4095,8 @@ $ilDB->addPrimaryKey("cmi_objective", $pk_fields);
 $in_fields = array("cmi_interaction_id");
 $ilDB->addIndex("cmi_objective", $in_fields, "i2", false);
 
-$in_fields = array("id");
-$ilDB->addIndex("cmi_objective", $in_fields, "i3", false);
+//$in_fields = array("id");
+//$ilDB->addIndex("cmi_objective", $in_fields, "i3", false);
 
 $in_fields = array("success_status");
 $ilDB->addIndex("cmi_objective", $in_fields, "i4", false);
@@ -28633,8 +28633,8 @@ $ilDB->createTable("mail_attachment", $fields);
 $pk_fields = array("mail_id");
 $ilDB->addPrimaryKey("mail_attachment", $pk_fields);
 
-$in_fields = array("path");
-$ilDB->addIndex("mail_attachment", $in_fields, "i1", false);
+//$in_fields = array("path");
+//$ilDB->addIndex("mail_attachment", $in_fields, "i1", false);
 
 
 //
