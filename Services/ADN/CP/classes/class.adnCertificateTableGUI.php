@@ -157,6 +157,19 @@ class adnCertificateTableGUI extends ilTable2GUI
 
 		if ($this->cp_id == 0 && adnPerm::check(adnPerm::CP, adnPerm::WRITE))
 		{
+			// cr-008 start
+			include_once './Services/ADN/Report/classes/class.adnReportCertificate.php';
+			if ($a_set["status"] == adnCertificate::STATUS_VALID && !adnCertificate::isDuplicate($a_set['id']) &&
+				!$a_set["is_extension"])
+			{
+				$this->tpl->setCurrentBlock("action");
+				$this->tpl->setVariable("TXT_CMD", $lng->txt("adn_download_certificate"));
+				$this->tpl->setVariable("HREF_CMD",
+					$ilCtrl->getLinkTarget($this->parent_obj, "downloadCertificate"));
+				$this->tpl->parseCurrentBlock();
+			}
+			// cr-008 end
+
 			// extend
 			$this->tpl->setCurrentBlock("action");
 			$this->tpl->setVariable("TXT_CMD", $lng->txt("adn_extend_certificate"));
