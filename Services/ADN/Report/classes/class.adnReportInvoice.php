@@ -269,7 +269,9 @@ class adnReportInvoice extends adnReport
 		}
 
 		$map['cost'] = sprintf('%01.2f EUR',$cost['value']);
+		$map['cost'] = str_replace('.', ',',$map['cost']);
 		$map['sum'] = sprintf('%01.2f EUR',$cost['value']);
+		$map['sum'] = str_replace('.', ',',$map['sum']);
 
 		$until = new ilDate($this->getDue()->get(IL_CAL_UNIX),IL_CAL_UNIX);
 		$map['until'] = ilDatePresentation::formatDate($until);

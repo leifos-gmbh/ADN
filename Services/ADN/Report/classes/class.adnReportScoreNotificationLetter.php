@@ -424,7 +424,8 @@ class adnReportScoreNotificationLetter extends adnReport
 		
 		// Costs 
 		$costs = $this->getWMO()->getCostCertificate();
-		$map['exam_charge'] = $costs['value'].' EUR';
+		$map['exam_charge'] = sprintf('%01.2f EUR',$costs['value']);
+		$map['exam_charge'] = str_replace('.', ',',$map['exam_charge']);
 		
 		// Date of exam
 		$exam = $this->getEvent()->getDateFrom();
