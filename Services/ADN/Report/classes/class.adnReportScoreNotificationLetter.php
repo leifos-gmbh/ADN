@@ -169,7 +169,7 @@ class adnReportScoreNotificationLetter extends adnReport
 		global $ilUser;
 		
 		include_once './Services/ADN/Report/classes/class.adnReportFileUtils.php';
-
+		
 		// Template by type
 		switch($this->getEvent()->getType())
 		{
@@ -443,18 +443,21 @@ class adnReportScoreNotificationLetter extends adnReport
 			$points['reached'],
 			$points['possible']
 		);
+		$map['exam_points'] = str_replace('.', ',', $map['exam_points']);
 		
 		$map['exam_points_mc'] = sprintf(
 			$lng->txt('adn_report_score_points'),
 			$assignment->getScoreMc(),
 			30
 		);
+		$map['exam_points_mc'] = str_replace('.', ',', $map['exam_points_mc']);
 			
 		$map['exam_points_case'] = sprintf(
 			$lng->txt('adn_report_score_points'),
 			$assignment->getScoreCase(),
 			30
 		);
+		$map['exam_points_case'] = str_replace('.', ',', $map['exam_points_case']);
 
 
 		if($cand->getBlockedUntil() instanceof ilDate)
