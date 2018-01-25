@@ -376,7 +376,7 @@ class adnDBBase
 	{
 		global $ilDB;
 
-		if($ilDB->getDBType() == "mysql")
+		if($ilDB->getDBType() == "mysql" || $ilDB->getDBType() == "innodb")
 		{
 			$cast_value = $cast_column = "CAST(%s AS UNSIGNED)";
 		}
