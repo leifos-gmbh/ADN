@@ -17,7 +17,7 @@ include_once './Services/ADN/MD/classes/class.adnWMO.php';
  */
 
 class adnReportAnswerSheet extends adnReport
-{
+{	
 	const TYPE_DRY = 1;
 	const TYPE_TANK = 2;
 	const TYPE_COMB = 3;
@@ -715,6 +715,7 @@ class adnReportAnswerSheet extends adnReport
 		
 		include_once './Services/Xml/classes/class.ilXmlWriter.php';
 		$xml = new ilXmlWriter();
+		$xml->xmlHeader();
 		$xml->xmlStartTag('answerSheet');
 		$xml->xmlElement('wsd',array(),$this->getWMO()->getName());
 		
