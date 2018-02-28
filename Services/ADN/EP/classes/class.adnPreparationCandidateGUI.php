@@ -105,6 +105,7 @@ class adnPreparationCandidateGUI
 					case "resetTrainingEventFilter":
 					case "saveLastTraining":
 					case "saveCandidateAndAddCertificate":
+					case "saveCandidateAndListPersonData":
 						if(adnPerm::check(adnPerm::EP, adnPerm::WRITE))
 						{
 							$this->$cmd();
@@ -320,8 +321,14 @@ class adnPreparationCandidateGUI
 		$registered = new ilCheckboxInputGUI($lng->txt("adn_applied_for_examination"), "applied");
 		$form->addItem($registered);
 
-		$foreign = new ilCheckboxInputGUI($lng->txt("adn_foreign_certificate"), "foreign");
-		$form->addItem($foreign);
+		if ($this->mode != self::MODE_GENERAL)
+		{
+			$foreign = new ilCheckboxInputGUI($lng->txt("adn_foreign_certificate"), "foreign");
+			$form->addItem($foreign);
+		}
+
+		$foreign_cert_handed_id = new ilCheckboxInputGUI($lng->txt("adn_foreign_cert_handed_in"), "foreign_cert_handed_in");
+		$form->addItem($foreign_cert_handed_id);
 
 		$phone = new ilTextInputGUI($lng->txt("adn_phone"), "phone");
 		$phone->setMaxLength(30);
@@ -457,6 +464,8 @@ class adnPreparationCandidateGUI
 			// cr-008 start
 			if ($this->mode == self::MODE_GENERAL)
 			{
+				$form->addCommandButton("saveCandidateAndListPersonData",
+					$lng->txt("save"));
 				$form->addCommandButton("saveCandidateAndAddCertificate",
 					$lng->txt("adn_save_and_add_certificate"));
 				$form->addCommandButton("listPersonData", $lng->txt("cancel"));
@@ -492,7 +501,11 @@ class adnPreparationCandidateGUI
 			$citizenship->setValue($this->candidate->getCitizenship());
 			$type->setValue($this->candidate->getSubjectArea());
 			$registered->setChecked($this->candidate->isRegisteredForExam());
-			$foreign->setChecked($this->candidate->hasForeignCertificate());
+			if ($this->mode != self::MODE_GENERAL)
+			{
+				$foreign->setChecked($this->candidate->hasForeignCertificate());
+			}
+			$foreign_cert_handed_id->setChecked($this->candidate->hasForeignCertificateHandedIn());
 			$phone->setValue($this->candidate->getPhone());
 			$email->setValue($this->candidate->getEmail());
 			$registered_by->setValue($this->candidate->getRegisteredBy());
@@ -591,7 +604,11 @@ class adnPreparationCandidateGUI
 			$candidate->setCitizenship($form->getInput("citizenship"));
 			$candidate->setSubjectArea($form->getInput("type"));
 			$candidate->setRegisteredForExam($form->getInput("applied"));
-			$candidate->setForeignCertificate($form->getInput("foreign"));
+			if ($this->mode != self::MODE_GENERAL)
+			{
+				$candidate->setForeignCertificate($form->getInput("foreign"));
+			}
+			$candidate->setForeignCertificateHandedIn($form->getInput("foreign_cert_handed_in"));
 			$candidate->setRegisteredBy($form->getInput("registered_by"));
 			$candidate->setPhone($form->getInput("phone"));
 			$candidate->setEmail($form->getInput("email"));
@@ -626,7 +643,7 @@ class adnPreparationCandidateGUI
 					ilUtil::sendSuccess($lng->txt("adn_candidate_created"), true);
 
 					// cr-008 start
-					if (self::MODE_GENERAL)
+					if ($this->mode == self::MODE_GENERAL)
 					{
 						$this->listPersonData();
 					}
@@ -680,7 +697,11 @@ class adnPreparationCandidateGUI
 			$this->candidate->setCitizenship($form->getInput("citizenship"));
 			$this->candidate->setSubjectArea($form->getInput("type"));
 			$this->candidate->setRegisteredForExam($form->getInput("applied"));
-			$this->candidate->setForeignCertificate($form->getInput("foreign"));
+			if ($this->mode != self::MODE_GENERAL)
+			{
+				$this->candidate->setForeignCertificate($form->getInput("foreign"));
+			}
+			$this->candidate->setForeignCertificateHandedIn($form->getInput("foreign_cert_handed_in"));
 			$this->candidate->setRegisteredBy($form->getInput("registered_by"));
 			$this->candidate->setPhone($form->getInput("phone"));
 			$this->candidate->setEmail($form->getInput("email"));
@@ -910,7 +931,11 @@ class adnPreparationCandidateGUI
 			$cgui->addHiddenItem("citizenship", $a_form->getInput("citizenship"));
 			$cgui->addHiddenItem("type", $a_form->getInput("type"));
 			$cgui->addHiddenItem("applied", $a_form->getInput("applied"));
-			$cgui->addHiddenItem("foreign", $a_form->getInput("foreign"));
+			if ($this->mode != self::MODE_GENERAL)
+			{
+				$cgui->addHiddenItem("foreign", $a_form->getInput("foreign"));
+			}
+			$cgui->addHiddenItem("foreign_cert_handed_in", $a_form->getInput("foreign_cert_handed_in"));
 			$cgui->addHiddenItem("registered_by", $a_form->getInput("registered_by"));
 			$cgui->addHiddenItem("phone", $a_form->getInput("phone"));
 			$cgui->addHiddenItem("email", $a_form->getInput("email"));
@@ -1157,11 +1182,12 @@ class adnPreparationCandidateGUI
 	{
 		global $ilCtrl;
 
-		$ilCtrl->redirectByClass(array("adnBaseGUI", "adncertifiedprofessionalgui", "adnPersonalDataMaintenanceGUI"), "listPersonalData");
+		$ilCtrl->redirectByClass(array("adnBaseGUI", "adncertifiedprofessionalgui", "adnCertifiedProfessionalDataGUI"), "listProfessionals");
+		//$ilCtrl->redirectByClass(array("adnBaseGUI", "adncertifiedprofessionalgui", "adnPersonalDataMaintenanceGUI"), "listPersonalData");
 	}
 
 	/**
-	 * Save candidate and edit last training
+	 * Save candidate and add certificate
 	 */
 	protected function saveCandidateAndAddCertificate()
 	{
@@ -1171,6 +1197,19 @@ class adnPreparationCandidateGUI
 		{
 			$ilCtrl->setParameterByClass("adnCertificateScoringGUI", "cd_id", $this->cd_id);
 			$ilCtrl->redirectByClass(array("adnBaseGUI", "adnExaminationScoringGUI", "adnCertificateScoringGUI"), "createCertificate");
+		}
+	}
+
+	/**
+	 * Save candidate and list personal data
+	 */
+	protected function saveCandidateAndListPersonData()
+	{
+		global $ilCtrl;
+
+		if($this->saveCandidate(true))
+		{
+			$this->listPersonData();
 		}
 	}
 

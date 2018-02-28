@@ -129,15 +129,6 @@ class adnCertificateGUI
 		$ilToolbar->setFormAction($ilCtrl->getFormAction($this));
 		$ilToolbar->addFormButton($lng->txt("adn_update_view"), "listCertificates");
 
-		// cr-008 start
-		$ilToolbar->addSeparator();
-		include_once("./Services/ADN/EP/classes/class.adnPreparationCandidateGUI.php");
-		$ilCtrl->setParameterByClass("adnpreparationcandidategui", "mode", adnPreparationCandidateGUI::MODE_GENERAL);
-		$ilToolbar->addButton($lng->txt("adn_ad_add_person"),
-			$ilCtrl->getLinkTargetByClass(array("adnbasegui", "adnexaminationpreparationgui", "adnpreparationcandidategui"), "createCandidate")
-		);
-		// cr-008 end
-
 		// table of certificates
 		include_once("./Services/ADN/CP/classes/class.adnCertificateTableGUI.php");
 		$table = new adnCertificateTableGUI($this, "listCertificates");
