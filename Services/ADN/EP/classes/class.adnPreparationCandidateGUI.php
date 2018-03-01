@@ -466,8 +466,8 @@ class adnPreparationCandidateGUI
 			{
 				$form->addCommandButton("saveCandidateAndListPersonData",
 					$lng->txt("save"));
-				$form->addCommandButton("saveCandidateAndAddCertificate",
-					$lng->txt("adn_save_and_add_certificate"));
+				//$form->addCommandButton("saveCandidateAndAddCertificate",
+				//	$lng->txt("adn_save_and_add_certificate"));
 				$form->addCommandButton("listPersonData", $lng->txt("cancel"));
 				$form->setTitle($lng->txt("adn_ad_add_person"));
 			}
