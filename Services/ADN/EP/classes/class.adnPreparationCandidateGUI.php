@@ -104,7 +104,7 @@ class adnPreparationCandidateGUI
 					case "applyTrainingEventFilter":
 					case "resetTrainingEventFilter":
 					case "saveLastTraining":
-					case "saveCandidateAndAddCertificate":
+					case "saveCandidateAndAddExtension":
 					case "saveCandidateAndListPersonData":
 						if(adnPerm::check(adnPerm::EP, adnPerm::WRITE))
 						{
@@ -466,8 +466,8 @@ class adnPreparationCandidateGUI
 			{
 				$form->addCommandButton("saveCandidateAndListPersonData",
 					$lng->txt("save"));
-				//$form->addCommandButton("saveCandidateAndAddCertificate",
-				//	$lng->txt("adn_save_and_add_certificate"));
+				$form->addCommandButton("saveCandidateAndAddExtension",
+					$lng->txt("adn_save_and_add_extension"));
 				$form->addCommandButton("listPersonData", $lng->txt("cancel"));
 				$form->setTitle($lng->txt("adn_ad_add_person"));
 			}
@@ -585,9 +585,19 @@ class adnPreparationCandidateGUI
 
 		$form = $this->initCandidateForm("create");
 
+
 		// check input
 		if ($form->checkInput())
 		{
+			// #13
+			if ($ilCtrl->getCmd() == "saveCandidateAndAddExtension" && !$form->getInput("foreign_cert_handed_in"))
+			{
+				ilUtil::sendFailure($lng->txt("adn_create_ext_only_if_for_cert"));
+				$form->setValuesByPost();
+				$this->createCandidate($form);
+				return;
+			}
+
 			if($this->showDialog($form, null, $a_edit_training))
 			{
 				return;
@@ -1187,16 +1197,16 @@ class adnPreparationCandidateGUI
 	}
 
 	/**
-	 * Save candidate and add certificate
+	 * Save candidate and add extension
 	 */
-	protected function saveCandidateAndAddCertificate()
+	protected function saveCandidateAndAddExtension()
 	{
 		global $ilCtrl;
 
 		if($this->saveCandidate(true))
 		{
-			$ilCtrl->setParameterByClass("adnCertificateScoringGUI", "cd_id", $this->cd_id);
-			$ilCtrl->redirectByClass(array("adnBaseGUI", "adnExaminationScoringGUI", "adnCertificateScoringGUI"), "createCertificate");
+			$ilCtrl->setParameterByClass("adnCertificateGUI", "pid", $this->cd_id);
+			$ilCtrl->redirectByClass(array("adnBaseGUI", "adnCertifiedProfessionalGUI", "adnCertificateGUI"), "extendCertificate");
 		}
 	}
 
