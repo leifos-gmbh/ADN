@@ -55,6 +55,9 @@ class adnPersonalDataNotification extends ilCronJob
 	{
 		global $lng;
 
+		$log = ilLoggerFactory::getLogger("root");
+		$log->notice("started");
+
 		$status = ilCronJobResult::STATUS_NO_ACTION;
 		$status_details = null;
 
@@ -78,12 +81,20 @@ class adnPersonalDataNotification extends ilCronJob
 
 		include_once "Services/ADN/AD/classes/class.adnPersonalData.php";
 		$cand = adnPersonalData::getData(array(), "cand");
+
+		$log->notice("got candidate data: ".count($cand));
+
+
 		$wmo = array();
 		foreach ($cand as $c)
 		{
 			$wmo[$c["registered_by_wmo_id"]]["cand"][] = $c;
 		}
 		$cert = adnPersonalData::getData(array(), "cert");
+
+		$log->notice("got certificate data: ".count($cert));
+
+
 //		var_dump($cand);
 //		var_dump($cert);
 //		exit;
@@ -100,10 +111,17 @@ class adnPersonalDataNotification extends ilCronJob
 			$cert_nr =  (is_array($data["cert"]))
 				? count($data["cert"])
 				: 0;
+
+			$log->notice("wmo: ".$wmo_id.", items: ".($cand_nr + $cert_nr));
+
 			if (($cand_nr + $cert_nr) > 0)
 			{
+				$log->notice("before send mail...");
+
 				// send email to wmo
 				$this->sendMail($wmo_id, $cand_nr, $cert_nr);
+
+				$log->notice("...after send mail");
 
 				// mails were sent - set cron job status accordingly
 				$status = ilCronJobResult::STATUS_OK;
@@ -134,6 +152,8 @@ class adnPersonalDataNotification extends ilCronJob
 	protected function sendMail($a_wmo_id, $a_cand_nr, $a_cert_nr)
 	{
 		global $lng;
+
+		$log = ilLoggerFactory::getLogger("root");
 
 		//include_once "./Services/Notification/classes/class.ilSystemNotification.php";
 		//$ntf = new ilSystemNotification();
@@ -175,6 +195,10 @@ class adnPersonalDataNotification extends ilCronJob
 		$mail = new ilMail(ANONYMOUS_USER_ID);
 		$mail->enableSOAP(false); // #10410
 //	echo "-$a_wmo_id-$mail_adress-";
+
+		$log->notice("sending to:".$mail_adress);
+		$log->notice("subject:".$subject);
+		//$log->notice("message:".$message);
 		$ret = $mail->sendMail($mail_adress,
 			null,
 			null,
