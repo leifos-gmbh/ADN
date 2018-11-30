@@ -157,6 +157,7 @@ class adnWMOGUI
 			$office->setPhone($form->getInput("fon"));
 			$office->setFax($form->getInput("fax"));
 			$office->setEmail($form->getInput("email"));
+			$office->setNotificationEmail($form->getInput('emailnoti'));
 			$office->setURL($form->getInput("url"));
 			$office->setPostalStreet($form->getInput("pstreet"));
 			$office->setPostalStreetNumber($form->getInput("pstreetno"));
@@ -231,6 +232,7 @@ class adnWMOGUI
 			$this->office->setPhone($form->getInput("fon"));
 			$this->office->setFax($form->getInput("fax"));
 			$this->office->setEmail($form->getInput("email"));
+			$this->office->setNotificationEmail($form->getInput('emailnoti'));
 			$this->office->setURL($form->getInput("url"));
 			$this->office->setPostalStreet($form->getInput("pstreet"));
 			$this->office->setPostalStreetNumber($form->getInput("pstreetno"));
@@ -325,6 +327,11 @@ class adnWMOGUI
 		$mail->setRequired(true);
 		$mail->setMaxLength(50);
 		$form->addItem($mail);
+
+		$mailnoti = new ilTextInputGUI($lng->txt("adn_email_noti"), "emailnoti");
+		$mailnoti->setRequired(true);
+		$mailnoti->setMaxLength(50);
+		$form->addItem($mailnoti);
 
 		$url = new ilTextInputGUI($lng->txt("adn_url"), "url");
 		$url->setRequired(true);
@@ -534,6 +541,7 @@ class adnWMOGUI
 			$fon->setValue($this->office->getPhone());
 			$fax->setValue($this->office->getFax());
 			$mail->setValue($this->office->getEmail());
+			$mailnoti->setValue($this->office->getNotificationEmail());
 			$url->setValue($this->office->getURL());
 			$pstreet->setValue($this->office->getPostalStreet());
 			$pstreet_no->setValue($this->office->getPostalStreetNumber());

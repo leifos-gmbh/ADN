@@ -808,3 +808,4 @@ adn#:#adn_foreign_cert_handed_in#:#Bescheinigung aus dem Ausland vorgelegt
 adn#:#adn_extend_certificate_foreign#:#Verlängerung erstellen (Ausland)
 adn#:#adn_save_and_add_extension#:#Speichern und Verlängerung erstellen
 adn#:#adn_create_ext_only_if_for_cert#:#Die sofortige Erstellung einer Verlängerung erfordert eine Bescheinigung aus dem Ausland.
+adn#:#adn_email_noti#:#E-Mail für Benachrichtigungen

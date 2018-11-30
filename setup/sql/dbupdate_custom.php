@@ -80,3 +80,16 @@ if (!$ilDB->tableColumnExists("adn_cp_professional", "foreign_cert_handed_in"))
 		"default" => 0));
 }
 ?>
+<#12>
+<?php
+if (!$ilDB->tableColumnExists("adn_md_wmo", "notification_email"))
+{
+	$ilDB->addTableColumn("adn_md_wmo", "notification_email", array(
+		"notnull" => false,
+		"length" => 128,
+		"type" => "text",
+		"default" => '',
+		'fixed' => true
+	));
+}
+?>
