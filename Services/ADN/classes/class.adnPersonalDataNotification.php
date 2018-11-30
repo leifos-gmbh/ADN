@@ -51,6 +51,11 @@ class adnPersonalDataNotification extends ilCronJob
 		return true;
 	}
 
+	public function hasCustomSettings()
+	{
+		return true;
+	}
+
 	public function run()
 	{
 		global $lng;
@@ -170,7 +175,10 @@ class adnPersonalDataNotification extends ilCronJob
 
 		include_once("./Services/ADN/MD/classes/class.adnWMO.php");
 		$wmo = new adnWMO($a_wmo_id);
-		$mail_adress = $wmo->getEmail();
+
+		// use notification email
+		$mail_adress = $wmo->getNotificationEmail();
+
 
 		$lng->loadLanguageModule("adn");
 		$message = $lng->txtlng("adn", "adn_new_delete_candidates_mess", "de");
@@ -208,6 +216,26 @@ class adnPersonalDataNotification extends ilCronJob
 			array("email"));
 	//echo $ret; exit;
 	}
+
+	public function addCustomSettingsToForm(ilPropertyFormGUI $a_form)
+	{
+		global $lng, $ilSetting;
+
+		$lng->loadLanguageModule('adn');
+		$mail = new ilTextInputGUI($lng->txt('adn_cron_cc'),'cc');
+		$mail->setValue($ilSetting->get('adn_cron_cc'));
+		$a_form->addItem($mail);
+
+		return $a_form;
+	}
+
+	public function saveCustomSettings(ilPropertyFormGUI $a_form)
+	{
+		global $ilSetting;
+
+		$ilSetting->set('adn_cron_cc', $a_form->getInput('cc'));
+	}
+
 
 	/*public function addToExternalSettingsForm($a_form_id, array &$a_fields, $a_is_active)
 	{
