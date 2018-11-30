@@ -156,7 +156,7 @@ class adnPersonalDataNotification extends ilCronJob
 	 */
 	protected function sendMail($a_wmo_id, $a_cand_nr, $a_cert_nr)
 	{
-		global $lng;
+		global $lng, $ilSetting;
 
 		$log = ilLoggerFactory::getLogger("root");
 
@@ -206,15 +206,16 @@ class adnPersonalDataNotification extends ilCronJob
 
 		$log->notice("sending to:".$mail_adress);
 		$log->notice("subject:".$subject);
-		//$log->notice("message:".$message);
 		$ret = $mail->sendMail($mail_adress,
-			null,
+			$ilSetting->get('adn_cron_cc',''),
 			null,
 			$subject,
 			$message,
 			null,
 			array("email"));
-	//echo $ret; exit;
+
+
+		$log->notice('Mail service returned: '  . $ret);
 	}
 
 	public function addCustomSettingsToForm(ilPropertyFormGUI $a_form)
