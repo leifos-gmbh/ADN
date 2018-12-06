@@ -60,6 +60,11 @@ class ilBuddySystemRelationRepository
 	{
 		$relations = array();
 
+		// adn-patch start
+		// bug #146
+		return $relations;
+		// adn-patch end
+
 		$res = $this->db->queryF(
 			"
 			SELECT usr_id, buddy_usr_id, ts, '" . self::TYPE_APPROVED . "' rel_type FROM buddylist WHERE usr_id = %s
