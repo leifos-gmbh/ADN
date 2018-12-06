@@ -73,7 +73,15 @@ class ilNewAccountNotification extends ilMailNotification
 
 			$this->getMail()->appendInstallationSignature(true);
 			$this->getMail()->enableSoap(false);
-			$this->sendMail(array($rcp),array('email'),false);
+
+			include_once './Services/Mail/classes/class.ilMimeMail.php';
+			$mime = new ilMimeMail();
+			$mime->To($rcp);
+			$mime->Subject($this->getSubject());
+			$mime->Body($this->getBody());
+			$mime->Send();
+
+			//$this->sendMail(array($rcp),array('email'),false);
 		}
 	}
 	

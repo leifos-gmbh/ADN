@@ -206,6 +206,17 @@ class adnPersonalDataNotification extends ilCronJob
 
 		$log->notice("sending to:".$mail_adress);
 		$log->notice("subject:".$subject);
+
+		include_once './Services/Mail/classes/class.ilMimeMail.php';
+
+		$mail = new ilMimeMail();
+		$mail->To($mail_adress);
+		$mail->Cc($ilSetting->get('adn_cron_cc',''));
+		$mail->Subject($subject);
+		$mail->Body($message);
+		$mail->Send();
+
+		/**
 		$ret = $mail->sendMail($mail_adress,
 			$ilSetting->get('adn_cron_cc',''),
 			null,
@@ -213,9 +224,9 @@ class adnPersonalDataNotification extends ilCronJob
 			$message,
 			null,
 			array("email"));
+		 *
+		 */
 
-
-		$log->notice('Mail service returned: '  . $ret);
 	}
 
 	public function addCustomSettingsToForm(ilPropertyFormGUI $a_form)
