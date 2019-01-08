@@ -175,7 +175,7 @@ class adnExaminationQuestionTableGUI extends ilTable2GUI
 						{
 							$sizes = adnBaseGUI::resizeImage($img_path.$item["id"]."_".($loop+1));
 							$ilCtrl->setParameterByClass("adnmcquestiongui", "img", $loop+1);
-							${"img_".$loop} = "<img width=\"".$sizes["width"].
+							${"img_".$loop} = "<img class=\"adnQuestImage\" width=\"".$sizes["width"].
 								"\" height=\"".$sizes["height"].
 								"\" src=\"".$ilCtrl->getLinkTargetByClass("adnmcquestiongui",
 								"showImage")."\" />";
