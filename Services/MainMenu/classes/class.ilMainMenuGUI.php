@@ -456,17 +456,18 @@ class ilMainMenuGUI {
 	 */
 	public function getHTML() {
 	{
-		// adn-patch start
-		include_once("./Services/ADN/UI/classes/class.adnMainMenuGUI.php");
-		$adn_menu = new adnMainMenuGUI();
-		return $adn_menu->getHTML();
-		// adn-patch end
 
 		// this is a workaround for bugs like 14016
 		// the main menu does not need the YUI connection, but many other
 		// features since they rely on il.Util.sendAjaxGetRequestToUrl (see Services/Javascript)
 		// which still uses YUI. This should be migrated to jQuery with a future major release
 		ilYuiUtil::initConnection();
+
+		// adn-patch start
+		include_once("./Services/ADN/UI/classes/class.adnMainMenuGUI.php");
+		$adn_menu = new adnMainMenuGUI($this);
+		return $adn_menu->getHTML();
+		// adn-patch end
 
 		$this->setTemplateVars();
 
