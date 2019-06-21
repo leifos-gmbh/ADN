@@ -152,6 +152,7 @@ class adnWMOGUI
 			include_once("./Services/ADN/MD/classes/class.adnWMO.php");
 			$office = new adnWMO();
 			$office->setName($form->getInput("name"));
+			$office->setSubtitle($form->getInput('subtitle'));
 			$office->setCode($form->getInput("code"));
 			$office->setPhone($form->getInput("fon"));
 			$office->setFax($form->getInput("fax"));
@@ -225,6 +226,7 @@ class adnWMOGUI
 		if($form->checkInput())
 		{
 			$this->office->setName($form->getInput("name"));
+			$this->office->setSubtitle($form->getInput('subtitle'));
 			$this->office->setCode($form->getInput("code"));
 			$this->office->setPhone($form->getInput("fon"));
 			$this->office->setFax($form->getInput("fax"));
@@ -295,6 +297,11 @@ class adnWMOGUI
 		$name->setRequired(true);
 		$name->setMaxLength(100);
 		$form->addItem($name);
+
+		$stitle = new ilTextInputGUI($lng->txt("adn_subtitle"), "subtitle");
+		$stitle->setRequired(true);
+		$stitle->setMaxLength(100);
+		$form->addItem($stitle);
 
 		$code = new ilTextInputGUI($lng->txt("adn_wmo_code"), "code");
 		$code->setRequired(true);
@@ -380,25 +387,27 @@ class adnWMOGUI
 
 		$bbank = new ilTextInputGUI($lng->txt("adn_bank"), "bbank");
 		$bbank->setRequired(true);
-		$bbank->setMaxLength(50);
+		$bbank->setMaxLength(64);
 		$form->addItem($bbank);
 
-		if($this->office->getBankCode())
+		if(!$a_create)
 		{
-			$bcode = new ilNumberInputGUI($lng->txt("adn_bank_code"), "bcode");
-			$bcode->setMaxLength(20);
-			$bcode->setSize(20);
-			$form->addItem($bcode);
-		}
+			if($this->office->getBankCode())
+			{
+				$bcode = new ilNumberInputGUI($lng->txt("adn_bank_code"), "bcode");
+				$bcode->setMaxLength(20);
+				$bcode->setSize(20);
+				$form->addItem($bcode);
+			}
 
-		if($this->office->getBankAccount())
-		{
-			$baccount = new ilNumberInputGUI($lng->txt("adn_bank_account"), "baccount");
-			$baccount->setMaxLength(20);
-			$baccount->setSize(20);
-			$form->addItem($baccount);
+			if($this->office->getBankAccount())
+			{
+				$baccount = new ilNumberInputGUI($lng->txt("adn_bank_account"), "baccount");
+				$baccount->setMaxLength(20);
+				$baccount->setSize(20);
+				$form->addItem($baccount);
+			}
 		}
-		
 
 		$biban = new ilTextInputGUI($lng->txt("adn_bank_iban"), "biban");
 		$biban->setRequired(true);
@@ -417,10 +426,10 @@ class adnWMOGUI
 		$sub->setTitle($lng->txt("adn_wmo_cost_certificate"));
 		$form->addItem($sub);
 
-		$ccno = new ilNumberInputGUI($lng->txt("adn_running_id"), "ccno");
+		$ccno = new ilTextInputGUI($lng->txt("adn_running_id"), "ccno");
 		$ccno->setRequired(true);
-		$ccno->setMaxLength(4);
-		$ccno->setSize(4);
+		$ccno->setMaxLength(10);
+		$ccno->setSize(10);
 		$form->addItem($ccno);
 
 		$ccdesc = new ilTextAreaInputGUI($lng->txt("adn_description"), "ccdesc");
@@ -442,10 +451,10 @@ class adnWMOGUI
 		$sub->setTitle($lng->txt("adn_wmo_cost_duplicate"));
 		$form->addItem($sub);
 
-		$cdno = new ilNumberInputGUI($lng->txt("adn_running_id"), "cdno");
+		$cdno = new ilTextInputGUI($lng->txt("adn_running_id"), "cdno");
 		$cdno->setRequired(true);
-		$cdno->setMaxLength(4);
-		$cdno->setSize(4);
+		$cdno->setMaxLength(10);
+		$cdno->setSize(10);
 		$form->addItem($cdno);
 
 		$cddesc = new ilTextAreaInputGUI($lng->txt("adn_description"), "cddesc");
@@ -467,10 +476,10 @@ class adnWMOGUI
 		$sub->setTitle($lng->txt("adn_wmo_cost_extension"));
 		$form->addItem($sub);
 
-		$ceno = new ilNumberInputGUI($lng->txt("adn_running_id"), "ceno");
+		$ceno = new ilTextInputGUI($lng->txt("adn_running_id"), "ceno");
 		$ceno->setRequired(true);
-		$ceno->setMaxLength(4);
-		$ceno->setSize(4);
+		$ceno->setMaxLength(10);
+		$ceno->setSize(10);
 		$form->addItem($ceno);
 
 		$cedesc = new ilTextAreaInputGUI($lng->txt("adn_description"), "cedesc");
@@ -492,10 +501,10 @@ class adnWMOGUI
 		$sub->setTitle($lng->txt("adn_wmo_cost_exam"));
 		$form->addItem($sub);
 
-		$cxno = new ilNumberInputGUI($lng->txt("adn_running_id"), "cxno");
+		$cxno = new ilTextInputGUI($lng->txt("adn_running_id"), "cxno");
 		$cxno->setRequired(true);
-		$cxno->setMaxLength(4);
-		$cxno->setSize(4);
+		$cxno->setMaxLength(10);
+		$cxno->setSize(10);
 		$form->addItem($cxno);
 
 		$cxdesc = new ilTextAreaInputGUI($lng->txt("adn_description"), "cxdesc");
@@ -520,6 +529,7 @@ class adnWMOGUI
 		else
 		{
 			$name->setValue($this->office->getName());
+			$stitle->setValue($this->office->getSubtitle());
 			$code->setValue($this->office->getCode());
 			$fon->setValue($this->office->getPhone());
 			$fax->setValue($this->office->getFax());

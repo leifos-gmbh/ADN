@@ -410,7 +410,7 @@ class adnReportStatistics extends adnReport
 
 		include_once './Services/ADN/MD/classes/class.adnWMO.php';
 		$wmo = new adnWMO($this->getWmo());
-		return $a_str.' '.$wmo->getName();
+		return $a_str.' '.$wmo->getName().'('. $wmo->getSubtitle().')';
 	}
 }
 ?>

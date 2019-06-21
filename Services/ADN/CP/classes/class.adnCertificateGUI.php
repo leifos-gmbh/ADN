@@ -282,6 +282,10 @@ class adnCertificateGUI
 		foreach ($wmos as $wmo)
 		{
 			$options[$wmo["id"]] = $wmo["name"];
+			if(strlen($wmo['subtitle']))
+			{
+				$options[$wmo['id']] .= (' ('.$wmo['subtitle'].')');
+			}
 		}
 		$wmo = new ilSelectInputGUI($lng->txt("adn_issued_by"), "issued_by_wmo");
 		$wmo->setOptions($options);
@@ -977,7 +981,7 @@ class adnCertificateGUI
 		}
 		include_once("./Services/ADN/Report/classes/class.adnReportCertificate.php");
 		ilUtil::deliverFile(
-			adnReportCertificate::getCertificate((int)$_REQUEST['ct_id']),
+			adnReportCertificate::lookupCertificate((int)$_REQUEST['ct_id']),
 			"Verlaengerung.pdf",
 			'application/pdf'
 		);
@@ -997,7 +1001,7 @@ class adnCertificateGUI
 		}
 		include_once("./Services/ADN/Report/classes/class.adnReportCertificate.php");
 		ilUtil::deliverFile(
-			adnReportCertificate::getCertificate((int)$_REQUEST['ct_id']),
+			adnReportCertificate::lookupCertificate((int)$_REQUEST['ct_id']),
 			"Ersatzausfertigung.pdf",
 			'application/pdf'
 		);

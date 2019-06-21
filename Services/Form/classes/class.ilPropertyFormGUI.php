@@ -1386,8 +1386,8 @@ class ilPropertyFormGUI extends ilFormGUI
 						$value[] = $option->getTitle();
 					}
 				}
-				$field = new ilNonEditableValueGUI($item->getTitle());
-				$field->setValue(implode("<br />", $value));
+				$field = new ilNonEditableValueGUI($item->getTitle(),'',true);
+				$field->setValue(implode('<br />', $value));
 				break;
 
 			default:

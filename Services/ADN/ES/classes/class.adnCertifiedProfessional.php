@@ -1111,10 +1111,12 @@ class adnCertifiedProfessional extends adnDBBase
 			{
 				$on.= " AND a.birthdate = b.birthdate";
 			}
-			$sql.= " JOIN adn_cp_professional b ON (a.id <> b.id ".$on.") ";
+			if ($on != "")
+			{
+				$sql .= " JOIN adn_cp_professional b ON (a.id <> b.id " . $on . ") ";
+			}
 		}
 		// cr-008 end
-
 		$where = array();
 
 		// archived?
@@ -1178,7 +1180,6 @@ class adnCertifiedProfessional extends adnDBBase
 		{
 			$sql .= " WHERE ".implode(" AND ", $where);
 		}
-
 		$res = $ilDB->query($sql);
 		$all = array();
 		while($row = $ilDB->fetchAssoc($res))

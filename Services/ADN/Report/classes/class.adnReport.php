@@ -41,6 +41,15 @@ abstract class adnReport
 			$this->datadir = ilUtil::getDataDir().'/'.$this->basedir.'/'.$this->getRelativeDataDir());
 		$GLOBALS['ilLog']->write(__METHOD__.': '.$this->datadir);
 	}
+	
+	/**
+	 * Get a certificate if available
+	 * @return adnCertificate | null
+	 */
+	public function getCertificate()
+	{
+		return null;
+	}
 
 
 	/**
@@ -105,7 +114,7 @@ abstract class adnReport
 	 */
 	public function addStandardRightColumn($map,$wsd)
 	{
-		global $ilUser;
+		global $ilUser, $lng;
 		
 		include_once './Services/ADN/MD/classes/class.adnWMO.php';
 		include_once './Services/Calendar/classes/class.ilCalendarUtil.php';
@@ -121,11 +130,29 @@ abstract class adnReport
 		{
 			$map['rgt_wmo_name'] = "<br>";
 		}
+		
+		if($this->getCertificate() instanceof adnCertificate)
+		{
+			$full_nr = $wmo->getCode()."-".
+				str_pad($this->getCertificate()->getNumber(), 3, "0", STR_PAD_LEFT)."-".
+				$this->getCertificate()->getIssuedOn()->get(IL_CAL_FKT_DATE,'Y');
+			$map['rgt_cert_number'] = $full_nr;
+		}
+		
+		// banking details
+		$info = $lng->txt('adn_banking_details').':';
+		$info .= ("\n".$wmo->getBankInstitute());
+		$info .= ("\n".$lng->txt('adn_bank_iban').': '.$wmo->getBankIBAN());
+		$info .= ("\n".$lng->txt('adn_bank_bic').': '.$wmo->getBankBIC());
+		
+		$map['rgt_bank_account_info'] = $info;
+		
 		$map['rgt_wmo_name'] .= $title;
+		$map['rgt_wmo_subtitle'] = $wmo->getSubtitle();
 		$map['rgt_wmo_street'] = $wmo->getPostalStreet().' '.$wmo->getPostalStreetNumber();
 		$map['rgt_wmo_city'] = $wmo->getPostalZip().' '.$wmo->getPostalCity();
 		$map['rgt_wmo_phone'] = $wmo->getPhone();
-		$map['rgt_wmo_fax'] = $wmo->getFax();
+		$map['rgt_wmo_fax'] = strlen($wmo->getFax()) ? $wmo->getFax() : '-';
 		$map['rgt_wmo_mail'] = $wmo->getEmail();
 		$map['rgt_wmo_url'] = $wmo->getURL();
 		
@@ -134,7 +161,7 @@ abstract class adnReport
 		$map['rgt_iss_identifier'] = $ilUser->getSign();
 		$map['rgt_iss_name'] = $ilUser->getFullname();
 		$map['rgt_iss_phone'] = $ilUser->getPhoneOffice();
-		$map['rgt_iss_fax'] = $ilUser->getFax();
+		$map['rgt_iss_fax'] = strlen($ilUser->getFax()) ? $ilUser->getFax() : '-'; 
 
 		if(ilStr::strLen($ilUser->getEmail()) > self::MAX_RIGHT_COL_LENGTH)
 		{

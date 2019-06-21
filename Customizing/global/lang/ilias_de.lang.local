@@ -281,8 +281,8 @@ adn#:#adn_country_code#:#Kennzeichen
 adn#:#adn_country_updated#:#Land wurde gespeichert.
 adn#:#adn_country_created#:#Land wurde hinzugefügt.
 adn#:#adn_country_deleted#:#Land wurde gelöscht.
-adn#:#adn_wmos#:#Wasserschifffahrtsdirektionen
-adn#:#adn_wmo#:#Wasserschifffahrtsdirektion
+adn#:#adn_wmos#:#GDWS
+adn#:#adn_wmo#:#GDWS
 adn#:#adn_wmo_code#:#Behördenkennziffer
 adn#:#adn_add_wmo#:#WSD hinzufügen
 adn#:#adn_url#:#Internet
@@ -687,7 +687,7 @@ adn#:#adn_download_notification_letter#:#Antwortschreiben herunterladen
 adn#:#adn_create_notification_letters#:#Antwortschreiben erstellen
 adn#:#adn_invoice#:#Kostenbescheid
 adn#:#adn_due_date#:#Datum der Fälligkeit
-adn#:#adn_zuev_number#:#Codierung (ZÜV-Nummer)
+adn#:#adn_zuev_number#:#Verwendungszweck
 adn#:#adn_type_of_cost#:#Kostengegenstand
 adn#:#adn_list_access_codes#:#Liste Benutzerzugänge
 adn#:#adn_report_salutation_m#:#Sehr geehrter Herr
@@ -802,3 +802,4 @@ adn#:#adn_new_delete_candidates_subj#:#ADN Löschung von personenbezogenen Daten
 adn#:#adn_ad_add_person#:#Person hinzufügen
 adn#:#adn_add_certificate#:#Bescheinigung hinzufügen
 adn#:#adn_save_and_add_certificate#:#Speichern und Bescheinigung hinzufügen
+adn#:#adn_subtitle#:#Untertitel

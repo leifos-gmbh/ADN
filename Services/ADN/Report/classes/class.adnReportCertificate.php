@@ -66,7 +66,7 @@ class adnReportCertificate extends adnReport
 	 * @return
 	 * @access static
 	 */
-	public static function getCertificate($a_cert_id)
+	public static function lookupCertificate($a_cert_id)
 	{
 		return ilUtil::getDataDir().'/adn/report/cer/'.$a_cert_id.'.pdf';
 	}
