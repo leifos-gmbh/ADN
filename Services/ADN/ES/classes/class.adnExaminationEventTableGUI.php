@@ -143,7 +143,7 @@ class adnExaminationEventTableGUI extends ilTable2GUI
 					case self::MODE_ATTENDANCE:
 						include_once './Services/ADN/Report/classes/class.adnReportAttendanceList.php';
 						
-						$events['idx']['attendance'] = '';
+						$events[$idx]['attendance'] = '';
 						if(adnReportAttendanceList::lookupLastFile($item['id']) instanceof ilDateTime)
 						{
 							$events[$idx]["attendance"] = 

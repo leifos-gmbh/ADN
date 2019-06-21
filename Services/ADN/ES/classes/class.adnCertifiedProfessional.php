@@ -981,6 +981,7 @@ class adnCertifiedProfessional extends adnDBBase
 				include_once("./Services/ADN/EP/classes/class.adnAnswerSheet.php");
 				include_once("./Services/ADN/EP/classes/class.adnExaminationEvent.php");
 				include_once "Services/ADN/EP/classes/class.adnAssignment.php";
+				include_once "Services/ADN/EP/classes/class.adnAnswerSheetAssignment.php";
 				foreach (adnAssignment::getAllAssignments(array("user_id" => $this->getId())) as $ass)
 				{
 					$exam_event  = new adnExaminationEvent($ass["ep_exam_event_id"]);
@@ -993,6 +994,7 @@ class adnCertifiedProfessional extends adnDBBase
 
 				// archive/delete all certificates
 				include_once("./Services/ADN/Report/classes/class.adnReportCertificate.php");
+				include_once './Services/ADN/ES/classes/class.adnCertificate.php';
 				foreach (adnCertificate::getAllCertificates(array("cp_professional_id" => $this->getId()), true, true) as $cert)
 				{
 					$c = new adnCertificate($cert["id"]);
