@@ -1939,6 +1939,10 @@ class ilStartUpGUI
 	{
 		global $objDefinition, $ilPluginAdmin, $ilUser;
 
+		// adn-patch cr008 start
+		include_once("./Services/ADN/Base/classes/class.adnGotoHandler.php");
+		return adnGotoHandler::_check($a_target);
+		// adn-patch cr008 end
 
 		if (is_object($ilPluginAdmin))
 		{

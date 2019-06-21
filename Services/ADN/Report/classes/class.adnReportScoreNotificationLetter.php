@@ -52,7 +52,7 @@ class adnReportScoreNotificationLetter extends adnReport
 	/**
 	 * Check if report exists
 	 * @param object $event_id
-	 * @param object $ass_id
+	 * @param int $ass_id
 	 * @return bool
 	 * @access static
 	 */
@@ -60,6 +60,22 @@ class adnReportScoreNotificationLetter extends adnReport
 	{
 		return file_exists(ilUtil::getDataDir().'/adn/report/sno/'.$event_id.'_'.$ass_id.'.pdf');
 	}
+
+	// cr-008 start
+	/**
+	 * Delete report
+	 * @param object $event_id
+	 * @param object $ass_id
+	 */
+	public static function deleteFile($event_id,$ass_id)
+	{
+		$file = ilUtil::getDataDir().'/adn/report/sno/'.$event_id.'_'.$ass_id.'.pdf';
+		if (file_exists($file))
+		{
+			unlink($file);
+		}
+	}
+	// cr-008 end
 	
 	/**
 	 * Get file

@@ -43,4 +43,9 @@
 			<parent id="adm" max="1">adm</parent>
 		</object>
 	</objects>
+	<crons>
+		<cron id="adn_pd_notification" class="adnPersonalDataNotification" />
+	</crons>
 </service>
+
+

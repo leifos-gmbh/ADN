@@ -47,7 +47,7 @@ class adnReportInvoice extends adnReport
 	/**
 	 * Check if invoice is available
 	 * @param int $a_cert_id
-	 * @return void
+	 * @return bool
 	 */
 	public static function hasInvoice($a_cert_id)
 	{
@@ -55,6 +55,21 @@ class adnReportInvoice extends adnReport
 			ilUtil::getDataDir().'/adn/report/invoice/'.$a_cert_id.'.pdf'
 		);
 	}
+
+	// cr-008 start
+	/**
+	 * Delete invoice
+	 * @param int $a_cert_id
+	 */
+	public static function deleteInvoice($a_cert_id)
+	{
+		$file = ilUtil::getDataDir().'/adn/report/invoice/'.$a_cert_id.'.pdf';
+		if (file_exists($file))
+		{
+			unlink($file);
+		}
+	}
+	// cr-008 end
 	
 	/**
 	 * Get invoice
