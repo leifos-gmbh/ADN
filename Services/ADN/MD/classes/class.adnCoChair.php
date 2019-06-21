@@ -220,6 +220,10 @@ class adnCoChair extends adnDBBase
 			include_once "Services/ADN/EP/classes/class.adnExaminationEvent.php";
 			if(adnExaminationEvent::hasChair($id))
 			{
+				// cr-008 start
+				$this->setName("xxx");
+				$this->setSalutation(null);
+				// cr-008 end
 				$this->setArchived(true);
 				return $this->update();
 			}

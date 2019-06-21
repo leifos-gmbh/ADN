@@ -119,7 +119,7 @@ class adnCandidateTableGUI extends ilTable2GUI
 		{
 			foreach($assignments as $idx => $item)
 			{
-				$assignments[$idx]["result_details"] = $item["score_mc"]+$item["score_case"];
+				$assignments[$idx]["result_details"] = $item["score_mc"] + $item["score_case"];
 			}
 		}
 
@@ -214,8 +214,10 @@ class adnCandidateTableGUI extends ilTable2GUI
 		else
 		{		
 		*/
-		$this->tpl->setVariable("VAL_RESULT",
-			adnAssignment::getScoreText((int) $a_set["result_total"]));		
+		$this->tpl->setVariable(
+			"VAL_RESULT",
+			adnAssignment::getScoreText($a_set["result_total"])
+		);		
 
 		if(!$this->notification_mode)
 		{

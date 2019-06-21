@@ -468,6 +468,22 @@ class adnInstructor extends adnDBBase
 	{
 		return self::lookupProperty($a_id, "last_name");
 	}
+
+	// cr-008 start
+	/**
+	 * Archive
+	 */
+	function archive()
+	{
+		$this->setFirstName("xxx");
+		$this->setLastName("xxx");
+		$this->expertise = array();
+		$this->training_types = array();
+		$this->setArchived(true);
+		$this->update();
+	}
+
+	// cr-008 end
 }
 
 ?>

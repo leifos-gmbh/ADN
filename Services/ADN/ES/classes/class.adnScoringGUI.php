@@ -231,10 +231,11 @@ class adnScoringGUI
 
 		// score mc
 		$mc = new ilNumberInputGUI($lng->txt("adn_scoring_mc"), "score_mc");
+		$mc->setDecimals(1);
 		$mc->setRequired(true);
 		$mc->setMinValue(0);
-		$mc->setSize(3);
-		$mc->setMaxLength(3);
+		$mc->setSize(4);
+		$mc->setMaxLength(4);
 		if ($assignment->getScoreMc() != null)
 		{
 			$mc->setValue($assignment->getScoreMc());
@@ -256,10 +257,11 @@ class adnScoringGUI
 		if (adnSubjectArea::hasCasePart($event->getType()))
 		{
 			$case = new ilNumberInputGUI($lng->txt("adn_scoring_case"), "score_case");
+			$case->setDecimals(1);
 			$case->setRequired(true);
 			$case->setMinValue(0);
-			$case->setSize(3);
-			$case->setMaxLength(3);
+			$case->setSize(4);
+			$case->setMaxLength(4);
 			$case->setValue($assignment->getScoreCase());
 			$form->addItem($case);
 		}

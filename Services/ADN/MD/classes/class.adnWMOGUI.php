@@ -383,17 +383,22 @@ class adnWMOGUI
 		$bbank->setMaxLength(50);
 		$form->addItem($bbank);
 
-		$bcode = new ilNumberInputGUI($lng->txt("adn_bank_code"), "bcode");
-		$bcode->setRequired(true);
-		$bcode->setMaxLength(20);
-		$bcode->setSize(20);
-		$form->addItem($bcode);
+		if($this->office->getBankCode())
+		{
+			$bcode = new ilNumberInputGUI($lng->txt("adn_bank_code"), "bcode");
+			$bcode->setMaxLength(20);
+			$bcode->setSize(20);
+			$form->addItem($bcode);
+		}
 
-		$baccount = new ilNumberInputGUI($lng->txt("adn_bank_account"), "baccount");
-		$baccount->setRequired(true);
-		$baccount->setMaxLength(20);
-		$baccount->setSize(20);
-		$form->addItem($baccount);
+		if($this->office->getBankAccount())
+		{
+			$baccount = new ilNumberInputGUI($lng->txt("adn_bank_account"), "baccount");
+			$baccount->setMaxLength(20);
+			$baccount->setSize(20);
+			$form->addItem($baccount);
+		}
+		
 
 		$biban = new ilTextInputGUI($lng->txt("adn_bank_iban"), "biban");
 		$biban->setRequired(true);
@@ -535,8 +540,15 @@ class adnWMOGUI
 			}
 
 			$bbank->setValue($this->office->getBankInstitute());
-			$bcode->setValue($this->office->getBankCode());
-			$baccount->setValue($this->office->getBankAccount());
+			
+			if($this->office->getBankCode())
+			{
+				$bcode->setValue($this->office->getBankCode());
+			}
+			if($this->office->getBankAccount())
+			{
+				$baccount->setValue($this->office->getBankAccount());
+			}
 			$bbic->setValue($this->office->getBankBIC());
 			$biban->setValue($this->office->getBankIBAN());
 
