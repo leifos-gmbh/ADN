@@ -2,7 +2,7 @@
 
 /* Copyright (c) 2010 Leifos, GPL, see docs/LICENSE */
 
-include_once("classes/class.ilObjectAccess.php");
+include_once("./Services/Object/classes/class.ilObjectAccess.php");
 
 /**
  * Access class for ADN examination preparation
