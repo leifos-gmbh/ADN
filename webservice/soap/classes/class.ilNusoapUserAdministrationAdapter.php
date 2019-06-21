@@ -143,6 +143,11 @@ class ilNusoapUserAdministrationAdapter
             'ILIAS login function'
         );
 
+        // adn-patch start outcommented functions that are not needed
+        $incl_def_funcs = false;
+        if ($incl_def_funcs) {
+            // adn-patch end
+
         // loginCAS()
         $this->server->register(
             'loginCAS',
@@ -182,6 +187,9 @@ class ilNusoapUserAdministrationAdapter
             SERVICE_USE,
             'ILIAS login function for Stud.IP-Connection. DEPRECATED: this method will be removed in ILIAS 5.3.'
         );
+        // adn-patch
+        }
+        // adn-end
 
         // logout()
         $this->server->register(
@@ -194,6 +202,289 @@ class ilNusoapUserAdministrationAdapter
             SERVICE_USE,
             'ILIAS logout function'
         );
+
+        // adn-patch start
+
+        //// getSubjectAreas
+
+        // complex type for subject areas
+        $this->server->wsdl->addComplexType(
+            'SubjectArea',
+            'complexType',
+            'struct',
+            'all',
+            '',
+            array('sa_id' => array('name' => 'sa_id', 'type' => 'xsd:string'),
+                  'sa_title' => array('name' => 'sa_title', 'type' => 'xsd:string')
+            )
+        );
+
+        // array of subject areas
+        $this->server->wsdl->addComplexType(
+            'SubjectAreas',
+            'complexType',
+            'array',
+            '',
+            'SOAP-ENC:Array',
+            array(),
+            array(array('ref' => 'SOAP-ENC:arrayType',
+                        'wsdl:arrayType' => 'tns:SubjectArea[]'
+                  )
+            ),
+            'tns:SubjectArea'
+        );
+
+        // register getSubjectAreas
+        $this->server->register(
+            'getSubjectAreas',
+            array('sid' => 'xsd:string'),
+            array('subjectareas' => 'tns:SubjectAreas'),
+            SERVICE_NAMESPACE,
+            SERVICE_NAMESPACE . '#getSubjectAreas',
+            SERVICE_STYLE,
+            SERVICE_USE,
+            'Get possible subject areas for online tests.'
+        );
+
+        //// createTest
+
+        // register getSubjectAreas
+        $this->server->register(
+            'createTest',
+            array('sid' => 'xsd:string', 'sa_id' => 'xsd:string'),
+            array('success' => 'xsd:boolean'),
+            SERVICE_NAMESPACE,
+            SERVICE_NAMESPACE . '#createTest',
+            SERVICE_STYLE,
+            SERVICE_USE,
+            'Create a new test for a given subject area.'
+        );
+
+        //// get question overview
+
+        // complex type for question (for test overview)
+        $this->server->wsdl->addComplexType(
+            'QuestionOv',
+            'complexType',
+            'struct',
+            'all',
+            '',
+            array('q_id' => array('name' => 'q_id', 'type' => 'xsd:int'),
+                  'q_text' => array('name' => 'q_text', 'type' => 'xsd:string'),
+                  'q_nr' => array('name' => 'q_nr', 'type' => 'xsd:int'),
+                  'answered' => array('name' => 'answered', 'type' => 'xsd:boolean'),
+            )
+        );
+
+        // array of questions (for test overview)
+        $this->server->wsdl->addComplexType(
+            'QuestionOvs',
+            'complexType',
+            'array',
+            '',
+            'SOAP-ENC:Array',
+            array(),
+            array(array('ref' => 'SOAP-ENC:arrayType',
+                        'wsdl:arrayType' => 'tns:QuestionOv[]'
+                  )
+            ),
+            'tns:QuestionOv'
+        );
+
+        // register getQuestionOverview
+        $this->server->register(
+            'getQuestionOverview',
+            array('sid' => 'xsd:string'),
+            array('questions' => 'tns:QuestionOvs'),
+            SERVICE_NAMESPACE,
+            SERVICE_NAMESPACE . '#getQuestionOverview',
+            SERVICE_STYLE,
+            SERVICE_USE,
+            'Get questions of current test.'
+        );
+
+        //// process question
+
+        // complex type for answer
+        $this->server->wsdl->addComplexType(
+            'Answer',
+            'complexType',
+            'struct',
+            'all',
+            '',
+            array('nr' => array('name' => 'nr', 'type' => 'xsd:int'),
+                  'text' => array('name' => 'text', 'type' => 'xsd:string'),
+                  'image' => array('name' => 'image', 'type' => 'xsd:string')
+            )
+        );
+
+        // array of answers
+        $this->server->wsdl->addComplexType(
+            'Answers',
+            'complexType',
+            'array',
+            '',
+            'SOAP-ENC:Array',
+            array(),
+            array(array('ref' => 'SOAP-ENC:arrayType',
+                        'wsdl:arrayType' => 'tns:Answer[]'
+                  )
+            ),
+            'tns:Answer'
+        );
+
+        // complex type for single question (full info, no overview)
+        $this->server->wsdl->addComplexType(
+            'Question',
+            'complexType',
+            'struct',
+            'all',
+            '',
+            array('q_id' => array('name' => 'q_id', 'type' => 'xsd:int'),
+                  'q_text' => array('name' => 'q_text', 'type' => 'xsd:string'),
+                  'q_image' => array('name' => 'q_image', 'type' => 'xsd:string'),
+                  'next_q_id' => array('name' => 'next_q_id', 'type' => 'xsd:int'),
+                  'prev_q_id' => array('name' => 'prev_q_id', 'type' => 'xsd:int'),
+                  'answers' => array('name' => 'answers', 'type' => 'tns:Answers')
+            )
+        );
+
+        // register processQuestion
+        $this->server->register(
+            'processQuestion',
+            array('sid' => 'xsd:string',
+                  'save_q_id' => 'xsd:int',
+                  'given_answer' => 'xsd:int',
+                  'req_q_id' => 'xsd:int'
+            ),
+            array('question' => 'tns:Question'),
+            SERVICE_NAMESPACE,
+            SERVICE_NAMESPACE . '#processQuestion',
+            SERVICE_STYLE,
+            SERVICE_USE,
+            'Process a single question, give answer, retrieve next question.'
+        );
+
+        // complex type for result
+        $this->server->wsdl->addComplexType(
+            'Result',
+            'complexType',
+            'struct',
+            'all',
+            '',
+            array(
+                'q_id' => array('name' => 'q_id', 'type' => 'xsd:int'),
+                'correct' => array('name' => 'correct', 'type' => 'xsd:int'),
+                'q_text' => array('name' => 'q_text', 'type' => 'xsd:string'),
+                'q_image' => array('name' => 'q_image', 'type' => 'xsd:string'),
+                'q_nr' => array('name' => 'q_nr', 'type' => 'xsd:int'),
+                'given_answer' => array('name' => 'given_answer', 'type' => 'xsd:int'),
+                'given_answer_text' => array('name' => 'given_answer_text', 'type' => 'xsd:string'),
+                'given_answer_image' => array('name' => 'given_answer_image', 'type' => 'xsd:string'),
+                'correct_answer' => array('name' => 'correct_answer', 'type' => 'xsd:int'),
+                'correct_answer_text' => array('name' => 'correct_answer_text', 'type' => 'xsd:string'),
+                'correct_answer_image' => array('name' => 'correct_answer_image', 'type' => 'xsd:string')
+            )
+        );
+
+        // array of result sets
+        $this->server->wsdl->addComplexType(
+            'Results',
+            'complexType',
+            'array',
+            '',
+            'SOAP-ENC:Array',
+            array(),
+            array(array('ref' => 'SOAP-ENC:arrayType',
+                        'wsdl:arrayType' => 'tns:Result[]'
+                  )
+            ),
+            'tns:Result'
+        );
+
+        // register finishTest
+        $this->server->register(
+            'finishTest',
+            array('sid' => 'xsd:string', 'save_q_id' => 'xsd:int', 'given_answer' => 'xsd:int'),
+            array('results' => 'tns:Results'),
+            SERVICE_NAMESPACE,
+            SERVICE_NAMESPACE . '#finishTest',
+            SERVICE_STYLE,
+            SERVICE_USE,
+            'Process last answer and finish the test, get results.'
+        );
+
+        // register getScoringSheet
+        $this->server->register(
+            'getScoringSheet',
+            array('sid' => 'xsd:string'),
+            array('url' => 'xsd:string'),
+            SERVICE_NAMESPACE,
+            SERVICE_NAMESPACE . '#getScoringSheet',
+            SERVICE_STYLE,
+            SERVICE_USE,
+            'Get download URL of scoring sheet.'
+        );
+
+        // complext type for information sheet
+        $this->server->wsdl->addComplexType(
+            'InformationSheet',
+            'complexType',
+            'struct',
+            'all',
+            '',
+            array(
+                'filename' => array('name' => 'filename', 'type' => 'xsd:string'),
+                'url' => array('name' => 'url', 'type' => 'xsd:string')
+            )
+        );
+
+        // array of information sheets
+        $this->server->wsdl->addComplexType(
+            'InformationSheets',
+            'complexType',
+            'array',
+            '',
+            'SOAP-ENC:Array',
+            array(),
+            array(array('ref' => 'SOAP-ENC:arrayType',
+                        'wsdl:arrayType' => 'tns:InformationSheet[]'
+                  )
+            ),
+            'tns:InformationSheet'
+        );
+
+        // register getInformationSheets
+        $this->server->register(
+            'getInformationSheets',
+            array('sid' => 'xsd:string'),
+            array('sheets' => 'tns:InformationSheets'),
+            SERVICE_NAMESPACE,
+            SERVICE_NAMESPACE . '#getInformationSheets',
+            SERVICE_STYLE,
+            SERVICE_USE,
+            'Get download URLs of information sheets.'
+        );
+
+        // getHelpText
+        $this->server->register(
+            'getHelpText',
+            array(),
+            array('help_text' => 'xsd:string'),
+            SERVICE_NAMESPACE,
+            SERVICE_NAMESPACE . '#getHelpText',
+            SERVICE_STYLE,
+            SERVICE_USE,
+            'Get help text for e-learning self tests.'
+        );
+
+        // adn-patch end
+
+
+// adn-patch start outcommented functions that are not needed
+if ($incl_def_funcs)
+{
+
         // user_data definitions
         $this->server->wsdl->addComplexType(
             'ilUserData',
@@ -1617,6 +1908,9 @@ class ilNusoapUserAdministrationAdapter
         if (isset($_GET['client_id'])) {
             $this->handleSoapPlugins();
         }
+    // adn-patch start
+    }
+    // adn-patch end
 
         return true;
     }

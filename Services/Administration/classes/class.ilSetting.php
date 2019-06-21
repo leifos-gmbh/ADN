@@ -122,6 +122,20 @@ class ilSetting
     */
     public function get($a_keyword, $a_default_value = false)
     {
+        // adn-patch start
+        if ($a_keyword == "pub_section")
+        {
+            global $ilClientIniFile;
+            if (is_object($ilClientIniFile))
+            {
+                if ($ilClientIniFile->readVariable("system", "ELEARNING_MODE") == "1")
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        // adn-patch end
         if ($a_keyword == "ilias_version") {
             return ILIAS_VERSION;
         }

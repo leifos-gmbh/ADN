@@ -32729,7 +32729,7 @@ $pk_fields = array("id");
 $ilDB->addPrimaryKey("prg_usr_progress", $pk_fields);
 
 $in_fields = array("assignment_id","prg_id","usr_id");
-$ilDB->addUniqueConstraint("prg_usr_progress", $in_fields, "con");
+#$ilDB->addUniqueConstraint("prg_usr_progress", $in_fields, "con");
 
 $ilDB->createSequence("prg_usr_progress", 1);
 
@@ -53524,7 +53524,7 @@ $pk_fields = array("child");
 $ilDB->addPrimaryKey("tree", $pk_fields);
 
 $in_fields = array("child");
-$ilDB->addIndex("tree", $in_fields, "i1", false);
+#$ilDB->addIndex("tree", $in_fields, "i1", false);
 
 $in_fields = array("parent");
 $ilDB->addIndex("tree", $in_fields, "i2", false);
@@ -53932,7 +53932,7 @@ $in_fields = array("anonymous_id");
 $ilDB->addIndex("tst_active", $in_fields, "i3", false);
 
 $in_fields = array("user_fi","test_fi","anonymous_id");
-$ilDB->addUniqueConstraint("tst_active", $in_fields, "uc1");
+#$ilDB->addUniqueConstraint("tst_active", $in_fields, "uc1");
 
 $ilDB->createSequence("tst_active", 1);
 

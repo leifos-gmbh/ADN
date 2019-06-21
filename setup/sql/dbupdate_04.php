@@ -122,7 +122,7 @@ if (!$ilDB->tableExists('usr_data_multi')) {
 <?php
 
 // #12845
-$set = $ilDB->query("SELECT od.owner, prtf.id prtf_id, pref.value public" .
+$set = $ilDB->query("SELECT od.owner, prtf.id prtf_id, pref.value publicp".
     ", MIN(acl.object_id) acl_type" .
     " FROM usr_portfolio prtf" .
     " JOIN object_data od ON (od.obj_id = prtf.id" .
@@ -134,7 +134,7 @@ $set = $ilDB->query("SELECT od.owner, prtf.id prtf_id, pref.value public" .
     " GROUP BY od.owner, prtf.id, pref.value");
 while ($row = $ilDB->fetchAssoc($set)) {
     $acl_type = (int) $row["acl_type"];
-    $pref = trim($row["public"]);
+	$pref = trim($row["publicp"]);
     $user_id = (int) $row["owner"];
     $prtf_id = (int) $row["prtf_id"];
 
@@ -4758,6 +4758,7 @@ if ($ilDB->tableExists('tst_test_random')) {
 ?>
 <#4411>
 <?php
+return;
 if (!$ilDB->sequenceExists('il_bibl_settings')) {
     $ilDB->createSequence('il_bibl_settings');
     $set = $ilDB->query('SELECT MAX(id) new_seq FROM il_bibl_settings');
@@ -5338,7 +5339,7 @@ if (!$ilDB->tableColumnExists('file_based_lm', 'show_bib')) {
 ?>
 <#4440>
 <?php
-
+return;
 $ilDB->manipulate("UPDATE settings " .
     "SET value = " . $ilDB->quote(1370, "text") .
     " WHERE module = " . $ilDB->quote("blga", "text") .
@@ -7097,6 +7098,7 @@ if (!$ilDB->tableExists('chatroom_historytmp')) {
 ?>
 <#4550>
 <?php
+return;
 require_once 'Services/Migration/DBUpdate_4550/classes/class.ilDBUpdate4550.php';
 ilDBUpdate4550::cleanupOrphanedChatRoomData();
 if ($ilDB->getDBType() == 'innodb' || $ilDB->getDBType() == 'mysql' || $ilDB->getDBType() == '') {
@@ -7161,6 +7163,7 @@ $ilDB->addIndex('chatroom_history', array('room_id', 'sub_room'), 'i1');
 ?>
 <#4556>
 <?php
+return;
 require_once 'Services/Migration/DBUpdate_4550/classes/class.ilDBUpdate4550.php';
 ilDBUpdate4550::cleanupOrphanedChatRoomData();
 ?>
@@ -7612,7 +7615,10 @@ if ($ilDB->tableExists('tst_result_cache_tmp')) {
 ?>
 <#4582>
 <?php
-$ilDB->addIndex('mail_obj_data', array('obj_id', 'user_id'), 'i2');
+if(!$ilDB->indexExistsByFields('mail_obj_data',array('obj_id','usr_id')))
+{
+#	$ilDB->addIndex('mail_obj_data', array('obj_id', 'user_id'), 'i2');
+}
 ?>
 <#4583>
 <?php
@@ -8199,7 +8205,7 @@ $ilDB->addPrimaryKey('mail_tree', array('child'));
 ?>
 <#4593>
 <?php
-$ilDB->dropIndex('mail_tree', 'i1');
+#$ilDB->dropIndex('mail_tree', 'i1');
 ?>
 <#4594>
 <?php
@@ -10020,6 +10026,7 @@ if ($ilDB->tableExists('search_tree')) {
 ?>
 <#4699>
 <?php
+return;
 //step 1/2 adm_set_templ_hide_tab removes all dublicates
 if ($ilDB->tableExists('adm_set_templ_hide_tab')) {
     $res = $ilDB->query("
@@ -10613,6 +10620,7 @@ if ($ilDB->tableExists('xmlnestedset') && !$ilDB->tableExists('xmlnestedset_old'
 ?>
 <#4729>
 <?php
+return;
 //step 2/4 xmlnestedset creates new table with unique id and sequenz
 
 if (!$ilDB->tableExists('xmlnestedset')) {
@@ -10710,6 +10718,7 @@ if ($ilDB->tableExists('xmlnestedsettmp') && !$ilDB->tableExists('xmlnestedsettm
 ?>
 <#4733>
 <?php
+return;
 //step 2/4 xmlnestedsettmp creates new table with unique id and sequenz
 
 if (!$ilDB->tableExists('xmlnestedsettmp')) {
@@ -10971,6 +10980,7 @@ if (!$ilDB->tableColumnExists('tst_tests', 'force_inst_fb')) {
 ?>
 <#4746>
 <?php
+return;
 require_once("./Modules/StudyProgramme/classes/model/class.ilStudyProgramme.php");
 require_once("./Modules/StudyProgramme/classes/model/class.ilStudyProgrammeAssignment.php");
 require_once("./Modules/StudyProgramme/classes/model/class.ilStudyProgrammeProgress.php");
@@ -12110,6 +12120,7 @@ if (!$ilDB->indexExistsByFields('obj_members', array('usr_id'))) {
 ?>
 <#4775>
 <?php
+return;
 $ilDB->modifyTableColumn(
     'il_dcl_field',
     'description',
@@ -12178,6 +12189,7 @@ $ilDB->modifyTableColumn(
 ?>
 <#4784>
 <?php
+return;
     include_once('./Services/Migration/DBUpdate_3560/classes/class.ilDBUpdateNewObjectType.php');
     $obj_type_id = ilDBUpdateNewObjectType::getObjectTypeId("prg");
     $existing_ops = array("read");
@@ -12397,6 +12409,7 @@ if (!$ilDB->tableColumnExists('adl_shared_data', 'cp_node_id')) {
 ?>
 <#4804>
 <?php
+return;
     $query = "show index from sahs_sc13_seq_templ where Key_name = 'PRIMARY'";
     $res = $ilDB->query($query);
     if (!$ilDB->numRows($res)) {
@@ -12405,6 +12418,7 @@ if (!$ilDB->tableColumnExists('adl_shared_data', 'cp_node_id')) {
 ?>
 <#4805>
 <?php
+return;
     $query = "show index from sahs_sc13_seq_tree where Key_name = 'PRIMARY'";
     $res = $ilDB->query($query);
     if (!$ilDB->numRows($res)) {
@@ -12413,6 +12427,7 @@ if (!$ilDB->tableColumnExists('adl_shared_data', 'cp_node_id')) {
 ?>
 <#4806>
 <?php
+return;
     $query = "show index from sahs_sc13_tree where Key_name = 'PRIMARY'";
     $res = $ilDB->query($query);
     if (!$ilDB->numRows($res)) {
@@ -12421,6 +12436,7 @@ if (!$ilDB->tableColumnExists('adl_shared_data', 'cp_node_id')) {
 ?>
 <#4807>
 <?php
+return;
     $query = "show index from scorm_tree where Key_name = 'PRIMARY'";
     $res = $ilDB->query($query);
     if (!$ilDB->numRows($res)) {
@@ -12429,6 +12445,7 @@ if (!$ilDB->tableColumnExists('adl_shared_data', 'cp_node_id')) {
 ?>
 <#4808>
 <?php
+return;
     $ilDB->modifyTableColumn('cp_tree', 'obj_id', array(
         "notnull" => true,
         "default" => "0"

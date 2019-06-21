@@ -1,0 +1,146 @@
+
+ADN Service
+===========
+- Added, OK
+
+adnDBUpdateSteps
+================
+- Move to dbupdate_custom.php OK
+- Migrate step from adnDBUpdateSteps to custom update TODO
+
+
+DB Storage Engine Patch
+=======================
+- needed?
+
+Password Storage
+================
+
+Admin Einstellungen
+===================
+- Passwort mit Buchstaben/Ziffern raus
+- Passwortänderung bei Erstzugriff raus
+
+Other
+=====
+
+Targets
+    Occurrences of 'adn-patch' in Directory /htdocs/adn/dev
+dev  (80 usages found)
+      (2 usages found)
+        repository.php  (2 usages found)
+            15// adn-patch start OK (does not exist anymore)
+            18// adn-patch end OK
+    Modules/SystemFolder/classes  (4 usages found)
+        class.ilObjSystemFolderGUI.php  (4 usages found)
+            1980// adn-patch start OK (link in admin general settings to setup)
+            1982// adn-patch end OK
+            1991// adn-patch start OK
+            1994// adn-patch end OK
+    Services/Administration/classes  (2 usages found)
+        class.ilSetting.php  (2 usages found)
+            83// adn-patch start ADDED (check for ELEARNING_MODE when pub_section is activated)
+            96// adn-patch end ADDED
+    Services/Calendar/classes  (1 usage found)
+        class.ilDateTime.php  (1 usage found)
+            373// adn-patch start ADDED (fix for #1029: IL_CAL_DATETIME will fail if date has more than 4 digits...)
+    Services/Database/classes  (6 usages found)
+        class.ilAuthContainerMDB2.php  (2 usages found)
+            71// adn-patch start ADDED (Auth for online tests)
+            84// adn-patch end ADDED
+        class.ilDB.php  (4 usages found)
+            476// adn-patch start (+ added $a_foreign_key_engine parameter) NOT ADDED (not needed, due to native innodb support)
+            481// adn-patch end NOT ADDED
+            2199// adn-patch start OK (foreign key support)
+            2261// adn-patch end OK
+    Services/Form/classes  (22 usages found)
+        class.ilCheckboxInputGUI.php  (2 usages found)
+            159// adn-patch start NOT ADDED (seems to be similar in standard: return true, if not checked and subitems not ok)
+            167// adn-patch end NOT ADDED
+        class.ilFileInputGUI.php  (2 usages found)
+            293// adn-patch start NOT ADDED (delete existing file similar in standard, TODO need to set setAllowDeletion?)
+            301// adn-patch start NOT ADDED
+        class.ilPropertyFormGUI.php  (6 usages found)
+            478// adn-patch start NOT ADDED (prevent double submission?)
+            483// adn-patch end NOT ADDED
+            503// adn-patch start NOT ADDED  (prevent double submission?)
+            510// adn-patch end NOT ADDED
+            665// adn-patch start ADDED (convert form to read-only)
+            828// adn-patch end ADDED
+        class.ilTextAreaInputGUI.php  (6 usages found)
+            46// adn-patch start ADDED (special characters)
+            52// adn-patch end ADDED
+            492// adn-patch start ADDED (special characters)
+            CHANGED ALSO Services/Form/templates/default/tpl.prop_textarea.html
+            542// adn-patch end ADDED
+            660// adn-patch start ADDED (special characters)
+            714// adn-patch end ADDED
+        class.ilTextInputGUI.php  (6 usages found)
+            34// adn-patch start ADDED (special characters)
+            40// adn-patch end ADDED
+            469// adn-patch start ADDED (special characters)
+            CHANGED ALSO Services/Form/templates/default/tpl.prop_textinput.html
+            519// adn-patch end ADDED
+            558// adn-patch start ADDED (special characters)
+            612// adn-patch end ADDED
+    Services/Init/classes  (4 usages found)
+        class.ilStartUpGUI.php  (4 usages found)
+            223// adn-patch start (out-commented) ADDED (no registration link)
+            231// adn-patch end ADDED
+            512// adn-patch start ADDED (no no cookies message)
+            519// adn-patch end ADDED
+    Services/MainMenu/classes  (2 usages found)
+        class.ilMainMenuGUI.php  (2 usages found)
+            460// adn-patch start ADDED (ADN main menu)
+            464// adn-patch end ADDED
+    Services/PersonalDesktop/classes  (2 usages found)
+        class.ilPersonalDesktopGUI.php  (2 usages found)
+            65// adn-patch start ADDED (redirecto to adnBaseGUI)
+            68// adn-patch end ADDED
+    Services/Table/classes  (6 usages found)
+        class.ilTable2GUI.php  (6 usages found)
+            137// adn-patch start ADDED (20 is the default items per page)
+            140// adn-patch end ADDED
+            1491// adn-patch start ADDED (#994, different no entries text, if filter are used)
+            1516// adn-patch end ADDED
+            2211// adn-patch start ADDED (#932, add legend)
+            2228// adn-patch end ADDED
+    Services/User/classes  (2 usages found)
+        class.ilObjUser.php  (2 usages found)
+            5074// adn-patch start ADDED (getSign() method "Mein Zeichen")
+            5089// adn-patch end ADDED
+    setup/classes  (19 usages found)
+        class.ilSetupGUI.php  (19 usages found)
+            309// adn-patch start NOT ADDED (all changes seem to be due to custom update which is now moved to dbupdate_custom.php)
+            313// adn-patch end NOT ADDED
+            412// adn-patch start NOT ADDED
+            415// adn-patch end NOT ADDED
+            2024// adn-patch added $a_adn parameter NOT ADDED
+            2032// adn-patch start NOT ADDED
+            2035// adn-patch end NOT ADDED
+            2066// adn-patch start NOT ADDED
+            2068// adn-patch end NOT ADDED
+            2121// adn-patch start NOT ADDED
+            2126// adn-patch end NOT ADDED
+            2128// adn-patch out-commented next line NOT ADDED
+            2166// adn-patch start NOT ADDED
+            2175// adn-patch start NOT ADDED
+            2213// adn-patch start NOT ADDED
+            2222// adn-patch end NOT ADDED
+            2224// adn-patch out-commented the following line NOT ADDED
+            3369// adn-patch start NOT ADDED
+            3460// adn-patch end NOT ADDED
+    setup/include  (2 usages found)
+        inc.client_tabs.php  (2 usages found)
+            36// adn-patch start NOT ADDED
+            43// adn-patch end NOT ADDED
+    webservice/soap/classes  (4 usages found)
+        class.ilNusoapUserAdministrationAdapter.php  (4 usages found)
+            128// adn-patch outcommented functions that are not needed ADDED
+            166// adn-patch start ADDED (ADN related soap functions)
+            390// adn-patch end ADDED
+            393// adn-patch outcommented functions that are not needed ADDED
+    webservice/soap/include  (2 usages found)
+        inc.soap_functions.php  (2 usages found)
+            927// adn-patch start ADDED (ADN related soap functions)
+            1013// adn-patch end ADDED

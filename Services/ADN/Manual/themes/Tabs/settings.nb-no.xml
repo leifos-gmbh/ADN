@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<settings>
+	<theme>
+		<predefined>true</predefined>
+	</theme>
+	<strings>
+		<pageHeaderText></pageHeaderText>
+		<topicSpinnerText>Laster inn...</topicSpinnerText>
+	</strings>
+	<topic>
+		<strings>
+			<notfoundText>Emne ikke funnet</notfoundText>
+			<notfoundTitle>Emne ikke funnet</notfoundTitle>
+		</strings>
+		<collapsibleSections>
+			<expandAll>
+				<label>Vis alt</label>
+			</expandAll>
+			<collapseAll>
+				<label>Skjul alt</label>
+			</collapseAll>
+		</collapsibleSections>
+	</topic>
+	<toc>
+		<label>Innhold</label>
+	</toc>
+	<index>
+		<label>Stikkord</label>
+		<strings>
+			<notfound>Finner ingen stikkord.</notfound>
+		</strings>
+	</index>
+	<search>
+		<label>Søk</label>
+		<strings>
+			<helpMessage>Du kan bruke logiske operatorer i søkestrengen: #{and}, #{or}, #{not}. Eksempler: football #{or} hockey, sports #{and} #{not} baseball</helpMessage>
+			<loading>Laster inn søkemotor...</loading>
+			<loaderror>Feil: Kan ikke laste inn søkemotor.</loaderror>
+			<disabled>Søk er deaktivert.</disabled>
+			<notfound>Ingen emner funnet.</notfound>
+			<correcting>Mente du: #{query}</correcting>
+		</strings>
+		<buttons>
+			<go>
+				<label>Søk</label>
+			</go>
+			<help>
+				<label>Hjelp</label>
+			</help>
+			<highlight>
+				<label>Marker søkeord i tekst</label>
+			</highlight>
+		</buttons>
+    <options>
+      <operators>
+        <and>OG</and>
+        <or>ELLER</or>
+        <not>IKKE</not>
+      </operators>
+    </options>
+  </search>
+	<context>
+		<strings>
+			<title>Emner for "#{key}": "#{value}"</title>
+			<notfound>Ingen emner funnet.</notfound>
+			<notsupported>Kontekstnøkkel "#{key}" er ikke støttet.</notsupported>
+		</strings>
+	</context>
+	<buttons>
+		<btnPoweredBy>
+			<label>Levert&amp;nbsp;av&amp;nbsp;Doc-To-Help&amp;nbsp;®</label>
+		</btnPoweredBy>
+		<btnGotoPrev>
+			<label>Forrige emne</label>
+		</btnGotoPrev>
+		<btnGotoNext>
+			<label>Neste emne</label>
+		</btnGotoNext>
+		<btnGotoHome>
+			<label>Hjem</label>
+		</btnGotoHome>
+		<btnPrint>
+			<label>Skriv ut emne</label>
+		</btnPrint>
+		<btnEmail>
+			<label>E-post</label>
+		</btnEmail>
+	</buttons>
+</settings>

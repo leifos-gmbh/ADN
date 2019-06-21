@@ -1,0 +1,806 @@
+<!-- language file start -->
+common#:#login_to_ilias#:#Bei ADN anmelden
+common#:#login_to_ilias_via_cas#:#Bei ADN über zentrales Authentifizierungssystem anmelden
+common#:#login_to_ilias_via_shibboleth#:#Bei ADN anmelden über
+common#:#mail_multiple_recipients_found#:#Geben Sie eine genauere E-Mail-Adresse ein, da ADN mehrere Empfänger gefunden hat.
+common#:#mail_no_recipient_found#:#Geben Sie bitte eine andere E-Mail-Adresse an. ADN konnte keinen zugehörigen Empfänger finden.
+common#:#mail_use_pear_mail_info#:#Verwende PEAR-Mail zum Parsen von Mailbox-Adressen. Der in ADN integrierte Parser ist sehr limitiert. PEAR-Mail unterstützt Internet-konforme E-Mail-Adressen vollständig.
+common#:#obj_adm_desc#:#Beinhaltet alle Verwaltungstools für Ihre ADN-Installation.
+common#:#obj_extt_desc#:#Konfigurieren Sie hier externe Software und Dienste, welche von ADN unterstützt werden
+common#:#obj_root#:#ADN-System
+common#:#password_assistance_disabled#:#Passwort-Unterstützung ist nur dann verfügbar, wenn die Authentifizierung der Benutzer über die ADN-Datenbank erfolgt.
+common#:#password_assistance_info#:#Wenn die Passwort-Unterstützung aktiviert ist, erscheint ein Link mit der Bezeichnung "Passwort vergessen?" auf der Anmeldeseite von ADN. Benutzer können diese Funktion verwenden, um automatisch ein neues Passwort zu erhalten.
+common#:#password_change_on_first_login_demand#:#Ihr Erstpasswort muss geändert werden, bevor Sie ADN nutzen können.
+common#:#proxy_not_connectable#:#ADN kann keine Verbindung zum Proxy aufbauen.
+common#:#proxy_status_info#:#Um einen Proxy in ADN zu verwenden (z.B. für Webfeeds und die Überprüfung von Weblinks) aktivieren Sie bitte dieses Häkchen.
+common#:#reg_mail_body_text1#:#Willkommen im ADN System!
+common#:#reg_mail_subject#:#ADN - Ihre Zugangsdaten
+common#:#reg_mail_subject_confirmation#:#ADN - Ihr Bestätigungslink
+common#:#root_read#:#Lesezugriff auf ADN System
+common#:#root_visible#:#ADN System ist sichtbar
+common#:#session_reminder_lead_time_info#:#Hier können Sie festlegen, wann ADN Sie vor dem Ablauf Ihrer Sitzung warnen soll. Sie erhalten dann einen Hinweis und können einfach per Mausklick die Sitzung verlängern. Geben Sie einen Wert in Minuten ein. Empfohlen sind 5 Minuten.<br />Der aktuelle Wert für die Dauer einer Sitzung in diesem ADN beträgt %s.
+common#:#soap_user_administration_desc#:#Wenn eingeschaltet, kann ADN über die SOAP-Schnittstelle verwaltet werden.
+common#:#startpage#:#ADN-Anmeldeseite
+common#:#txt_registered#:#Sie haben sich erfolgreich bei ADN registriert. Klicken Sie bitte auf den untenstehenden Button, um in ADN zu gelangen.
+common#:#txt_registered_passw_gen#:#Sie haben sich erfolgreich bei ADN registriert. Sie werden in Kürze eine E-Mail mit Ihrem Passwort erhalten.
+common#:#txt_submitted#:#Sie haben sich erfolgreich bei ADN registriert. Ihr Benutzerkonto muss noch vom Systemadministrator freigegeben werden. Wir bitten um Ihre Geduld.
+common#:#zip_test_failed#:#Der ZIP-Test ist fehlgeschlagen. Bitte kontaktieren Sie ihren ADN Administrator.
+content#:#cont_upload_dir_info#:#Server-Verzeichnis, von dem große SCORM- und HTML-Pakete kopiert werden können, statt sie direkt hochzuladen. Nur ADN Administratoren sehen eine Auswahl von Dateien aus diesem Verzeichnis. Bitte geben Sie einen vollständigen Serverpfad ohne Slash am Ende ein.
+content#:#msg_page_no_public_access#:#Die aufgerufene Seite ist für den öffentlichen Bereich nicht freigegeben. Bitte melden Sie sich zuerst bei ADN an, um Zugang zu dieser Seite zu erhalten.
+mail#:#mail_auto_generated_info#:#Diese E-Mail wurde von der ADN-Installation %s, %s automatisch an Sie versandt.
+adn#:#adn_ta#:#Schulungsverwaltung
+adn#:#adn_ta_tps#:#Schulungsveranstalter
+adn#:#adn_ta_tes#:#Übersicht Schulungstermine
+adn#:#adn_ta_ils#:#Merkblätter
+adn#:#adn_ed#:#Prüfungselemente
+adn#:#adn_ed_obs#:#Prüfungsziele
+adn#:#adn_ed_eqs#:#Prüfungsfragen
+adn#:#adn_ed_nqs#:#Anzahl zu generierender Fragen
+adn#:#adn_ed_cas#:#Situationsbeschreibungen
+adn#:#adn_ep#:#Prüfungsvorbereitung
+adn#:#adn_ep_ils#:#Merkblätter und Anträge
+adn#:#adn_ep_ees#:#Prüfungstermine
+adn#:#adn_ep_ecs#:#Prüfungskandidaten
+adn#:#adn_ep_ces#:#Kandidaten/Termine
+adn#:#adn_ep_ins#:#Einladungen
+adn#:#adn_ep_ass#:#Prüfungsbögen
+adn#:#adn_ep_acs#:#Onlineprüfung
+adn#:#adn_es#:#Prüfungsnachbearbeitung
+adn#:#adn_es_scs#:#Korrekturen
+adn#:#adn_ep_als#:#Teilnahmelisten
+adn#:#adn_es_cts#:#ADN Bescheinigungen
+adn#:#adn_es_sns#:#Antwortschreiben
+adn#:#adn_cp#:#Sachkundigenverwaltung
+adn#:#adn_cp_cts#:#Sachkundige/Bescheinigungen
+adn#:#adn_cp_dcp#:#Verzeichnis der Sachkundigen
+adn#:#adn_st#:#Statistiken
+adn#:#adn_st_exs#:#Durchgeführte Prüfungen
+adn#:#adn_st_ers#:#Verlängerungen aufgrund Wiederholungskurs
+adn#:#adn_st_ees#:#Verlängerungen aufgrund Arbeitszeitnachweis
+adn#:#adn_st_cos#:#Bescheinigungen aufgrund sonstiger Anträge
+adn#:#adn_st_tns#:#Summe Bescheinigungen
+adn#:#adn_md#:#Stammdaten
+adn#:#adn_md_wos#:#WSDen
+adn#:#adn_ta_aes#:#Fachgebiete
+adn#:#adn_ed_gts#:#Stoffe
+adn#:#adn_md_cns#:#Länder
+adn#:#adn_add_training_provider#:#Schulungsveranstalter hinzufügen
+adn#:#adn_training_providers#:#Schulungsveranstalter
+adn#:#adn_company_name#:#Name der Firma
+adn#:#adn_approved_types_of_training#:#Anerkannte Kursarten
+adn#:#adn_instructors#:#Dozenten
+adn#:#adn_training_facilities#:#Schulungsorte
+adn#:#adn_edit_properties#:#Eigenschaften bearbeiten
+adn#:#adn_edit_instructors#:#Dozenten bearbeiten
+adn#:#adn_edit_training_facilities#:#Schulungsorte bearbeiten
+adn#:#adn_training_events#:#Schulungstermine
+adn#:#adn_type_of_training#:#Kursart
+adn#:#adn_instructor#:#Dozent
+adn#:#adn_training_facility#:#Schulungsort
+adn#:#adn_contact_person#:#Ansprechpartner
+adn#:#adn_street#:#Straße
+adn#:#adn_street_number#:#Hausnummer
+adn#:#adn_postal_code#:#PLZ
+adn#:#adn_city#:#Ort
+adn#:#adn_phone#:#Telefon
+adn#:#adn_fax#:#Fax
+adn#:#adn_email#:#E-Mail
+adn#:#adn_train_type_dm#:#Basiskurs "Trockengüterschifffahrt"
+adn#:#adn_train_type_tank#:#Basiskurs "Tankschifffahrt"
+adn#:#adn_train_type_comb#:#Basiskurs "kombiniert Trockengüter-/Tankschifffahrt"
+adn#:#adn_train_type_gas#:#Aufbaukurs "Gas"
+adn#:#adn_train_type_chem#:#Aufbaukurs "Chemie"
+adn#:#adn_train_type_rep_dm#:#Wiederholungskurs "Trockengüterschifffahrt"
+adn#:#adn_train_type_rep_tank#:#Wiederholungskurs "Tankschifffahrt"
+adn#:#adn_train_type_rep_comb#:#Wiederholungskurs "kombiniert Trockengüter-/Tankschifffahrt"
+adn#:#adn_train_type_rep_gas#:#Wiederholungskurs "Gas"
+adn#:#adn_train_type_rep_chem#:#Wiederholungskurs "Chemie"
+adn#:#adn_approved_on#:#Genehmigt am
+adn#:#adn_sure_delete_training_provider#:#Sollen die folgenden Schulungsveranstalter wirklich gelöscht werden?
+adn#:#adn_add_training_event#:#Schulungstermin hinzufügen
+adn#:#adn_edit#:#Bearbeiten
+adn#:#adn_date_from#:#Datum von
+adn#:#adn_date_to#:#Datum bis
+adn#:#adn_date#:#Datum
+adn#:#adn_ta_tp#:#Schulungsveranstalter
+adn#:#adn_current_tr_events#:#Aktuelle Schulungstermine
+adn#:#adn_archived_tr_events#:#Archivierte Schulungstermine
+adn#:#adn_subject_area_dm#:#"Trockengüterschifffahrt"
+adn#:#adn_subject_area_tank#:#"Tankschifffahrt"
+adn#:#adn_subject_area_comb#:#"Trockengüter- / Tankschifffahrt kombiniert"
+adn#:#adn_subject_area_gas#:#Aufbau "Gas"
+adn#:#adn_subject_area_chem#:#Aufbau "Chemie"
+adn#:#adn_add_mc_objective#:#MC-Prüfungsziel hinzufügen
+adn#:#adn_subject_area#:#Prüfungsbereich
+adn#:#adn_type_mc_case#:#MC/Kasus
+adn#:#adn_nr#:#Nr
+adn#:#adn_title#:#Titel
+adn#:#adn_topic#:#Thema
+adn#:#adn_edit_objective#:#Prüfungsziel bearbeiten
+adn#:#adn_objectives#:#Prüfungsziele
+adn#:#adn_objective#:#Prüfungsziel
+adn#:#adn_subobjectives#:#Unterziele
+adn#:#adn_subobjective#:#Unterziel
+adn#:#adn_add_subobjective#:#Unterziel hinzufügen
+adn#:#adn_edit_subobjective#:#Unterziel bearbeiten
+adn#:#adn_certificates#:#ADN Bescheinigungen
+adn#:#adn_number#:#Nummer
+adn#:#adn_type_of_cert#:#Art der Bescheinigung
+adn#:#adn_last_name#:#Name
+adn#:#adn_first_name#:#Vorname
+adn#:#adn_birthdate#:#Geburtsdatum
+adn#:#adn_issued_by#:#Ausgestellt von
+adn#:#adn_issued_on#:#Ausgestellt am
+adn#:#adn_extended_on#:#Verlängert am
+adn#:#adn_duplicated_on#:#Ersatzausfertigung ausgestellt am
+adn#:#adn_filter_all#:#Alle
+adn#:#adn_details#:#Details
+adn#:#adn_extend_certificate#:#Verlängerung erstellen
+adn#:#adn_download_extension#:#Verlängerung herunterladen
+adn#:#adn_duplicate_certificate#:#Ersatzausfertigung erstellen
+adn#:#adn_download_duplicate#:#Ersatzausfertigung herunterladen
+adn#:#adn_generate_invoice#:#Kostenbescheid erstellen
+adn#:#adn_download_invoice#:#Kostenbescheid herunterladen
+adn#:#adn_archive_certificates#:#Bescheinigungen archivieren
+adn#:#adn_show_archived_certificates#:#Archivierte Bescheinigungen einblenden
+adn#:#adn_update_view#:#Ansicht aktualisieren
+adn#:#adn_cp_dir#:#Verzeichnis der Sachkundigen
+adn#:#adn_add_mc_question#:#MC Frage hinzufügen
+adn#:#adn_objective_nr#:#Prüfungsziel/Nr
+adn#:#adn_objective_title#:#Prüfungsziel/Titel
+adn#:#adn_subobjective_nr#:#Unterziel/Nr
+adn#:#adn_subobjective_title#:#Unterziel/Titel
+adn#:#adn_question#:#Frage
+adn#:#adn_status#:#Status
+adn#:#adn_edit_examination_question#:#Frage bearbeiten
+adn#:#adn_mc_questions#:#MC Fragen
+adn#:#adn_case_questions#:#Kasusfragen
+adn#:#adn_add_case_question#:#Kasusfragen hinzufügen
+adn#:#adn_question_nr#:#Frage/Nr
+adn#:#adn_question_title#:#Frage/Titel
+adn#:#adn_certified_professional_directory#:#Verzeichnis der Sachkundigen
+adn#:#adn_download_directory#:#Verzeichnis herunterladen
+adn#:#adn_citizenship#:#Staatsangehörigkeit
+adn#:#adn_valid_until#:#Gültig bis
+adn#:#adn_administrator#:#Sachbearbeiter
+adn#:#adn_create_certificate_professional_directory#:#Verzeichnis der Sachkundigen erstellen
+adn#:#adn_display_directory#:#Verzeichnis anzeigen
+adn#:#adn_examination_events#:#Prüfungstermine
+adn#:#adn_facility#:#Ort
+adn#:#adn_time_from#:#Uhrzeit von
+adn#:#adn_time_to#:#Uhrzeit bis
+adn#:#adn_candidates#:#Prüfungskandidaten
+adn#:#adn_registered_candidates#:#Gemeldete Kandidaten
+adn#:#adn_age#:#Alter
+adn#:#adn_participated#:#Teilgenommen
+adn#:#adn_result#:#Ergebnis
+adn#:#adn_holdback#:#Sperrfrist
+adn#:#adn_edit_scoring#:#Korrektur bearbeiten
+adn#:#adn_scoring_mc#:#Punktezahl MC
+adn#:#adn_scoring_case#:#Punktezahl Kasus
+adn#:#adn_result_mc#:#Gesamtergebnis MC
+adn#:#adn_result_case#:#Gesamtergebnis Kasus
+adn#:#adn_reexamination#:#Nachprüfung
+adn#:#adn_holdback_until#:#Sperrfrist bis zum
+adn#:#adn_holdback_by#:#Sperrfrist festgelegt durch
+adn#:#adn_holdback_on#:#Generiert am (?)
+adn#:#adn_edit_certificate#:#Bescheinigung bearbeiten
+adn#:#adn_create_certificate#:#Bescheinigung erstellen
+adn#:#adn_activate#:#Aktivieren
+adn#:#adn_deactivate#:#Deaktivieren
+adn#:#adn_total_active_questions#:#Summe aktive Fragen
+adn#:#adn_proof_experience#:#Nachweis der Fahrzeit
+adn#:#adn_valid#:#gültig
+adn#:#adn_invalid#:#ungültig
+adn#:#adn_source#:#Quellenbezug
+adn#:#adn_image_for_question#:#Bild zur Frage
+adn#:#adn_correct_answer#:#Richtige Antwort
+adn#:#adn_answer#:#Antwort
+adn#:#adn_answer_text#:#Antworttext
+adn#:#adn_image_for_answer#:#Bild zur Antwort
+adn#:#adn_active#:#Aktiv
+adn#:#adn_inactive#:#Inaktiv
+adn#:#adn_add_examination_event#:#Termin hinzufügen
+adn#:#adn_delete_examination_events#:#Termine löschen
+adn#:#adn_registered_by#:#Erfasst durch
+adn#:#adn_add_candidate#:#Kandidat hinzufügen
+adn#:#adn_delete_candidates#:#Löschen
+adn#:#adn_edit_candidate#:#Kandidat bearbeiten
+adn#:#adn_salutation#:#Anrede
+adn#:#adn_applied_for_examination#:#Antrag auf Prüfung gestellt
+adn#:#adn_foreign_certificate#:#Basisbescheinigung aus dem Ausland vorhanden
+adn#:#adn_company#:#Firma/Reederei
+adn#:#adn_comment#:#Bemerkung
+adn#:#adn_permanent_address#:#Wohnsitz
+adn#:#adn_country#:#Land
+adn#:#adn_zip#:#PLZ
+adn#:#adn_house_number#:#Hausnummer
+adn#:#adn_shipping_address#:#Zustelladresse
+adn#:#adn_current_training#:#Aktuell besuchte Schulung
+adn#:#adn_training_provider#:#Schulungsveranstalter
+adn#:#adn_training#:#Kurs
+adn#:#adn_shipping_address_inactive#:#Zustelladresse deaktiviert
+adn#:#adn_show_certified_professionals#:#Sachkundige einblenden
+adn#:#adn_show_archived_examinations#:#Archivierte Prüfungen anzeigen
+adn#:#adn_assigned_candidates#:#Zugeordnete Kandidaten
+adn#:#adn_assign_candidates#:#Kandidaten zuordnen
+adn#:#adn_before_deadline#:#Frist eingehalten
+adn#:#adn_has_base_certificate#:#Basisbescheinigung
+adn#:#adn_assigned#:#Zugeordnet
+adn#:#adn_save_assignment#:#Zuordnung speichern
+adn#:#adn_answer_sheets#:#Prüfungsbögen
+adn#:#adn_generated_on#:#Generiert am
+adn#:#adn_type_mc#:#MC
+adn#:#adn_type_case#:#Kasus
+adn#:#adn_add_case_answer_sheet#:#Kasus-Prüfungsbogen hinzufügen
+adn#:#adn_add_mc_answer_sheet#:#MC-Prüfungsbogen hinzufügen
+adn#:#adn_delete_answer_sheets#:#Prüfungsbögen löschen
+adn#:#adn_number_of_candidates#:#Anzahl Kandidaten
+adn#:#adn_questions#:#Fragen
+adn#:#adn_questions_group#:#Gruppiert nach Zielen
+adn#:#adn_questions_table#:#Tabellarisch
+adn#:#adn_add_questions#:#Fragen hinzufügen
+adn#:#adn_remove_questions#:#Fragen entfernen
+adn#:#adn_answer_sheet#:#Prüfungsbogen
+adn#:#adn_assignment_generating#:#Zuordnung und Generierung
+adn#:#adn_download_answer_scoring_material#:#Prüfungsbögen, Lösungsblätter und Material herunterladen
+adn#:#adn_download_material#:#Materialien herunterladen
+adn#:#adn_answer_sheet_assignment#:#Zuordnung Prüfungsbögen
+adn#:#adn_assigned_sheets#:#Zugeordnete Prüfbögen
+adn#:#adn_generated_sheets#:#Generierte Prüfbögen
+adn#:#adn_add_answer_sheet#:#Prüfbogen hinzufügen
+adn#:#adn_generate_sheets#:#Prüfbögen generieren
+adn#:#adn_no_assignment#:#Keine Zuordnung
+adn#:#adn_target_nr_of_questions#:#Anzahl zu generierender Fragen
+adn#:#adn_target_number#:#Anzahl
+adn#:#adn_total#:#Gesamt
+adn#:#adn_mc_part#:#MC
+adn#:#adn_case_part#:#Kasus
+adn#:#adn_po_box#:#Postfach
+adn#:#adn_properties#:#Eigenschaften
+adn#:#adn_name#:#Name
+adn#:#adn_firstname#:#Vorname
+adn#:#adn_area_of_expertise#:#Fachgebiet
+adn#:#adn_add_instructor#:#Dozenten hinzufügen
+adn#:#adn_type_of_examination#:#Zu absolvierende Prüfung
+adn#:#adn_training_attendances#:#Schulungsteilnahmen
+adn#:#adn_shipping_address_activated#:#Zustelladresse aktiviert
+adn#:#adn_candidate#:#Prüfungskandidat
+adn#:#adn_assign_sheet_to_candidate#:#Prüfungskandidaten neuen Prüfbogen zuordnen
+adn#:#adn_examination_attendees#:#Prüfungsteilnehmer
+adn#:#adn_edit_holdback#:#Sperrfrist bearbeiten
+adn#:#adn_download_certificates#:#Bescheinigungen herunterladen
+adn#:#adn_contact_data#:#Kontaktdaten
+adn#:#adn_edit_contact_data#:#Kontaktdaten bearbeiten
+adn#:#adn_edit_types_of_training#:#Kursarten bearbeiten
+adn#:#adn_preceding_certificate#:#Vorbescheinigung
+adn#:#adn_signed_by#:#Unterzeichnet von
+adn#:#adn_countries#:#Länder
+adn#:#adn_add_country#:#Land hinzufügen
+adn#:#adn_country_code#:#Kennzeichen
+adn#:#adn_country_updated#:#Land wurde gespeichert.
+adn#:#adn_country_created#:#Land wurde hinzugefügt.
+adn#:#adn_country_deleted#:#Land wurde gelöscht.
+adn#:#adn_wmos#:#GDWS
+adn#:#adn_wmo#:#GDWS
+adn#:#adn_wmo_code#:#Behördenkennziffer
+adn#:#adn_add_wmo#:#WSD hinzufügen
+adn#:#adn_url#:#Internet
+adn#:#adn_postal_address#:#Postadresse
+adn#:#adn_visitors_address#:#Separate Besucheradresse
+adn#:#adn_banking_details#:#Bankverbindung
+adn#:#adn_bank#:#Bankinstitut
+adn#:#adn_bank_code#:#BLZ
+adn#:#adn_bank_account#:#Kontonr.
+adn#:#adn_bank_iban#:#IBAN
+adn#:#adn_bank_bic#:#BIC
+adn#:#adn_wmo_updated#:#WSD wurde gespeichert.
+adn#:#adn_wmo_created#:#WSD wurde angelegt.
+adn#:#adn_wmo_cost_certificate#:#Kostengegenstand Bescheinigung
+adn#:#adn_wmo_cost_duplicate#:#Kostengegenstand Ersatzausfertigung
+adn#:#adn_wmo_cost_extension#:#Kostengegenstand Verlängerung
+adn#:#adn_wmo_cost_exam#:#Kostengegenstand Prüfungsteilnahme
+adn#:#adn_wmo_cost_certificate_short#:#Bescheinigung
+adn#:#adn_wmo_cost_extension_short#:#Verlängerung
+adn#:#adn_wmo_cost_duplicate_short#:#Ersatzausfertigung
+adn#:#adn_wmo_cost_exam_short#:#Prüfungsteilnahme
+adn#:#adn_running_id#:#Laufende Nummer
+adn#:#adn_description#:#Beschreibung
+adn#:#adn_cost#:#Kosten
+adn#:#adn_sure_delete_countries#:#Wollen Sie folgende Länder wirklich löschen?
+adn#:#adn_sure_delete_wmos#:#Wollen Sie folgende WSDen wirklich löschen?
+adn#:#adn_wmo_deleted#:#WSD wurde gelöscht.
+adn#:#adn_cochairs#:#Beisitzer
+adn#:#adn_cochair#:#Beisitzer
+adn#:#adn_add_cochair#:#Beisitzer hinzufügen
+adn#:#adn_salutation_m#:#Herr
+adn#:#adn_salutation_f#:#Frau
+adn#:#adn_cochair_updated#:#Beisitzer wurde gespeichert.
+adn#:#adn_cochair_created#:#Beisitzer wurde hinzugefügt.
+adn#:#adn_sure_delete_cochairs#:#Wollen Sie folgende Beisitzer wirklich löschen?
+adn#:#adn_cochair_deleted#:#Beisitzer wurde gelöscht.
+adn#:#adn_exam_facilities#:#Prüfungsorte
+adn#:#adn_exam_facility#:#Prüfungsort
+adn#:#adn_add_exam_facility#:#Prüfungsort hinzufügen
+adn#:#adn_exam_facility_updated#:#Prüfungsort wurde gespeichert.
+adn#:#adn_exam_facility_created#:#Prüfungsort wurde hinzugefügt.
+adn#:#adn_sure_delete_exam_facilities#:#Wollen Sie folgende Prüfungsorte wirklich löschen?
+adn#:#adn_exam_facility_deleted#:#Prüfungsort wurde gelöscht.
+adn#:#adn_exam_facility_name#:#Name der Firma
+adn#:#adn_ad_mnt#:#Wartungsmodus
+adn#:#adn_ad_chr#:#Sonderzeichen
+adn#:#adn_ad_usr#:#Systembenutzer
+adn#:#adn_ad_mcx#:#Fragenkatalog exportieren/importieren
+adn#:#adn_ad#:#Administration
+adn#:#adn_maintenance_mode#:#Wartungsmodus
+adn#:#adn_maintenance_toggle#:#Wartungsmodus aktiv
+adn#:#adn_characters#:#Sonderzeichen
+adn#:#adn_character#:#Sonderzeichen
+adn#:#adn_add_character#:#Sonderzeichen hinzufügen
+adn#:#adn_character_updated#:#Sonderzeichen wurde gespeichert.
+adn#:#adn_character_created#:#Sonderzeichen wurde hinzugefügt.
+adn#:#adn_sure_delete_characters#:#Wollen Sie folgende Sonderzeichen wirklich löschen?
+adn#:#adn_character_deleted#:#Sonderzeichen wurde gelöscht.
+adn#:#adn_char#:#Zeichen
+adn#:#adn_char_code#:#UTF8-Code
+adn#:#adn_training_provider_created#:#Schulungsveranstalter wurde hinzugefügt.
+adn#:#adn_training_provider_updated#:#Schulungsveranstalter wurde gespeichert.
+adn#:#adn_edit_training_provider#:#Schulungsveranstalter bearbeiten
+adn#:#adn_alternative_address#:#Abweichende Postadresse
+adn#:#adn_training_types_updated#:#Anerkannte Kursarten wurden gespeichert.
+adn#:#adn_types_of_training#:#Kursarten
+adn#:#adn_areas_of_expertise#:#Fachgebiete
+adn#:#adn_instructor_created#:#Dozent wurde hinzugefügt.
+adn#:#adn_instructor_updated#:#Dozent wurde gespeichert.
+adn#:#adn_sure_delete_instructors#:#Wollen Sie folgende Dozenten wirklich löschen?
+adn#:#adn_instructor_deleted#:#Dozent wurde gelöscht.
+adn#:#adn_add_training_facility#:#Schulungsort hinzufügen
+adn#:#adn_edit_training_facility#:#Schulungsort bearbeiten
+adn#:#adn_training_facility_created#:#Schulungsort wurde hinzugefügt.
+adn#:#adn_training_facility_updated#:#Schulungsort wurde gespeichert.
+adn#:#adn_sure_delete_training_facilities#:#Wollen Sie folgende Schulungsorte wirklich löschen?
+adn#:#adn_training_facility_deleted#:#Schulungsort wurde gelöscht.
+adn#:#adn_training_event_created#:#Schulungstermin wurde hinzugefügt.
+adn#:#adn_training_event_updated#:#Schulungstermin wurde gespeichert.
+adn#:#adn_sure_delete_training_event#:#Wollen Sie folgende Schulungstermine wirklich löschen?
+adn#:#adn_training_event_deleted#:#Schulungstermin wurde gelöscht.
+adn#:#adn_add_area_of_expertise#:#Fachgebiet hinzufügen
+adn#:#adn_edit_area_of_expertise#:#Fachgebiet bearbeiten
+adn#:#adn_area_of_expertise_created#:#Fachgebiet wurde hinzugefügt.
+adn#:#adn_area_of_expertise_updated#:#Fachgebiet wurde gespeichert.
+adn#:#adn_sure_delete_areas_of_expertise#:#Wollen Sie folgende Fachgebiete wirklich löschen?
+adn#:#adn_area_of_expertise_deleted#:#Fachgebiet wurde gelöscht.
+adn#:#adn_information_letters#:#Merkblätter
+adn#:#adn_add_information_letter#:#Merkblatt hinzufügen
+adn#:#adn_edit_information_letter#:#Merkblatt bearbeiten
+adn#:#adn_information_letter_created#:#Merkblatt wurde hinzugefügt.
+adn#:#adn_information_letter_updated#:#Merkblatt wurde gespeichert.
+adn#:#adn_sure_delete_information_letters#:#Wollen Sie folgende Merkblätter wirklich löschen?
+adn#:#adn_information_letter_deleted#:#Merkblatt wurde gelöscht.
+adn#:#adn_file_corrupt#:#Datei kann nicht heruntergeladen werden.
+adn#:#adn_show_details#:#Details anzeigen
+adn#:#adn_edit_training_event#:#Schulungstermin bearbeiten
+adn#:#adn_training_event#:#Schulungstermin
+adn#:#adn_catalog_area#:#Fragenkatalogbereich
+adn#:#adn_catalog_area_base#:#Basiskurs
+adn#:#adn_catalog_area_gas#:#Aufbaukurs Gas
+adn#:#adn_catalog_area_chem#:#Aufbaukurs Chemie
+adn#:#adn_catalog_area_general#:#Allgemeiner Teil
+adn#:#adn_catalog_area_dm#:#Trockengüterschifffahrt
+adn#:#adn_catalog_area_tank#:#Tankschifffahrt
+adn#:#adn_catalog_area_basics#:#Grundkenntnisse
+adn#:#adn_catalog_area_phys_chem#:#Physikalische und chemische Kenntnisse
+adn#:#adn_catalog_area_prac#:#Praktische Kenntnisse
+adn#:#adn_catalog_area_emergency#:#Maßnahmen bei Notfällen
+adn#:#adn_filter_both#:#Beide
+adn#:#adn_area_base_no_case#:#Prüfungsziele vom Typ Kasus können nur den Aufbaubereichen zugeordnet werden.
+adn#:#adn_objective_created#:#Prüfungsziel wurde angelegt.
+adn#:#adn_objective_updated#:#Prüfungsziel wurde gespeichert.
+adn#:#adn_sure_delete_objectives#:#Wollen Sie folgende Prüfungsziele wirklich löschen?
+adn#:#adn_objective_deleted#:#Prüfungsziel wurde gelöscht.
+adn#:#adn_subobjective_created#:#Unterziel wurde angelegt.
+adn#:#adn_subobjective_updated#:#Unterziel wurde gespeichert.
+adn#:#adn_sure_delete_subobjectives#:#Wollen Sie folgende Unterziele wirklich löschen?
+adn#:#adn_subobjective_deleted#:#Unterziel wurde gelöscht.
+adn#:#adn_edit_mc_question#:#MC-Frage bearbeiten
+adn#:#adn_mc_question_created#:#MC-Frage wurde hinzugefügt.
+adn#:#adn_mc_question_updated#:#MC-Frage wurde gespeichert.
+adn#:#adn_sure_delete_mc_questions#:#Wollen Sie folgende MC-Fragen wirklich löschen?
+adn#:#adn_mc_question_deleted#:#MC-Frage wurde gelöscht.
+adn#:#adn_last_change#:#Letzte Änderung
+adn#:#adn_last_change_date#:#Datum
+adn#:#adn_last_change_user#:#Benutzer
+adn#:#adn_last_change_status#:#Statusänderung
+adn#:#adn_last_change_comment#:#Änderungskommentar
+adn#:#adn_question_unique_number#:#Die von Ihnen angegebene Fragennummer wird bereits genutzt.
+adn#:#adn_save_backup#:#Speichern und Vorversion sichern
+adn#:#adn_backup_created#:#Vorversion wurde gespeichert.
+adn#:#adn_backup_fail#:#Vorversion konnte nicht gespeichert werden.
+adn#:#adn_show_backup#:#Vorversion anzeigen
+adn#:#adn_default_answer#:#Standard-Antwort
+adn#:#adn_good_specific_answer#:#Frage kann nur bei bestimmten Stoffen gestellt werden
+adn#:#adn_edit_case_question#:#Kasus-Frage bearbeiten
+adn#:#adn_case_question_created#:#Kasus-Frage wurde hinzugefügt.
+adn#:#adn_case_question_updated#:#Kasus-Frage wurde gespeichert.
+adn#:#adn_sure_delete_case_questions#:#Wollen Sie folgende Kasus-Fragen wirklich löschen?
+adn#:#adn_case_question_deleted#:#Kasus-Frage wurde gelöscht.
+adn#:#adn_ed_lic#:#Zulassungszeugnisse
+adn#:#adn_goods_in_transit#:#Stoffe
+adn#:#adn_add_good_in_transit#:#Stoff hinzufügen
+adn#:#adn_edit_good_in_transit#:#Stoff bearbeiten
+adn#:#adn_good_in_transit_created#:#Stoff wurde hinzugefügt.
+adn#:#adn_good_in_transit_updated#:#Stoff wurde gespeichert.
+adn#:#adn_sure_delete_goods_in_transit#:#Wollen Sie folgende Stoffe wirklich löschen?
+adn#:#adn_good_in_transit_deleted#:#Stoff wurde gelöscht.
+adn#:#adn_goods_in_transit_chemicals#:#Chemie
+adn#:#adn_goods_in_transit_gas#:#Gas
+adn#:#adn_good_in_transit_categories#:#Stoffkategorien
+adn#:#adn_add_good_in_transit_category#:#Stoffkategorie hinzufügen
+adn#:#adn_edit_good_in_transit_category#:#Stoffkategorie bearbeiten
+adn#:#adn_good_in_transit_category_created#:#Stoffkategorie wurde hinzugefügt.
+adn#:#adn_good_in_transit_category_updated#:#Stoffkategorie wurde gespeichert.
+adn#:#adn_sure_delete_good_in_transit_categories#:#Wollen Sie folgende Stoffkategorien wirklich löschen?
+adn#:#adn_good_in_transit_category_deleted#:#Stoffkategorie wurde gelöscht.
+adn#:#adn_good_in_transit_category#:#Stoffkategorie
+adn#:#adn_no_good_in_transit_category#:#Keine Kategorie
+adn#:#adn_class#:#Klasse
+adn#:#adn_class_code#:#Klassifizierungscode
+adn#:#adn_packing_group#:#Verpackungsgruppe
+adn#:#adn_material_file#:#Materialiendatei
+adn#:#adn_un_nr#:#UN-Nr.
+adn#:#adn_good_related_answers#:#Stoffabhängige Antworten
+adn#:#adn_add_good_related_answer#:#Stoffabhängige Antwort hinzufügen
+adn#:#adn_edit_good_related_answer#:#Stoffabhängige Antwort bearbeiten
+adn#:#adn_good_related_answer_created#:#Stoffabhängige Antwort wurde hinzugefügt.
+adn#:#adn_good_related_answer_updated#:#Stoffabhängige Antwort wurde gespeichert.
+adn#:#adn_sure_delete_good_related_answers#:#Wollen Sie folgende Antworten wirklich löschen?
+adn#:#adn_good_related_answer_deleted#:#Stoffabhängige Antwort wurde gelöscht.
+adn#:#adn_butan_or_empty#:#Butan oder Leer
+adn#:#adn_butan#:#Butan
+adn#:#adn_empty#:#Leer
+adn#:#adn_add_question_target_number#:#Eintrag hinzufügen
+adn#:#adn_edit_question_target_number#:#Eintrag bearbeiten
+adn#:#adn_question_target_number_created#:#Eintrag wurde hinzugefügt.
+adn#:#adn_question_target_number_updated#:#Eintrag wurde gespeichert.
+adn#:#adn_sure_delete_question_target_numbers#:#Wollen Sie folgende Einträge wirklich löschen?
+adn#:#adn_question_target_number_deleted#:#Eintrag wurde gelöscht.
+adn#:#adn_max_one_per_objective#:#Max. eine Frage je Ziel
+adn#:#adn_overall#:#Gesamtsumme
+adn#:#adn_overall_saved#:#Gesamtsumme wurde gespeichert.
+adn#:#adn_overall_fail#:#Bitte geben Sie eine Gesamtsumme ein.
+adn#:#adn_overall_info#:#Die Anzahl der Fragen weicht von der Gesamtsumme um %s ab.
+adn#:#adn_add_case_objective#:#Kasus-Prüfungsziel hinzufügen
+adn#:#adn_case_gas_empty#:#Gas (Leer)
+adn#:#adn_case_gas_butan#:#Gas (Butan)
+adn#:#adn_case_chem#:#Chemie
+adn#:#adn_case#:#Situationsbeschreibung
+adn#:#adn_text#:#Text
+adn#:#adn_case_placeholder_chem#:#Zugelassene Platzhalter: [UN-Nr1], [Bezeichnung1], [Klasse1], [Klassifizierungscode1], [Verpackungsgruppe1], [UN-Nr2], [Bezeichnung2], [Klasse2], [Klassifizierungscode2], [Verpackungsgruppe2]
+adn#:#adn_case_created#:#Situationsbeschreibung wurde hinzugefügt.
+adn#:#adn_case_updated#:#Situationsbeschreibung wurde gespeichert.
+adn#:#adn_licenses#:#Zulassungszeugnisse
+adn#:#adn_add_license#:#Zulassungszeugnis hinzufügen
+adn#:#adn_edit_license#:#Zulassungszeugnis bearbeiten
+adn#:#adn_license_created#:#Zulassungszeugnis wurde hinzugefügt.
+adn#:#adn_license_updated#:#Zulassungszeugnis wurde gespeichert.
+adn#:#adn_sure_delete_licenses#:#Wollen Sie folgende Zulassungszeugnisse wirklich löschen?
+adn#:#adn_license_deleted#:#Zulassungszeugnis wurde gelöscht.
+adn#:#adn_export_mc_questions#:#Fragen exportieren
+adn#:#adn_create_mc_export#:#Exportdatei erstellen
+adn#:#adn_import_mc_questions#:#Fragendatei importieren
+adn#:#adn_mc_export_success#:#Die Exportdatei wurde erstellt.
+adn#:#adn_sure_delete_export_files#:#Wollen Sie folgende Exportdateien wirklich löschen?
+adn#:#adn_export_file_deleted#:#Exportdateien gelöscht.
+adn#:#adn_include_objectives#:#Prüfungsziele
+adn#:#adn_delete_old_data#:#Alle vorhandenen Daten löschen
+adn#:#adn_enable_updates#:#Vorhandene Daten überschreiben
+adn#:#adn_sure_import_mc_questions#:#Wollen Sie wirklich die folgenden Prüfungselemente importieren?
+adn#:#adn_mc_import_obj_invalid#:#Ungültige Prüfungsziele
+adn#:#adn_mc_import_obj_valid#:#Gültige Prüfungsziele
+adn#:#adn_mc_import_sobj_invalid#:#Ungültige Unterprüfungsziele
+adn#:#adn_mc_import_sobj_valid#:#Gültige Unterprüfungsziele
+adn#:#adn_mc_import_mc_quest_invalid#:#Ungültige MC-Fragen
+adn#:#adn_mc_import_mc_quest_valid#:#Gültige MC-Fragen
+adn#:#adn_mc_import_files_invalid#:#Ungültige Bild-Dateien
+adn#:#adn_mc_import_files_valid#:#Gültige Bild-Dateien
+adn#:#adn_mc_questions_import_failed#:#Der Import ist gescheitert.
+adn#:#adn_mc_questions_import_success#:#Der Import wurde erfolgreich durchgeführt.
+adn#:#adn_licenses_chem#:#Zulassungszeugnisse Chemie
+adn#:#adn_licenses_gas#:#Zulassungszeugnisse Gas
+adn#:#adn_add_information_letter_application#:#Merkblatt/Antrag hinzufügen
+adn#:#adn_information_letters_and_applications#:#Merkblätter und Anträge
+adn#:#adn_missing_file#:#Bitte geben Sie eine Datei an.
+adn#:#adn_current_examination_events#:#Aktuelle Prüfungstermine
+adn#:#adn_archived_examination_events#:#Archivierte Prüfungstermine
+adn#:#adn_chairman#:#Vorsitzender
+adn#:#adn_additional_costs#:#Zusätzliche Kosten pro Person
+adn#:#adn_examination_event_updated#:#Prüfungstermin wurde gespeichert.
+adn#:#adn_examination_event_created#:#Prüfungstermin wurde erstellt.
+adn#:#adn_sure_delete_examination_events#:#Wollen Sie wirklich die folgenden Prüfungstermine löschen?
+adn#:#adn_examination_event_deleted#:#Prüfungstermin wurde gelöscht.
+adn#:#adn_edit_examination_event#:#Prüfungstermin bearbeiten
+adn#:#adn_examination_event#:#Prüfungstermin
+adn#:#adn_filter_none#:#Keine
+adn#:#adn_candidate_updated#:#Prüfungskandidat wurde gespeichert.
+adn#:#adn_candidate_created#:#Prüfungskandidat wurde erstellt.
+adn#:#adn_sure_delete_candidates#:#Wollen Sie wirklich die folgenden Prüfungskandidaten löschen?
+adn#:#adn_candidate_deleted#:#Prüfungskandidat wurde gelöscht.
+adn#:#adn_include_goods#:#Stoffe
+adn#:#adn_mc_import_good_invalid#:#Ungültige Stoffe
+adn#:#adn_mc_import_good_valid#:#Gültige Stoffe
+adn#:#adn_mc_import_good_category_invalid#:#Ungültige Stoffkategorien
+adn#:#adn_mc_import_good_category_valid#:#Gültige Stoffkategorien
+adn#:#adn_exam_application_holdback#:#Es liegt eine Sperrfrist zum Prüfungskandidaten vor. Soll der Antrag trotz Sperrfrist gesetzt werden?
+adn#:#adn_allow_application#:#Antrag annehmen
+adn#:#adn_dismiss_application#:#Antrag ablehnen
+adn#:#adn_candidate_not_unique#:#Ein Kandidat mit diesem Namen und Geburtsdatum ist bereits im System. Wollen Sie trotzdem speichern?
+adn#:#adn_foreign_certificate_missing#:#Der Benutzer benötigt eine gültige Basisbescheinigung um an einer Aufbauprüfung teilnehmen zu wollen. Möchten Sie die Daten trotzdem speichern?
+adn#:#adn_save_and_edit_training#:#Speichern und letzte Schulung angeben
+adn#:#adn_show_candidates#:#Kandidaten anzeigen
+adn#:#adn_assignment_saved#:#Zuordnung gespeichert
+adn#:#adn_add_objective#:#Prüfungsziel hinzufügen
+adn#:#adn_not_scored#:#Nicht bewertet
+adn#:#adn_passed#:#Bestanden
+adn#:#adn_failed#:#Nicht bestanden
+adn#:#adn_type_of_exam#:#Art der Prüfung
+adn#:#adn_show_prospects#:#Interessenten einblenden
+adn#:#adn_score_saved#:#Korrektur wurde gespeichert.
+adn#:#adn_blocked_and_passed_not_allowed#:#Es wurde eine Sperrfrist angegeben, obwohl das Ergebnis "bestanden" ist. Bitte korrigieren Sie die Eingabe.
+adn#:#adn_certificate issued_on#:#Bescheinigung ausgestellt am
+common#:#obj_xaad#:#ADN Administration
+common#:#obj_xacp#:#ADN Sachkundigenverwaltung
+common#:#obj_xaec#:#ADN Prüfungsdurchführung
+common#:#obj_xaed#:#ADN Prüfungselemente
+common#:#obj_xaep#:#ADN Prüfungsvorbereitung
+common#:#obj_xaes#:#ADN Prüfungsnachbereitung
+common#:#obj_xamd#:#ADN Stammdaten
+common#:#obj_xast#:#ADN Statistiken
+common#:#obj_xata#:#ADN Schulungsverwaltung
+rbac#:#xaad_visible#:#Sichtbar
+rbac#:#xaad_read#:#Leserecht
+rbac#:#xaad_write#:#Schreibrecht
+rbac#:#xaad_edit_permission#:#Rechteeinstellungen ändern
+rbac#:#xacp_visible#:#Sichtbar
+rbac#:#xacp_read#:#Leserecht
+rbac#:#xacp_write#:#Schreibrecht
+rbac#:#xacp_edit_permission#:#Rechteeinstellungen ändern
+rbac#:#xaec_visible#:#Sichtbar
+rbac#:#xaec_read#:#Leserecht
+rbac#:#xaec_write#:#Schreibrecht
+rbac#:#xaec_edit_permission#:#Rechteeinstellungen ändern
+rbac#:#xaed_visible#:#Sichtbar
+rbac#:#xaed_read#:#Leserecht
+rbac#:#xaed_write#:#Schreibrecht
+rbac#:#xaed_edit_permission#:#Rechteeinstellungen ändern
+rbac#:#xaep_visible#:#Sichtbar
+rbac#:#xaep_read#:#Leserecht
+rbac#:#xaep_write#:#Schreibrecht
+rbac#:#xaep_edit_permission#:#Rechteeinstellungen ändern
+rbac#:#xaes_visible#:#Sichtbar
+rbac#:#xaes_read#:#Leserecht
+rbac#:#xaes_write#:#Schreibrecht
+rbac#:#xaes_edit_permission#:#Rechteeinstellungen ändern
+rbac#:#xamd_visible#:#Sichtbar
+rbac#:#xamd_read#:#Leserecht
+rbac#:#xamd_write#:#Schreibrecht
+rbac#:#xamd_edit_permission#:#Rechteeinstellungen ändern
+rbac#:#xast_visible#:#Sichtbar
+rbac#:#xast_read#:#Leserecht
+rbac#:#xast_write#:#Schreibrecht
+rbac#:#xast_edit_permission#:#Rechteeinstellungen ändern
+rbac#:#xata_visible#:#Sichtbar
+rbac#:#xata_read#:#Leserecht
+rbac#:#xata_write#:#Schreibrecht
+rbac#:#xata_edit_permission#:#Rechteeinstellungen ändern
+adn#:#adn_objective_not_deleted#:#Es konnten nicht alle Prüfungsziele gelöscht werden. Es können nur Prüfungsziele entfernt werden, die selbst oder deren Unterziele keinen Fragen zugeordnet sind.
+adn#:#adn_subobjective_not_deleted#:#Es konnten nicht alle Prüfungsunterziele gelöscht werden. Es können nur Prüfungsunterziele entfernt werden, die keinen Fragen zugeordnet sind.
+adn#:#adn_good_in_transit_category_not_deleted#:#Es konnten nicht alle Stoffkategorien gelöscht werden. Es können nur Stoffkategorien entfernt werden, denen keine Stoffe zugeordnet sind.
+adn#:#adn_generated_invitations#:#Anzahl generierter Einladungen
+adn#:#adn_generate_invitations#:#Einladungen generieren
+adn#:#adn_invitation_generated_on#:#Einladung generiert am
+adn#:#adn_sheet_questions_added#:#Fragen wurden hinzugefügt
+adn#:#adn_sheet_questions_removed#:#Fragen wurden entfernt
+adn#:#adn_sure_delete_answer_sheets#:#Wollen Sie wirklich die folgenden Prüfungsbögen löschen?
+adn#:#adn_answer_sheet_deleted#:#Prüfungsbogen wurde gelöscht.
+adn#:#adn_sheet_assignment_saved#:#Zuordnungen gespeichert
+adn#:#adn_objective_case_sheet_hierarchy#:#Prüfungsziel wird in Prüfungsbögen anderen Prüfungszielen untergeordnet
+adn#:#adn_good_in_transit_select#:#Zu ladender Stoff
+adn#:#adn_license#:#Zulassungszeugnis
+adn#:#adn_good_in_transit_previous#:#Geladener Stoff
+adn#:#adn_no_previous_good#:#Von der Werft
+adn#:#adn_subject_area_cert_dm#:#8.2.1.3 (Trockengüterschiffe)
+adn#:#adn_subject_area_cert_tank#:#8.2.1.3 (Tankschiffe)
+adn#:#adn_subject_area_cert_gas#:#8.2.1.5 (Gas)
+adn#:#adn_subject_area_cert_chem#:#8.2.1.7 (Chemie)
+adn#:#adn_answer_sheet_created#:#Prüfungsbogen wurde angelegt
+adn#:#adn_edit_last_training#:#Letzte Schulung ändern
+adn#:#adn_set_last_training#:#Letzte Schulung setzen
+adn#:#adn_training_attendance_saved#:#Schulungsteilnahme gespeichert
+adn#:#adn_sure_save_invalid_assignments#:#Einige zugeordnete Kandidaten erfüllen die folgenden angegebenen Kriterien nicht.
+adn#:#adn_sure_save_assignments#:#Zuordnungen trotzdem speichern
+adn#:#adn_assignment_invalid_age#:#Kandidat ist jünger als 18 Jahre
+adn#:#adn_assignment_invalid_certificate#:#Kandidat ist nicht im Besitz einer gültigen ADN bzw. ausländischen Basisbescheinigung.
+adn#:#adn_assignment_invalid_last_training#:#Kandidat hat die Teilnahmefrist nicht eingehalten.
+adn#:#adn_certificate_updated#:#Bescheinigung wurde gespeichert.
+adn#:#adn_type#:#Typ
+adn#:#adn_certificate_saved#:#Bescheinigung wurde erstellt.
+adn#:#adn_good_related_answer#:#Stoffabhängige Antwort
+adn#:#adn_include_mc_questions#:#MC-Fragen
+adn#:#adn_include_case_questions#:#Kasus-Fragen
+adn#:#adn_include_target_numbers#:#Anzahl zu generierende Fragen
+adn#:#adn_import_include#:#Zu importierende Daten
+adn#:#adn_mc_import_target_valid#:#Gültige Anzahl zu generierender Fragen
+adn#:#adn_mc_import_target_invalid#:#Ungültige Anzahl zu generierender Fragen
+adn#:#adn_mc_import_case_quest_invalid#:#Ungültige Kasus-Fragen
+adn#:#adn_mc_import_case_quest_valid#:#Gültige Kasus-Fragen
+adn#:#adn_edit_instructor#:#Dozent bearbeiten
+adn#:#adn_training_provider_deleted#:#Schulungsveranstalter wurde gelöscht.
+adn#:#adn_cp_cpr#:#Sachkundige/Personendaten
+adn#:#adn_certified_professionals_data#:#Personendaten
+adn#:#adn_edit_professional#:#Personendaten bearbeiten
+adn#:#adn_certified_professional_updated#:#Sachkundiger wurde gespeichert.
+adn#:#adn_number_of_examination_events#:#Anzahl Prüfungstermine
+adn#:#adn_number_of_participants#:#Anzahl Teilnehmer
+adn#:#adn_number_of_successful_participants#:#davon bestanden
+adn#:#adn_success_quota#:#Erfolgsquote
+adn#:#adn_timeframe#:#Zeitraum
+adn#:#adn_add_gas_license#:#Zulassungszeugnis mit Anhang hochladen
+adn#:#adn_invalid_date_range#:#Der angegebene Zeitraum ist ungültig.
+adn#:#adn_save_subjected_questions#:#Zuordnung der Fragen speichern
+adn#:#adn_certificate#:#Bescheinigung
+adn#:#adn_more_certificates#:#Archivierte Bescheinigungen anzeigen
+adn#:#adn_archived_on#:#Archiviert am
+adn#:#adn_unique_number#:#Dieser Wert ist bereits vergeben.
+common#:#msg_invalid_order_ascending#:#Die Werte müssen aufsteigend sein.
+common#:#msg_invalid_order_descending#:#Die Werte müssen absteigend sein.
+adn#:#adn_proof#:#Nachweis
+adn#:#adn_proof_train_dm#:#Kurs Trockengüterschifffahrt
+adn#:#adn_proof_train_tank#:#Kurs Tankschifffahrt
+adn#:#adn_proof_train_combined#:#Kurs Trockengüter-/Tankschifffahrt kombiniert
+adn#:#adn_proof_train_gas#:#Kurs Gas
+adn#:#adn_proof_train_chemicals#:#Kurs Chemie
+adn#:#adn_proof_exp_gas#:#Fahrzeit Gas
+adn#:#adn_proof_exp_chemicals#:#Fahrzeit Chemie
+adn#:#adn_create_extension#:#Verlängerung erstellen
+adn#:#adn_statistics_count#:#Anzahl
+adn#:#adn_type_of_refresher_training#:#Art des Wiederholungskurses
+adn#:#adn_type_of_experience#:#Nachweis von mindestens 1 Jahr Arbeit an Bord eines
+adn#:#adn_type_of_experience_gas#:#Typ G-Schiffs (Gas)
+adn#:#adn_type_of_experience_chem#:#Typ C-Schiffs (Chemie)
+adn#:#adn_other_applications#:#Sonstige Anträge
+adn#:#adn_application_duplicates#:#Zweitschriften / Ersatzausfertigungen
+adn#:#adn_number_of_issued_certificates#:#Anzahl der ausgestellten Bescheinigungen
+adn#:#adn_st_tgc#:#Bescheinigungen für Aufbaukurse Gas und Chemie
+adn#:#adn_extension_created#:#Verlängerung wurde erstellt.
+adn#:#adn_create_duplicate#:#Ersatzausfertigung erstellen
+adn#:#adn_duplicate_created#:#Ersatzausfertigung wurde erstellt.
+adn#:#adn_duplicate_issued_on#:#Ersatzausfertigung ausgestellt am
+adn#:#adn_case_placeholder_gas#:#Zugelassene Platzhalter: [UN-Nr], [Bezeichnung]
+adn#:#adn_download_statistics#:#Statistik herunterladen
+adn#:#adn_attendance_list_created_on#:#Teilnahmeliste erstellt am
+adn#:#adn_download_attendance_list#:#Teilnahmeliste herunterladen
+adn#:#adn_create_attendance_list#:#Teilnahmeliste erstellen
+adn#:#adn_score_notification_letters#:#Antwortschreiben
+adn#:#adn_number_of_correct_answers#:#Anzahl richtig beantworteter Fragen
+adn#:#adn_points#:#Punkte
+adn#:#adn_download_notification_letter#:#Antwortschreiben herunterladen
+adn#:#adn_create_notification_letters#:#Antwortschreiben erstellen
+adn#:#adn_invoice#:#Kostenbescheid
+adn#:#adn_due_date#:#Datum der Fälligkeit
+adn#:#adn_zuev_number#:#Verwendungszweck
+adn#:#adn_type_of_cost#:#Kostengegenstand
+adn#:#adn_list_access_codes#:#Liste Benutzerzugänge
+adn#:#adn_report_salutation_m#:#Sehr geehrter Herr
+adn#:#adn_report_salutation_f#:#Sehr geehrte Frau
+adn#:#adn_date_long#:#%s, den %s
+adn#:#adn_report_date_clock#:#Uhr
+adn#:#adn_report_exam_sheet#:#Prüfungsfragebogen
+adn#:#adn_report_exam#:#Prüfung
+adn#:#adn_question_target_invalid_number#:#Bitte geben Sie eine gültige Anzahl an.
+adn#:#adn_question_target_invalid_objective#:#Bitte wählen Sie mindestens 1 Prüfungsziel bzw. Unterziel aus.
+adn#:#adn_login#:#Login
+adn#:#adn_password#:#Passwort
+adn#:#adn_download_access_codes#:#Benutzerzugänge herunterladen
+adn#:#adn_report_solution_sheet#:#Lösungsblatt zum Prüfungsfragebogen
+adn#:#adn_user_sign#:#Zeichen
+adn#:#adn_report_exam_list_header#:#%s am %s in der Zeit von %s Uhr bis %s Uhr in %s
+adn#:#adn_report_created_attendance_list#:#Die Teilnahmeliste wurde erstellt
+adn#:#adn_online_test#:#ADN Online Test
+adn#:#adn_previous_question#:#Vorige Frage
+adn#:#adn_next_question#:#Nächste Frage
+adn#:#adn_question_overview#:#Fragenübersicht
+adn#:#adn_report_score_points#:#%s von %s Punkten
+adn#:#adn_report_created_score_notification#:#Die Antwortschreiben wurden erstellt.
+adn#:#adn_report_score_err_not_scored#:#Es konnten keine Antwortschreiben erstellt werden, da die ausgewählten Kandidaten nicht bewertet wurden.
+adn#:#adn_finish_test#:#Test beenden
+adn#:#adn_show_question#:#Frage anzeigen
+adn#:#adn_answered#:#Beantwortet
+adn#:#adn_really_finish_test#:#Wollen Sie den Test wirklich beenden?
+adn#:#adn_test_finished#:#Der Test wurde beendet.
+adn#:#adn_es_oas#:#Online-Antwortbögen
+adn#:#adn_report_invoice_created#:#Der Kostenbescheid wurde erstellt
+adn#:#adn_online_answer_sheets#:#Antwortbögen
+adn#:#adn_given_answer#:#Gegebene Antwort
+adn#:#adn_correct#:#Korrekt
+adn#:#adn_elearning#:#ADN E-Learning
+adn#:#adn_self_test#:#Selbsttest
+adn#:#adn_start_test#:#Test starten
+adn#:#adn_report_stat_header#:#Statistik für den Zeitraum vom %s bis zum %s
+adn#:#adn_no_mc_sheet_found#:#Dem Kandidaten wurde kein MC Fragebogen zugeordnet.
+adn#:#adn_no_answer_given_prev#:#Sie haben zur letzten Frage keine Antwortmöglichkeit ausgewählt. Wenn Sie die Frage erneut anzeigen möchten, betätigen Sie bitte den Knopf "Nächste Frage".
+adn#:#adn_no_answer_given_next#:#Sie haben zur letzten Frage keine Antwortmöglichkeit ausgewählt. Wenn Sie die Frage erneut anzeigen möchten, betätigen Sie bitte den Knopf "Vorige Frage".
+adn#:#adn_your_answer#:#Ihre Antwort
+adn#:#adn_back_to_front_page#:#Zurück zur Startseite
+adn#:#adn_download_solutions#:#Lösungsbogen herunterladen
+adn#:#adn_your_score#:#Ihr Ergebnis
+adn#:#adn_score_points#:#Punkt(e)
+adn#:#adn_please_check_certificate#:#Bitte vergewissern Sie sich noch einmal, daß alle Daten korrekt sind. Ausstellende WSD und Ausstellungsdatum können nach dem nächsten Schritt nicht mehr geändert werden, da der Bescheinigung eine neue Nummer zugeteilt wird.
+adn#:#adn_cert_not_valid_save_anyway#:#Die ursprüngliche Bescheinigung ist nicht mehr gültig. Wollen Sie wirklich eine Verlängerung erstellen?
+adn#:#adn_assignment_delete_fail_answered#:#Die Zuordnung könnte nicht gelöscht werden, da bereits Antworten vorliegen.
+adn#:#adn_no_entries_filter#:#Es wurden keine Einträge gefunden, welche Ihren gewählten Filterkriterien entsprechen.
+adn#:#adn_sheet_question_status#:#%s von %s Fragen
+adn#:#adn_sheet_too_few#:#Zu wenige Fragen im Prüfungsbogen.
+adn#:#adn_sheet_too_many#:#Zu viele Fragen im Prüfungsbogen.
+adn#:#adn_sheet_question_status_invalid#:#davon %s inaktiv
+adn#:#adn_candidate_last_event_mismatch#:#Die letzte Schulung entspricht nicht der gewählten Prüfungsart.
+adn#:#adn_candidate_edit_last_event#:#Letzte Schulung bearbeiten
+adn#:#adn_candidate_reset_last_event#:#Letzte Schulung löschen
+adn#:#adn_overall_info_lower#:#Es sind momentan %s Frage(n) zu wenig zugeordnet.
+adn#:#adn_overall_info_higher#:#Es sind momentan %s Frage(n) zu viel zugeordnet.
+adn#:#adn_certificate_germany#:#Deutschland
+adn#:#adn_certificate_foreign#:#Ausland
+adn#:#adn_certificate_germany_and_foreign#:#Deutschland und Ausland
+adn#:#adn_professional_directory_help#:#Sachkundige werden im Verzeichnis gelistet, wenn sie zu einem beliebigen Zeitpunkt innerhalb des angegebenen Zeitraums eine gültige ADN Bescheinigung hatten.
+adn#:#adn_ad_icp#:#Sachkundige importieren
+adn#:#adn_default_wmo#:#Standard-WSD
+adn#:#adn_default_country#:#Standard-Land
+adn#:#adn_anonymize#:#Anonymisieren
+adn#:#adn_limit#:#Limit
+adn#:#adn_professional_import_new#:#Neue Sachkundige
+adn#:#adn_professional_import_existing#:#Vorhandene Sachkundige
+adn#:#adn_professional_import_failed#:#Der Import ist gescheitert.
+adn#:#adn_professional_import_success#:#Der Import wurde erfolgreich durchgeführt.
+adn#:#adn_report_err_not_generated#:#Für einige Kandidaten sind keine Prüfungsbögen generiert.
+adn#:#adn_report_err_sheet_deprecated#:#Einige Prüfungsbögen sind veraltet. Bitte generieren Sie die Prüfungsbögen neu.
+adn#:#adn_questions_activated#:#Fragen wurden aktiviert
+adn#:#adn_questions_deactivated#:#Fragen wurden deaktiviert
+adn#:#adn_archived_flag#:#[archiviert]
+adn#:#adn_report_type_extension_ref#:#Verlängerung von Bescheinigungen aufgrund Wiederholungskurses
+adn#:#adn_report_type_extension_exp#:#Verlängerung von Bescheinigungen aufgrund Arbeitszeitnachweis
+adn#:#adn_report_type_cert_others#:#Ausgestellte Bescheinigungen aufgrund sonstiger Anträge
+adn#:#adn_report_type_cert_gc#:#Ausgestellte Bescheinigungen für Aufbaukurse "Gas" und "Chemie"
+adn#:#adn_report_type_cert_sum#:#Summe der Bescheinigungen
+adn#:#adn_report_attendance_header_chem#:#Niederschrift der Prüfung zum Erwerb der Bescheinigung über besondere Kenntnisse gemäß ADN 8.2.1.7
+adn#:#adn_report_attendance_header_gas#:#Niederschrift der Prüfung zum Erwerb der Bescheinigung über besondere Kenntnisse gemäß ADN 8.2.1.5
+adn#:#adn_report_attendance_header_def#:#Niederschrift der Prüfung zum Erwerb der Bescheinigung über besondere Kenntnisse gemäß ADN 8.2.1.3
+adn#:#adn_report_legal_remedies#:#Gegen diese Entscheidung kann innerhalb eines Monats nach Bekanntgabe Widerspruch erhoben werden. Der Widerspruch ist schriftlich oder zur Niederschrift bei der %s einzulegen.
+adn#:#adn_failed_sum#:#Nicht bestanden (Gesamtpunktzahl)
+adn#:#adn_certificate_issued_on_warning#:#Sind Sie sicher, dass ein anderes Jahr für die Ausstellung der Bescheinigung als das laufende Jahr gewählt werden soll?
+administration#:#adm_adn#:#ADN
+adn#:#adn_ad_personal_data#:#Personendaten
+adn#:#adn_ad_equal_last_name#:#Gleicher Nachname
+adn#:#adn_ad_equal_birthdate#:#Gleiches Geburtsdatum
+adn#:#adn_ad_equal_city#:#Gleicher Wohnort
+adn#:#adn_ad_equal_street#:#Gleiche Straße
+adn#:#adn_exam_candidate#:#Prüfungskandidat
+adn#:#adn_certificates#:#Bescheinigungen
+adn#:#adn_invoices#:#Kostenbescheide
+adn#:#adn_no_entries#:#Keine Einträge
+adn#:#adn_cp_pdm#:#Personenbezogene Daten
+adn#:#adn_really_delete_pd#:#Sollen die folgenden Sachkundigen/Interessenten/Kandidaten wirklich gelöscht werden?
+adn#:#adn_ad_wmo_created#:#Angelegt durch
+common#:#adn_personal_data_notification#:#ADN Benachrichtigung über Löschkandidaten
+common#:#adn_personal_data_notification_desc#:#Die WSDen werden über anstehende Löschkandidaten (Sachkundige und Prüfungskandidaten) informiert.
+adn#:#adn_ad_pd_all#:#Alle
+adn#:#adn_ad_pd_cand#:#Prüfungskandidaten (älter 2 Jahre)
+adn#:#adn_ad_pd_cert#:#Sachkundige (älter 7 Jahre)
+adn#:#adn_ad_created_date#:#Angelegt am
+adn#:#adn_ad_last_certificate#:#Letztes Zertifikat
+adn#:#adn_ad_wmo#:#WSD
+adn#:#adn_new_delete_candidates_mess#:#Sehr geehrter Mitarbeiter {WSD},<br /><br />in Ihrer WSD stehen folgende Nutzer zur Löschung an:<br />{USER}<br /><br />Diese Nachricht wurde automatisch erstellt.
+adn#:#adn_new_delete_candidates_subj#:#ADN Löschung von personenbezogenen Daten
+adn#:#adn_ad_add_person#:#Sachkundigen hinzufügen
+adn#:#adn_add_certificate#:#Bescheinigung hinzufügen
+adn#:#adn_save_and_add_certificate#:#Speichern und Bescheinigung hinzufügen
+adn#:#adn_subtitle#:#Untertitel
+adn#:#adn_download_certificate#:#Bescheinigung herunterladen

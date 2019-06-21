@@ -104,6 +104,12 @@ class ilTable2GUI extends ilTableGUI
     const FILTER_NUMBER_RANGE = 5;
     const FILTER_DATE_RANGE = 6;
     const FILTER_DURATION_RANGE = 7;
+	// adn-patch start
+	const FILTER_TEXT_RANGE = 99;
+	// cr-008 start
+	const FILTER_CHECKBOX = 98;
+	// cr-008 end
+	// adn-patch end
     const FILTER_DATETIME_RANGE = 8;
     const FILTER_CHECKBOX = 9;
 
@@ -232,6 +238,9 @@ class ilTable2GUI extends ilTableGUI
             } else {
                 if (is_object($ilUser)) {
                     $limit = $ilUser->getPref("hits_per_page");
+                    // adn-patch start
+                    $limit = 20;
+                    // adn-patch end
                 } else {
                     $limit = 40;
                 }
@@ -744,6 +753,28 @@ class ilTable2GUI extends ilTableGUI
                 $item->addCombinationItem("to", $combi_item, $lng->txt("to"));
                 $item->setComparisonMode(ilCombinationInputGUI::COMPARISON_ASCENDING);
                 break;
+
+			// adn-patch start
+			case self::FILTER_TEXT_RANGE:
+				include_once("./Services/Form/classes/class.ilCombinationInputGUI.php");
+				include_once("./Services/Form/classes/class.ilTextInputGUI.php");
+				$item = new ilCombinationInputGUI($caption, $id);
+				$combi_item = new ilTextInputGUI("", $id."_from");
+				$item->addCombinationItem("from", $combi_item, $lng->txt("from"));
+				$combi_item = new ilTextInputGUI("", $id."_to");
+				$item->addCombinationItem("to", $combi_item, $lng->txt("to"));
+				$item->setComparisonMode(ilCombinationInputGUI::COMPARISON_ASCENDING);
+				$item->setSize(20);
+				break;
+
+			// cr-008 start
+			case self::FILTER_CHECKBOX:
+				include_once("./Services/Form/classes/class.ilCheckboxInputGUI.php");
+				$item = new ilCheckboxInputGUI($caption, $id);
+				$item->setValue("1");
+				break;
+			// cr-008 end
+			// adn-patch end
 
             case self::FILTER_DURATION_RANGE:
                 $lng->loadLanguageModule("form");
@@ -1715,6 +1746,26 @@ class ilTable2GUI extends ilTableGUI
                 $this->tpl->parseCurrentBlock();
             }
         } else {
+            // adn-patch start
+            if ($this->filter) {
+                foreach ($this->filter as $item) {
+                    if (!is_array($item) && $item != "") {
+                        $has_active_filter = true;
+                    } else {
+                        if (is_array($item) && implode("", $item) != "") {
+                            $has_active_filter = true;
+                        }
+                    }
+                    if ($has_active_filter) {
+                        break;
+                    }
+                }
+                if ($has_active_filter) {
+                    $this->setNoEntriesText($lng->txt("adn_no_entries_filter"));
+                }
+            }
+            // adn-patch end
+
             // add standard no items text (please tell me, if it messes something up, alex, 29.8.2008)
             $no_items_text = (trim($this->getNoEntriesText()) != '')
                 ? $this->getNoEntriesText()
@@ -2399,6 +2450,24 @@ class ilTable2GUI extends ilTableGUI
                 $this->tpl->parseCurrentBlock();
             }
         }
+
+		// adn-patch start
+		if(is_array($this->legend))
+		{
+			$this->tpl->setCurrentBlock("legend_item");
+			foreach($this->legend as $sign => $caption)
+			{
+				$this->tpl->setVariable("LEGEND_SIGN", $sign);
+				$this->tpl->setVariable("LEGEND_CAPTION", $caption);
+				$this->tpl->parseCurrentBlock();
+			}
+
+			$this->tpl->setCurrentBlock("legend");
+			$this->tpl->setVariable("LEGEND_TITLE", $lng->txt("legend"));
+			$this->tpl->parseCurrentBlock();
+		}
+		// adn-patch end
+
     }
 
     /**

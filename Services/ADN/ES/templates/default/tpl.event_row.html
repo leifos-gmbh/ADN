@@ -1,0 +1,40 @@
+<tr class="{CSS_ROW}">
+	<!-- BEGIN checkbox_column -->
+	<td class="std small">
+		<input type="checkbox" name="event_id[]" value="{VAL_ID}" />
+	</td>
+	<!-- END checkbox_column -->
+	<td class="std small">
+		{VAL_DATE}
+	</td>
+	<td class="std small" style="background-color:{VAL_TYPE_COLOR}">
+		{VAL_TYPE}
+	</td>
+	<td class="std small">
+		{VAL_FACILITY}
+	</td>
+	<td class="std small">
+		{VAL_TIME_FROM}
+	</td>
+	<td class="std small">
+		{VAL_TIME_TO}
+	</td>
+	<!-- BEGIN assigned_column -->
+	<td class="std small">
+		{VAL_ASSIGNED}
+	</td>
+	<!-- END assigned_column -->
+	<!-- BEGIN invitation_column -->
+	<td class="std small">
+		{VAL_INVITATIONS}
+	</td>
+	<!-- END invitation_column -->
+	<!-- BEGIN attendance_column -->
+	<td class="std small">
+		{VAL_ATTENDANCE}
+	</td>
+	<!-- END attendance_column -->
+	<td class="std small">
+		<!-- BEGIN action --><div><a href="{HREF_CMD}">{TXT_CMD}</a></div><!-- END action -->
+	</td>
+</tr>

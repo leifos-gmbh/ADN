@@ -1,0 +1,51 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<service xmlns="http://www.w3.org" version="$Id$"
+	id="adn">
+	<baseclasses>
+		<baseclass name="adnBaseGUI" dir="Base/classes" />
+	</baseclasses>
+	<objects>
+		$types = array("xata", "xaed", "xaep", "xaec", "xaes", "xacp", "xast", "xamd", "xaad");
+		<object id="xata" class_name="ADNTrainingAdministration" dir="Base/classes"
+			checkbox="0" inherit="0" translate="sys" rbac="1" system="1">
+			<parent id="adm" max="1">adm</parent>
+		</object>
+		<object id="xaed" class_name="ADNExaminationDefinition" dir="Base/classes"
+			checkbox="0" inherit="0" translate="sys" rbac="1" system="1">
+			<parent id="adm" max="1">adm</parent>
+		</object>
+		<object id="xaep" class_name="ADNExaminationPreparation" dir="Base/classes"
+			checkbox="0" inherit="0" translate="sys" rbac="1" system="1">
+			<parent id="adm" max="1">adm</parent>
+		</object>
+		<object id="xaec" class_name="ADNExaminationConduction" dir="Base/classes"
+			checkbox="0" inherit="0" translate="sys" rbac="1" system="1">
+			<parent id="adm" max="1">adm</parent>
+		</object>
+		<object id="xaes" class_name="ADNExaminationScoring" dir="Base/classes"
+			checkbox="0" inherit="0" translate="sys" rbac="1" system="1">
+			<parent id="adm" max="1">adm</parent>
+		</object>
+		<object id="xacp" class_name="ADNCertifiedProfessional" dir="Base/classes"
+			checkbox="0" inherit="0" translate="sys" rbac="1" system="1">
+			<parent id="adm" max="1">adm</parent>
+		</object>
+		<object id="xast" class_name="ADNStatistic" dir="Base/classes"
+			checkbox="0" inherit="0" translate="sys" rbac="1" system="1">
+			<parent id="adm" max="1">adm</parent>
+		</object>
+		<object id="xamd" class_name="ADNMasterData" dir="Base/classes"
+			checkbox="0" inherit="0" translate="sys" rbac="1" system="1">
+			<parent id="adm" max="1">adm</parent>
+		</object>
+		<object id="xaad" class_name="ADNAdministration" dir="Base/classes"
+			checkbox="0" inherit="0" translate="sys" rbac="1" system="1">
+			<parent id="adm" max="1">adm</parent>
+		</object>
+	</objects>
+	<crons>
+		<cron id="adn_pd_notification" class="adnPersonalDataNotification" />
+	</crons>
+</service>
+
+

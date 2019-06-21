@@ -1,0 +1,20 @@
+﻿#topic {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: white;
+	background-image: none;
+	color: black;
+}
+#topic a {
+	color: black;
+	text-decoration: none;
+}
+#pageContent, #topicBlock {
+	border: none;
+}
+#pageHeader, #topBar, #statusBar, #topicBar, #pageSide, #pageSplitter, #topicSpinner {
+	display: none;
+}

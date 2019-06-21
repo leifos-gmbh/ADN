@@ -189,6 +189,13 @@ class ilAdministrationGUI
             $this->ctrl->setCmd("view");
         }
 
+		// adn-patch start
+		global $tpl;
+		include_once("./Services/ADN/UI/classes/class.adnMainMenuGUI.php");
+		$adn_menu = new adnMainMenuGUI(null);
+		$adn_menu->addAdminMenu();
+		// adn-patch end
+
         $cmd = $this->ctrl->getCmd("forward");
 
         //echo "<br>cmd:$cmd:nextclass:$next_class:-".$_GET["cmdClass"]."-".$_GET["cmd"]."-";

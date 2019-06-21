@@ -7873,6 +7873,7 @@ $setting->set("enable_sahs_pd", 1);
 ?>
 <#3460>
 <?php
+	return;
     $ilDB->setLimit(1);
     $query = "SELECT object_data.obj_id, object_reference.ref_id FROM object_data INNER JOIN object_reference on object_data.obj_id = object_reference.obj_id WHERE type = 'chta'";
     $rset = $ilDB->query($query);
@@ -19000,8 +19001,8 @@ require_once("./Modules/DataCollection/classes/class.ilDataCollectionField.php")
 require_once("./Modules/DataCollection/classes/class.ilObjDataCollection.php");
 //if the table was "exportable" before, every visible field was exported, now we set the default value of the existing dcls to field.isExportable() iff field.isVisible().
 $q = "SELECT view2.id as view_id, viewdef.field, viewdef.field_order FROM il_dcl_viewdefinition viewdef" .
-        " INNER JOIN il_dcl_view view ON viewdef.view_id = view.id AND view.type = " . ilDataCollectionField::VIEW_VIEW .
-        " INNER JOIN il_dcl_view view2 ON view.table_id = view2.table_id AND view2.type = " . ilDataCollectionField::EXPORTABLE_VIEW .
+		" INNER JOIN il_dcl_view view1 ON viewdef.view_id = view1.id AND view1.type = ".ilDataCollectionField::VIEW_VIEW.
+		" INNER JOIN il_dcl_view view2 ON view1.table_id = view2.table_id AND view2.type = ".ilDataCollectionField::EXPORTABLE_VIEW.
         " WHERE viewdef.is_set = " . $ilDB->quote(1, "integer");
 $set = $ilDB->query($q);
 while ($res = $ilDB->fetchAssoc($set)) {

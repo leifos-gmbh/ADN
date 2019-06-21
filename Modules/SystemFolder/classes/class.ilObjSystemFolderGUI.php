@@ -1201,6 +1201,12 @@ class ilObjSystemFolderGUI extends ilObjectGUI
         $ilTabs->addSubTabTarget("contact_data", $ilCtrl->getLinkTarget($this, "showContactInformation"));
         $ilTabs->addSubTabTarget("adm_imprint", $ilCtrl->getLinkTargetByClass("ilimprintgui", "preview"));
     
+		// adn-patch start
+		global $lng;
+		$lng->loadLanguageModule('cmps');
+		$ilTabs->addSubTabTarget('cmps_database', './setup/setup.php','','','_top');
+		// adn-patch end
+
         $ilTabs->setSubTabActive($a_activate);
         $ilTabs->setTabActive("general_settings");
     }

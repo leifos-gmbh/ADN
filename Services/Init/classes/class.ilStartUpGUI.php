@@ -960,6 +960,8 @@ class ilStartUpGUI
         // allow new registrations?
         include_once 'Services/Registration/classes/class.ilRegistrationSettings.php';
         if (ilRegistrationSettings::_lookupRegistrationType() != IL_REG_DISABLED) {
+            // adn-patch start (out-commented)
+            /*
             $rtpl->setCurrentBlock("new_registration");
             $rtpl->setVariable("REGISTER", $lng->txt("registration"));
             $rtpl->setVariable(
@@ -967,6 +969,8 @@ class ilStartUpGUI
                 $this->ctrl->getLinkTargetByClass("ilaccountregistrationgui", "")
             );
             $rtpl->parseCurrentBlock();
+            */
+            // adn-patch end
         }
         // allow password assistance? Surpress option if Authmode is not local database
         if ($ilSetting->get("password_assistance")) {
@@ -1640,6 +1644,11 @@ class ilStartUpGUI
         global $objDefinition, $ilPluginAdmin, $ilUser;
 
         $access = $DIC->access();
+
+        // adn-patch cr008 start
+        include_once("./Services/ADN/Base/classes/class.adnGotoHandler.php");
+        return adnGotoHandler::_check($a_target);
+        // adn-patch cr008 end
 
 
         if (is_object($ilPluginAdmin)) {

@@ -2390,8 +2390,12 @@ class ilObjUser extends ilObject
     {
         $this->profile_incomplete = (boolean) $a_prof_inc;
     }
+
     public function getProfileIncomplete()
     {
+        // begin-patch adn
+        return false;
+        // end-patch adn
         if ($this->id == ANONYMOUS_USER_ID) {
             return false;
         }
@@ -3078,6 +3082,19 @@ class ilObjUser extends ilObject
 
         return $styles;
     }
+
+	public static function moveAllUsersToStyle($a_to_skin, $a_to_style)
+	{
+		global $ilDB;
+		
+		$query = 'SELECT distinct(usr_id) usrs from usr_data';
+		$res  = $ilDB->query($query);
+		while($row = $res->fetchRow(DB_FETCHMODE_OBJECT))
+		{
+			self::_writePref($row->usrs, "skin", $a_to_skin);
+			self::_writePref($row->usrs, "style", $a_to_style);
+		}
+	}
 
     /**
     * skins and styles
@@ -5543,4 +5560,21 @@ class ilObjUser extends ilObject
 
         return $r;
     }
+
+    // adn-patch start
+    public function getSign()
+    {
+        include_once './Services/User/classes/class.ilUserDefinedFields.php';
+        $definition = ilUserDefinedFields::_getInstance();
+        $sign_id = $definition->fetchFieldIdFromName("sign");
+
+        if ($sign_id) {
+            return isset($this->user_defined_data['f_' . $sign_id]) ?
+                $this->user_defined_data['f_' . $sign_id] :
+                '';
+        }
+        return '';
+    }
+    // adn-patch end
+
 } // END class ilObjUser

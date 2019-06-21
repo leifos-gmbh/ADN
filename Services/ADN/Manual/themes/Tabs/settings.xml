@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<settings>
+	<theme>
+		<name>Tabs</name>
+		<predefined>true</predefined>
+	</theme>
+	<pageHeader>
+		<visible>true</visible>
+		<height>40</height>
+		<logoImage></logoImage>
+		<showText>true</showText>
+	</pageHeader>
+	<topic>
+		<jqueryuiStyle>true</jqueryuiStyle>
+		<relatedTopics>
+			<icon>ui-icon ui-icon-arrowreturnthick-1-e</icon>
+		</relatedTopics>
+		<collapsibleSections>
+			<expandAll>
+				<icon>ui-icon ui-icon-circle-triangle-s</icon>
+			</expandAll>
+			<collapseAll>
+				<icon>ui-icon ui-icon-circle-triangle-n</icon>
+			</collapseAll>
+			<expanded>
+				<icon>ui-icon ui-icon-circle-triangle-n</icon>
+			</expanded>
+			<collapsed>
+				<icon>ui-icon ui-icon-circle-triangle-s</icon>
+			</collapsed>
+		</collapsibleSections>
+	</topic>
+	<toc>
+		<options>
+			<icons>
+				<leaf>ui-icon ui-icon-document</leaf>
+				<collapsed>ui-icon ui-icon-folder-collapsed</collapsed>
+				<expanded>ui-icon ui-icon-folder-open</expanded>
+			</icons>
+		</options>
+	</toc>
+	<index>
+		<visible>true</visible>
+	</index>
+	<search>
+		<visible>true</visible>
+		<buttons>
+			<go>
+				<icon>ui-icon ui-icon-search</icon>
+			</go>
+			<help>
+				<icon>ui-icon ui-icon-help</icon>
+			</help>
+			<highlight>
+				<icon>ui-icon ui-icon-lightbulb</icon>
+			</highlight>
+		</buttons>
+	</search>
+	<buttons>
+		<btnPoweredBy>
+			<icon>custom-icon custom-icon-1</icon>
+			<showLabel>false</showLabel>
+			<visible>true</visible>
+		</btnPoweredBy>
+		<btnGotoPrev>
+			<icon>ui-icon ui-icon-circle-arrow-w</icon>
+			<showLabel>false</showLabel>
+			<visible>true</visible>
+		</btnGotoPrev>
+		<btnGotoNext>
+			<icon>ui-icon ui-icon-circle-arrow-e</icon>
+			<showLabel>false</showLabel>
+			<visible>true</visible>
+		</btnGotoNext>
+		<btnGotoHome>
+			<icon>ui-icon ui-icon-home</icon>
+			<showLabel>false</showLabel>
+			<visible>true</visible>
+		</btnGotoHome>
+		<btnPrint>
+			<icon>ui-icon ui-icon-print</icon>
+			<showLabel>false</showLabel>
+			<visible>true</visible>
+		</btnPrint>
+		<btnEmail>
+			<icon>ui-icon ui-icon-mail-closed</icon>
+			<showLabel>false</showLabel>
+			<visible>true</visible>
+		</btnEmail>
+	</buttons>
+</settings>

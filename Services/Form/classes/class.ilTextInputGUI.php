@@ -29,6 +29,14 @@ class ilTextInputGUI extends ilSubEnabledFormPropertyGUI implements ilTableFilte
     protected $ajax_datasource_commit_url;
     protected $submit_form_on_enter = false;
 
+	// adn-patch start
+
+	protected $special_characters;
+	protected $add_js_meta;
+	protected $form_id;
+
+	// adn-patch end
+
     /**
      * @var bool Flag whether the html autocomplete attribute should be set to "off" or not
      */
@@ -502,6 +510,56 @@ class ilTextInputGUI extends ilSubEnabledFormPropertyGUI implements ilTableFilte
         }
 
         $tpl->setVariable("ARIA_LABEL", ilUtil::prepareFormOutput($this->getTitle()));
+        // adn-patch start
+
+        if($this->hasSpecialCharacters())
+        {
+            $tpl->setCurrentBlock("bbcode_buttons");
+            $tags = array();
+
+            $static_tags = array("f", "u", "h", "t");
+            foreach($static_tags as $tag)
+            {
+                $tpl->setVariable("BBCODE_BUTTON_INDEX", sizeof($tags));
+                $tpl->setVariable("BBCODE_BUTTON_CAPTION", "[".$tag."]");
+                $tpl->setVariable("BBCODE_FIELD", $this->getFieldId());
+                $tpl->parseCurrentBlock();
+
+                $tags[] = "'[".$tag."]'";
+                $tags[] = "'[/".$tag."]'";
+            }
+
+            include_once "Services/ADN/AD/classes/class.adnCharacter.php";
+            $chars = adnCharacter::getAllCharacters();
+            if($chars)
+            {
+                foreach($chars as $idx => $char)
+                {
+                    $tpl->setVariable("BBCODE_BUTTON_INDEX", sizeof($tags));
+                    $tpl->setVariable("BBCODE_BUTTON_CAPTION", $char["name"]);
+                    $tpl->setVariable("BBCODE_FIELD", $this->getFieldId());
+                    $tpl->parseCurrentBlock();
+
+                    $tags[] = "'".$char["name"]."'";
+                    $tags[] = "''";
+                }
+            }
+
+            if($this->addJSMeta())
+            {
+                $tpl->setCurrentBlock("bbcode_meta");
+                $tpl->setVariable("BBCODE_TAGS", implode(",", $tags));
+                $tpl->setVariable("BBCODE_FORM", "form_".$this->getFormId());
+                $tpl->parseCurrentBlock();
+
+                $GLOBALS["tpl"]->addJavascript("Services/COPage/phpBB/3_0_5/editor.js");
+            }
+
+            $tpl->setCurrentBlock("bbcode");
+            $tpl->parseCurrentBlock();
+        }
+
+        // adn-patch end
 
         return $tpl->get();
     }
@@ -553,4 +611,61 @@ class ilTextInputGUI extends ilSubEnabledFormPropertyGUI implements ilTableFilte
     {
         return $this->autocomplete_disabled;
     }
+
+	// adn-patch start
+
+	/**
+	 * Toggle rendering of special characters
+	 *
+	 * @param bool $a_value
+	 * @param bool $a_add_js_meta
+	 */
+	public function setSpecialCharacters($a_value, $a_add_js_meta = false)
+	{
+		$this->special_characters = (bool)$a_value;
+		$this->add_js_meta = (bool)$a_add_js_meta;
+	}
+
+	/**
+	 * Are special characters to be rendered?
+	 *
+	 * @return bool
+	 */
+	public function hasSpecialCharacters()
+	{
+		return $this->special_characters;
+	}
+
+	/**
+	 * Add js meta data to template?
+	 *
+	 * @return bool
+	 */
+	public function addJsMeta()
+	{
+		return $this->add_js_meta;
+	}
+
+	/**
+	 * Set current form id
+	 *
+	 * @param string $a_value
+	 */
+	public function setFormId($a_value)
+	{
+		$this->form_id = (string)$a_value;
+	}
+
+	/**
+	 * Get current form id
+	 *
+	 * @return bool
+	 */
+	public function getFormId()
+	{
+		return $this->form_id;
+	}
+
+	// adn-patch end
+
 }

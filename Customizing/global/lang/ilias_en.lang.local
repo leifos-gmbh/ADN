@@ -1,0 +1,742 @@
+<!-- language file start -->
+adn#:#adn_ta#:#Training Administration
+adn#:#adn_ta_tps#:#Training Providers
+adn#:#adn_ta_tes#:#Training Events Overview
+adn#:#adn_ta_ils#:#Information Letters
+adn#:#adn_ed#:#Examination Elements
+adn#:#adn_ed_obs#:#Objectives
+adn#:#adn_ed_eqs#:#Examination Questions
+adn#:#adn_ed_nqs#:#Target Number of Questions
+adn#:#adn_ed_cas#:#Cases
+adn#:#adn_ep#:#Exam Preparation
+adn#:#adn_ep_ils#:#Information Letters
+adn#:#adn_ep_ees#:#Examination Events
+adn#:#adn_ep_ecs#:#Candidates
+adn#:#adn_ep_ces#:#Assigning Candidates to Examinations
+adn#:#adn_ep_ins#:#Invitation Letters
+adn#:#adn_ep_ass#:#Answer Sheets
+adn#:#adn_ep_acs#:#Access Codes (Online Exam)
+adn#:#adn_es#:#Examination Scoring
+adn#:#adn_es_scs#:#Scoring
+adn#:#adn_ep_als#:#Attendance Lists
+adn#:#adn_es_cts#:#ADN Certificates
+adn#:#adn_es_sns#:#Score Notification Letters
+adn#:#adn_cp#:#Administration of Certified Professionals
+adn#:#adn_cp_cts#:#ADN Certificates
+adn#:#adn_cp_dcp#:#Directory of Certified Professionals
+adn#:#adn_st#:#Statistics
+adn#:#adn_st_exs#:#Examinations
+adn#:#adn_st_ers#:#Extended Validity due to Refresher Training
+adn#:#adn_st_ees#:#Extended Validity due to Operational Experience
+adn#:#adn_st_cos#:#Certificates due to other Applications
+adn#:#adn_st_tns#:#Total Number of Certificates
+adn#:#adn_md#:#Master Data
+adn#:#adn_md_wos#:#Waterway Management Offices
+adn#:#adn_ta_aes#:#Areas of Expertise
+adn#:#adn_ed_gts#:#Goods in Transit
+adn#:#adn_md_cns#:#Countries
+adn#:#adn_add_training_provider#:#Add Training Provider
+adn#:#adn_training_providers#:#Training Providers
+adn#:#adn_company_name#:#Company Name
+adn#:#adn_approved_types_of_training#:#Approved Types of Training
+adn#:#adn_instructors#:#Instructors
+adn#:#adn_training_facilities#:#Training Facilities
+adn#:#adn_edit_properties#:#Edit Properties
+adn#:#adn_edit_instructors#:#Edit Instructors
+adn#:#adn_edit_training_facilities#:#Edit Training Facilities
+adn#:#adn_training_events#:#Training Events
+adn#:#adn_type_of_training#:#Type of Training
+adn#:#adn_instructor#:#Instructor
+adn#:#adn_training_facility#:#Training Facility
+adn#:#adn_contact_person#:#Contact Person
+adn#:#adn_street#:#Street
+adn#:#adn_street_number#:#Street Number
+adn#:#adn_postal_code#:#Postal Code
+adn#:#adn_city#:#City
+adn#:#adn_phone#:#Phone
+adn#:#adn_fax#:#Fax
+adn#:#adn_email#:#E-Mail
+adn#:#adn_train_type_dm#:#Dry Materials
+adn#:#adn_train_type_tank#:#Tank
+adn#:#adn_train_type_comb#:#Combined
+adn#:#adn_train_type_gas#:#Gas
+adn#:#adn_train_type_chem#:#Chemicals
+adn#:#adn_train_type_rep_dm#:#Refresher Dry Materials
+adn#:#adn_train_type_rep_tank#:#Refresher Tank
+adn#:#adn_train_type_rep_comb#:#Refresher Combined
+adn#:#adn_train_type_rep_gas#:#Refresher Gas
+adn#:#adn_train_type_rep_chem#:#Refresher Chemicals
+adn#:#adn_approved_on#:#Approved on
+adn#:#adn_sure_delete_training_provider#:#Do you really want to delete the following training providers?
+adn#:#adn_add_training_event#:#Add Training Event
+adn#:#adn_edit#:#Edit
+adn#:#adn_date_from#:#Date From
+adn#:#adn_date_to#:#Date To
+adn#:#adn_date#:#Date
+adn#:#adn_ta_tp#:#Training Provider
+adn#:#adn_current_tr_events#:#Current Training Events
+adn#:#adn_archived_tr_events#:#Archived Training Events
+adn#:#adn_subject_area_dm#:#Dry Materials
+adn#:#adn_subject_area_tank#:#Tank
+adn#:#adn_subject_area_comb#:#Combined
+adn#:#adn_subject_area_gas#:#Gas
+adn#:#adn_subject_area_chem#:#Chemicals
+adn#:#adn_add_mc_objective#:#Add MC Objective
+adn#:#adn_subject_area#:#Subject Area
+adn#:#adn_type_mc_case#:#MC/Case
+adn#:#adn_nr#:#Nr
+adn#:#adn_title#:#Title
+adn#:#adn_topic#:#Topic
+adn#:#adn_edit_objective#:#Edit Objective
+adn#:#adn_objectives#:#Objectives
+adn#:#adn_objective#:#Objective
+adn#:#adn_subobjectives#:#Subobjectives
+adn#:#adn_subobjective#:#Subobjective
+adn#:#adn_add_subobjective#:#Add Subobjective
+adn#:#adn_edit_subobjective#:#Edit Subobjective
+adn#:#adn_certificates#:#ADN Certificates
+adn#:#adn_number#:#Number
+adn#:#adn_type_of_cert#:#Type of Certificate
+adn#:#adn_last_name#:#Name
+adn#:#adn_first_name#:#First name
+adn#:#adn_birthdate#:#Birthdate
+adn#:#adn_issued_by#:#Issued by
+adn#:#adn_issued_on#:#Issued on
+adn#:#adn_extended_on#:#Extended on
+adn#:#adn_duplicated_on#:#Duplicate issued on
+adn#:#adn_filter_all#:#All
+adn#:#adn_details#:#Details
+adn#:#adn_extend_certificate#:#Extend Certificate
+adn#:#adn_download_extension#:#Download Extension
+adn#:#adn_duplicate_certificate#:#Duplicate Certificate
+adn#:#adn_download_duplicate#:#Download Duplicate
+adn#:#adn_generate_invoice#:#Generate Invoice
+adn#:#adn_download_invoice#:#Download Invoice
+adn#:#adn_archive_certificates#:#Archive Certificates
+adn#:#adn_show_archived_certificates#:#Show Archived Certificates
+adn#:#adn_update_view#:#Update View
+adn#:#adn_cp_dir#:#Directory of Certified Professionals
+adn#:#adn_add_mc_question#:#Add MC Question
+adn#:#adn_objective_nr#:#Objective Nr
+adn#:#adn_objective_title#:#Objective Title
+adn#:#adn_subobjective_nr#:#Subobjective Nr
+adn#:#adn_subobjective_title#:#Subobjective Title
+adn#:#adn_question#:#Question
+adn#:#adn_status#:#Status
+adn#:#adn_edit_examination_question#:#Edit Question
+adn#:#adn_case_questions#:#Case Questions
+adn#:#adn_add_case_question#:#Add Case Question
+adn#:#adn_question_nr#:#Question Nr
+adn#:#adn_question_title#:#Question Title
+adn#:#adn_citizenship#:#Citizenship
+adn#:#adn_valid_until#:#Valid Until
+adn#:#adn_administrator#:#Administrator
+adn#:#adn_create_certificate_professional_directory#:#Create directory of Certified Professionals
+adn#:#adn_display_directory#:#Display Directory
+adn#:#adn_examination_events#:#Examination Events
+adn#:#adn_facility#:#Facility
+adn#:#adn_time_from#:#Time from
+adn#:#adn_time_to#:#Time to
+adn#:#adn_candidates#:#Candidates
+adn#:#adn_registered_candidates#:#Registered Candidates
+adn#:#adn_age#:#Age
+adn#:#adn_participated#:#Participated
+adn#:#adn_result#:#Result
+adn#:#adn_holdback#:#Holdback
+adn#:#adn_edit_scoring#:#Edit Scoring
+adn#:#adn_scoring_mc#:#Scoring MC
+adn#:#adn_scoring_case#:#Scoring Kasus
+adn#:#adn_result_mc#:#Overall Result MC
+adn#:#adn_result_case#:#Overall Result Kasus
+adn#:#adn_reexamination#:#Re-Examination
+adn#:#adn_holdback_until#:#Holdback until
+adn#:#adn_holdback_by#:#Holdback issued by
+adn#:#adn_holdback_on#:#Generated on (?)
+adn#:#adn_edit_certificate#:#Edit Certificate
+adn#:#adn_create_certificate#:#Create Certificate
+adn#:#adn_activate#:#Activate
+adn#:#adn_deactivate#:#Deactivate
+adn#:#adn_total_active_questions#:#Total Active
+adn#:#adn_proof_experience#:#Proof of Experience
+adn#:#adn_valid#:#valid
+adn#:#adn_invalid#:#invalid
+adn#:#adn_source#:#Source
+adn#:#adn_image_for_question#:#Question Image
+adn#:#adn_correct_answer#:#Correct Answer
+adn#:#adn_answer#:#Answer
+adn#:#adn_answer_text#:#Answer Text
+adn#:#adn_image_for_answer#:#Answer Image
+adn#:#adn_active#:#Active
+adn#:#adn_inactive#:#Inactive
+adn#:#adn_add_examination_event#:#Add Event
+adn#:#adn_delete_examination_events#:#Delete Events
+adn#:#adn_registered_by#:#Registered by
+adn#:#adn_add_candidate#:#Add Candidate
+adn#:#adn_delete_candidates#:#Delete
+adn#:#adn_edit_candidate#:#Edit Candidate
+adn#:#adn_salutation#:#Salutation
+adn#:#adn_applied_for_examination#:#Applied for Examination
+adn#:#adn_foreign_certificate#:#Has Foreign Certificate
+adn#:#adn_company#:#(Shipping) Company
+adn#:#adn_comment#:#Comment
+adn#:#adn_permanent_address#:#Permanent Address
+adn#:#adn_country#:#Country
+adn#:#adn_zip#:#Zip Code
+adn#:#adn_house_number#:#House Number
+adn#:#adn_shipping_address#:#Shipping Address
+adn#:#adn_current_training#:#Current Training
+adn#:#adn_training_provider#:#Training Provider
+adn#:#adn_training#:#Training
+adn#:#adn_shipping_address_inactive#:#Shipping address inactive
+adn#:#adn_show_certified_professionals#:#Show certified professionals
+adn#:#adn_show_archived_examinations#:#Show archived examinations
+adn#:#adn_assigned_candidates#:#Assigned Candidates
+adn#:#adn_assign_candidates#:#Assign Candidates
+adn#:#adn_before_deadline#:#Before Deadline
+adn#:#adn_has_base_certificate#:#Base Certificate
+adn#:#adn_assigned#:#Assigned
+adn#:#adn_answer_sheets#:#Answer Sheets
+adn#:#adn_generated_on#:#Generated on
+adn#:#adn_type_mc#:#MC
+adn#:#adn_type_case#:#Case
+adn#:#adn_add_case_answer_sheet#:#Add Case Answer Sheet
+adn#:#adn_add_mc_answer_sheet#:#Add MC Answer Sheet
+adn#:#adn_delete_answer_sheets#:#Delete Answer Sheets
+adn#:#adn_number_of_candidates#:#Number of Candidates
+adn#:#adn_questions#:#Questions
+adn#:#adn_questions_group#:#Grouped by Objectives
+adn#:#adn_questions_table#:#In Table Form
+adn#:#adn_add_questions#:#Add Questions
+adn#:#adn_remove_questions#:#Remove Questions
+adn#:#adn_answer_sheet#:#Answer Sheet
+adn#:#adn_assignment_generating#:#Assignment and Generating
+adn#:#adn_download_answer_scoring_material#:#Download Answer, Scoring Sheets and Supporting Material
+adn#:#adn_download_material#:#Download Supporting Materials
+adn#:#adn_answer_sheet_assignment#:#Assignment to Answer Sheets
+adn#:#adn_assigned_sheets#:#Assigned Answer Sheets
+adn#:#adn_generated_sheets#:#Generated Answer Sheets
+adn#:#adn_add_answer_sheet#:#Add Answer Sheets
+adn#:#adn_generate_sheets#:#Generate Answer Sheets
+adn#:#adn_no_assignment#:#No Assignment
+adn#:#adn_target_nr_of_questions#:#Target Number of Questions
+adn#:#adn_target_number#:#Target Number
+adn#:#adn_total#:#Total
+adn#:#adn_mc_part#:#MC Part
+adn#:#adn_case_part#:#Case Part
+adn#:#adn_po_box#:#Postoffice Box
+adn#:#adn_properties#:#Properties
+adn#:#adn_name#:#Name
+adn#:#adn_firstname#:#Firstname
+adn#:#adn_area_of_expertise#:#Area of Expertise
+adn#:#adn_add_instructor#:#Add Instructor
+adn#:#adn_type_of_examination#:#Type of Examination
+adn#:#adn_training_attendances#:#Training Attendances
+adn#:#adn_shipping_address_activated#:#Shipping Address activated
+adn#:#adn_candidate#:#Candidate
+adn#:#adn_assign_sheet_to_candidate#:#Assign new Answer Sheet to Candidate
+adn#:#adn_examination_attendees#:#Examination Attendees
+adn#:#adn_edit_holdback#:#Edit Holdback
+adn#:#adn_contact_data#:#Contact Data
+adn#:#adn_edit_contact_data#:#Edit Contact Data
+adn#:#adn_edit_types_of_training#:#Edit Types of Training
+adn#:#adn_preceding_certificate#:#Preceding Certificate
+adn#:#adn_signed_by#:#Signed by
+adn#:#adn_countries#:#Countries
+adn#:#adn_add_country#:#Add Country
+adn#:#adn_country_code#:#Country Code
+adn#:#adn_country_updated#:#Country was updated.
+adn#:#adn_country_created#:#Country was created.
+adn#:#adn_country_deleted#:#Country was deleted.
+adn#:#adn_wmos#:#Waterway Management Offices
+adn#:#adn_wmo#:#Waterway Management Office
+adn#:#adn_wmo_code#:#Code
+adn#:#adn_add_wmo#:#Add WMO
+adn#:#adn_url#:#URL
+adn#:#adn_postal_address#:#Postal Address
+adn#:#adn_visitors_address#:#Visitors Address
+adn#:#adn_banking_details#:#Banking Details
+adn#:#adn_bank#:#Bank
+adn#:#adn_bank_code#:#Code
+adn#:#adn_bank_account#:#Account
+adn#:#adn_bank_iban#:#IBAN
+adn#:#adn_bank_bic#:#BIC
+adn#:#adn_wmo_updated#:#WMO was updated.
+adn#:#adn_wmo_created#:#WMO was created.
+adn#:#adn_wmo_cost_certificate#:#Cost Certificate
+adn#:#adn_wmo_cost_duplicate#:#Cost Duplicate
+adn#:#adn_wmo_cost_extension#:#Cost Extension
+adn#:#adn_wmo_cost_exam#:#Cost Exam
+adn#:#adn_running_id#:#Running Id
+adn#:#adn_description#:#Description
+adn#:#adn_cost#:#Cost
+adn#:#adn_sure_delete_countries#:#Are you sure you want to delete the following countries?
+adn#:#adn_sure_delete_wmos#:#Are you sure you want to delete the following WMOs?
+adn#:#adn_wmo_deleted#:#WMO was deleted.
+adn#:#adn_cochairs#:#Co-Chairs
+adn#:#adn_cochair#:#Co-Chair
+adn#:#adn_add_cochair#:#Add Co-Chair
+adn#:#adn_salutation_m#:#Mr
+adn#:#adn_salutation_f#:#Mrs
+adn#:#adn_cochair_updated#:#Co-Chair was updated.
+adn#:#adn_cochair_created#:#Co-Chair was added.
+adn#:#adn_sure_delete_cochairs#:#Are you sure you want to delete the following Co-Chairs?
+adn#:#adn_cochair_deleted#:#Co-Chair was deleted.
+adn#:#adn_exam_facilities#:#Exam Facilities
+adn#:#adn_exam_facility#:#Exam Facility
+adn#:#adn_add_exam_facility#:#Add Exam Facility
+adn#:#adn_exam_facility_updated#:#Exam Facility was updated.
+adn#:#adn_exam_facility_created#:#Exam Facility was created.
+adn#:#adn_sure_delete_exam_facilities#:#Are you sure you want to delete the following Exam Facilities?
+adn#:#adn_exam_facility_deleted#:#Exam Facility was deleted.
+adn#:#adn_exam_facility_name#:#Company Name
+adn#:#adn_ad_mnt#:#Maintenance Mode
+adn#:#adn_ad_chr#:#Special Characters
+adn#:#adn_ad_usr#:#Users
+adn#:#adn_ad_mcx#:#Export/Import Questions
+adn#:#adn_ad#:#Administration
+adn#:#adn_maintenance_mode#:#Maintenance Mode
+adn#:#adn_maintenance_toggle#:#Maintenance Mode active
+adn#:#adn_characters#:#Special Characters
+adn#:#adn_character#:#Special Character
+adn#:#adn_add_character#:#Add Special Character
+adn#:#adn_character_updated#:#Special Character was updated.
+adn#:#adn_character_created#:#Special Character was added.
+adn#:#adn_sure_delete_characters#:#Are you sure you want to delete the following Special Characters?
+adn#:#adn_character_deleted#:#Special Character was deleted.
+adn#:#adn_char#:#Char
+adn#:#adn_char_code#:#UTF8-Code
+adn#:#adn_training_provider_created#:#Training Provider was created.
+adn#:#adn_training_provider_updated#:#Training Provider was updated.
+adn#:#adn_edit_training_provider#:#Edit Training Provider
+adn#:#adn_alternative_address#:#Alternative Address
+adn#:#adn_training_types_updated#:#Training Types were updated.
+adn#:#adn_types_of_training#:#Types of Training
+adn#:#adn_areas_of_expertise#:#Areas of Expertise
+adn#:#adn_instructor_created#:#Instructor was created.
+adn#:#adn_instructor_updated#:#Instructor was updated.
+adn#:#adn_sure_delete_instructors#:#Are you sure you want to delete the following Instructors?
+adn#:#adn_instructor_deleted#:#Instructor was deleted.
+adn#:#adn_add_training_facility#:#Add Training Facility
+adn#:#adn_edit_training_facility#:#Edit Training Facility
+adn#:#adn_training_facility_created#:#Training Facility was created.
+adn#:#adn_training_facility_updated#:#Training Facility was updated.
+adn#:#adn_sure_delete_training_facilities#:#Are you sure you want to delete the following Training Facilities?
+adn#:#adn_training_facility_deleted#:#Training Facility was deleted.
+adn#:#adn_training_event_created#:#Training Event was created.
+adn#:#adn_training_event_updated#:#Training Event was updated.
+adn#:#adn_sure_delete_training_event#:#Are you sure you want to delete the following Training Events?
+adn#:#adn_training_event_deleted#:#Training Event was deleted.
+adn#:#adn_information_letters#:#Information Letters
+adn#:#adn_add_information_letter#:#Add Information Letter
+adn#:#adn_edit_information_letter#:#Edit Information Letter
+adn#:#adn_information_letter_created#:#Information Letter was created.
+adn#:#adn_information_letter_updated#:#Information Letter was updated.
+adn#:#adn_sure_delete_information_letters#:#Are you sure you want to delete the following Information Letters?
+adn#:#adn_information_letter_deleted#:#Information Letter was deleted.
+adn#:#adn_file_corrupt#:#File cannot be downloaded.
+adn#:#adn_show_details#:#Show Details
+adn#:#adn_edit_training_event#:#Edit Training Event
+adn#:#adn_training_event#:#Training Event
+adn#:#adn_catalog_area#:#Area of Question Catalog
+adn#:#adn_catalog_area_base#:#Basic Training
+adn#:#adn_catalog_area_gas#:#Advanced Training Gas
+adn#:#adn_catalog_area_chem#:#Advanced Training Chemicals
+adn#:#adn_catalog_area_general#:#General Part
+adn#:#adn_catalog_area_dm#:#Dry Materials
+adn#:#adn_catalog_area_tank#:#Tank
+adn#:#adn_catalog_area_basics#:#Basic Knowledge
+adn#:#adn_catalog_area_phys_chem#:#Physics and Chemicals Knowledge
+adn#:#adn_catalog_area_prac#:#Practical Knowledge
+adn#:#adn_catalog_area_emergency#:#Emergency Procedures
+adn#:#adn_filter_both#:#Both
+adn#:#adn_area_base_no_case#:#Case Objectives can only be used with Advanced Training areas.
+adn#:#adn_objective_created#:#Objective was created.
+adn#:#adn_objective_updated#:#Objective was updated.
+adn#:#adn_sure_delete_objectives#:#Are you sure you want to delete the following Objectives?
+adn#:#adn_objective_deleted#:#Objective was deleted.
+adn#:#adn_subobjective_created#:#Subobjective was created.
+adn#:#adn_subobjective_updated#:#Subobjective was updated.
+adn#:#adn_sure_delete_subobjectives#:#Are you sure you want to delete the following Subobjectives?
+adn#:#adn_subobjective_deleted#:#Subobjective was deleted.
+adn#:#adn_edit_mc_question#:#Edit MC Question
+adn#:#adn_mc_question_created#:#MC Question was created.
+adn#:#adn_mc_question_updated#:#MC Question was updated.
+adn#:#adn_sure_delete_mc_questions#:#Are you sure you want to delete the following MC Questions?
+adn#:#adn_mc_question_deleted#:#MC Question was deleted.
+adn#:#adn_last_change#:#Last Change
+adn#:#adn_last_change_date#:#Date
+adn#:#adn_last_change_user#:#User
+adn#:#adn_last_change_status#:#Change of Status
+adn#:#adn_last_change_comment#:#Comment
+adn#:#adn_question_unique_number#:#The given question number is already in use.
+adn#:#adn_save_backup#:#Save and Create Backup
+adn#:#adn_backup_created#:#Backup was created.
+adn#:#adn_backup_fail#:#Backup could not be created.
+adn#:#adn_show_backup#:#Show Backup
+adn#:#adn_default_answer#:#Default Answer
+adn#:#adn_good_specific_answer#:#Question can only be used for specific goods
+adn#:#adn_edit_case_question#:#Edit Case Question
+adn#:#adn_case_question_created#:#Case Question was created.
+adn#:#adn_case_question_updated#:#Case Question was updated.
+adn#:#adn_sure_delete_case_questions#:#Are you sure you want to delete the following Case Questions?
+adn#:#adn_case_question_deleted#:#Case Question was deleted.
+adn#:#adn_ed_lic#:#Licences
+adn#:#adn_goods_in_transit#:#Goods in Transit
+adn#:#adn_add_good_in_transit#:#Add Good in Transit
+adn#:#adn_edit_good_in_transit#:#Edit Good in Transit
+adn#:#adn_good_in_transit_created#:#Good in Transit was created.
+adn#:#adn_good_in_transit_updated#:#Good in Transit was updated.
+adn#:#adn_sure_delete_goods_in_transit#:#Are you sure you want to delete the following Goods in Transit?
+adn#:#adn_good_in_transit_deleted#:#Good in Transit was deleted.
+adn#:#adn_goods_in_transit_chemicals#:#Chemicals
+adn#:#adn_goods_in_transit_gas#:#Gas
+adn#:#adn_good_in_transit_categories#:#Good in Transit Categories
+adn#:#adn_add_good_in_transit_category#:#Add Good in Transit Category
+adn#:#adn_edit_good_in_transit_category#:#Edit Good in Transit Category
+adn#:#adn_good_in_transit_category_created#:#Good in Transit Category was created.
+adn#:#adn_good_in_transit_category_updated#:#Good in Transit Categorywas updated.
+adn#:#adn_sure_delete_good_in_transit_categories#:#Are you sure you want to delete the following Good in Transit Categories?
+adn#:#adn_good_in_transit_category_deleted#:#Good in Transit Category was deleted.
+adn#:#adn_good_in_transit_category#:#Good in Transit Category
+adn#:#adn_no_good_in_transit_category#:#No Category
+adn#:#adn_class#:#Class
+adn#:#adn_class_code#:#Class Code
+adn#:#adn_packing_group#:#Packing Group
+adn#:#adn_material_file#:#Material File
+adn#:#adn_un_nr#:#UN-Number
+adn#:#adn_good_related_answers#:#Good-related Answers
+adn#:#adn_add_good_related_answer#:#Add Good-related Answer
+adn#:#adn_edit_good_related_answer#:#Edit Good-related Answer
+adn#:#adn_good_related_answer_created#:#Good-related Answer was created.
+adn#:#adn_good_related_answer_updated#:#Good-related Answer was updated.
+adn#:#adn_sure_delete_good_related_answers#:#Are you sure you want to delete the following Good-related Answers?
+adn#:#adn_good_related_answer_deleted#:#Good-related Answer was deleted.
+adn#:#adn_butan_or_empty#:#Butan or Empty
+adn#:#adn_butan#:#Butan
+adn#:#adn_empty#:#Empty
+adn#:#adn_add_question_target_number#:#Add Entry
+adn#:#adn_edit_question_target_number#:#Edit Entry
+adn#:#adn_question_target_number_created#:#Entry was created.
+adn#:#adn_question_target_number_updated#:#Entry was updated.
+adn#:#adn_sure_delete_question_target_numbers#:#Are you sure you want to delete the following entries?
+adn#:#adn_question_target_number_deleted#:#Entry was deleted.
+adn#:#adn_max_one_per_objective#:#Max. 1 Question per Objective
+adn#:#adn_overall#:#Overall
+adn#:#adn_overall_saved#:#Overall was saved.
+adn#:#adn_overall_fail#:#Please enter an overall value.
+adn#:#adn_overall_info#:#The number of questions differs from the overall value by %s.
+adn#:#adn_add_case_objective#:#Add Case Objective
+adn#:#adn_case_gas_empty#:#Gas (Emoty)
+adn#:#adn_case_gas_butan#:#Gas (Butane)
+adn#:#adn_case_chem#:#Chemicals
+adn#:#adn_case#:#Case
+adn#:#adn_text#:#Text
+adn#:#adn_case_placeholder_chem#:#Available placholders: [un_nr1], [title1], [class1], [class_code1], [packing_group1], [un_nr2], [title2], [class2], [class_code2], [packing_group2]
+adn#:#adn_case_created#:#Case was created.
+adn#:#adn_case_updated#:#Case was updated.
+adn#:#adn_licenses#:#Licenses
+adn#:#adn_add_license#:#Add License
+adn#:#adn_edit_license#:#Edit License
+adn#:#adn_license_created#:#License was created.
+adn#:#adn_license_updated#:#License was updated.
+adn#:#adn_sure_delete_licenses#:#Are you sure you want to delete the following licenses?
+adn#:#adn_license_deleted#:#License was deleted
+adn#:#adn_export_mc_questions#:#Export Questions
+adn#:#adn_create_mc_export#:#Create Export
+adn#:#adn_import_mc_questions#:#Import Questions
+adn#:#adn_mc_export_success#:#The export file was created.
+adn#:#adn_sure_delete_export_files#:#Are you sure you want to delete the following Export Files?
+adn#:#adn_export_file_deleted#:#Export file was deleted.
+adn#:#adn_include_objectives#:#Objectives
+adn#:#adn_delete_old_data#:#Delete all existing data
+adn#:#adn_enable_updates#:#Overwrite existing data
+adn#:#adn_sure_import_mc_questions#:#Are you sure you want to import the following examination definitions?
+adn#:#adn_mc_import_obj_invalid#:#Invalid Objectives
+adn#:#adn_mc_import_obj_valid#:#Valid Objectives
+adn#:#adn_mc_import_sobj_invalid#:#Invalid Subobjectives
+adn#:#adn_mc_import_sobj_valid#:#Valid Subobjectives
+adn#:#adn_mc_import_mc_quest_invalid#:#Invalid MC Questions
+adn#:#adn_mc_import_mc_quest_valid#:#Valid MC Questions
+adn#:#adn_mc_import_files_invalid#:#Invalid Image Files
+adn#:#adn_mc_import_files_valid#:#Valid Image Files
+adn#:#adn_mc_questions_import_failed#:#The import has failed.
+adn#:#adn_mc_questions_import_success#:#The import was completed.
+adn#:#adn_licenses_chem#:#Licenses Chemicals
+adn#:#adn_licenses_gas#:#Licenses Gas
+adn#:#adn_add_information_letter_application#:#Add Information Letter/Application
+adn#:#adn_information_letters_and_applications#:#Information Letters And Applications
+adn#:#adn_missing_file#:#Please state a valid file path.
+adn#:#adn_current_examination_events#:#Current Events
+adn#:#adn_archived_examination_events#:#Archived Events
+adn#:#adn_chairman#:#Chairman
+adn#:#adn_additional_costs#:#Additional Costs per Person
+adn#:#adn_examination_event_updated#:#Examination Event was updated.
+adn#:#adn_examination_event_created#:#Examination Event was created.
+adn#:#adn_sure_delete_examination_events#:#Are you sure you want to delete the following Examination Events?
+adn#:#adn_examination_event_deleted#:#Examination Event was deleted.
+adn#:#adn_edit_examination_event#:#Edit Examination Event
+adn#:#adn_examination_event#:#Examination Event
+adn#:#adn_filter_none#:#None
+adn#:#adn_candidate_updated#:#Examination Candidate was updated.
+adn#:#adn_candidate_created#:#Examination Candidate was created.
+adn#:#adn_sure_delete_candidates#:#Are you sure you want to delete the following Examination Candidate?
+adn#:#adn_candidate_deleted#:#Examination Candidate was deleted.
+adn#:#adn_include_goods#:#Goods in Transit
+adn#:#adn_mc_import_good_invalid#:#Invalid Goods in Transit
+adn#:#adn_mc_import_good_valid#:#Valid Goods in Transit
+adn#:#adn_mc_import_good_category_invalid#:#Invalid Good in Transit Categories
+adn#:#adn_mc_import_good_category_valid#:#Valid Good in Transit Categories
+adn#:#adn_exam_application_holdback#:#There is an active holdback for this user. Do you still want to allow the application?
+adn#:#adn_allow_application#:#Allow Application
+adn#:#adn_dismiss_application#:#Dismiss Application
+adn#:#adn_candidate_not_unique#:#A candidate with this name and birthdate already exists. Do you still want to proceed?
+adn#:#adn_foreign_certificate_missing#:#The user needs a foreign certificate to be able to participate in the selected examination. Do you still want to proceed?
+adn#:#adn_save_and_edit_training#:#Save and set last training
+adn#:#adn_show_candidates#:#Show Candidates
+adn#:#adn_assignment_saved#:#Assignment saved
+adn#:#adn_add_objective#:#Prüfungsziel hinzufügen
+adn#:#adn_not_scored#:#Not Scored
+adn#:#adn_passed#:#Passed
+adn#:#adn_failed#:#Failed
+adn#:#adn_type_of_exam#:#Type of Exam
+adn#:#adn_show_prospects#:#Show prospects
+adn#:#adn_score_saved#:#Scoring saved
+adn#:#adn_blocked_and_passed_not_allowed#:#You entered a holdback period, but the result is "passed". Please correct your input.
+adn#:#adn_certificate issued_on#:#Certificate issued on
+common#:#obj_xaad#:#ADN Administration
+common#:#obj_xacp#:#ADN Certified Professionals
+common#:#obj_xaec#:#ADN Exam Conduction
+common#:#obj_xaed#:#ADN Exam Definition
+common#:#obj_xaep#:#ADN Exam Preparation
+common#:#obj_xaes#:#ADN Exam Scoring
+common#:#obj_xamd#:#ADN Master Data
+common#:#obj_xast#:#ADN Statistics
+common#:#obj_xata#:#ADN Training Administration
+rbac#:#xaad_visible#:#Visible
+rbac#:#xaad_read#:#Read
+rbac#:#xaad_write#:#Write
+rbac#:#xaad_edit_permission#:#Edit Permission
+rbac#:#xacp_visible#:#Visible
+rbac#:#xacp_read#:#Read
+rbac#:#xacp_write#:#Write
+rbac#:#xacp_edit_permission#:#Edit Permission
+rbac#:#xaec_visible#:#Visible
+rbac#:#xaec_read#:#Read
+rbac#:#xaec_write#:#Write
+rbac#:#xaec_edit_permission#:#Edit Permission
+rbac#:#xaed_visible#:#Visible
+rbac#:#xaed_read#:#Read
+rbac#:#xaed_write#:#Write
+rbac#:#xaed_edit_permission#:#Edit Permission
+rbac#:#xaep_visible#:#Visible
+rbac#:#xaep_read#:#Read
+rbac#:#xaep_write#:#Write
+rbac#:#xaep_edit_permission#:#Edit Permission
+rbac#:#xaes_visible#:#Visible
+rbac#:#xaes_read#:#Read
+rbac#:#xaes_write#:#Write
+rbac#:#xaes_edit_permission#:#Edit Permission
+rbac#:#xamd_visible#:#Visible
+rbac#:#xamd_read#:#Read
+rbac#:#xamd_write#:#Write
+rbac#:#xamd_edit_permission#:#Edit Permission
+rbac#:#xast_visible#:#Visible
+rbac#:#xast_read#:#Read
+rbac#:#xast_write#:#Write
+rbac#:#xast_edit_permission#:#Edit Permission
+rbac#:#xata_visible#:#Visible
+rbac#:#xata_read#:#Read
+rbac#:#xata_write#:#Write
+rbac#:#xata_edit_permission#:#Edit Permission
+adn#:#adn_objective_not_deleted#:#Not all objectives could be deleted. Only objectives or their subobjectives can be deleted if they are not assigned to any question.
+adn#:#adn_subobjective_not_deleted#:#Not all subobjectives could be deleted. Only subobjectives can be deleted which are not assigned to any question.
+adn#:#adn_good_in_transit_category_not_deleted#:#Not all categories could be deleted. Only categories which are not used with any good in transit can be deleted.
+adn#:#adn_generated_invitations#:#Number of Generated Invitations
+adn#:#adn_generate_invitations#:#Generate Invitations
+adn#:#adn_invitation_generated_on#:#Invitation Generated on
+adn#:#adn_sheet_questions_added#:#Questions were added to Sheet
+adn#:#adn_sheet_questions_removed#:#Questions were removed from Sheet
+adn#:#adn_sure_delete_answer_sheets#:#Are you sure you want to delete the following Answer Sheets?
+adn#:#adn_answer_sheet_deleted#:#Answer Sheet was deleted.
+adn#:#adn_sheet_assignment_saved#:#Assignments were saved
+adn#:#adn_objective_case_sheet_hierarchy#:#Objective will be subjected to other objectives in answer sheets
+adn#:#adn_good_in_transit_select#:#Good in Transit
+adn#:#adn_license#:#License
+adn#:#adn_good_in_transit_previous#:#Previous Good in Transit
+adn#:#adn_no_previous_good#:#From Shipyard
+adn#:#adn_subject_area_cert_dm#:#8.2.1.3 (Dry Materials)
+adn#:#adn_subject_area_cert_tank#:#8.2.1.3 (Tank)
+adn#:#adn_subject_area_cert_gas#:#8.2.1.5 (Gas)
+adn#:#adn_subject_area_cert_chem#:#8.2.1.7 (Chemicals)
+adn#:#adn_answer_sheet_created#:#Answer Sheet was created
+adn#:#adn_edit_last_training#:#Edit Last Training
+adn#:#adn_set_last_training#:#Set Last Training
+adn#:#adn_training_attendance_saved#:#Training Attendance was saved
+adn#:#adn_sure_save_invalid_assignments#:#Some of the assigned candidates are not valid because of the following criteria.
+adn#:#adn_sure_save_assignments#:#Save Assignments
+adn#:#adn_assignment_invalid_age#:#Candidate is younger than 18 years.
+adn#:#adn_assignment_invalid_certificate#:#Candidate does not have a valid domestic or foreign base certificate.
+adn#:#adn_assignment_invalid_last_training#:#Candidate has missed the deadline.
+adn#:#adn_certificate_updated#:#Certificate has been updated.
+adn#:#adn_certificate_saved#:#Certificate has been saved.
+adn#:#adn_type#:#Type
+adn#:#adn_good_related_answer#:#Good-related Answer
+adn#:#adn_include_mc_questions#:#MC Questions
+adn#:#adn_include_case_questions#:#Case Questions
+adn#:#adn_include_target_numbers#:#Question Target Numbers
+adn#:#adn_import_include#:#Data to import
+adn#:#adn_mc_import_target_valid#:#Valid Question Target Numbers
+adn#:#adn_mc_import_target_invalid#:#Invalid Question Target Numbers
+adn#:#adn_mc_import_case_quest_invalid#:#Invalid Case Questions
+adn#:#adn_mc_import_case_quest_valid#:#Valid Case Questions
+adn#:#adn_edit_instructor#:#Edit Instructor
+adn#:#adn_training_provider_deleted#:#Training Provider was deleted.
+adn#:#adn_cp_cpr#:#Certified Professionals
+adn#:#adn_certified_professionals_data#:#Certified Professionals
+adn#:#adn_edit_professional#:#Edit Professional
+adn#:#adn_certified_professional_updated#:#Certified Professional was saved.
+adn#:#adn_number_of_examination_events#:#Number of Examination Events
+adn#:#adn_number_of_participants#:#Number of Participants
+adn#:#adn_number_of_successful_participants#:#Successful
+adn#:#adn_success_quota#:#Success Quota
+adn#:#adn_timeframe#:#Timeframe
+adn#:#adn_add_gas_license#:#Add License with Attachment
+adn#:#adn_invalid_date_range#:#The given date range is invalid.
+adn#:#adn_save_subjected_questions#:#Save Question Assignment
+adn#:#adn_certificate#:#Certificate
+adn#:#adn_more_certificates#:#Show older certificates
+adn#:#adn_archived_on#:#Archived on
+adn#:#adn_unique_number#:#This value is already in use.
+common#:#msg_invalid_order_ascending#:#The values have to be ascending.
+common#:#msg_invalid_order_descending#:#The values have to be descending.
+adn#:#adn_proof#:#Proof
+adn#:#adn_proof_train_dm#:#Training Dry Materials
+adn#:#adn_proof_train_tank#:#Training Tank
+adn#:#adn_proof_train_combined#:#Training Dry Materials/Tank combined
+adn#:#adn_proof_train_gas#:#Training Gas
+adn#:#adn_proof_train_chemicals#:#Training Chemicals
+adn#:#adn_proof_exp_gas#:#Experience Gas
+adn#:#adn_proof_exp_chemicals#:#Experience Chemicals
+adn#:#adn_create_extension#:#Create Prolongation
+adn#:#adn_statistics_count#:#Count
+adn#:#adn_type_of_refresher_training#:#Type of Refresher Training
+adn#:#adn_type_of_experience#:#Proof of at least 1 year experience on
+adn#:#adn_type_of_experience_gas#:#Type G-Ship (Gas)
+adn#:#adn_type_of_experience_chem#:#Type C-Ship (Chemicals)
+adn#:#adn_other_applications#:#Other Applications
+adn#:#adn_application_duplicates#:#Duplicate Certificates
+adn#:#adn_number_of_issued_certificates#:#Number of Issued Certificates
+adn#:#adn_st_tgc#:#Certificates for Gas and Chemicals Training
+adn#:#adn_extension_created#:#Prolongation has been created.
+adn#:#adn_create_duplicate#:#Create Duplicate
+adn#:#adn_duplicate_created#:#Duplicate has been created.
+adn#:#adn_duplicate_issued_on#:#Duplicate Issue On
+adn#:#adn_case_placeholder_gas#:#Available placholders: [un_nr], [title]
+adn#:#adn_download_statistics#:#Download Statistics
+adn#:#adn_attendance_list_created_on#:#Attendance List created on
+adn#:#adn_download_attendance_list#:#Download Attendance List
+adn#:#adn_create_attendance_list#:#Create Attendance List
+adn#:#adn_score_notification_letters#:#Score Notification Letters
+adn#:#adn_number_of_correct_answers#:#Number of Correct Answers
+adn#:#adn_points#:#Points
+adn#:#adn_download_notification_letter#:#Download Notification Letter
+adn#:#adn_create_notification_letters#:#Create Notification Letters
+adn#:#adn_invoice#:#Invoice
+adn#:#adn_due_date#:#Due Date
+adn#:#adn_zuev_number#:#Usage
+adn#:#adn_type_of_cost#:#Type of Cost
+adn#:#adn_list_access_codes#:#Access Codes
+adn#:#adn_report_salutation_m#:#Mr.
+adn#:#adn_report_salutation_f#:#Mrs.
+adn#:#adn_date_long#:#%s, %s
+adn#:#adn_report_date_clock#:#
+adn#:#adn_report_exam_sheet#:#Exam Sheet
+adn#:#adn_report_exam#:#Exam
+adn#:#adn_question_target_invalid_number#:#Please give a valid number.
+adn#:#adn_question_target_invalid_objective#:#Please choose at least 1 objective or subobjective.
+adn#:#adn_login#:#Login
+adn#:#adn_password#:#Password
+adn#:#adn_download_access_codes#:#Download Access Codes
+adn#:#adn_user_sign#:#Sign
+adn#:#adn_report_exam_list_header#:#%s on %s, %s o'clock until %s o'clock in %s
+adn#:#adn_report_created_attendance_list#:#Created new attendance list
+adn#:#adn_report_solution_sheet#:#Answer Sheet Solutions
+adn#:#adn_online_test#:#ADN Online Test
+adn#:#adn_previous_question#:#Previous Question
+adn#:#adn_next_question#:#Next Question
+adn#:#adn_question_overview#:#Question Overview
+adn#:#adn_finish_test#:#Finish Test
+adn#:#adn_report_score_points#:#%s of %s points
+adn#:#adn_report_created_score_notification#:#Created score notification letters
+adn#:#adn_report_score_err_not_scored#:#Please choose only candidates with status "Passed" or "Failed"
+adn#:#adn_show_question#:#Show Question
+adn#:#adn_answered#:#Answered
+adn#:#adn_really_finish_test#:#Do you really want to finish the test?
+adn#:#adn_test_finished#:#The test has been finished.
+adn#:#adn_es_oas#:#Online Answer Sheets
+adn#:#adn_online_answer_sheets#:#Answer Sheets
+adn#:#adn_given_answer#:#Given Answer
+adn#:#adn_correct#:#Correct
+adn#:#adn_elearning#:#ADN E-Learning
+adn#:#adn_self_test#:#Self Test
+adn#:#adn_start_test#:#Start Test
+adn#:#adn_report_invoice_created#:#Created invoice
+adn#:#adn_report_stat_header#:#Statistics for the % until %s
+adn#:#adn_no_mc_sheet_found#:#No MC question sheet found for candidate.
+adn#:#adn_no_answer_given_prev#:#You did not enter an answer for the last question. If you would like to return to the question, please hit "Previous Question".
+adn#:#adn_no_answer_given_next#:#You did not enter an answer for the last question. If you would like to return to the question, please hit "Next Question".
+adn#:#adn_your_answer#:#Your Answer
+adn#:#adn_back_to_front_page#:#Back to front page
+adn#:#adn_download_solutions#:#Download Solutions
+adn#:#adn_your_score#:#Your Score
+adn#:#adn_score_points#:#Point(s)
+adn#:#adn_please_check_certificate#:#Please check again all data you have entered. After saving the new number cannot be changed.
+adn#:#adn_cert_not_valid_save_anyway#:#Die ursprüngliche Bescheinigung ist nicht mehr gültig. Wollen Sie wirklich eine Verlängerung erstellen?
+adn#:#adn_assignment_delete_fail_answered#:#The assignment could not be deleted because of existing answers.
+adn#:#adn_no_entries_filter#:#No entries did match your search criteria.
+adn#:#adn_sheet_question_status_invalid#:#with %s inactive
+adn#:#adn_candidate_last_event_mismatch#:#The type of the last training does not match the examination type.
+adn#:#adn_candidate_edit_last_event#:#Edit Last Training Event
+adn#:#adn_candidate_reset_last_event#:#Delete Last Training Event
+adn#:#adn_overall_info_lower#:#There are currently %s Question(s) missing.
+adn#:#adn_overall_info_higher#:#There are currently %s Question(s) too many.
+adn#:#adn_certificate_germany#:#Germany
+adn#:#adn_certificate_foreign#:#Foreign Country
+adn#:#adn_certificate_germany_and_foreign#:#Germany and Foreign Country
+adn#:#adn_professional_directory_help#:#Certified Professionals will be included when they have had a valid certificate in the given timeframe.
+adn#:#adn_ad_icp#:#Import Certified Professionals
+adn#:#adn_default_wmo#:#Default WMO
+adn#:#adn_default_country#:#Default Country
+adn#:#adn_anonymize#:#Anonymizie
+adn#:#adn_limit#:#Limit
+adn#:#adn_professional_import_new#:#New Certified Professionals
+adn#:#adn_professional_import_existing#:#Existing Certified Professionals
+adn#:#adn_professional_import_failed#:#The import failed.
+adn#:#adn_professional_import_success#:#The import was successful.
+adn#:#adn_report_err_not_generated#:#Answer sheets are not generated for all candidates.
+adn#:#adn_report_err_sheet_deprecated#:#Some answer sheets are deprecated. Please generate new answer sheets.
+adn#:#adn_questions_activated#:#Questions activated
+adn#:#adn_questions_deactivated#:#Questions deactivated
+adn#:#adn_archived_flag#:#[archived]
+adn#:#adn_failed_sum#:#Failed (Total Points)
+adn#:#adn_certificate_issued_on_warning#:#Are you sure you want to choose a different year as issued on date?
+administration#:#adm_adn#:#ADN
+adn#:#adn_no_entries#:#Keine Einträge
+adn#:#adn_cp_pdm#:#Manage Personal Data
+adn#:#adn_really_delete_pd#:#Sollen die folgenden Sachkundigen/Interessenten/Kandidaten wirklich gelöscht werden?
+adn#:#adn_ad_wmo_created#:#Angelegt durch
+common#:#adn_personal_data_notification#:#ADN Benachrichtigung über Löschkandidaten
+common#:#adn_personal_data_notification_desc#:#Die WSDen werden über anstehende Löschkandidaten (Sachkundige und Prüfungskandidaten) informiert.
+adn#:#adn_ad_pd_all#:#Alle
+adn#:#adn_ad_pd_cand#:#Prüfungskandidaten (älter 2 Jahre)
+adn#:#adn_ad_pd_cert#:#Sachkundige (älter 7 Jahre)
+adn#:#adn_ad_created_date#:#Angelegt am
+adn#:#adn_ad_last_certificate#:#Letztes Zertifikat
+adn#:#adn_ad_wmo#:#WSD
+adn#:#adn_new_delete_candidates_mess#:#Sehr geehrter Mitarbeiter {WSD},<br /><br />in Ihrer WSD stehen folgende Nutzer zur Löschung an:<br />{USER}<br /><br />Diese Nachricht wurde automatisch erstellt.
+adn#:#adn_new_delete_candidates_subj#:#ADN Löschung von personenbezogenen Daten
+adn#:#adn_ad_add_person#:#Person hinzufügen
+adn#:#adn_add_certificate#:#Bescheinigung hinzufügen
+adn#:#adn_save_and_add_certificate#:#Speichern und Bescheinigung hinzufügen
+adn#:#adn_subtitle#:#Subtitle
+adn#:#adn_download_certificate#:#Bescheinigung herunterladen

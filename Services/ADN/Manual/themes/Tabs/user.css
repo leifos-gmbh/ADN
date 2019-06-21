@@ -1,0 +1,45 @@
+/* Global styles */
+body {
+	/*font-family: Georgia, Times, "Times New Roman";*/
+	/*font-size: 10pt;*/
+}
+
+/* Page header styles */
+#pageHeaderLogoCell {
+	/*vertical-align: middle;*/
+}
+#pageHeaderTextCell {
+	/*vertical-align: middle;*/
+}
+#pageHeaderText {
+	margin: 0;
+	font-family: Georgia, Times, "Times New Roman";
+	font-style: italic;
+}
+
+/* Links styles */
+#topicBlock a[href],
+#topicBlock a[data-ref],
+.nethelp-topic-popup a[href],
+.nethelp-topic-popup a[data-ref],
+.aklinks-menu a {
+	color: #1B75BB;
+	text-decoration: none;
+}
+#topicBlock a[href]:hover,
+#topicBlock a[data-ref]:hover,
+.nethelp-topic-popup a[href]:hover,
+.nethelp-topic-popup a[data-ref]:hover,
+.aklinks-menu a:hover {
+	text-decoration: underline;
+}
+
+/* Breadcrumbs styles */
+#breadcrumbs {
+	/*font-size: .8em;*/
+}
+
+/* Side tabs block styles */
+#pageSideTabs {
+	/*font-size: .9em;*/
+}

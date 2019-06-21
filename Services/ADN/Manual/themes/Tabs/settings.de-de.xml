@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<settings>
+	<theme>
+		<predefined>true</predefined>
+	</theme>
+	<strings>
+		<topicSpinnerText>laden...</topicSpinnerText>
+	</strings>
+	<topic>
+		<strings>
+			<notfoundText>Thema nicht gefunden</notfoundText>
+			<notfoundTitle>Thema nicht gefunden</notfoundTitle>
+		</strings>
+		<collapsibleSections>
+			<expandAll>
+				<label>alle aufklappen</label>
+			</expandAll>
+			<collapseAll>
+				<label>alle zuklappen</label>
+			</collapseAll>
+		</collapsibleSections>
+	</topic>
+	<toc>
+		<label>Inhalt</label>
+	</toc>
+	<index>
+		<label>Index</label>
+		<strings>
+			<notfound>keine  Indexeinträge gefunden.</notfound>
+		</strings>
+	</index>
+	<search>
+		<label>Volltextsuche</label>
+		<strings>
+			<helpMessage>Sie können für die Suche logische Verknüpfungen verwenden: #{and}, #{or}, #{not}. Beispiele: Sport #{or} Film, Berlin #{and} #{not} Museen</helpMessage>
+			<loading>Suchmaschine wird geladen...</loading>
+			<loaderror>Fehler: Suchmaschine kann nicht geladen werden.</loaderror>
+			<disabled>Volltextsuche ist abgeschaltet.</disabled>
+			<notfound>Kein Thema gefunden.</notfound>
+			<correcting>Meinten Sie: #{query}</correcting>
+		</strings>
+		<buttons>
+			<go>
+				<label>Suchen</label>
+			</go>
+			<help>
+				<label>Hilfe</label>
+			</help>
+			<highlight>
+				<label>Suchbegriffe hervorheben</label>
+			</highlight>
+		</buttons>
+    <options>
+      <operators>
+        <and>AND</and>
+        <or>OR</or>
+        <not>NOT</not>
+      </operators>
+    </options>
+  </search>
+	<context>
+		<strings>
+			<title>Themen für "#{key}": "#{value}"</title>
+			<notfound>Kein Thema gefunden.</notfound>
+			<notsupported>Der Schlüssel "{#key}" wird nicht unterstützt.</notsupported>
+		</strings>
+	</context>
+	<buttons>
+		<btnPoweredBy>
+			<label>unterstützt&amp;nbsp;von&amp;nbsp;Doc-To-Help&amp;nbsp;®</label>
+		</btnPoweredBy>
+		<btnGotoPrev>
+			<label>vorherige Seite</label>
+		</btnGotoPrev>
+		<btnGotoNext>
+			<label>nächste Seite</label>
+		</btnGotoNext>
+		<btnGotoHome>
+			<label>Startseite</label>
+		</btnGotoHome>
+		<btnPrint>
+			<label>Drucken</label>
+		</btnPrint>
+		<btnEmail>
+			<label>Email</label>
+		</btnEmail>
+	</buttons>
+</settings>

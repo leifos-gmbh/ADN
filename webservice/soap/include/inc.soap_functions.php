@@ -1068,6 +1068,94 @@ class ilSoapFunctions
         return $dcl->exportDataCollectionContent($sid, $data_collection_id, $table_id, $format, $filepath);
     }
 
+    // adn-patch start
+
+    public static function getSubjectAreas($sid)
+    {
+        include_once("./Services/ADN/EL/classes/class.adnSoapELearning.php");
+
+        $soap = new adnSoapELearning();
+
+        $ret = $soap->getSubjectAreas($sid);
+
+        return $ret;
+    }
+
+    public static function createTest($sid, $sa_id)
+    {
+        include_once("./Services/ADN/EL/classes/class.adnSoapELearning.php");
+
+        $soap = new adnSoapELearning();
+
+        $ret = $soap->createTest($sid, $sa_id);
+
+        return $ret;
+    }
+
+    public static function getQuestionOverview($sid)
+    {
+        include_once("./Services/ADN/EL/classes/class.adnSoapELearning.php");
+
+        $soap = new adnSoapELearning();
+
+        $ret = $soap->getQuestionOverview($sid);
+
+        return $ret;
+    }
+
+    public static function processQuestion($sid, $a_save_q_id, $a_given_answer, $a_req_q_id)
+    {
+        include_once("./Services/ADN/EL/classes/class.adnSoapELearning.php");
+
+        $soap = new adnSoapELearning();
+
+        $ret = $soap->processQuestion($sid, $a_save_q_id, $a_given_answer, $a_req_q_id);
+
+        return $ret;
+    }
+
+    public static function finishTest($sid, $a_save_q_id, $a_given_answer)
+    {
+        include_once("./Services/ADN/EL/classes/class.adnSoapELearning.php");
+
+        $soap = new adnSoapELearning();
+
+        $ret = $soap->finishTest($sid, $a_save_q_id, $a_given_answer);
+
+        return $ret;
+    }
+
+    public static function getScoringSheet($sid)
+    {
+        include_once("./Services/ADN/EL/classes/class.adnSoapELearning.php");
+
+        $soap = new adnSoapELearning();
+
+        $ret = $soap->getScoringSheet($sid, $a_save_q_id, $a_given_answer);
+
+        return $ret;
+    }
+
+    public static function getInformationSheets($sid)
+    {
+        include_once("./Services/ADN/EL/classes/class.adnSoapELearning.php");
+
+        $soap = new adnSoapELearning();
+
+        $ret = $soap->getInformationSheets($sid);
+
+        return $ret;
+    }
+
+    public static function getHelpText()
+    {
+        $help_text = file_get_contents("./Services/ADN/EL/templates/default/tpl.help_text.html");
+
+        return $help_text;
+    }
+
+// adn-patch end
+
     /**
      * Add desktop items for user
      *

@@ -1,0 +1,120 @@
+//pathes
+@delospath:	"../../../../templates/default/";
+
+//import delos
+@import "@{delospath}delos.less";
+
+
+@icon-font-path: "../../../../Services/UICore/lib/bootstrap-3.2.0/fonts/";
+/* @background-images-path: "images/"; */
+@web-font-path: "../../../../templates/default/fonts/";
+
+/* original 117 px */
+@adn-fixed-menu-height: 77px;
+
+.navbar-header .navbar-toggle {
+	/* display: none !important; */
+}
+
+/* original 80 px */
+.ilMainHeader {
+	height: 40px;
+}
+
+/* original 110 px */
+.ilMainMenu.ilTopFixed {
+	top: 82px;
+}
+
+.ilLeftNav {
+	top: @adn-fixed-menu-height;
+}
+
+.ilFixedTopSpacer {
+	padding-top: @adn-fixed-menu-height;
+}
+
+div#right_area {
+	top: @adn-fixed-menu-height;
+}
+
+div#right_cont_area {
+	top: @adn-fixed-menu-height;
+}
+
+a.ilTreeView {
+	top: @adn-fixed-menu-height;
+}
+
+
+#adn_adm_side_menu img {
+	width: 20px;
+	height: 20px;
+}
+
+#adn_adm_side_menu ul {
+	list-style-type: none;
+	padding: 0px;
+}
+
+.navbar-brand {
+	display:none !important;
+}
+
+#il_startup_logo {
+	display:none !important;
+}
+
+#ilTopNav {
+	margin-left: 0;
+}
+
+#ilTopNav a.dropdown-toggle {
+	text-transform: none;
+	font-size: 12px;
+	padding: 3px 6px !important;
+}
+
+#ilTopBar .ilTopTitle {
+	display: none !important;
+}
+
+#ilMainMenuEntries {
+	/*display:table !important;*/
+}
+
+#ilMainMenuEntries > ul {
+	/* display:table-row !important; */
+}
+
+#ilMainMenuEntries > ul > li {
+	display:table-cell;
+	float: none;
+	white-space: nowrap;
+}
+
+#ilMainMenuEntries > ul > li > a {
+}
+
+@media only screen and (max-width: 767px) {
+	#ilMainMenuEntries {
+		/*display: block !important;*/
+	}
+	#ilMainMenuEntries > ul {
+		/* display: none; */
+	}
+
+	#ilMainMenuEntries > ul > li {
+		display: block;
+	}
+
+	.ilMainMenu.ilTopFixed {
+		position: fixed;
+		top: 40px;
+		border-bottom: 0px;
+	}
+
+	.ilFixedTopSpacer {
+		padding-top: 0px;
+	}
+}

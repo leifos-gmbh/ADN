@@ -37,6 +37,7 @@
 						<span>{USER_IMG}<!--{USERNAME}--><span class="caret"></span></span>
 					</a>
 					<ul class="dropdown-menu pull-right" role="menu">
+						<!-- adn-patch start
 						<li>
 							<a href="{USR_LINK_PROFILE}" target="_top">{USR_TXT_PROFILE}</a>
 						</li>
@@ -44,6 +45,12 @@
 							<a href="{USR_LINK_SETTINGS}" target="_top">{USR_TXT_SETTINGS}</a>
 						</li>
 						<li role="presentation" class="divider"></li>
+						adn-patch end -->
+						<!-- adn-patch start -->
+						<li class="dropdown">
+							<a href="">{USERNAME} ({USER_ROLE})</a>
+						</li>
+						<!-- adn-patch end -->
 						<li>
 							<a href="{LINK_LOGOUT2}">{TXT_LOGOUT2}</a>
 						</li>

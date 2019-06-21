@@ -1168,4 +1168,170 @@ class ilPropertyFormGUI extends ilFormGUI
             }
         }
     }
+
+	// adn-patch start
+
+	/**
+	 * Convert to read-only fields
+	 *
+	 * @return ilPropertyFormGUI
+	 */
+	public function convertToReadonly()
+	{
+		ilDatePresentation::setUseRelativeDates(false);
+		$target_form = new ilPropertyFormGUI;
+		$target_form->setTitle($this->getTitle());
+		$target_form->setDescription($this->getDescription());
+		$this->convertFieldsToReadOnly($target_form, $this->getItems());
+		return $target_form;
+	}
+
+	/**
+	 * Convert form items to read-only
+	 *
+	 * @param ilPropertyFormGUI $a_target_form
+	 * @param array $a_source_items
+	 * @param ilFormPropertyGUI $a_parent
+	 */
+	protected function convertFieldsToReadOnly(ilPropertyFormGUI $a_target_form, array $a_source_items, ilFormPropertyGUI $a_parent = NULL)
+	{
+		if(sizeof($a_source_items))
+		{
+			foreach($a_source_items as $item)
+			{
+				$this->convertFieldToReadOnly($a_target_form, $item, $a_parent);
+			}
+		}
+	}
+
+	/**
+	 * Convert field to read only
+	 *
+	 * @param
+	 * @return
+	 */
+	protected function convertFieldToReadOnly(ilPropertyFormGUI $a_target_form, $item, ilFormPropertyGUI $a_parent = NULL)
+	{
+		$field = NULL;
+		$is_active = false;
+
+		$field = $this->getReadOnlyItem($item, $is_active);
+
+		// add as item or subitem
+		if($field)
+		{
+			if(!$a_parent)
+			{
+				$a_target_form->addItem($field);
+			}
+			else
+			{
+				$a_parent->addSubItem($field);
+			}
+		}
+
+		// recursion / subitems
+		if(method_exists($item, "getSubItems") && $is_active)
+		{
+			$sub = $item->getSubItems();
+			$this->convertFieldsToReadOnly($a_target_form, $sub, $field);
+		}
+
+	}
+
+	/**
+	 * Get read only item for input item
+	 *
+	 * @param object input gui item
+	 * @param bool checkbox status
+	 * @return object read only item
+	 */
+	function getReadOnlyItem($item, &$is_active = NULL)
+	{
+		global $lng;
+
+		switch(get_class($item))
+		{
+			case "ilCombinationInputGUI":
+				$field = new ilNonEditableValueGUI($item->getTitle());
+				$field->setValue(implode(" - ", $item->getValue()));
+				break;
+
+			case "ilFormSectionHeaderGUI":
+				$field = $item;
+				break;
+
+			case "ilCheckboxInputGUI":
+				if($item->getChecked())
+				{
+					$is_active = true;
+					$value = $lng->txt("yes");
+				}
+				else
+				{
+					$value = $lng->txt("no");
+				}
+				$field = new ilNonEditableValueGUI($item->getTitle());
+				$field->setValue($value);
+				break;
+
+			case "ilDateTimeInputGUI":
+				$date = $item->getDate();
+				if($date)
+				{
+					$date = ilDatePresentation::formatDate($date);
+				}
+				$field = new ilNonEditableValueGUI($item->getTitle());
+				$field->setValue($date);
+				break;
+
+			case "ilSelectInputGUI":
+				$field = new ilNonEditableValueGUI($item->getTitle());
+				$value = $item->getValue();
+				$options = $item->getOptions();
+				if(isset($options[$value]))
+				{
+					$field->setValue($options[$value]);
+				}
+				break;
+
+			case "ilImageFileInputGUI":
+				$img = $item->getImage();
+				if($img)
+				{
+					$img = "<img src=\"".$img."\" alt=\"".$item->getAlt()."\" />";
+				}
+				$field = new ilNonEditableValueGUI($item->getTitle());
+				$field->setValue($img);
+				break;
+
+			case "ilCheckboxGroupInputGUI":
+				$value = array();
+				foreach($item->getOptions() as $option)
+				{
+					if(in_array($option->getValue(), $item->getValue()))
+					{
+						$value[] = $option->getTitle();
+					}
+				}
+				$field = new ilNonEditableValueGUI($item->getTitle(),'',true);
+				$field->setValue(implode('<br />', $value));
+				break;
+
+			default:
+				$value = nl2br($item->getValue());
+				if(method_exists($item, "getSuffix") && $item->getSuffix())
+				{
+					$value .= " ".$item->getSuffix();
+				}
+				$field = new ilNonEditableValueGUI($item->getTitle());
+				$field->setValue($value);
+				break;
+		}
+
+		return $field;
+	}
+
+	// adn-patch end
+
 }
