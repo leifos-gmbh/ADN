@@ -1,0 +1,14 @@
+<form action="{FORMACTION}" method="post">
+<input type="hidden" name="q_id" value="{QID}" />
+{TOOLBAR}
+<div style="padding:15px 15px 25px 15px; background-color:#FFFFFF;">
+<div style="background-color:#F3F3F3; padding:10px;">{QUESTION}</div>
+<!-- BEGIN answer -->
+<div style="margin-top: 10px; padding:10px; background-color:#F3F3F3;">
+	<div style="position: absolute; font-weight: bold;"><input type="radio" name="given_anser" value="{KEY}" <!-- BEGIN checked -->checked="checked"<!-- END checked --> /> {VAL_NR}.</div>
+	<div style="padding-left: 50px;">{ANSWER}</div>
+</div>
+<!-- END answer -->
+</div>
+{TOOLBAR2}
+</form>

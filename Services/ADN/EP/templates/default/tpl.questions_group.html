@@ -1,0 +1,63 @@
+<form method="post" action="{FORM_ACTION}">
+<div class="ilTableOuter">
+<div class="ilTableCommandRowTop">{VAL_TITLE}</div>
+<!-- BEGIN subtitle -->
+<div class="subtitle" style="margin: 5px 5px 10px;">{VAL_SUBTITLE}</div>
+<!-- END subtitle -->
+<!-- BEGIN remove1 -->
+<div class="ilTableCommandRow"">
+	<input type="submit" class="submit" name="cmd[removeQuestionsFromSheet]" value="{VAL_REMOVE_QUESTIONS}" />
+</div>
+<!-- END remove1 -->
+<table width="100%">
+<colgroup>
+	<col width="80%" />
+	<col width="20%" />
+</colgroup>
+<tr class="tblheader">
+	<td class="std">Ziele / Fragen</td>
+	<td class="std">Aktion</td>
+</tr>
+<!-- BEGIN row -->
+	<tr class="{CSS_ROW}">
+	<!-- BEGIN objective -->
+	<td class="std small">
+		({VAL_OBJECTIVE_NUMBER}) {VAL_OBJECTIVE}
+	</td>
+	<td class="std small">
+		<!-- BEGIN objective_add -->
+		<div><a href="{VAL_OBJECTIVE_URL}">{VAL_OBJECTIVE_ACTION}</a></div>
+		<!-- END objective_add -->
+	</td>
+	<!-- END objective -->
+	<!-- BEGIN subobjective -->
+	<td class="std small" style="padding-left:25px">
+		({VAL_SUBOBJECTIVE_NUMBER}) {VAL_SUBOBJECTIVE}
+	</td>
+	<td class="std small">
+		<!-- BEGIN subobjective_add -->
+		<div><a href="{VAL_SUBOBJECTIVE_URL}">{VAL_SUBOBJECTIVE_ACTION}</a></div>
+		<!-- END subobjective_add -->
+	</td>
+	<!-- END subobjective -->
+	<!-- BEGIN question -->
+	<td class="std small" style="padding-left:{VAL_QUESTION_MARGIN}px">
+		<p style="margin: 0; margin-left:26px; text-indent:-26px">
+			<!-- BEGIN cbox -->
+			<input type="checkbox" value="{VAL_QUESTION_ID}" name="question_id[]" />
+			<!-- END cbox -->
+			({VAL_QUESTION_NUMBER}) {VAL_QUESTION}
+		</p>
+	</td>
+	<td>&nbsp;</td>
+	<!-- END question -->
+</tr>
+<!-- END row -->
+</table>
+<!-- BEGIN remove2 -->
+<div class="ilTableCommandRow"">
+	<input type="submit" class="submit" name="cmd[removeQuestionsFromSheet]" value="{VAL_REMOVE_QUESTIONS}" />
+</div>
+<!-- END remove2 -->
+</div>
+</form>

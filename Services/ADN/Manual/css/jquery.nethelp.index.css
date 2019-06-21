@@ -1,0 +1,16 @@
+﻿.nethelp-index, .nethelp-index ul, .nethelp-index li {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+.nethelp-index li ul {
+	margin-left: 15px;
+}
+.nethelp-index-text, .nethelp-index-link {
+	cursor: pointer;
+}
+.aklinks-menu, .nethelp-index li ul.aklinks-menu {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}

@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<settings>
+  <theme>
+    <url>themes/Tabs/settings.xml</url>
+    <configUrl>themes/Tabs/settings.en-us.xml</configUrl>
+    <jqueryui>css/wijmo/aristo/jquery-wijmo.css</jqueryui>
+  </theme>
+  <references>
+    <css>LinksExt/C1H_HTML.css</css>
+  </references>
+  <strings>
+    <pageHeaderText>ADN Online-Hilfe</pageHeaderText>
+    <emailAddress>support@mycompany.com</emailAddress>
+  </strings>
+  <windows>
+    <window>
+      <name>proc</name>
+      <features>left=680,top=10,height=500,width=315</features>
+    </window>
+  </windows>
+</settings>

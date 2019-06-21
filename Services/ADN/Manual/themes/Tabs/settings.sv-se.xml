@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<settings>
+	<theme>
+		<predefined>true</predefined>
+	</theme>
+	<strings>
+		<topicSpinnerText>Laddar...</topicSpinnerText>
+	</strings>
+	<topic>
+		<strings>
+			<notfoundText>Ämnet kan inte hittas</notfoundText>
+			<notfoundTitle>Ämnet kan inte hittas</notfoundTitle>
+		</strings>
+		<collapsibleSections>
+			<expandAll>
+				<label>Visa alla</label>
+			</expandAll>
+			<collapseAll>
+				<label>Dölj alla</label>
+			</collapseAll>
+		</collapsibleSections>
+	</topic>
+	<toc>
+		<label>Innehåll</label>
+	</toc>
+	<index>
+		<label>Index</label>
+		<strings>
+			<notfound>Hittar inga nyckelord.</notfound>
+		</strings>
+	</index>
+	<search>
+		<label>Sök</label>
+		<strings>
+			<helpMessage>Du kan använda logiska operatorer i söksträngen: #{and}, #{or}, #{not}. Exempel: football #{or} hockey, sports #{and} #{not} baseball</helpMessage>
+			<loading>Laddar sökmotor...</loading>
+			<loaderror>Fel: Det gick inte att läsa in sökmotorn.</loaderror>
+			<disabled>Sök är inaktiverad.</disabled>
+			<notfound>Inga ämnen hittades.</notfound>
+			<correcting>Menade du: #{query}</correcting>
+		</strings>
+		<buttons>
+			<go>
+				<label>Sök</label>
+			</go>
+			<help>
+				<label>Hjälp</label>
+			</help>
+			<highlight>
+				<label>Visa sökord i text</label>
+			</highlight>
+		</buttons>
+    <options>
+      <operators>
+        <and>OCH</and>
+        <or>ELLER</or>
+        <not>INTE</not>
+      </operators>
+    </options>
+  </search>
+	<context>
+		<strings>
+			<title>Ämne för "#{key}": "#{value}"</title>
+			<notfound>Inga ämnen hittades.</notfound>
+			<notsupported>Stöd saknas för kontextnyckeln "#{key}".</notsupported>
+		</strings>
+	</context>
+	<buttons>
+		<btnPoweredBy>
+			<label>Tillhandahålls&amp;nbsp;av&amp;nbsp;Doc-To-Help&amp;nbsp;®</label>
+		</btnPoweredBy>
+		<btnGotoPrev>
+			<label>Föregående ämne</label>
+		</btnGotoPrev>
+		<btnGotoNext>
+			<label>Nästa ämne</label>
+		</btnGotoNext>
+		<btnGotoHome>
+			<label>Hem</label>
+		</btnGotoHome>
+		<btnPrint>
+			<label>Skriv ut ämne</label>
+		</btnPrint>
+		<btnEmail>
+			<label>E-post</label>
+		</btnEmail>
+	</buttons>
+</settings>

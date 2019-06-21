@@ -1,0 +1,37 @@
+﻿/* links */
+.topic-link, .a-link, .k-link, .popup-text, .inline-text {
+	cursor: pointer;
+}
+#topicBlock a[href],
+#topicBlock a[data-ref],
+.nethelp-topic-popup a[href],
+.nethelp-topic-popup a[data-ref],
+.aklinks-menu a {
+	text-decoration: underline;
+}
+#topicBlock a[href]:hover,
+#topicBlock a[data-ref]:hover,
+.nethelp-topic-popup a[href]:hover,
+.nethelp-topic-popup a[data-ref]:hover,
+.aklinks-menu a:hover {
+	text-decoration: underline;
+}
+
+/* related topics */
+.related-topics {
+	list-style-type: none;
+	padding: 5px 15px;
+	margin: 0;
+}
+.related-topics .ui-icon, .related-topics .custom-icon {
+	float: left;
+}
+.related-topics-header {
+	margin: 15px 0 0 0;
+}
+
+/* search highlight */
+.search-highlight {
+	background-color: yellow;
+	color: black;
+}

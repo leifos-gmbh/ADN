@@ -1,0 +1,23 @@
+<tr class="{CSS_ROW}">
+	<!-- BEGIN cbox -->
+	<td class="std small">
+		<input type="checkbox" name="question_id[]" value="{VAL_ID}" />
+	</td>
+	<!-- END cbox -->
+	<!-- BEGIN select -->
+	<td class="std small">
+		<input type="hidden" name="question_id[]" value="{VAL_ID}" />
+		<select name="subj_map[{VAL_ID}]">
+		<!-- BEGIN select_option -->
+		<option value="{OPTION_VALUE}"{OPTION_STATUS}>{OPTION_CAPTION}</option>
+		<!-- END select_option -->
+		</select>
+	</td>
+	<!-- END select -->
+	<td class="std small">
+		{VAL_NUMBER}
+	</td>
+	<td class="std small">
+		{VAL_QUESTION}
+	</td>
+</tr>

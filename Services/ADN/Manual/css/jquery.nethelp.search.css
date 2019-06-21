@@ -1,0 +1,14 @@
+﻿.nethelp-search, .nethelp-search ul, .nethelp-search li {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+.nethelp-search li ul {
+	margin-left: 15px;
+}
+.nethelp-search-text, .nethelp-search-link {
+	cursor: pointer;
+}
+.nethelp-search-text:hover, .nethelp-search-link:hover {
+	text-decoration: underline;
+}

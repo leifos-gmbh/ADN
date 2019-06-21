@@ -1,0 +1,173 @@
+﻿/* common styles */
+body .abs {
+	position: absolute;
+}
+body .fill-h {
+	left: 0;
+	right: 0;
+}
+body .fill-v {
+	top: 0;
+	bottom: 0;
+}
+body .rel {
+	position: relative;
+}
+body .crop {
+	overflow: hidden;
+}
+body .scroll {
+	overflow: auto;
+}
+
+/* pageHeader */
+#pageHeader {
+	height: 100px;
+}
+#pageHeaderFrame,
+#pageHeaderFrame tr,
+#pageHeaderFrame td,
+#pageHeaderFrame img {
+	border: 0 none;
+}
+#pageHeaderFrame {
+	height: 100%;
+	vertical-align: middle;
+}
+#pageHeaderLogoCell {
+	padding: 0 20px 0 5px;
+}
+
+/* main block */
+#pageMain {
+	top: 102px;
+	bottom: 0;
+}
+/* side block */
+#pageSide {
+	left: 0px;
+	width: 300px;
+}
+#toc a, #index a, #search a, #collapsibleAll a {
+	text-decoration: none;
+	cursor: pointer;
+}
+#toc a:hover, #index a:hover, #search a:hover, #collapsibleAll a:hover {
+	text-decoration: underline;
+}
+#pageSide .ui-tabs-panel {
+	margin: 0;
+	padding: 0;
+}
+#pageSideTabs {
+	font-size: .9em;
+}
+#pageSideInner, #pageContentInner {
+	position: absolute;
+	top: .2em;
+	right: .2em;
+	bottom: .2em;
+	left: .2em;
+}
+#pageSideTabsContent {
+	top: 3.2em;
+	right: .2em;
+	bottom: .2em;
+	left: .2em;
+}
+#indexFilter, #searchFilter {
+	padding: 3px 7px 3px 3px;
+	overflow: visible;
+	z-index: 1;
+	border: 0 none;
+	background: transparent none;
+}
+#indexFilterInputBlock, #searchFilterInputBlock {
+	overflow: visible;
+	border: 0 none;
+	background: transparent none;
+}
+#searchFilterInputBlock {
+	margin-right: 28px;
+}
+#indexFilterInput, #searchFilterInput {
+	width: 100%;
+	padding: 2px 1px;
+	margin: 0;
+}
+#searchGoButton, #searchHelpButton, #searchHighlightButton {
+	display: block;
+	position: absolute;
+	top: 50%;
+	margin-top: -8px;
+	cursor: pointer;
+}
+#searchHighlightButton {
+	right: 0px;
+}
+#searchGoButton {
+	right: 16px;
+}
+#searchHelpButton {
+	right: 32px;
+}
+#index, #search {
+	top: 2.7em;
+	bottom: 0;
+	z-index: 0;
+}
+.nethelp-index-selected, .nethelp-search-selected {
+	font-weight: bold;
+}
+
+#pageContent {
+	right: 0;
+	left: 305px;
+	overflow: auto;
+}
+#topBar {
+	top: 0;
+	font-size: .8em;
+	padding: .2em;
+	height: 2.6em;
+	overflow: hidden;
+}
+#topicBlock {
+	top: 2.7em;
+	bottom: 0;
+}
+#topicSpinnerMessage {
+	top: 50%;
+	left: 50%;
+}
+#topic {
+	clear: both;
+}
+
+#breadcrumbs {
+	font-size: .8em;
+	margin: 0;
+	padding: 2px 0;
+	border-bottom: 1px solid;
+	background: transparent none;
+}
+
+/* topic only mode */
+.topic-only .abs {
+	position: static;
+}
+.topic-only #topicBlock {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+.topic-only #pageHeader,
+.topic-only #topBar,
+.topic-only #topicBar,
+.topic-only #pageSide,
+.topic-only #pageSplitter,
+.topic-only #topicSpinner {
+	display: none;
+}

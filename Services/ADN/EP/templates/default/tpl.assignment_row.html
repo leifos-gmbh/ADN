@@ -1,0 +1,35 @@
+<tr class="{CSS_ROW}">
+	<!-- BEGIN cbox -->
+	<td class="std small">
+		<input type="checkbox" name="candidate_id[]" value="{VAL_ID}" />
+	</td>
+	<!-- END cbox -->
+	<td class="std small">
+		{VAL_NAME}
+	</td>
+	<td class="std small">
+		{VAL_FIRST_NAME}
+	</td>
+	<td class="std small">
+		{VAL_STREET} {VAL_HNO}, {VAL_ZIP} {VAL_CITY}, {VAL_COUNTRY}
+	</td>
+	<td class="std small">
+		<!-- BEGIN assigned -->
+		<div>
+			<select name="cnd[{VAL_ASSIGNED_ID}][]">
+			<!-- BEGIN assigned_option -->
+			<option value="{VAL_ASSIGNED_OPTION_ID}"{VAL_ASSIGNED_OPTION_STATUS}>{VAL_ASSIGNED_OPTION_TITLE}</option>
+			<!-- END assigned_option -->
+			</select>
+		</div>
+		<!-- END assigned -->
+		<!-- BEGIN assigned_static -->
+		{VAL_ASSIGNED_INFO}
+		<!-- END assigned_static -->
+	</td>
+	<td class="std small">
+		<!-- BEGIN generated -->
+		<div>{VAL_GENERATED_DATE}, {VAL_GENERATED_NUMBER}</div>
+		<!-- END generated -->
+	</td>
+</tr>
