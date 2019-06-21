@@ -75,6 +75,10 @@ class adnMainMenuGUI
 	const AD_MCX = "ad_mcx";	// export mc questions
 	const AD_ICP = "ad_icp";	// import professionals
 
+	// cr-008 start
+	const AD_PDM = "ad_pdm";	// maintenance personal data
+	// cr-008 end
+
 
 	// template
 	protected $tpl;
@@ -189,6 +193,9 @@ class adnMainMenuGUI
 
 			if(adnPerm::check(adnPerm::AD, adnPerm::READ))
 			{
+				// cr-008 start
+				$items[adnMainMenuGUI::MD][] = adnMainMenuGUI::AD_PDM;
+				// cr-008 end
 				$items[adnMainMenuGUI::MD][] = adnMainMenuGUI::AD_MNT;
 				$items[adnMainMenuGUI::MD][] = adnMainMenuGUI::AD_CHR;
 				$items[adnMainMenuGUI::MD][] = adnMainMenuGUI::AD_USR;

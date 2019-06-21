@@ -11703,6 +11703,9 @@ a.ilTreeView {
 .navbar-brand {
   display: none !important;
 }
+#il_startup_logo {
+  display: none !important;
+}
 #ilTopNav {
   margin-left: 0;
 }
@@ -11710,6 +11713,9 @@ a.ilTreeView {
   text-transform: none;
   font-size: 12px;
   padding: 3px 6px !important;
+}
+#ilTopBar .ilTopTitle {
+  display: none !important;
 }
 #ilMainMenuEntries {
   /*display:table !important;*/

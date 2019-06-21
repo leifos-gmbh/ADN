@@ -32,7 +32,7 @@ class adnCertificateCandidateTableGUI extends ilTable2GUI
 		
 		parent::__construct($a_parent_obj, $a_parent_cmd);
 
-		$ths->id = "adn_tbl_ccd";
+		$this->id = "adn_tbl_ccd";
 
 		include_once("./Services/ADN/EP/classes/class.adnExaminationEvent.php");
 		$this->setTitle($lng->txt("adn_candidates").": ".

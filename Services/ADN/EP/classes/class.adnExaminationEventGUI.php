@@ -228,6 +228,7 @@ class adnExaminationEventGUI
 		$form->addItem($date);
 
 		include_once "Services/Form/classes/class.ilCombinationInputGUI.php";
+		include_once "Services/Form/classes/class.ilTimeInputGUI.php";
 		$time = new ilCombinationInputGUI($lng->txt("adn_timeframe"), $time);
 		$time->setRequired(true);
 		$time_from = new ilTimeInputGUI("", "time_from");
