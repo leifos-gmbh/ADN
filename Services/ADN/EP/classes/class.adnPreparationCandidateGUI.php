@@ -1154,7 +1154,7 @@ class adnPreparationCandidateGUI
 	{
 		global $ilCtrl;
 
-		$ilCtrl->redirectByClass(array("adnBaseGUI", "adnAdministrationGUI", "adnPersonalDataMaintenanceGUI"), "listPersonalData");
+		$ilCtrl->redirectByClass(array("adnBaseGUI", "adncertifiedprofessionalgui", "adnPersonalDataMaintenanceGUI"), "listPersonalData");
 	}
 
 	/**

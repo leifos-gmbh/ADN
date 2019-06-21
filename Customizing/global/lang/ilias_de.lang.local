@@ -786,7 +786,7 @@ adn#:#adn_exam_candidate#:#Prüfungskandidat
 adn#:#adn_certificates#:#Bescheinigungen
 adn#:#adn_invoices#:#Kostenbescheide
 adn#:#adn_no_entries#:#Keine Einträge
-adn#:#adn_ad_pdm#:#Personenbezogene Daten
+adn#:#adn_cp_pdm#:#Personenbezogene Daten
 adn#:#adn_really_delete_pd#:#Sollen die folgenden Sachkundigen/Interessenten/Kandidaten wirklich gelöscht werden?
 adn#:#adn_ad_wmo_created#:#Angelegt durch
 adn#:#adn_personal_data_notification#:#ADN Benachrichtigung über Löschkandidaten

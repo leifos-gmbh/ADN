@@ -148,7 +148,7 @@ class adnCertificateScoringGUI
 		// cr-008 start
 		if ($event_id == 0)
 		{
-			$ilCtrl->redirectByClass(array("adnBaseGUI", "adnAdministrationGUI", "adnPersonalDataMaintenanceGUI"), "listPersonalData");
+			$ilCtrl->redirectByClass(array("adnBaseGUI", "adncertifiedprofessionalgui", "adnPersonalDataMaintenanceGUI"), "listPersonalData");
 		}
 		// cr-008 end
 
@@ -603,7 +603,7 @@ class adnCertificateScoringGUI
 			}
 			else
 			{
-				$ilCtrl->redirectByClass(array("adnBaseGUI", "adnAdministrationGUI", "adnPersonalDataMaintenanceGUI"), "listPersonalData");
+				$ilCtrl->redirectByClass(array("adnBaseGUI", "adncertifiedprofessionalgui", "adnPersonalDataMaintenanceGUI"), "listPersonalData");
 			}
 			// cr-008 end
 		}

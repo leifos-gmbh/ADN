@@ -56,6 +56,8 @@ class ilStudyProgrammeAppEventListener {
 	}
 
 	private static function onServiceUserDeleteUser($a_parameter) {
+		// removed due invalid oracle support?!
+		return true;
 		require_once("./Modules/StudyProgramme/classes/class.ilStudyProgrammeUserAssignment.php");
 		$assignments = ilStudyProgrammeUserAssignment::getInstancesOfUser($a_parameter["usr_id"]);
 		foreach ($assignments as $ass) {

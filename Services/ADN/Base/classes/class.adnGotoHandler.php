@@ -43,7 +43,7 @@ class adnGotoHandler
 		{
 			$ilCtrl->setParameterByClass("adnpersonaldatamaintenancegui", "target", $p[1]);
 			$ilCtrl->setParameterByClass("adnpersonaldatamaintenancegui", "wmo_id", (int) $p[2]);
-			$ilCtrl->redirectByClass(array("adnbasegui", "adnadministrationgui", "adnpersonaldatamaintenancegui"), "jumpToList");
+			$ilCtrl->redirectByClass(array("adnbasegui", "adncertifiedprofessionalgui", "adnpersonaldatamaintenancegui"), "jumpToList");
 		}
 	}
 

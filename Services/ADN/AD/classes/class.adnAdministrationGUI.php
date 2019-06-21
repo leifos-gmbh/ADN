@@ -13,9 +13,6 @@
  *
  * @ilCtrl_Calls adnAdministrationGUI: adnMaintenanceGUI, adnCharacterGUI, adnMCQuestionExportGUI
  * @ilCtrl_Calls adnAdministrationGUI: adnUserGUI, adnProfessionalImportGUI
- * cr-008 start
- * @ilCtrl_Calls adnAdministrationGUI: adnPersonalDataMaintenanceGUI
- * cr-008 end
  */
 class adnAdministrationGUI
 {
@@ -69,13 +66,6 @@ class adnAdministrationGUI
 					$ilCtrl->setCmd("importFile");
 					break;
 
-				// cr-008 start
-				case adnMainMenuGUI::AD_PDM:
-					$ilCtrl->setCmdClass("adnpersonaldatamaintenancegui");
-					$ilCtrl->setCmd("listPersonalData");
-					break;
-				// cr-008 end
-
 			}
 			$next_class = $ilCtrl->getNextClass();
 		}
@@ -123,13 +113,6 @@ class adnAdministrationGUI
 				$ilCtrl->forwardCommand($pro_gui);
 				break;
 
-			// cr-008 start
-			case "adnpersonaldatamaintenancegui":
-				include_once("./Services/ADN/AD/classes/class.adnPersonalDataMaintenanceGUI.php");
-				$pdm_gui = new adnPersonalDataMaintenanceGUI();
-				$ilCtrl->forwardCommand($pdm_gui);
-				break;
-			// cr-008 end
 		}
 
 		adnBaseGUI::setHelpButton($ilCtrl->getCmdClass());

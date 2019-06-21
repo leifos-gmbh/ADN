@@ -76,7 +76,7 @@ class adnMainMenuGUI
 	const AD_ICP = "ad_icp";	// import professionals
 
 	// cr-008 start
-	const AD_PDM = "ad_pdm";	// maintenance personal data
+	const CP_PDM = "cp_pdm";	// maintenance personal data
 	// cr-008 end
 
 
@@ -164,7 +164,10 @@ class adnMainMenuGUI
 			$items[adnMainMenuGUI::CP] = array(
 					adnMainMenuGUI::CP_CTS,
 					adnMainMenuGUI::CP_CPR,
-					adnMainMenuGUI::CP_DIR
+					adnMainMenuGUI::CP_DIR,
+					// cr-008 start
+					adnMainMenuGUI::CP_PDM
+					// cr-008 end
 				);
 		}
 
@@ -193,9 +196,6 @@ class adnMainMenuGUI
 
 			if(adnPerm::check(adnPerm::AD, adnPerm::READ))
 			{
-				// cr-008 start
-				$items[adnMainMenuGUI::MD][] = adnMainMenuGUI::AD_PDM;
-				// cr-008 end
 				$items[adnMainMenuGUI::MD][] = adnMainMenuGUI::AD_MNT;
 				$items[adnMainMenuGUI::MD][] = adnMainMenuGUI::AD_CHR;
 				$items[adnMainMenuGUI::MD][] = adnMainMenuGUI::AD_USR;
@@ -278,6 +278,20 @@ class adnMainMenuGUI
 		$this->tpl->setVariable("TXT_LOGOUT2",$lng->txt("logout"));
 		$this->tpl->setVariable("LINK_LOGOUT2", $link_dir."logout.php?lang=".$ilias->account->getCurrentLanguage());
 		$this->tpl->setVariable("USERNAME",$ilias->account->getFullname());
+		
+		foreach($GLOBALS['rbacreview']->getGlobalRoles() as $gr)
+		{
+			if(
+				$GLOBALS['rbacreview']->isAssigned(
+					$GLOBALS['ilUser']->getId(),
+					$gr
+			))
+			{
+				$this->tpl->setVariable('USER_ROLE', ilObject::_lookupTitle($gr));
+				break;
+			}
+		}
+		
 		$this->tpl->setVariable("LOGIN",$ilias->account->getLogin());
 		$this->tpl->setVariable("MATRICULATION",$ilias->account->getMatriculation());
 		$this->tpl->setVariable("EMAIL",$ilias->account->getEmail());
