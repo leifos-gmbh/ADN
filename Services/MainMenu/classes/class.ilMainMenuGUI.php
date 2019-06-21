@@ -463,7 +463,7 @@ class ilMainMenuGUI {
 		// which still uses YUI. This should be migrated to jQuery with a future major release
 		ilYuiUtil::initConnection();
 
-		// adn-patch start
+		// adn-patchadn start
 		include_once("./Services/ADN/UI/classes/class.adnMainMenuGUI.php");
 		$adn_menu = new adnMainMenuGUI($this);
 		return $adn_menu->getHTML();
