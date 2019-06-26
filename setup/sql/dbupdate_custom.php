@@ -68,3 +68,15 @@ $query = 'update adn_ep_assignment set score_mc = score_mc * 10';
 $res = $ilDB->manipulate($query);
 
 ?>
+<#11>
+<?php
+if (!$ilDB->tableColumnExists("adn_cp_professional", "foreign_cert_handed_in"))
+{
+	$ilDB->addTableColumn("adn_cp_professional ", "foreign_cert_handed_in", array(
+		"notnull" => false,
+		"length" => 1,
+		"type" => "integer",
+		"unsigned" => false,
+		"default" => 0));
+}
+?>
