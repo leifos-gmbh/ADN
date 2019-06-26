@@ -298,8 +298,8 @@ class adnReportCertificate extends adnReport
 		$map['issued_on']	= (string) $cert->getLatestIssuedOn()->get(IL_CAL_FKT_DATE,'d').'. '.
 			$lng->txt('month_'.$cert->getLatestIssuedOn()->get(IL_CAL_FKT_DATE,'m').'_long').' '.
 			$cert->getLatestIssuedOn()->get(IL_CAL_FKT_DATE,'Y');
-		$map['ia'] = 'Im Auftrag';
-		$map['signed_by'] = $cert->getSignedBy();
+		$map['ia'] = "i.A. " . $cert->getSignedBy();
+		#$map['signed_by'] = $cert->getSignedBy();
 		
 		return $map;
 	}
