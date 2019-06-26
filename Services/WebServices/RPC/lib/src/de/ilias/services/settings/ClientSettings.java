@@ -274,10 +274,10 @@ public class ClientSettings {
 		if(getDbType().equalsIgnoreCase("mysql") || getDbType().equalsIgnoreCase("innodb")) {
 			
 			if(getDbPort().length() > 0) {
-				return getDbHost() + ":" + getDbPort() + "/" + getDbName();
+				return "jdbc:mysql://" + getDbHost() + ":" + getDbPort() + "/" + getDbName();
 			}
 			else {
-				return getDbHost() + "/" + getDbName();
+				return "jdbc:mysql://" + getDbHost() + "/" + getDbName();
 			}
 		}
 		else {
@@ -297,25 +297,10 @@ public class ClientSettings {
 	 */
 	public String getDbType() {
 
+		// handle innodb as mysql
 		if(dbType.equalsIgnoreCase("innodb")) {
 			return "mysql";
 		}
-		if(dbType.equalsIgnoreCase("mysql")) {
-			return "mysql";
-		}
-		if(dbType.equalsIgnoreCase("mysqli")) {
-			return "mysql";
-		}
-		if(dbType.equalsIgnoreCase("pdo-mysql-myisam")) {
-			return "mysql";
-		}
-		if(dbType.equalsIgnoreCase("pdo-mysql-innodb")) {
-			return "mysql";
-		}
-		if(dbType.equalsIgnoreCase("pdo-mysql-galera")) {
-			return "mysql";
-		}
-
 		return dbType;
 	}
 
