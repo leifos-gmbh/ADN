@@ -2100,7 +2100,6 @@ abstract class ilDBPdo implements ilDBInterface, ilDBPdoInterface {
 	 */
 	function addForeignKey($a_name, $a_table, $a_fields, $a_ref_table, $a_ref_fields)
 	{
-		$manager = $this->db->loadModule('Manager');
 
 		// check constraint name
 		if (!$this->checkIndexName($a_name))
@@ -2119,9 +2118,7 @@ abstract class ilDBPdo implements ilDBInterface, ilDBPdoInterface {
 			" REFERENCES $a_ref_table ($ref_fields) ";
 		#" ON DELETE NO ACTION".
 		#" ON UPDATE NO ACTION";
-		$r = $this->query($q);
-
-		return $this->handleError($r, "addForeignKey(".$a_table.")");
+		return $this->query($q);
 	}
 
 	/**
@@ -2145,9 +2142,7 @@ abstract class ilDBPdo implements ilDBInterface, ilDBPdoInterface {
 	{
 		$q = "ALTER TABLE $a_table DROP FOREIGN KEY ".
 			$this->foreignKeyName($a_table, $a_name);
-		$r = $this->query($q);
-
-		return $this->handleError($r, "dropForeignKey(".$a_table.")");
+		return $this->query($q);
 	}
 
 

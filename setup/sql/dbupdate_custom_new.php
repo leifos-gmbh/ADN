@@ -4654,7 +4654,7 @@ while($row = $ilDB->fetchAssoc($set))
 <?php
 if (!$ilDB->tableColumnExists("adn_ep_assignment", "scoring_update"))
 {
-	$ilDB->addTableColumn("adn_ep_assignment ", "scoring_update", array(
+	$ilDB->addTableColumn("adn_ep_assignment", "scoring_update", array(
 		"notnull" => false,
 		"default" => "",
 		"type" => "timestamp"));
@@ -4665,7 +4665,7 @@ if (!$ilDB->tableColumnExists("adn_ep_assignment", "scoring_update"))
 <?php
 if (!$ilDB->tableColumnExists("adn_ep_assignment", "scoring_update_user"))
 {
-	$ilDB->addTableColumn("adn_ep_assignment ", "scoring_update_user", array(
+	$ilDB->addTableColumn("adn_ep_assignment", "scoring_update_user", array(
 		"notnull" => false,
 		"length" => 4,
 		"type" => "integer"));

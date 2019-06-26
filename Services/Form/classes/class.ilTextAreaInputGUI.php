@@ -819,7 +819,6 @@ class ilTextAreaInputGUI extends ilSubEnabledFormPropertyGUI
 		$this->initial_rte_width = $initial_rte_width;
 	}
 
-<<<<<<< HEAD
 	public function isCharLimited()
 	{
 		if ($this->getMaxNumOfChars() || $this->getMinNumOfChars())
@@ -830,7 +829,7 @@ class ilTextAreaInputGUI extends ilSubEnabledFormPropertyGUI
 		return false;
 
 	}
-=======
+
 	// adn-patch start
 
 	/**
@@ -887,5 +886,4 @@ class ilTextAreaInputGUI extends ilSubEnabledFormPropertyGUI
 
 	// adn-patch end
 
->>>>>>> c887f14d54... added all marked patches of old code
 }
