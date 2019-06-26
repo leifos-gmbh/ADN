@@ -106,6 +106,7 @@ class adnPersonalDataTableGUI extends ilTable2GUI
 		}
 
 		// wmo
+		/*			 see bug #15
 		include_once("./Services/ADN/MD/classes/class.adnWMO.php");
 		$options = array(
 			"" => $lng->txt("adn_filter_all")
@@ -119,7 +120,7 @@ class adnPersonalDataTableGUI extends ilTable2GUI
 		$wmo->setOptions($options);
 		$wmo->readFromSession();
 		$this->filter["registered_by"] = $wmo->getValue();
-
+		*/
 	}
 
 	/**

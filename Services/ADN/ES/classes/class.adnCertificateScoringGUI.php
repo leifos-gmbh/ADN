@@ -603,7 +603,7 @@ class adnCertificateScoringGUI
 			}
 			else
 			{
-				$ilCtrl->redirectByClass(array("adnBaseGUI", "adncertifiedprofessionalgui", "adnPersonalDataMaintenanceGUI"), "listPersonalData");
+				$ilCtrl->redirectByClass(array("adnBaseGUI", "adncertifiedprofessionalgui", "adnCertificateGUI"), "listCertificates");
 			}
 			// cr-008 end
 		}

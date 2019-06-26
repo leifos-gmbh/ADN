@@ -453,7 +453,6 @@ class adnPreparationCandidateGUI
 			$registered_by->setValue($wmo_id);
 			$holdback_by->setValue($wmo_id);
 
-			$form->addCommandButton("saveCandidate", $lng->txt("save"));
 
 			// cr-008 start
 			if ($this->mode == self::MODE_GENERAL)
@@ -461,16 +460,20 @@ class adnPreparationCandidateGUI
 				$form->addCommandButton("saveCandidateAndAddCertificate",
 					$lng->txt("adn_save_and_add_certificate"));
 				$form->addCommandButton("listPersonData", $lng->txt("cancel"));
+				$form->setTitle($lng->txt("adn_ad_add_person"));
 			}
 			else
 			{
+				$form->addCommandButton("saveCandidate", $lng->txt("save"));
+
 				$form->addCommandButton("saveCandidateAndEditTraining",
 					$lng->txt("adn_save_and_edit_training"));
 				$form->addCommandButton("listCandidates", $lng->txt("cancel"));
+				$form->setTitle($lng->txt("adn_add_candidate"));
 			}
 			// cr-008 end
 
-			$form->setTitle($lng->txt("adn_add_candidate"));
+
 		}
 		else
 		{

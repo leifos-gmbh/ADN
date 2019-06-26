@@ -63,6 +63,7 @@ class adnCertificateGUI
 					case "downloadInvoice":
 					case 'downloadExtension':
 					case 'downloadDuplicate':
+					case 'downloadCertificate':
 					case 'applyFilter':
 					case 'resetFilter':
 					case 'confirmSaveExtension':
@@ -127,7 +128,16 @@ class adnCertificateGUI
 		$ilToolbar->addInputItem($checkbox, true);
 		$ilToolbar->setFormAction($ilCtrl->getFormAction($this));
 		$ilToolbar->addFormButton($lng->txt("adn_update_view"), "listCertificates");
-		
+
+		// cr-008 start
+		$ilToolbar->addSeparator();
+		include_once("./Services/ADN/EP/classes/class.adnPreparationCandidateGUI.php");
+		$ilCtrl->setParameterByClass("adnpreparationcandidategui", "mode", adnPreparationCandidateGUI::MODE_GENERAL);
+		$ilToolbar->addButton($lng->txt("adn_ad_add_person"),
+			$ilCtrl->getLinkTargetByClass(array("adnbasegui", "adnexaminationpreparationgui", "adnpreparationcandidategui"), "createCandidate")
+		);
+		// cr-008 end
+
 		// table of certificates
 		include_once("./Services/ADN/CP/classes/class.adnCertificateTableGUI.php");
 		$table = new adnCertificateTableGUI($this, "listCertificates");
@@ -1006,6 +1016,48 @@ class adnCertificateGUI
 			'application/pdf'
 		);
 	}
+
+	// cr-008 start
+	/**
+	 * Download certificate
+	 */
+	protected function downloadCertificate()
+	{
+		global $lng,$ilCtrl;
+
+		if(!(int)$_REQUEST['ct_id'])
+		{
+			ilUtil::sendFailure($lng->txt('select_one'));
+			$ilCtrl->redirect($this,'listCertificates');
+		}
+
+		$ct_id = (int)$_REQUEST['ct_id'];
+
+		include_once './Services/ADN/Report/exceptions/class.adnReportException.php';
+		try
+		{
+			include_once './Services/ADN/EP/classes/class.adnExaminationEvent.php';
+			include_once("./Services/ADN/Report/classes/class.adnReportCertificate.php");
+			if (adnReportCertificate::lookupCertificate($ct_id) != "")	// create if not existent
+			{
+				$report = new adnReportCertificate(array($ct_id));
+				$report->create();
+			}
+
+			include_once("./Services/ADN/Report/classes/class.adnReportCertificate.php");
+			ilUtil::deliverFile(
+				adnReportCertificate::lookupCertificate($ct_id),
+				"Bescheinigung.pdf",
+				'application/pdf'
+			);
+		}
+		catch(adnReportException $e)
+		{
+			ilUtil::sendFailure($e->getMessage(),true);
+			$ilCtrl->redirect($this,'listCertificates');
+		}
+	}
+	// cr-008 end
 }
 
 ?>
