@@ -309,12 +309,14 @@ class adnBaseGUI
 		// current version of DocToHelp shortens file names to 20 chars
 		$filename = substr($map[$key], 0, 20);
 		
-		$path = "Services/ADN/Manual/default.htm#!Documents%2F".$filename.".htm";
+		$path = "Services/ADN/Manual/default.htm#!Documents/".$filename.".htm";
 		$link = "<a href=\"".$path."\" target=\"blank\">".$lng->txt("help")."</a>";
 
-		$tpl->setCurrentBlock("adn_help");
-		$tpl->setVariable("ADN_HELP_BUTTON", $link);
-		$tpl->parseCurrentBlock();
+		$GLOBALS["help_link"] = $path;
+
+		//$tpl->setCurrentBlock("adn_help");
+		//$tpl->setVariable("ADN_HELP_BUTTON", $link);
+		//$tpl->parseCurrentBlock();
 	}
 }
 

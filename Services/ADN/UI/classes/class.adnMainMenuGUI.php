@@ -266,6 +266,14 @@ class adnMainMenuGUI
 			$this->tpl->parseCurrentBlock();
 		}
 
+		if ($GLOBALS["help_link"] != "")
+		{
+			$this->tpl->setCurrentBlock("adn_help");
+			$this->tpl->setVariable("ADN_TXT_HELP",$lng->txt("help"));
+			$this->tpl->setVariable("ADN_LINK_HELP",$GLOBALS["help_link"]);
+			$this->tpl->parseCurrentBlock();
+		}
+
 		$this->tpl->setCurrentBlock("userisloggedin");
 		$this->tpl->setVariable("TXT_LOGIN_AS",$lng->txt("login_as"));
 		$user_img_src = $ilias->account->getPersonalPicturePath("small", true);
