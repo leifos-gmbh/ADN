@@ -130,6 +130,8 @@ class adnTestPreparationGUI
 	 */
 	function downloadAccessCodes()
 	{
+		global $ilCtrl;
+		
 		$event_id = (int)$_REQUEST['ev_id'];
 		
 		// create report

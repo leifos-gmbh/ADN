@@ -208,7 +208,7 @@ class adnBaseGUI
 		// workaound for #143
 		if (!is_file($a_file))
 		{
-			array("width" => $a_max, "height" => $a_max);
+			return array("width" => $a_max, "height" => $a_max);
 		}
 
 		$img = getimagesize($a_file);
