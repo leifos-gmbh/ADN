@@ -133,7 +133,7 @@ class adnScoreNotificationGUI
 
 		// table of examination events
 		include_once("./Services/ADN/ES/classes/class.adnCandidateTableGUI.php");
-		$table = new adnCandidateTableGUI($this, "listEvents", $event_id, true);
+		$table = new adnCandidateTableGUI($this, "listParticipants", $event_id, true);
 
 		// output table
 		$tpl->setContent($table->getHTML());

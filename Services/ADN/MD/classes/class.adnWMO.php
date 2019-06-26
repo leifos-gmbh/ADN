@@ -33,6 +33,7 @@ class adnWMO extends adnDBBase
 	protected $phone; // [string]
 	protected $fax; // [string]
 	protected $email; // [string]
+	protected $notification_email; // [string]
 	protected $url; // [string]
 	protected $cost; // [array]
 
@@ -193,6 +194,26 @@ class adnWMO extends adnDBBase
 	public function getEmail()
 	{
 		return $this->email;
+	}
+
+	/**
+	 * Set notification email
+	 *
+	 * @param string $a_email
+	 */
+	public function setNotificationEmail($a_email)
+	{
+		$this->notification_email = (string)$a_email;
+	}
+
+	/**
+	 * Get notification email
+	 *
+	 * @return string
+	 */
+	public function getNotificationEmail()
+	{
+		return $this->notification_email;
 	}
 
 	/**
@@ -633,7 +654,7 @@ class adnWMO extends adnDBBase
 		$res = $ilDB->query("SELECT code_nr,name,subtitle,street,street_no,postal_code,city,visit_street,".
 			"visit_street_no,visit_postal_code,visit_city,bank,bank_id,account_id,bic,iban,phone,".
 			"fax,email,internet,cert_nr,cert_description,cert_cost,duplicate_nr,duplicate_description,".
-			"duplicate_cost,ext_nr,ext_description,ext_cost,exam_nr,exam_description,exam_cost".
+			"duplicate_cost,ext_nr,ext_description,ext_cost,exam_nr,exam_description,exam_cost, notification_email".
 			" FROM adn_md_wmo".
 			" WHERE id = ".$ilDB->quote($id, "integer"));
 		$set = $ilDB->fetchAssoc($res);
@@ -657,6 +678,7 @@ class adnWMO extends adnDBBase
 		$this->setPhone($set["phone"]);
 		$this->setFax($set["fax"]);
 		$this->setEmail($set["email"]);
+		$this->setNotificationEmail($set['notification_email']);
 		$this->setURL($set["internet"]);
 
 		$this->setCostCertificate($set["cert_nr"], $set["cert_description"], $set["cert_cost"]/100);
@@ -694,6 +716,7 @@ class adnWMO extends adnDBBase
 			"phone" => array("text", $this->getPhone()),
 			"fax" => array("text", $this->getFax()),
 			"email" => array("text", $this->getEmail()),
+			'notification_email' => array('text', $this->getNotificationEmail()),
 			"internet" => array("text", $this->getURL()));
 
 		$costs = array(self::COST_CERTIFICATE => "cert",
