@@ -351,8 +351,8 @@ class adnExaminationEventGUI
 			$time_to = $form->getInput("time_to");
 			$time_to = str_pad($time_to["h"], 2, "0", STR_PAD_LEFT).":".
 				str_pad($time_to["m"], 2, "0", STR_PAD_LEFT).":00";
-			$event->setDateFrom(new ilDateTime($date["date"]." ".$time_from, IL_CAL_DATETIME));
-			$event->setDateTo(new ilDateTime($date["date"]." ".$time_to, IL_CAL_DATETIME));
+			$event->setDateFrom(new ilDateTime($date." ".$time_from, IL_CAL_DATETIME));
+			$event->setDateTo(new ilDateTime($date." ".$time_to, IL_CAL_DATETIME));
 			
 			if($event->save())
 			{
@@ -395,8 +395,8 @@ class adnExaminationEventGUI
 			$time_to = $form->getInput("time_to");
 			$time_to = str_pad($time_to["h"], 2, "0", STR_PAD_LEFT).":".
 				str_pad($time_to["m"], 2, "0", STR_PAD_LEFT).":00";
-			$this->event->setDateFrom(new ilDateTime($date["date"]." ".$time_from, IL_CAL_DATETIME));
-			$this->event->setDateTo(new ilDateTime($date["date"]." ".$time_to, IL_CAL_DATETIME));
+			$this->event->setDateFrom(new ilDateTime($date." ".$time_from, IL_CAL_DATETIME));
+			$this->event->setDateTo(new ilDateTime($date." ".$time_to, IL_CAL_DATETIME));
 			 
 			if($this->event->update())
 			{

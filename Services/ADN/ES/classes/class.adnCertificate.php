@@ -787,7 +787,7 @@ class adnCertificate extends adnDBBase
 	 *
 	 * @return array array of professional ids
 	 */
-	function getAllProfessionalsWithValidCertificates()
+	static function getAllProfessionalsWithValidCertificates()
 	{
 		global $ilDB;
 

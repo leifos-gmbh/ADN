@@ -610,7 +610,7 @@ class adnPreparationCandidateGUI
 			$candidate->setLastName($form->getInput("last_name"));
 			$candidate->setFirstName($form->getInput("first_name"));
 			$date = $form->getInput("birthdate");
-			$candidate->setBirthdate(new ilDate($date["date"], IL_CAL_DATE));
+			$candidate->setBirthdate(new ilDate($date, IL_CAL_DATE));
 			$candidate->setCitizenship($form->getInput("citizenship"));
 			$candidate->setSubjectArea($form->getInput("type"));
 			$candidate->setRegisteredForExam($form->getInput("applied"));
@@ -642,7 +642,7 @@ class adnPreparationCandidateGUI
 			{
 				$date = $form->getInput("holdback_until");
 				$candidate->setBlockedBy($form->getInput("holdback_by"));
-				$candidate->setBlockedUntil(new ilDate($date["date"], IL_CAL_DATE));
+				$candidate->setBlockedUntil(new ilDate($date, IL_CAL_DATE));
 			}
 
 			if($candidate->save())
@@ -703,7 +703,7 @@ class adnPreparationCandidateGUI
 			$this->candidate->setLastName($form->getInput("last_name"));
 			$this->candidate->setFirstName($form->getInput("first_name"));
 			$date = $form->getInput("birthdate");
-			$this->candidate->setBirthdate(new ilDate($date["date"], IL_CAL_DATE));
+			$this->candidate->setBirthdate(new ilDate($date, IL_CAL_DATE));
 			$this->candidate->setCitizenship($form->getInput("citizenship"));
 			$this->candidate->setSubjectArea($form->getInput("type"));
 			$this->candidate->setRegisteredForExam($form->getInput("applied"));
@@ -735,7 +735,7 @@ class adnPreparationCandidateGUI
 			{
 				$date = $form->getInput("holdback_until");
 				$this->candidate->setBlockedBy($form->getInput("holdback_by"));
-				$this->candidate->setBlockedUntil(new ilDate($date["date"], IL_CAL_DATE));
+				$this->candidate->setBlockedUntil(new ilDate($date, IL_CAL_DATE));
 			}
 			else
 			{
@@ -839,7 +839,7 @@ class adnPreparationCandidateGUI
 			$a_form->getInput("holdback"))
 		{
 			$date = $a_form->getInput("holdback_until");
-			if($date["date"] >= date("Y-m-d"))
+			if($date >= date("Y-m-d"))
 			{
 				$message = $lng->txt("adn_exam_application_holdback");
 				$button_ok = $lng->txt("adn_allow_application");
@@ -854,7 +854,7 @@ class adnPreparationCandidateGUI
 			$date = $a_form->getInput("birthdate");
 			include_once("./Services/ADN/ES/classes/class.adnCertifiedProfessional.php");
 			if(!adnCertifiedProfessional::isUserUnique($a_form->getInput("last_name"), 
-				$a_form->getInput("first_name"), new ilDate($date["date"], IL_CAL_DATE), $a_id))
+				$a_form->getInput("first_name"), new ilDate($date, IL_CAL_DATE), $a_id))
 			{
 				if(!$message)
 				{
@@ -934,7 +934,7 @@ class adnPreparationCandidateGUI
 			$cgui->addHiddenItem("last_name", $a_form->getInput("last_name"));
 			$cgui->addHiddenItem("first_name", $a_form->getInput("first_name"));
 			$date = $a_form->getInput("birthdate");
-			$date = explode("-", $date["date"]);
+			$date = explode("-", $date);
 			$cgui->addHiddenItem("birthdate[date][d]", $date[2]);
 			$cgui->addHiddenItem("birthdate[date][m]", $date[1]);
 			$cgui->addHiddenItem("birthdate[date][y]", $date[0]);
@@ -968,7 +968,7 @@ class adnPreparationCandidateGUI
 			$cgui->addHiddenItem("holdback", $a_form->getInput("holdback"));
 			$cgui->addHiddenItem("holdback_by", $a_form->getInput("holdback_by"));
 			$date = $a_form->getInput("holdback_until");
-			$date = explode("-", $date["date"]);
+			$date = explode("-", $date);
 			$cgui->addHiddenItem("holdback_until[date][d]", $date[2]);
 			$cgui->addHiddenItem("holdback_until[date][m]", $date[1]);
 			$cgui->addHiddenItem("holdback_until[date][y]", $date[0]);
