@@ -111,7 +111,7 @@ class adnCountry extends adnDBBase
 		$this->setCode($set["code"]);
 		$this->setName($set["name"]);
 
-		parent::read($id, "adn_md_country");
+		parent::_read($id, "adn_md_country");
 	}
 
 	/**
@@ -145,7 +145,7 @@ class adnCountry extends adnDBBase
 			
 		$ilDB->insert("adn_md_country", $fields);
 
-		parent::save($id, "adn_md_country");
+		parent::_save($id, "adn_md_country");
 		
 		return $id;
 	}
@@ -169,7 +169,7 @@ class adnCountry extends adnDBBase
 
 		$ilDB->update("adn_md_country", $fields, array("id"=>array("integer", $id)));
 
-		parent::update($id, "adn_md_country");
+		parent::_update($id, "adn_md_country");
 
 		return true;
 	}

@@ -222,7 +222,7 @@ class adnQuestionTargetNumbers extends adnDBBase
 		}
 		$this->setObjectives($obj);
 		
-		parent::read($id, "adn_ed_quest_target_nr");
+		parent::_read($id, "adn_ed_quest_target_nr");
 	}
 
 	/**
@@ -259,7 +259,7 @@ class adnQuestionTargetNumbers extends adnDBBase
 
 		$this->saveObjectives();
 
-		parent::save($id, "adn_ed_quest_target_nr");
+		parent::_save($id, "adn_ed_quest_target_nr");
 		
 		return $id;
 	}
@@ -285,7 +285,7 @@ class adnQuestionTargetNumbers extends adnDBBase
 
 		$this->saveObjectives();
 
-		parent::update($id, "adn_ed_quest_target_nr");
+		parent::_update($id, "adn_ed_quest_target_nr");
 
 		return true;
 	}

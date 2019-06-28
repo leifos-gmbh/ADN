@@ -132,7 +132,7 @@ class adnGoodInTransitCategory extends adnDBBase
 		$this->setName($set["name"]);
 		$this->setType($set["type"]);
 
-		parent::read($id, "adn_ed_good_category");
+		parent::_read($id, "adn_ed_good_category");
 	}
 
 	/**
@@ -165,7 +165,7 @@ class adnGoodInTransitCategory extends adnDBBase
 			
 		$ilDB->insert("adn_ed_good_category", $fields);
 
-		parent::save($id, "adn_ed_good_category");
+		parent::_save($id, "adn_ed_good_category");
 		
 		return $id;
 	}
@@ -189,7 +189,7 @@ class adnGoodInTransitCategory extends adnDBBase
 		
 		$ilDB->update("adn_ed_good_category", $fields, array("id"=>array("integer", $id)));
 
-		parent::update($id, "adn_ed_good_category");
+		parent::_update($id, "adn_ed_good_category");
 
 		return true;
 	}

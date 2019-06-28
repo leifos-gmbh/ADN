@@ -140,7 +140,7 @@ class adnCoChair extends adnDBBase
 		$this->setSalutation($set["salutation"]);
 		$this->setName($set["name"]);
 
-		parent::read($a_id, "adn_md_cochair");
+		parent::_read($a_id, "adn_md_cochair");
 	}
 
 	/**
@@ -175,7 +175,7 @@ class adnCoChair extends adnDBBase
 			
 		$ilDB->insert("adn_md_cochair", $fields);
 
-		parent::save($id, "adn_md_cochair");
+		parent::_save($id, "adn_md_cochair");
 		
 		return $id;
 	}
@@ -199,7 +199,7 @@ class adnCoChair extends adnDBBase
 		
 		$ilDB->update("adn_md_cochair", $fields, array("id"=>array("integer", $id)));
 
-		parent::update($id, "adn_md_cochair");
+		parent::_update($id, "adn_md_cochair");
 
 		return true;
 	}

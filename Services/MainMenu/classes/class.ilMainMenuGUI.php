@@ -455,8 +455,6 @@ class ilMainMenuGUI {
 	 * @throws ilTemplateException
 	 */
 	public function getHTML() {
-	{
-
 		// this is a workaround for bugs like 14016
 		// the main menu does not need the YUI connection, but many other
 		// features since they rely on il.Util.sendAjaxGetRequestToUrl (see Services/Javascript)

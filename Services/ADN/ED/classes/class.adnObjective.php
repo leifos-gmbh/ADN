@@ -227,7 +227,7 @@ class adnObjective extends adnDBBase
 		$this->setNumber($set["nr"]);
 		$this->setSheetSubjected($set["sheet_subjected"]);
 
-		parent::read($a_id, "adn_ed_objective");
+		parent::_read($a_id, "adn_ed_objective");
 	}
 
 	/**
@@ -264,7 +264,7 @@ class adnObjective extends adnDBBase
 			
 		$ilDB->insert("adn_ed_objective", $fields);
 
-		parent::save($id, "adn_ed_objective");
+		parent::_save($id, "adn_ed_objective");
 		
 		return $id;
 	}
@@ -288,7 +288,7 @@ class adnObjective extends adnDBBase
 		
 		$ilDB->update("adn_ed_objective", $fields, array("id"=>array("integer", $id)));
 
-		parent::update($id, "adn_ed_objective");
+		parent::_update($id, "adn_ed_objective");
 
 		return true;
 	}

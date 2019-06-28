@@ -177,7 +177,7 @@ class adnSubobjective extends adnDBBase
 		$this->setTopic($set["topic"]);
 		$this->setNumber($set["nr"]);
 
-		parent::read($id, "adn_ed_subobjective");
+		parent::_read($id, "adn_ed_subobjective");
 	}
 
 	/**
@@ -212,7 +212,7 @@ class adnSubobjective extends adnDBBase
 			
 		$ilDB->insert("adn_ed_subobjective", $fields);
 
-		parent::save($id, "adn_ed_subobjective");
+		parent::_save($id, "adn_ed_subobjective");
 		
 		return $id;
 	}
@@ -236,7 +236,7 @@ class adnSubobjective extends adnDBBase
 		
 		$ilDB->update("adn_ed_subobjective", $fields, array("id"=>array("integer", $id)));
 
-		parent::update($id, "adn_ed_subobjective");
+		parent::_update($id, "adn_ed_subobjective");
 
 		return true;
 	}

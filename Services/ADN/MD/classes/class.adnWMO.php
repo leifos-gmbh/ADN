@@ -687,7 +687,7 @@ class adnWMO extends adnDBBase
 		$this->setCostExtension($set["ext_nr"], $set["ext_description"], $set["ext_cost"]/100);
 		$this->setCostExam($set["exam_nr"], $set["exam_description"], $set["exam_cost"]/100);
 
-		parent::read($id, "adn_md_wmo");
+		parent::_read($id, "adn_md_wmo");
 	}
 
 	/**
@@ -752,7 +752,7 @@ class adnWMO extends adnDBBase
 		
 		$ilDB->insert("adn_md_wmo", $fields);
 
-		parent::save($id, "adn_md_wmo");
+		parent::_save($id, "adn_md_wmo");
 
 		return $id;
 	}
@@ -776,7 +776,7 @@ class adnWMO extends adnDBBase
 
 		$ilDB->update("adn_md_wmo", $fields, array("id"=>array("integer", $id)));
 
-		parent::update($id, "adn_md_wmo");
+		parent::_update($id, "adn_md_wmo");
 
 		return true;
 	}

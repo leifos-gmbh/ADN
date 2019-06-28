@@ -71,7 +71,7 @@ class adnExamInfoLetter extends adnDBBase
 		$set = $ilDB->fetchAssoc($res);
 		$this->setFileName($set["ifile"]);
 		
-		parent::read($id, "adn_ep_information");
+		parent::_read($id, "adn_ep_information");
 	}
 
 	/**
@@ -114,7 +114,7 @@ class adnExamInfoLetter extends adnDBBase
 			
 		$ilDB->insert("adn_ep_information", $fields);
 
-		parent::save($id, "adn_ep_information");
+		parent::_save($id, "adn_ep_information");
 		
 		return $id;
 	}
@@ -148,7 +148,7 @@ class adnExamInfoLetter extends adnDBBase
 
 		$ilDB->update("adn_ep_information", $fields, array("id"=>array("integer", $id)));
 
-		parent::update($id, "adn_ep_information");
+		parent::_update($id, "adn_ep_information");
 
 		return true;
 	}

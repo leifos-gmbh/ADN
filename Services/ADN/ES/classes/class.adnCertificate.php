@@ -449,7 +449,7 @@ class adnCertificate extends adnDBBase
 					$rec["type_".$k]);
 			}
 
-			parent::read($this->getId(), "adn_es_certificate");
+			parent::_read($this->getId(), "adn_es_certificate");
 		}
 	}
 
@@ -550,7 +550,7 @@ class adnCertificate extends adnDBBase
 			$ilDB->unlockTables();
 		}
 
-		parent::save($id, "adn_es_certificate");
+		parent::_save($id, "adn_es_certificate");
 
 		return $id;
 	}
@@ -580,7 +580,7 @@ class adnCertificate extends adnDBBase
 		
 		$ilDB->update("adn_es_certificate", $fields, array("id"=>array("integer", $id)));
 
-		parent::update($id, "adn_es_certificate");
+		parent::_update($id, "adn_es_certificate");
 
 		return true;
 	}
@@ -868,7 +868,7 @@ class adnCertificate extends adnDBBase
 		// unlock table
 		$ilDB->unlockTables();
 
-		parent::save($id, "adn_es_certificate");
+		parent::_save($id, "adn_es_certificate");
 	}
 
 	/**

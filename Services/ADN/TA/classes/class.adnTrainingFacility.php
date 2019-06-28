@@ -113,7 +113,7 @@ class adnTrainingFacility extends adnDBBase
 		$this->setProvider($set["ta_provider_id"]);
 		$this->setName($set["name"]);
 
-		parent::read($id, "adn_ta_instructor");
+		parent::_read($id, "adn_ta_instructor");
 	}
 
 	/**
@@ -147,7 +147,7 @@ class adnTrainingFacility extends adnDBBase
 			
 		$ilDB->insert("adn_ta_facility", $fields);
 
-		parent::save($id, "adn_ta_facility");
+		parent::_save($id, "adn_ta_facility");
 		
 		return $id;
 	}
@@ -171,7 +171,7 @@ class adnTrainingFacility extends adnDBBase
 		
 		$ilDB->update("adn_ta_facility", $fields, array("id"=>array("integer", $id)));
 
-		parent::update($id, "adn_ta_facility");
+		parent::_update($id, "adn_ta_facility");
 
 		return true;
 	}

@@ -89,7 +89,7 @@ class adnAreaOfExpertise extends adnDBBase
 		$set = $ilDB->fetchAssoc($res);
 		$this->setName($set["title"]);
 
-		parent::read($id, "adn_ta_expertise");
+		parent::_read($id, "adn_ta_expertise");
 	}
 
 	/**
@@ -122,7 +122,7 @@ class adnAreaOfExpertise extends adnDBBase
 			
 		$ilDB->insert("adn_ta_expertise", $fields);
 
-		parent::save($id, "adn_ta_expertise");
+		parent::_save($id, "adn_ta_expertise");
 		
 		return $id;
 	}
@@ -146,7 +146,7 @@ class adnAreaOfExpertise extends adnDBBase
 		
 		$ilDB->update("adn_ta_expertise", $fields, array("id"=>array("integer", $id)));
 
-		parent::update($id, "adn_ta_expertise");
+		parent::_update($id, "adn_ta_expertise");
 
 		return true;
 	}

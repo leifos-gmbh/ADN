@@ -182,7 +182,7 @@ class adnLicense extends adnDBBase
 		}
 		$this->setGoods($goods);
 
-		parent::read($id, "adn_ed_license");
+		parent::_read($id, "adn_ed_license");
 	}
 
 	/**
@@ -229,7 +229,7 @@ class adnLicense extends adnDBBase
 
 		$this->saveGoods();
 
-		parent::save($id, "adn_ed_license");
+		parent::_save($id, "adn_ed_license");
 		
 		return $id;
 	}
@@ -265,7 +265,7 @@ class adnLicense extends adnDBBase
 
 		$this->saveGoods();
 
-		parent::update($id, "adn_ed_license");
+		parent::_update($id, "adn_ed_license");
 
 		return true;
 	}

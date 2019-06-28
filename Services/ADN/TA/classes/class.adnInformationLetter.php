@@ -92,7 +92,7 @@ class adnInformationLetter extends adnDBBase
 		$this->setName($set["name"]);
 		$this->setFileName($set["ifile"]);
 
-		parent::read($id, "adn_ta_information");
+		parent::_read($id, "adn_ta_information");
 	}
 
 	/**
@@ -127,7 +127,7 @@ class adnInformationLetter extends adnDBBase
 			
 		$ilDB->insert("adn_ta_information", $fields);
 
-		parent::save($id, "adn_ta_information");
+		parent::_save($id, "adn_ta_information");
 		
 		return $id;
 	}
@@ -151,7 +151,7 @@ class adnInformationLetter extends adnDBBase
 		
 		$ilDB->update("adn_ta_information", $fields, array("id"=>array("integer", $id)));
 
-		parent::update($id, "adn_ta_information");
+		parent::_update($id, "adn_ta_information");
 
 		return true;
 	}

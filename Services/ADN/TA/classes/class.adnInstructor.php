@@ -199,7 +199,7 @@ class adnInstructor extends adnDBBase
 		$this->setLastName($set["last_name"]);
 		$this->setFirstName($set["first_name"]);
 
-		parent::read($id, "adn_ta_instructor");
+		parent::_read($id, "adn_ta_instructor");
 
 		// get instructor training types
 		$set = $ilDB->query("SELECT *".
@@ -311,7 +311,7 @@ class adnInstructor extends adnDBBase
 		$this->saveTrainingTypes();
 		$this->saveAreasOfExpertise();
 
-		parent::save($id, "adn_ta_instructor");
+		parent::_save($id, "adn_ta_instructor");
 		
 		return $id;
 	}
@@ -338,7 +338,7 @@ class adnInstructor extends adnDBBase
 		$this->saveTrainingTypes();
 		$this->saveAreasOfExpertise();
 
-		parent::update($id, "adn_ta_instructor");
+		parent::_update($id, "adn_ta_instructor");
 
 		return true;
 	}

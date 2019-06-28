@@ -252,7 +252,7 @@ class adnGoodInTransit extends adnDBBase
 		$this->setFileName($set["material_file"]);
 		// upload date?
 
-		parent::read($id, "adn_ed_good");
+		parent::_read($id, "adn_ed_good");
 	}
 
 	/**
@@ -304,7 +304,7 @@ class adnGoodInTransit extends adnDBBase
 			
 		$ilDB->insert("adn_ed_good", $fields);
 
-		parent::save($id, "adn_ed_good");
+		parent::_save($id, "adn_ed_good");
 		
 		return $id;
 	}
@@ -341,7 +341,7 @@ class adnGoodInTransit extends adnDBBase
 
 		$ilDB->update("adn_ed_good", $fields, array("id"=>array("integer", $id)));
 
-		parent::update($id, "adn_ed_good");
+		parent::_update($id, "adn_ed_good");
 
 		return true;
 	}

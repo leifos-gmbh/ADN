@@ -328,7 +328,7 @@ class adnAnswerSheet extends adnDBBase
 		$this->setNewGood($set["new_ed_good_id"]);
 		$this->setGeneratedOn(new ilDate($set["generated_on"], IL_CAL_DATE, ilTimeZone::UTC));
 		
-		parent::read($id, "adn_ep_answer_sheet");
+		parent::_read($id, "adn_ep_answer_sheet");
 
 		// get questions
 		$res = $ilDB->query("SELECT ed_question_id,ed_objective_id".
@@ -395,7 +395,7 @@ class adnAnswerSheet extends adnDBBase
 
 		$ilDB->insert("adn_ep_answer_sheet", $fields);
 
-		parent::save($id, "adn_ep_answer_sheet");
+		parent::_save($id, "adn_ep_answer_sheet");
 
 		$this->saveQuestions();
 		
@@ -441,7 +441,7 @@ class adnAnswerSheet extends adnDBBase
 
 		$ilDB->update("adn_ep_answer_sheet", $fields, array("id"=>array("integer", $id)));
 
-		parent::update($id, "adn_ep_answer_sheet");
+		parent::_update($id, "adn_ep_answer_sheet");
 
 		$this->saveQuestions();
 

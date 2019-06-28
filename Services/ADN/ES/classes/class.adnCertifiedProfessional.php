@@ -809,7 +809,7 @@ class adnCertifiedProfessional extends adnDBBase
 		$this->setLastEvent($set["last_ta_event_id"]);
 		$this->setIliasUserId($set["ilias_user_id"]);
 
-		parent::read($id, "adn_cp_professional");
+		parent::_read($id, "adn_cp_professional");
 	}
 
 	/**
@@ -884,7 +884,7 @@ class adnCertifiedProfessional extends adnDBBase
 			
 		$ilDB->insert("adn_cp_professional", $fields);
 
-		parent::save($id, "adn_cp_professional");
+		parent::_save($id, "adn_cp_professional");
 		
 		return $id;
 	}
@@ -908,7 +908,7 @@ class adnCertifiedProfessional extends adnDBBase
 
 		$ilDB->update("adn_cp_professional", $fields, array("id"=>array("integer", $id)));
 
-		parent::update($id, "adn_cp_professional");
+		parent::_update($id, "adn_cp_professional");
 
 		return true;
 	}
