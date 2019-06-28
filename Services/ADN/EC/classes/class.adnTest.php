@@ -178,7 +178,7 @@ class adnTest
 		$res = $ilDB->query($query);
 
 		$results = array();
-		while($row = $res->fetchRow(DB_FETCHMODE_OBJECT))
+		while($row = $res->fetchObject())
 		{
 			$results[$row->ed_question_id] = $row->answer;
 		}

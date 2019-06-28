@@ -373,7 +373,7 @@ class adnTrainingEventGUI
 		{
 			$date_from = $form->getInput("dfrom");
 			$date_to = $form->getInput("dto");
-			if($date_from["date"] <= $date_to["date"])
+			if($date_from <= $date_to)
 			{
 				// input ok: create new training event
 				include_once("./Services/ADN/TA/classes/class.adnTrainingEvent.php");
@@ -381,9 +381,9 @@ class adnTrainingEventGUI
 				$training_event->setProvider($this->provider_id);
 				$training_event->setType($form->getInput("type"));
 				$date = $form->getInput("dfrom");
-				$training_event->setDateFrom(new ilDate($date["date"], IL_CAL_DATE));
+				$training_event->setDateFrom(new ilDate($date, IL_CAL_DATE));
 				$date = $form->getInput("dto");
-				$training_event->setDateTo(new ilDate($date["date"], IL_CAL_DATE));
+				$training_event->setDateTo(new ilDate($date, IL_CAL_DATE));
 				$training_event->setFacility($form->getInput("facility"));
 
 				if($training_event->save())
@@ -420,12 +420,12 @@ class adnTrainingEventGUI
 		{
 			$date_from = $form->getInput("dfrom");
 			$date_to = $form->getInput("dto");
-			if($date_from["date"] <= $date_to["date"])
+			if($date_from <= $date_to)
 			{
 				// perform update
 				$this->training_event->setType($form->getInput("type"));
-				$this->training_event->setDateFrom(new ilDate($date_from["date"], IL_CAL_DATE));
-				$this->training_event->setDateTo(new ilDate($date_to["date"], IL_CAL_DATE));
+				$this->training_event->setDateFrom(new ilDate($date_from, IL_CAL_DATE));
+				$this->training_event->setDateTo(new ilDate($date_to, IL_CAL_DATE));
 				$this->training_event->setFacility($form->getInput("facility"));
 
 				if($this->training_event->update())

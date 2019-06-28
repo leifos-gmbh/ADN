@@ -216,7 +216,7 @@ class adnCaseQuestion extends adnExaminationQuestion
 				// remove good related answers
 				include_once "Services/ADN/ED/classes/class.adnGoodRelatedAnswer.php";
 				$all = adnGoodRelatedAnswer::getAllAnswers($id);
-				if(sizeof($all))
+				if(is_array($all) && count($all) > 0)
 				{
 					foreach($all as $item)
 					{
@@ -249,7 +249,7 @@ class adnCaseQuestion extends adnExaminationQuestion
 			$ilDB->manipulate("DELETE FROM adn_ed_quest_case_good".
 				" WHERE ed_question_id = ".$ilDB->quote($id, "integer"));
 
-			if(sizeof($this->goods))
+			if(is_array($this->goods) && count($this->goods) > 0)
 			{
 				foreach($this->goods as $good_id)
 				{

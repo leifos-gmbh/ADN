@@ -354,7 +354,7 @@ class adnAnswerSheetAssignment extends adnDBBase
 		$query = "SELECT * FROM adn_ep_cand_sheet ".
 			"WHERE ep_answer_sheet_id = ".$ilDB->quote($a_sheet_id,'integer');
 		$res = $ilDB->query($query);
-		while($row = $res->fetchRow(DB_FETCHMODE_OBJECT))
+		while($row = $res->fetchObject())
 		{
 			return true;
 		}

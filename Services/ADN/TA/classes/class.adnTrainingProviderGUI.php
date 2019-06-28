@@ -662,7 +662,7 @@ class adnTrainingProviderGUI
 			if($form->getInput("train_type_".$type))
 			{
 				$date = $form->getInput("approved_".$type);
-				$types[$type] = new ilDate($date["date"], IL_CAL_DATE, ilTimeZone::UTC);
+				$types[$type] = new ilDate($date, IL_CAL_DATE, ilTimeZone::UTC);
 			}
 		}
 		$this->training_provider->setTypesOfTraining($types);
