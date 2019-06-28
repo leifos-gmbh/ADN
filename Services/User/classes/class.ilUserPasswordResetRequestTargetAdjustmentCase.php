@@ -37,6 +37,9 @@ class ilUserPasswordResetRequestTargetAdjustmentCase extends ilUserRequestTarget
 	 */
 	public function shouldAdjustRequest()
 	{
+		// adn-patch start
+		return false;
+		// adn-patch end
 		if(ilSession::get('used_external_auth'))
 		{
 			return false;
