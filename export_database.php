@@ -1,5 +1,5 @@
 <?php
-
+gc_enable();
 define("SCRIPT_CLIENT", "main");
 define("EXPORT_FILE", "db_export.xml");
 
@@ -56,6 +56,7 @@ foreach ($ilDB->listTables() as $table)
 	$xml->endElement();
 	echo(" Flush to XML-File\n");
 	$xml->flush();
+	gc_collect_cycles();
 }
 $xml->endElement();
 $xml->endDocument();
