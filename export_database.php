@@ -52,6 +52,8 @@ foreach ($ilDB->listTables() as $table)
 			$xml->endElement();
 		}
 		$xml->endElement();
+		$xml->flush();
+		gc_collect_cycles();
 	}
 	$xml->endElement();
 	echo(" Flush to XML-File\n");
