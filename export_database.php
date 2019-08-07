@@ -2,7 +2,7 @@
 gc_enable();
 define("SCRIPT_CLIENT", "main");
 define("EXPORT_FILE", "db_export.xml");
-$mlimit = (int)(ini_get('memory_limit') * 1024 * 1024);
+$mlimit = (int)(ini_get('memory_limit')*0.66 * 1024 * 1024);
 require_once("Services/Init/classes/class.ilInitialisation.php");
 class CustomInitialisation extends ilInitialisation{
 	public static function customInit($client_id)
@@ -31,7 +31,7 @@ $xml->startElement("tables");
 
 foreach ($ilDB->listTables() as $table)
 {
-	echo("Process " . $table. "                                  \r");
+	echo("Process " . $table. "                                                \r");
 	$xml->startElement("table");
 	$xml->startAttribute("name");
 	$xml->text($table);
@@ -67,7 +67,8 @@ foreach ($ilDB->listTables() as $table)
 		}
 		if($qc > 1 && $qc%10 == 1)
 		{
-			echo("Process " . $table. " Querys: ". ($qc*100) . " Memory usage: " . memory_get_usage() . "/" . $mlimit . " MB " .(memory_get_usage() > $mlimit*0.66 ? " (critical)": "") . "\r");
+			echo("Process " . $table. " Querys: ". ($qc) . " Memory usage: " . memory_get_usage() . "/" . $mlimit
+				. " MB " .(memory_get_usage() > $mlimit ? " (critical)": "") . "                     \r");
 		}
 		$qc++;
 	}while($i >= 100);
