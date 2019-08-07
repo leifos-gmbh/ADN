@@ -23,7 +23,7 @@ global $ilDB;
 echo("Start\n");
 
 $xml = new XMLWriter();
-$xml->openMemory();
+$xml->openURI(EXPORT_FILE);
 $xml->startDocument("1.0","UTF-8");
 
 $xml->startElement("tables");
@@ -35,7 +35,7 @@ foreach ($ilDB->listTables() as $table)
 	$xml->startAttribute("name");
 	$xml->text($table);
 	$xml->endAttribute();
-
+	echo(" Read from Database\n");
 	$res = $ilDB->query("SELECT * FROM ".$table);
 
 	while($row = $ilDB->fetchAssoc($res))
@@ -54,10 +54,10 @@ foreach ($ilDB->listTables() as $table)
 		$xml->endElement();
 	}
 	$xml->endElement();
-
+	echo(" Flush to XML-File\n");
+	$xml->flush();
 }
 $xml->endElement();
 $xml->endDocument();
-
-file_put_contents(EXPORT_FILE, $xml->outputMemory());
+$xml->flush();
 echo("Stop\n");
