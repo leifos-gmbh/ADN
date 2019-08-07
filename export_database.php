@@ -40,7 +40,9 @@ foreach ($ilDB->listTables() as $table)
 	$qc = 0;
 	do{
 		$i = 0;
-		$res = $ilDB->query("SELECT * FROM ".$table ." LIMIT 100 OFFSET " . (($qc*100)));
+		$ilDB->setLimit(100, $qc*100);
+		$res = $ilDB->query("SELECT * FROM ".$table);
+
 		$ex = false;
 
 		while($row = $ilDB->fetchAssoc($res))
