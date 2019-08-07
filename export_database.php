@@ -2,7 +2,7 @@
 gc_enable();
 define("SCRIPT_CLIENT", "main");
 define("EXPORT_FILE", "db_export.xml");
-$mlimit = (int)(ini_get('memory_limit')*(0.66) * 1024 * 1024);
+$mlimit = (int)(ini_get('memory_limit') * 1024 * 1024);
 require_once("Services/Init/classes/class.ilInitialisation.php");
 class CustomInitialisation extends ilInitialisation{
 	public static function customInit($client_id)
@@ -20,7 +20,7 @@ CustomInitialisation::customInit(SCRIPT_CLIENT);
  */
 global $ilDB;
 
-echo("Start\n");
+echo("Start export client ". SCRIPT_CLIENT . " to ". EXPORT_FILE ."\n");
 echo("Memory Limit: " . ($mlimit/1024/1024) . "MB\n");
 
 $xml = new XMLWriter();
@@ -31,12 +31,11 @@ $xml->startElement("tables");
 
 foreach ($ilDB->listTables() as $table)
 {
-	echo("Process " . $table. "\n");
+	echo("Process " . $table. "                                  \r");
 	$xml->startElement("table");
 	$xml->startAttribute("name");
 	$xml->text($table);
 	$xml->endAttribute();
-	echo(" Read from Database\n");
 	$qc = 0;
 	do{
 		$i = 0;
@@ -61,25 +60,23 @@ foreach ($ilDB->listTables() as $table)
 
 			if( memory_get_usage() > $mlimit ) {
 				$ex = true;
-				echo(" Flush to XML-File\n");
 				$xml->flush();
 				gc_collect_cycles();
 			}
 			$i++;
 		}
-		if($qc > 1)
+		if($qc > 1 && $qc%10 == 1)
 		{
-			echo(memory_get_usage() . "/" . $mlimit . " MB Memory" .(memory_get_usage() > $mlimit ? " (exceeded)": "") . "\r");
+			echo("Process " . $table. " Querys: ". ($qc*100) . " Memory usage: " . memory_get_usage() . "/" . $mlimit . " MB " .(memory_get_usage() > $mlimit*0.66 ? " (critical)": "") . "\r");
 		}
 		$qc++;
 	}while($i >= 100);
 
 	$xml->endElement();
-
 	$xml->flush();
 	gc_collect_cycles();
 }
 $xml->endElement();
 $xml->endDocument();
 $xml->flush();
-echo("Stop\n");
+echo("Stop                                                                                        \n");
