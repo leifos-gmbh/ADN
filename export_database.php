@@ -2,7 +2,7 @@
 gc_enable();
 define("SCRIPT_CLIENT", "main");
 define("EXPORT_FILE", "db_export.xml");
-
+$mlimit = (int)(ini_get('memory_limit')*(0.66) * 1024 * 1024);
 require_once("Services/Init/classes/class.ilInitialisation.php");
 class CustomInitialisation extends ilInitialisation{
 	public static function customInit($client_id)
@@ -21,6 +21,7 @@ CustomInitialisation::customInit(SCRIPT_CLIENT);
 global $ilDB;
 
 echo("Start\n");
+echo("Memory Limit: " . ($mlimit/1024/1024) . "MB\n");
 
 $xml = new XMLWriter();
 $xml->openURI(EXPORT_FILE);
@@ -36,27 +37,43 @@ foreach ($ilDB->listTables() as $table)
 	$xml->text($table);
 	$xml->endAttribute();
 	echo(" Read from Database\n");
-	$res = $ilDB->query("SELECT * FROM ".$table);
+	$qc = 0;
+	do{
+		$i = 0;
+		$res = $ilDB->query("SELECT * FROM ".$table ." LIMIT 100 OFFSET " . (($qc*100)));
+		$ex = false;
 
-	while($row = $ilDB->fetchAssoc($res))
-	{
-		$xml->startElement("row");
-		foreach($row as $column => $value)
+		while($row = $ilDB->fetchAssoc($res))
 		{
-			$xml->startElement("column");
-			$xml->startAttribute("name");
-			$xml->text($column);
-			$xml->endAttribute();
-			$xml->writeCdata($value);
-			//$xml->text($value);
+			$xml->startElement("row");
+			foreach($row as $column => $value)
+			{
+				$xml->startElement("column");
+				$xml->startAttribute("name");
+				$xml->text($column);
+				$xml->endAttribute();
+				$xml->writeCdata($value);
+				$xml->endElement();
+			}
 			$xml->endElement();
+
+			if( memory_get_usage() > $mlimit ) {
+				$ex = true;
+				echo(" Flush to XML-File\n");
+				$xml->flush();
+				gc_collect_cycles();
+			}
+			$i++;
 		}
-		$xml->endElement();
-		$xml->flush();
-		gc_collect_cycles();
-	}
+		if($qc > 1)
+		{
+			echo(memory_get_usage() . "/" . $mlimit . " MB Memory" .(memory_get_usage() > $mlimit ? " (exceeded)": "") . "\r");
+		}
+		$qc++;
+	}while($i >= 100);
+
 	$xml->endElement();
-	echo(" Flush to XML-File\n");
+
 	$xml->flush();
 	gc_collect_cycles();
 }
