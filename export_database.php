@@ -36,6 +36,13 @@ foreach ($ilDB->listTables() as $table)
 	$xml->startAttribute("name");
 	$xml->text($table);
 	$xml->endAttribute();
+	if($ilDB->sequenceExists($table))
+	{
+		$xml->startAttribute("seq");
+		$xml->text($ilDB->nextId($table));
+		$xml->endAttribute();
+	}
+
 	$qc = 0;
 	do{
 		$i = 0;

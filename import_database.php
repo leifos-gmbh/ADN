@@ -65,6 +65,13 @@ class ilImportDatabase extends ilSaxParser{
 
 				echo("Process " . $this->table. "\n");
 
+				if($ilDB->sequenceExists($this->table) && isset($a_attribs["seq"]))
+				{
+					$ilDB->dropSequence($this->table);
+					$ilDB->createSequence($this->table, (int) $a_attribs["seq"]-1);
+					echo("Set sequence of ". $this->table. "\n");
+				}
+
 				$sql = "DELETE FROM ". $this->table;
 				$ilDB->manipulate($sql);
 
