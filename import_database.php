@@ -21,6 +21,7 @@ class ilImportDatabase extends ilSaxParser{
 	private $column;
 	private $columns;
 	private $character;
+	private $ignore;
 
 	/**
 	 * set event handler
@@ -55,6 +56,13 @@ class ilImportDatabase extends ilSaxParser{
 				break;
 			case "table":
 				$this->table = $a_attribs["name"];
+				$this->ignore = false;
+				if(!$ilDB->tableExists($this->table)) {
+					echo("Missing Table " . $this->table. "\n");
+					$this->ignore = true;
+					break;
+				}
+
 				echo("Process " . $this->table. "\n");
 
 				$sql = "DELETE FROM ". $this->table;
@@ -87,13 +95,16 @@ class ilImportDatabase extends ilSaxParser{
 				$this->columns[$this->column] = $ilDB->quote( $this->character );
 				break;
 			case "row":
-				$columns = '(' . implode(array_keys($this->columns), ", ").')';
-				$values = '(' . implode($this->columns, ", ").')';
+				if(!$this->ignore) {
+					$columns = '(' . implode(array_keys($this->columns), ", ") . ')';
+					$values = '(' . implode($this->columns, ", ") . ')';
 
-				$sql = "INSERT INTO ".$this->table.
-					" " . $columns .
-					" VALUES ".$values.";";
-				$ilDB->manipulate($sql);
+					$sql = "INSERT INTO " . $this->table .
+						" " . $columns .
+						" VALUES " . $values . ";";
+					$ilDB->manipulate($sql);
+				}
+
 				break;
 		}
 		$this->character = "";
