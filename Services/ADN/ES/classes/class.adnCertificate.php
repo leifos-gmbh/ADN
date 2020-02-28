@@ -1242,7 +1242,7 @@ class adnCertificate extends adnDBBase
 			" FROM adn_es_duplicate".
 			" WHERE es_certificate_id = ".$ilDB->quote($a_cert_id, "integer");
 		$res = $ilDB->query($query);
-		$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+		$row = $res->fetchRow(\ilDBConstants::FETCHMODE_ASSOC);
 		return $row["num"] > 0 ? true : false;
 	}
 
