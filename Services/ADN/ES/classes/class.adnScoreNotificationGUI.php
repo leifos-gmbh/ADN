@@ -148,7 +148,7 @@ class adnScoreNotificationGUI
 		
 		$event_id = $_REQUEST['ev_id'];
 		$ass_ids = $_REQUEST['ass_id'];
-		if(!count($ass_ids))
+		if(empty($ass_ids))
 		{
 			ilUtil::sendFailure($lng->txt('select_one'),true);
 			$ilCtrl->redirect($this,'listParticipants');

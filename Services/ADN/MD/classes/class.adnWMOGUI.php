@@ -268,6 +268,8 @@ class adnWMOGUI
 				$form->getInput("ceval"));
 			$this->office->setCostExam($form->getInput("cxno"), $form->getInput("cxdesc"),
 				$form->getInput("cxval"));
+            $this->office->setCostExamGasChem($form->getInput("cxgcno"), $form->getInput("cxgcdesc"),
+                $form->getInput("cxgcval"));
 		
 
 			if($this->office->update())
@@ -528,6 +530,30 @@ class adnWMOGUI
 		$cxval->setMaxLength(20);
 		$form->addItem($cxval);
 
+        $sub = new ilFormSectionHeaderGUI();
+        $sub->setTitle($lng->txt("adn_wmo_cost_exam_gas_chem"));
+        $form->addItem($sub);
+
+        $cxgcno = new ilTextInputGUI($lng->txt("adn_running_id"), "cxgcno");
+        $cxgcno->setRequired(true);
+        $cxgcno->setMaxLength(10);
+        $cxgcno->setSize(10);
+        $form->addItem($cxgcno);
+
+        $cxgcdesc = new ilTextAreaInputGUI($lng->txt("adn_description"), "cxgcdesc");
+        $cxgcdesc->setCols(80);
+        $cxgcdesc->setRows(5);
+        $cxgcdesc->setRequired(true);
+        $form->addItem($cxgcdesc);
+
+        $cxgcval = new ilNumberInputGUI($lng->txt("adn_cost"), "cxgcval");
+        $cxgcval->setRequired(true);
+        $cxgcval->setDecimals(2);
+        $cxgcval->setSize(10);
+        $cxgcval->setSuffix("EUR");
+        $cxgcval->setMaxLength(20);
+        $form->addItem($cxgcval);
+
 
 		if($a_create)
 		{
@@ -589,6 +615,11 @@ class adnWMOGUI
 			$cxno->setValue($cost["no"]);
 			$cxdesc->setValue($cost["desc"]);
 			$cxval->setValue($cost["value"]);
+
+            $cost = $this->office->getCostExamGasChem();
+            $cxgcno->setValue($cost["no"]);
+            $cxgcdesc->setValue($cost["desc"]);
+            $cxgcval->setValue($cost["value"]);
 
 			$form->addCommandButton("updateWMO", $lng->txt("save"));
 		}

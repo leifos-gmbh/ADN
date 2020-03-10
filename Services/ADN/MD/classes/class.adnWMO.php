@@ -41,6 +41,7 @@ class adnWMO extends adnDBBase
 	const COST_DUPLICATE = 2;
 	const COST_EXTENSION = 3;
 	const COST_EXAM = 4;
+    const COST_EXAM_GAS_CHEM = 5;
 
 	/**
 	 * Constructor
@@ -580,6 +581,27 @@ class adnWMO extends adnDBBase
 		return $this->getCost(self::COST_EXAM);
 	}
 
+    /**
+     * Set exam cost for gas/chemistry
+     *
+     * @param int $a_no
+     * @param string $a_desc
+     * @param float $a_value
+     */
+    public function setCostExamGasChem($a_no, $a_desc, $a_value)
+    {
+        $this->setCost(self::COST_EXAM_GAS_CHEM, $a_no, $a_desc, $a_value);
+    }
+
+    /**
+     * get exam cost for gas/chemistry
+     * @return array("no", "desc", "value");
+     */
+    public function getCostExamGasChem()
+    {
+        return $this->getCost(self::COST_EXAM_GAS_CHEM);
+    }
+
 	/**
 	 * Set cost
 	 *
@@ -630,7 +652,7 @@ class adnWMO extends adnDBBase
 	protected function isValidCostType($a_type)
 	{
 		$valid = array(self::COST_CERTIFICATE, self::COST_DUPLICATE, self::COST_EXTENSION,
-			self::COST_EXAM);
+			self::COST_EXAM,self::COST_EXAM_GAS_CHEM);
 		if(in_array($a_type, $valid))
 		{
 			return true;
@@ -654,7 +676,8 @@ class adnWMO extends adnDBBase
 		$res = $ilDB->query("SELECT code_nr,name,subtitle,street,street_no,postal_code,city,visit_street,".
 			"visit_street_no,visit_postal_code,visit_city,bank,bank_id,account_id,bic,iban,phone,".
 			"fax,email,internet,cert_nr,cert_description,cert_cost,duplicate_nr,duplicate_description,".
-			"duplicate_cost,ext_nr,ext_description,ext_cost,exam_nr,exam_description,exam_cost, notification_email".
+			"duplicate_cost,ext_nr,ext_description,ext_cost,exam_nr,exam_description,exam_cost,notification_email,".
+            "exam_gas_chem_nr,exam_gas_chem_description,exam_gas_chem_cost" .
 			" FROM adn_md_wmo".
 			" WHERE id = ".$ilDB->quote($id, "integer"));
 		$set = $ilDB->fetchAssoc($res);
@@ -686,6 +709,7 @@ class adnWMO extends adnDBBase
 			$set["duplicate_cost"]/100);
 		$this->setCostExtension($set["ext_nr"], $set["ext_description"], $set["ext_cost"]/100);
 		$this->setCostExam($set["exam_nr"], $set["exam_description"], $set["exam_cost"]/100);
+		$this->setCostExamGasChem($set["exam_gas_chem_nr"], $set["exam_gas_chem_description"], $set["exam_gas_chem_cost"]/100);
 
 		parent::_read($id, "adn_md_wmo");
 	}
@@ -722,7 +746,8 @@ class adnWMO extends adnDBBase
 		$costs = array(self::COST_CERTIFICATE => "cert",
 			self::COST_DUPLICATE => "duplicate",
 			self::COST_EXTENSION => "ext",
-			self::COST_EXAM => "exam");
+			self::COST_EXAM => "exam",
+            self::COST_EXAM_GAS_CHEM => "exam_gas_chem");
 		foreach($costs as $type => $id)
 		{
 			$cost = $this->getCost($type);

@@ -955,6 +955,9 @@ class adnCertificateGUI
 			$cost = $wmo->getCostExam();
 			$types[adnWMO::COST_EXAM] = $lng->txt("adn_wmo_cost_exam").
 				" (".$cost["no"]." - ".$cost["value"]." EUR)";
+            $cost = $wmo->getCostExamGasChem();
+            $types[adnWMO::COST_EXAM_GAS_CHEM] = $lng->txt("adn_wmo_cost_exam_gas_chem").
+                " (".$cost["no"]." - ".$cost["value"]." EUR)";
 		}
 
 		$type = new ilSelectInputGUI($lng->txt("adn_type_of_cost"), "type");

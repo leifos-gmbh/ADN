@@ -585,7 +585,6 @@ class adnPreparationCandidateGUI
 
 		$form = $this->initCandidateForm("create");
 
-
 		// check input
 		if ($form->checkInput())
 		{
