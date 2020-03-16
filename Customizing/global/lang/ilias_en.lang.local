@@ -265,7 +265,8 @@ adn#:#adn_wmo_created#:#WMO was created.
 adn#:#adn_wmo_cost_certificate#:#Cost Certificate
 adn#:#adn_wmo_cost_duplicate#:#Cost Duplicate
 adn#:#adn_wmo_cost_extension#:#Cost Extension
-adn#:#adn_wmo_cost_exam#:#Cost Exam
+adn#:#adn_wmo_cost_exam#:#Cost Exam Basis
+adn#:#adn_wmo_cost_exam_gas_chem#:#Cost Exam Gas/Chemistry
 adn#:#adn_running_id#:#Running Id
 adn#:#adn_description#:#Description
 adn#:#adn_cost#:#Cost

@@ -461,7 +461,7 @@ class adnAnswerSheet extends adnDBBase
 			$ilDB->manipulate("DELETE FROM adn_ep_sheet_question".
 				" WHERE ep_answer_sheet_id = ".$ilDB->quote($id, "integer"));
 
-			if(sizeof($this->questions))
+			if(!empty($this->questions))
 			{
 				$map = $this->getQuestionMap();
 				foreach($this->questions as $question_id)
@@ -839,7 +839,7 @@ class adnAnswerSheet extends adnDBBase
 			$res = adnQuestionTargetNumbers::validateMCSheet($event->getType(), $this->getQuestions());
 			foreach($res as $type => $items)
 			{
-				if(sizeof($items))
+				if(!empty($items))
 				{
 					return false;
 				}

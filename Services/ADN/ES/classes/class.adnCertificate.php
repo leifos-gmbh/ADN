@@ -528,8 +528,8 @@ class adnCertificate extends adnDBBase
 
 			// lock table to keep table numbering consistent
 			$ilDB->lockTables(array(
-				0 => array('name' => 'adn_es_certificate','type' => ilDB::LOCK_WRITE),
-				1 => array('name' => 'adn_es_certificate_seq', 'type' => ilDB::LOCK_WRITE)
+				0 => array('name' => 'adn_es_certificate','type' => ilDBConstants::LOCK_WRITE),
+				1 => array('name' => 'adn_es_certificate_seq', 'type' => ilDBConstants::LOCK_WRITE)
 			));
 
 			$this->setNumber($this->determineNextNumber());
@@ -855,7 +855,7 @@ class adnCertificate extends adnDBBase
 
 		// lock table to keep table numbering consistent
 		$ilDB->lockTables(array(0 => array('name' => 'adn_es_certificate',
-			'type' => ilDB::LOCK_WRITE)));
+			'type' => ilDBConstants::LOCK_WRITE)));
 
 		$this->setNumber($this->determineNextNumber());
 		$this->setStatus(self::STATUS_VALID);

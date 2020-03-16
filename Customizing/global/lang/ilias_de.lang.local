@@ -299,7 +299,8 @@ adn#:#adn_wmo_created#:#WSD wurde angelegt.
 adn#:#adn_wmo_cost_certificate#:#Kostengegenstand Bescheinigung
 adn#:#adn_wmo_cost_duplicate#:#Kostengegenstand Ersatzausfertigung
 adn#:#adn_wmo_cost_extension#:#Kostengegenstand Verlängerung
-adn#:#adn_wmo_cost_exam#:#Kostengegenstand Prüfungsteilnahme
+adn#:#adn_wmo_cost_exam#:#Kostengegenstand Prüfungsteilnahme Basis
+adn#:#adn_wmo_cost_exam_gas_chem#:#Kostengegenstand Prüfungsteilnahme Gas/Chemie
 adn#:#adn_wmo_cost_certificate_short#:#Bescheinigung
 adn#:#adn_wmo_cost_extension_short#:#Verlängerung
 adn#:#adn_wmo_cost_duplicate_short#:#Ersatzausfertigung

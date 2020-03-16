@@ -93,3 +93,38 @@ if (!$ilDB->tableColumnExists("adn_md_wmo", "notification_email"))
 	));
 }
 ?>
+<#13>
+<?php
+if (!$ilDB->tableColumnExists("adn_md_wmo", "exam_gas_chem_nr"))
+{
+    $ilDB->addTableColumn("adn_md_wmo", "exam_gas_chem_nr", array(
+        "notnull" => false
+        ,"length" => 10
+        ,"default" => ""
+        ,"fixed" => false
+        ,"type" => "text"
+    ));
+}
+
+if (!$ilDB->tableColumnExists("adn_md_wmo", "exam_gas_chem_description"))
+{
+    $ilDB->addTableColumn("adn_md_wmo", "exam_gas_chem_description", array(
+        "notnull" => false
+        ,"length" => 1000
+        ,"default" => ""
+        ,"fixed" => false
+        ,"type" => "text"
+    ));
+}
+
+if (!$ilDB->tableColumnExists("adn_md_wmo", "exam_gas_chem_cost"))
+{
+    $ilDB->addTableColumn("adn_md_wmo", "exam_gas_chem_cost", array(
+        "notnull" => true
+        ,"length" => 4
+        ,"unsigned" => false
+        ,"default" => 0
+        ,"type" => "integer"
+    ));
+}
+?>
