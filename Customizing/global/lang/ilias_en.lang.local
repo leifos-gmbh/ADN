@@ -736,14 +736,14 @@ adn#:#adn_cp_pdm#:#Manage Personal Data
 adn#:#adn_really_delete_pd#:#Sollen die folgenden Sachkundigen/Interessenten/Kandidaten wirklich gelöscht werden?
 adn#:#adn_ad_wmo_created#:#Angelegt durch
 common#:#adn_personal_data_notification#:#ADN Benachrichtigung über Löschkandidaten
-common#:#adn_personal_data_notification_desc#:#Die WSDen werden über anstehende Löschkandidaten (Sachkundige und Prüfungskandidaten) informiert.
+common#:#adn_personal_data_notification_desc#:#Die GDWSen werden über anstehende Löschkandidaten (Sachkundige und Prüfungskandidaten) informiert.
 adn#:#adn_ad_pd_all#:#Alle
 adn#:#adn_ad_pd_cand#:#Prüfungskandidaten (älter 2 Jahre)
 adn#:#adn_ad_pd_cert#:#Sachkundige (älter 7 Jahre)
 adn#:#adn_ad_created_date#:#Angelegt am
 adn#:#adn_ad_last_certificate#:#Letztes Zertifikat
-adn#:#adn_ad_wmo#:#WSD
-adn#:#adn_new_delete_candidates_mess#:#Sehr geehrter Mitarbeiter {WSD},<br /><br />in Ihrer WSD stehen folgende Nutzer zur Löschung an:<br />{USER}<br /><br />Diese Nachricht wurde automatisch erstellt.
+adn#:#adn_ad_wmo#:#GDWS
+adn#:#adn_new_delete_candidates_mess#:#Sehr geehrter Mitarbeiter {GDWS},<br /><br />in Ihrer GDWS stehen folgende Nutzer zur Löschung an:<br />{USER}<br /><br />Diese Nachricht wurde automatisch erstellt.
 adn#:#adn_new_delete_candidates_subj#:#ADN Löschung von personenbezogenen Daten
 adn#:#adn_ad_add_person#:#Person hinzufügen
 adn#:#adn_add_certificate#:#Bescheinigung hinzufügen

@@ -184,7 +184,7 @@ class adnPersonalDataNotification extends ilCronJob
 		$message = $lng->txtlng("adn", "adn_new_delete_candidates_mess", "de");
 		$subject = $lng->txtlng("adn", "adn_new_delete_candidates_subj", "de");
 
-		$message = str_replace("{WSD}", $wmo->getName(), $message);
+		$message = str_replace("{GDWS}", $wmo->getName(), $message);
 		$user_str = "";
 		if ($a_cand_nr > 0)
 		{
