@@ -557,6 +557,15 @@ common#:#obj_xaes#:#ADN Prüfungsnachbereitung
 common#:#obj_xamd#:#ADN Stammdaten
 common#:#obj_xast#:#ADN Statistiken
 common#:#obj_xata#:#ADN Schulungsverwaltung
+common#:#obj_xaad_desc#:#Rechtevorgaben für Bereich ADN Administration
+common#:#obj_xacp_desc#:#Rechtevorgaben für Bereich ADN Sachkundigenverwaltung
+common#:#obj_xaec_desc#:#Rechtevorgaben für Bereich ADN Prüfungsdurchführung
+common#:#obj_xaed_desc#:#Rechtevorgaben für Bereich ADN Prüfungselemente
+common#:#obj_xaep_desc#:#Rechtevorgaben für Bereich ADN Prüfungsvorbereitung
+common#:#obj_xaes_desc#:#Rechtevorgaben für Bereich ADN Prüfungsnachbereitung
+common#:#obj_xamd_desc#:#Rechtevorgaben für Bereich ADN Stammdaten
+common#:#obj_xast_desc#:#Rechtevorgaben für Bereich ADN Statistiken
+common#:#obj_xata_desc#:#Rechtevorgaben für Bereich ADN Schulungsverwaltung
 rbac#:#xaad_visible#:#Sichtbar
 rbac#:#xaad_read#:#Leserecht
 rbac#:#xaad_write#:#Schreibrecht

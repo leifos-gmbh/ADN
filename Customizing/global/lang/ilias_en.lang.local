@@ -513,6 +513,15 @@ common#:#obj_xaes#:#ADN Exam Scoring
 common#:#obj_xamd#:#ADN Master Data
 common#:#obj_xast#:#ADN Statistics
 common#:#obj_xata#:#ADN Training Administration
+common#:#obj_xaad_desc#:#Rights specifications for area ADN Administration
+common#:#obj_xacp_desc#:#Rights specifications for area ADN Certified Professionals
+common#:#obj_xaec_desc#:#Rights specifications for area ADN Exam Conduction
+common#:#obj_xaed_desc#:#Rights specifications for area ADN Exam Definition
+common#:#obj_xaep_desc#:#Rights specifications for area ADN Exam Preparation
+common#:#obj_xaes_desc#:#Rights specifications for area ADN Exam Scoring
+common#:#obj_xamd_desc#:#Rights specifications for area ADN Master Data
+common#:#obj_xast_desc#:#Rights specifications for area ADN Statistics
+common#:#objobj_xata_desc#:#Rights requirements for area ADN Training Administration
 rbac#:#xaad_visible#:#Visible
 rbac#:#xaad_read#:#Read
 rbac#:#xaad_write#:#Write
