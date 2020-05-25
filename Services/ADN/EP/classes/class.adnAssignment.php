@@ -655,7 +655,7 @@ class adnAssignment extends adnDBBase
 	 * @param int score
 	 * @return string score text
 	 */
-	function getScoreText($a_score)
+	static function getScoreText($a_score)
 	{
 		global $lng;
 
