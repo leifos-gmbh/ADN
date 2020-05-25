@@ -933,10 +933,7 @@ class adnPreparationCandidateGUI
 			$cgui->addHiddenItem("last_name", $a_form->getInput("last_name"));
 			$cgui->addHiddenItem("first_name", $a_form->getInput("first_name"));
 			$date = $a_form->getInput("birthdate");
-			$date = explode("-", $date);
-			$cgui->addHiddenItem("birthdate[date][d]", $date[2]);
-			$cgui->addHiddenItem("birthdate[date][m]", $date[1]);
-			$cgui->addHiddenItem("birthdate[date][y]", $date[0]);
+			$cgui->addHiddenItem("birthdate", $date);
 			$cgui->addHiddenItem("citizenship", $a_form->getInput("citizenship"));
 			$cgui->addHiddenItem("type", $a_form->getInput("type"));
 			$cgui->addHiddenItem("applied", $a_form->getInput("applied"));
@@ -967,10 +964,7 @@ class adnPreparationCandidateGUI
 			$cgui->addHiddenItem("holdback", $a_form->getInput("holdback"));
 			$cgui->addHiddenItem("holdback_by", $a_form->getInput("holdback_by"));
 			$date = $a_form->getInput("holdback_until");
-			$date = explode("-", $date);
-			$cgui->addHiddenItem("holdback_until[date][d]", $date[2]);
-			$cgui->addHiddenItem("holdback_until[date][m]", $date[1]);
-			$cgui->addHiddenItem("holdback_until[date][y]", $date[0]);
+			$cgui->addHiddenItem("holdback_until", $date);
 
 			$tpl->setContent($cgui->getHTML());
 			return true;
