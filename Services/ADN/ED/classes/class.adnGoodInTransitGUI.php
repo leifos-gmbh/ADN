@@ -254,6 +254,7 @@ class adnGoodInTransitGUI
 		// file
 		$file = new ilFileInputGUI($lng->txt("adn_material_file"), "file");
 		$file->setSuffixes(array("pdf"));
+		$file->setALlowDeletion(true);
 		$form->addItem($file);
 
 		if ($a_mode == "create")
