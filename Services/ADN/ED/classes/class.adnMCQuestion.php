@@ -328,7 +328,7 @@ class adnMCQuestion extends adnExaminationQuestion
 	 * @param int $a_q_id question id
 	 * @return int correct answer
 	 */
-	function lookupCorrectAnswer($a_q_id)
+	static function lookupCorrectAnswer($a_q_id)
 	{
 		global $ilDB;
 

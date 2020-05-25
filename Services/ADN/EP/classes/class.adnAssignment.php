@@ -790,7 +790,7 @@ class adnAssignment extends adnDBBase
 	 * @param int $a_ass_id assignment id
 	 * @return int certified professional is
 	 */
-	public function lookupCertifiedProfessional($a_ass_id)
+	public static function lookupCertifiedProfessional($a_ass_id)
 	{
 		return self::lookupProperty($a_ass_id, "cp_professional_id");
 	}
