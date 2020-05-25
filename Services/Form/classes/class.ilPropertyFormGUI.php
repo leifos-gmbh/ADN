@@ -1373,7 +1373,7 @@ class ilPropertyFormGUI extends ilFormGUI
 				{
 					$img = "<img src=\"".$img."\" alt=\"".$item->getAlt()."\" />";
 				}
-				$field = new ilNonEditableValueGUI($item->getTitle());
+				$field = new ilNonEditableValueGUI($item->getTitle(), "", true);
 				$field->setValue($img);
 				break;
 
@@ -1396,7 +1396,7 @@ class ilPropertyFormGUI extends ilFormGUI
 				{
 					$value .= " ".$item->getSuffix();
 				}
-				$field = new ilNonEditableValueGUI($item->getTitle());
+				$field = new ilNonEditableValueGUI($item->getTitle(), "", true);
 				$field->setValue($value);
 				break;
 		}
