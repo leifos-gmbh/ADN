@@ -683,7 +683,7 @@ class adnAssignment extends adnDBBase
 	 *
 	 * @return array
 	 */
-	function getAllScores()
+	static function getAllScores()
 	{
 		return array(
 			self::SCORE_NOT_SCORED =>
