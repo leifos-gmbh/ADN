@@ -423,7 +423,7 @@ class adnCertifiedProfessionalDataGUI
 			{
 				$date = $form->getInput("holdback_until");
 				$this->professional->setBlockedBy($form->getInput("holdback_by"));
-				$this->professional->setBlockedUntil(new ilDate($date["date"], IL_CAL_DATE));
+				$this->professional->setBlockedUntil(new ilDate($date, IL_CAL_DATE));
 			}
 			else
 			{
