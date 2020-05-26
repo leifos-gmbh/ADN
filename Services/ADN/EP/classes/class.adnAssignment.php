@@ -750,7 +750,7 @@ class adnAssignment extends adnDBBase
 	 * @param string $a_code access code
 	 * @return boolean
 	 */
-	function codeUsed($a_cp_id, $a_code)
+	static function codeUsed($a_cp_id, $a_code)
 	{
 		global $ilDB;
 
