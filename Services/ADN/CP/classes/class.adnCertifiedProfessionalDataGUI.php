@@ -396,7 +396,7 @@ class adnCertifiedProfessionalDataGUI
 			$this->professional->setLastName($form->getInput("last_name"));
 			$this->professional->setFirstName($form->getInput("first_name"));
 			$date = $form->getInput("birthdate");
-			$this->professional->setBirthdate(new ilDate($date["date"], IL_CAL_DATE));
+			$this->professional->setBirthdate(new ilDate($date, IL_CAL_DATE));
 			$this->professional->setCitizenship($form->getInput("citizenship"));
 			$this->professional->setForeignCertificate($form->getInput("foreign"));
 			$this->professional->setForeignCertificateHandedIn($form->getInput("foreign_cert_handed_in"));
