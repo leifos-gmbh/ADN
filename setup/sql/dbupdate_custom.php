@@ -128,3 +128,32 @@ if (!$ilDB->tableColumnExists("adn_md_wmo", "exam_gas_chem_cost"))
     ));
 }
 ?>
+<#14>
+<?php
+
+// ensure that minimal character set is available
+$chars = array("°", "Σ", "ρ", "²", "³", "₀", "₁", "₂",
+               "₃", "₄", "₅", "₆", "₇", "₈", "₉");
+
+foreach($chars as $char)
+{
+    $set = $ilDB->queryF(
+        "SELECT * FROM adn_ad_character " .
+        " WHERE charact = %s ",
+        ["text"],
+        [$char]
+    );
+    $found = false;
+    while ($rec = $ilDB->fetchAssoc($set)) {
+        if ($rec["charact"] === $char) {
+            $found = true;
+        }
+    }
+    if (!$found) {
+        $fields = array("id" => array("integer", $ilDB->nextId("adn_ad_character")),
+                        "charact" => array("text", $char));
+        $ilDB->insert("adn_ad_character", $fields);
+    }
+}
+?>
+
