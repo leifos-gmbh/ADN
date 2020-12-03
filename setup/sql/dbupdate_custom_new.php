@@ -3315,7 +3315,7 @@ $ilDB->addPrimaryKey("adn_ta_provider_ttype", $pk_fields);
 
 $fields = array("cp_professional_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1","adn_cp_invoice", $fields, "adn_cp_professional", $ref_fields);
+#$ilDB->addForeignKey("fk1","adn_cp_invoice", $fields, "adn_cp_professional", $ref_fields);
 
 ?>
 <#44>
@@ -3323,7 +3323,7 @@ $ilDB->addForeignKey("fk1","adn_cp_invoice", $fields, "adn_cp_professional", $re
 
 $fields = array("ep_exam_event_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2","adn_cp_invoice", $fields, "adn_ep_exam_event", $ref_fields);
+#$ilDB->addForeignKey("fk2","adn_cp_invoice", $fields, "adn_ep_exam_event", $ref_fields);
 
 ?>
 <#45>
@@ -3331,7 +3331,7 @@ $ilDB->addForeignKey("fk2","adn_cp_invoice", $fields, "adn_ep_exam_event", $ref_
 
 $fields = array("es_certificate_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk3","adn_cp_invoice", $fields, "adn_es_certificate", $ref_fields);
+#$ilDB->addForeignKey("fk3","adn_cp_invoice", $fields, "adn_es_certificate", $ref_fields);
 
 ?>
 <#46>
@@ -3339,7 +3339,7 @@ $ilDB->addForeignKey("fk3","adn_cp_invoice", $fields, "adn_es_certificate", $ref
 
 $fields = array("registered_by_wmo_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1","adn_cp_professional", $fields, "adn_md_wmo", $ref_fields);
+#$ilDB->addForeignKey("fk1","adn_cp_professional", $fields, "adn_md_wmo", $ref_fields);
 
 ?>
 <#47>
@@ -3347,7 +3347,7 @@ $ilDB->addForeignKey("fk1","adn_cp_professional", $fields, "adn_md_wmo", $ref_fi
 
 $fields = array("blocked_by_wmo_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2","adn_cp_professional", $fields, "adn_md_wmo", $ref_fields);
+#$ilDB->addForeignKey("fk2","adn_cp_professional", $fields, "adn_md_wmo", $ref_fields);
 
 ?>
 <#48>
@@ -3355,7 +3355,7 @@ $ilDB->addForeignKey("fk2","adn_cp_professional", $fields, "adn_md_wmo", $ref_fi
 
 $fields = array("citizenship");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk3","adn_cp_professional", $fields, "adn_md_country", $ref_fields);
+#$ilDB->addForeignKey("fk3","adn_cp_professional", $fields, "adn_md_country", $ref_fields);
 
 ?>
 <#49>
@@ -3363,7 +3363,7 @@ $ilDB->addForeignKey("fk3","adn_cp_professional", $fields, "adn_md_country", $re
 
 $fields = array("pa_country");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk4","adn_cp_professional", $fields, "adn_md_country", $ref_fields);
+#$ilDB->addForeignKey("fk4","adn_cp_professional", $fields, "adn_md_country", $ref_fields);
 
 ?>
 <#50>
@@ -3371,7 +3371,7 @@ $ilDB->addForeignKey("fk4","adn_cp_professional", $fields, "adn_md_country", $re
 
 $fields = array("sa_country");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk5","adn_cp_professional", $fields, "adn_md_country", $ref_fields);
+#$ilDB->addForeignKey("fk5","adn_cp_professional", $fields, "adn_md_country", $ref_fields);
 
 ?>
 <#51>
@@ -3379,7 +3379,7 @@ $ilDB->addForeignKey("fk5","adn_cp_professional", $fields, "adn_md_country", $re
 
 $fields = array("last_ta_event_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk6","adn_cp_professional", $fields, "adn_ta_event", $ref_fields);
+#$ilDB->addForeignKey("fk6","adn_cp_professional", $fields, "adn_ta_event", $ref_fields);
 
 ?>
 <#52>
@@ -3387,7 +3387,7 @@ $ilDB->addForeignKey("fk6","adn_cp_professional", $fields, "adn_ta_event", $ref_
 
 $fields = array("ep_cand_sheet_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1","adn_ec_given_answer", $fields, "adn_ep_cand_sheet", $ref_fields);
+#$ilDB->addForeignKey("fk1","adn_ec_given_answer", $fields, "adn_ep_cand_sheet", $ref_fields);
 
 ?>
 <#53>
@@ -3395,7 +3395,7 @@ $ilDB->addForeignKey("fk1","adn_ec_given_answer", $fields, "adn_ep_cand_sheet", 
 
 $fields = array("ed_question_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2","adn_ec_given_answer", $fields, "adn_ed_question", $ref_fields);
+#$ilDB->addForeignKey("fk2","adn_ec_given_answer", $fields, "adn_ed_question", $ref_fields);
 
 ?>
 <#54>
@@ -3403,7 +3403,7 @@ $ilDB->addForeignKey("fk2","adn_ec_given_answer", $fields, "adn_ed_question", $r
 
 $fields = array("ed_good_related_answer_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1","adn_ed_case_answ_good", $fields, "adn_ed_good_rel_answer", $ref_fields);
+#$ilDB->addForeignKey("fk1","adn_ed_case_answ_good", $fields, "adn_ed_good_rel_answer", $ref_fields);
 
 ?>
 <#55>
@@ -3411,7 +3411,7 @@ $ilDB->addForeignKey("fk1","adn_ed_case_answ_good", $fields, "adn_ed_good_rel_an
 
 $fields = array("ed_good_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2","adn_ed_case_answ_good", $fields, "adn_ed_good", $ref_fields);
+#$ilDB->addForeignKey("fk2","adn_ed_case_answ_good", $fields, "adn_ed_good", $ref_fields);
 
 ?>
 <#56>
@@ -3419,7 +3419,7 @@ $ilDB->addForeignKey("fk2","adn_ed_case_answ_good", $fields, "adn_ed_good", $ref
 
 $fields = array("ed_good_category_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2","adn_ed_good", $fields, "adn_ed_good_category", $ref_fields);
+#$ilDB->addForeignKey("fk2","adn_ed_good", $fields, "adn_ed_good_category", $ref_fields);
 
 ?>
 <#57>
@@ -3427,7 +3427,7 @@ $ilDB->addForeignKey("fk2","adn_ed_good", $fields, "adn_ed_good_category", $ref_
 
 $fields = array("ed_question_id");
 $ref_fields = array("ed_question_id");
-$ilDB->addForeignKey("fk1","adn_ed_good_rel_answer", $fields, "adn_ed_question_case", $ref_fields);
+#$ilDB->addForeignKey("fk1","adn_ed_good_rel_answer", $fields, "adn_ed_question_case", $ref_fields);
 
 ?>
 <#58>
@@ -3435,7 +3435,7 @@ $ilDB->addForeignKey("fk1","adn_ed_good_rel_answer", $fields, "adn_ed_question_c
 
 $fields = array("ed_license_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1","adn_ed_license_good", $fields, "adn_ed_license", $ref_fields);
+#$ilDB->addForeignKey("fk1","adn_ed_license_good", $fields, "adn_ed_license", $ref_fields);
 
 ?>
 <#59>
@@ -3443,7 +3443,7 @@ $ilDB->addForeignKey("fk1","adn_ed_license_good", $fields, "adn_ed_license", $re
 
 $fields = array("ed_good_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2","adn_ed_license_good", $fields, "adn_ed_good", $ref_fields);
+#$ilDB->addForeignKey("fk2","adn_ed_license_good", $fields, "adn_ed_good", $ref_fields);
 
 ?>
 <#60>
@@ -3451,7 +3451,7 @@ $ilDB->addForeignKey("fk2","adn_ed_license_good", $fields, "adn_ed_good", $ref_f
 
 $fields = array("ed_objective_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1","adn_ed_question", $fields, "adn_ed_objective", $ref_fields);
+#$ilDB->addForeignKey("fk1","adn_ed_question", $fields, "adn_ed_objective", $ref_fields);
 
 ?>
 <#61>
@@ -3459,7 +3459,7 @@ $ilDB->addForeignKey("fk1","adn_ed_question", $fields, "adn_ed_objective", $ref_
 
 $fields = array("ed_subobjective_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2","adn_ed_question", $fields, "adn_ed_subobjective", $ref_fields);
+#$ilDB->addForeignKey("fk2","adn_ed_question", $fields, "adn_ed_subobjective", $ref_fields);
 
 ?>
 <#62>
@@ -3467,7 +3467,7 @@ $ilDB->addForeignKey("fk2","adn_ed_question", $fields, "adn_ed_subobjective", $r
 
 $fields = array("ed_question_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1","adn_ed_question_case", $fields, "adn_ed_question", $ref_fields);
+#$ilDB->addForeignKey("fk1","adn_ed_question_case", $fields, "adn_ed_question", $ref_fields);
 
 ?>
 <#63>
@@ -3475,7 +3475,7 @@ $ilDB->addForeignKey("fk1","adn_ed_question_case", $fields, "adn_ed_question", $
 
 $fields = array("ed_question_id");
 $ref_fields = array("ed_question_id");
-$ilDB->addForeignKey("fk1","adn_ed_quest_case_good", $fields, "adn_ed_question_case", $ref_fields);
+#$ilDB->addForeignKey("fk1","adn_ed_quest_case_good", $fields, "adn_ed_question_case", $ref_fields);
 
 ?>
 <#64>
@@ -3483,7 +3483,7 @@ $ilDB->addForeignKey("fk1","adn_ed_quest_case_good", $fields, "adn_ed_question_c
 
 $fields = array("ed_good_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2","adn_ed_quest_case_good", $fields, "adn_ed_good", $ref_fields);
+#$ilDB->addForeignKey("fk2","adn_ed_quest_case_good", $fields, "adn_ed_good", $ref_fields);
 
 ?>
 <#65>
@@ -3491,7 +3491,7 @@ $ilDB->addForeignKey("fk2","adn_ed_quest_case_good", $fields, "adn_ed_good", $re
 
 $fields = array("ed_question_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1","adn_ed_question_mc", $fields, "adn_ed_question", $ref_fields);
+#$ilDB->addForeignKey("fk1","adn_ed_question_mc", $fields, "adn_ed_question", $ref_fields);
 
 ?>
 <#66>
@@ -3499,7 +3499,7 @@ $ilDB->addForeignKey("fk1","adn_ed_question_mc", $fields, "adn_ed_question", $re
 
 $fields = array("ed_objective_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1","adn_ed_subobjective", $fields, "adn_ed_objective", $ref_fields);
+#$ilDB->addForeignKey("fk1","adn_ed_subobjective", $fields, "adn_ed_objective", $ref_fields);
 
 ?>
 <#67>
@@ -3507,7 +3507,7 @@ $ilDB->addForeignKey("fk1","adn_ed_subobjective", $fields, "adn_ed_objective", $
 
 $fields = array("ed_objective_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1","adn_ed_target_nr_obj", $fields, "adn_ed_objective", $ref_fields);
+#$ilDB->addForeignKey("fk1","adn_ed_target_nr_obj", $fields, "adn_ed_objective", $ref_fields);
 
 ?>
 <#68>
@@ -3515,7 +3515,7 @@ $ilDB->addForeignKey("fk1","adn_ed_target_nr_obj", $fields, "adn_ed_objective", 
 
 $fields = array("ed_subobjective_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2","adn_ed_target_nr_obj", $fields, "adn_ed_subobjective", $ref_fields);
+#$ilDB->addForeignKey("fk2","adn_ed_target_nr_obj", $fields, "adn_ed_subobjective", $ref_fields);
 
 ?>
 <#69>
@@ -3523,7 +3523,7 @@ $ilDB->addForeignKey("fk2","adn_ed_target_nr_obj", $fields, "adn_ed_subobjective
 
 $fields = array("ep_exam_event_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1","adn_ep_answer_sheet", $fields, "adn_ep_exam_event", $ref_fields);
+#$ilDB->addForeignKey("fk1","adn_ep_answer_sheet", $fields, "adn_ep_exam_event", $ref_fields);
 
 ?>
 <#70>
@@ -3531,7 +3531,7 @@ $ilDB->addForeignKey("fk1","adn_ep_answer_sheet", $fields, "adn_ep_exam_event", 
 
 $fields = array("ed_license_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2","adn_ep_answer_sheet", $fields, "adn_ed_license", $ref_fields);
+#$ilDB->addForeignKey("fk2","adn_ep_answer_sheet", $fields, "adn_ed_license", $ref_fields);
 
 ?>
 <#71>
@@ -3539,7 +3539,7 @@ $ilDB->addForeignKey("fk2","adn_ep_answer_sheet", $fields, "adn_ed_license", $re
 
 $fields = array("prev_ed_good_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk3","adn_ep_answer_sheet", $fields, "adn_ed_good", $ref_fields);
+#$ilDB->addForeignKey("fk3","adn_ep_answer_sheet", $fields, "adn_ed_good", $ref_fields);
 
 ?>
 <#72>
@@ -3547,7 +3547,7 @@ $ilDB->addForeignKey("fk3","adn_ep_answer_sheet", $fields, "adn_ed_good", $ref_f
 
 $fields = array("new_ed_good_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk4","adn_ep_answer_sheet", $fields, "adn_ed_good", $ref_fields);
+#$ilDB->addForeignKey("fk4","adn_ep_answer_sheet", $fields, "adn_ed_good", $ref_fields);
 
 ?>
 <#73>
@@ -3555,7 +3555,7 @@ $ilDB->addForeignKey("fk4","adn_ep_answer_sheet", $fields, "adn_ed_good", $ref_f
 
 $fields = array("ep_exam_event_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1","adn_ep_assignment", $fields, "adn_ep_exam_event", $ref_fields);
+#$ilDB->addForeignKey("fk1","adn_ep_assignment", $fields, "adn_ep_exam_event", $ref_fields);
 
 ?>
 <#74>
@@ -3563,7 +3563,7 @@ $ilDB->addForeignKey("fk1","adn_ep_assignment", $fields, "adn_ep_exam_event", $r
 
 $fields = array("cp_professional_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2","adn_ep_assignment", $fields, "adn_cp_professional", $ref_fields);
+#$ilDB->addForeignKey("fk2","adn_ep_assignment", $fields, "adn_cp_professional", $ref_fields);
 
 ?>
 <#75>
@@ -3571,7 +3571,7 @@ $ilDB->addForeignKey("fk2","adn_ep_assignment", $fields, "adn_cp_professional", 
 
 $fields = array("cp_professional_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1","adn_ep_cand_sheet", $fields, "adn_cp_professional", $ref_fields);
+#$ilDB->addForeignKey("fk1","adn_ep_cand_sheet", $fields, "adn_cp_professional", $ref_fields);
 
 ?>
 <#76>
@@ -3579,7 +3579,7 @@ $ilDB->addForeignKey("fk1","adn_ep_cand_sheet", $fields, "adn_cp_professional", 
 
 $fields = array("ep_answer_sheet_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2","adn_ep_cand_sheet", $fields, "adn_ep_answer_sheet", $ref_fields);
+#$ilDB->addForeignKey("fk2","adn_ep_cand_sheet", $fields, "adn_ep_answer_sheet", $ref_fields);
 
 ?>
 <#77>
@@ -3587,7 +3587,7 @@ $ilDB->addForeignKey("fk2","adn_ep_cand_sheet", $fields, "adn_ep_answer_sheet", 
 
 $fields = array("md_exam_facility_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1","adn_ep_exam_event", $fields, "adn_md_exam_facility", $ref_fields);
+#$ilDB->addForeignKey("fk1","adn_ep_exam_event", $fields, "adn_md_exam_facility", $ref_fields);
 
 ?>
 <#78>
@@ -3595,7 +3595,7 @@ $ilDB->addForeignKey("fk1","adn_ep_exam_event", $fields, "adn_md_exam_facility",
 
 $fields = array("chairman_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2","adn_ep_exam_event", $fields, "adn_md_cochair", $ref_fields);
+#$ilDB->addForeignKey("fk2","adn_ep_exam_event", $fields, "adn_md_cochair", $ref_fields);
 
 ?>
 <#79>
@@ -3603,7 +3603,7 @@ $ilDB->addForeignKey("fk2","adn_ep_exam_event", $fields, "adn_md_cochair", $ref_
 
 $fields = array("co_chair_1_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk3","adn_ep_exam_event", $fields, "adn_md_cochair", $ref_fields);
+#$ilDB->addForeignKey("fk3","adn_ep_exam_event", $fields, "adn_md_cochair", $ref_fields);
 
 ?>
 <#80>
@@ -3611,7 +3611,7 @@ $ilDB->addForeignKey("fk3","adn_ep_exam_event", $fields, "adn_md_cochair", $ref_
 
 $fields = array("co_chair_2_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk4","adn_ep_exam_event", $fields, "adn_md_cochair", $ref_fields);
+#$ilDB->addForeignKey("fk4","adn_ep_exam_event", $fields, "adn_md_cochair", $ref_fields);
 
 ?>
 <#81>
@@ -3619,7 +3619,7 @@ $ilDB->addForeignKey("fk4","adn_ep_exam_event", $fields, "adn_md_cochair", $ref_
 
 $fields = array("cp_professional_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1","adn_ep_exam_invitation", $fields, "adn_cp_professional", $ref_fields);
+#$ilDB->addForeignKey("fk1","adn_ep_exam_invitation", $fields, "adn_cp_professional", $ref_fields);
 
 ?>
 <#82>
@@ -3627,7 +3627,7 @@ $ilDB->addForeignKey("fk1","adn_ep_exam_invitation", $fields, "adn_cp_profession
 
 $fields = array("ep_exam_event_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2","adn_ep_exam_invitation", $fields, "adn_ep_exam_event", $ref_fields);
+#$ilDB->addForeignKey("fk2","adn_ep_exam_invitation", $fields, "adn_ep_exam_event", $ref_fields);
 
 ?>
 <#83>
@@ -3635,7 +3635,7 @@ $ilDB->addForeignKey("fk2","adn_ep_exam_invitation", $fields, "adn_ep_exam_event
 
 $fields = array("ep_answer_sheet_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1","adn_ep_sheet_question", $fields, "adn_ep_answer_sheet", $ref_fields);
+#$ilDB->addForeignKey("fk1","adn_ep_sheet_question", $fields, "adn_ep_answer_sheet", $ref_fields);
 
 ?>
 <#84>
@@ -3643,7 +3643,7 @@ $ilDB->addForeignKey("fk1","adn_ep_sheet_question", $fields, "adn_ep_answer_shee
 
 $fields = array("ed_question_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2","adn_ep_sheet_question", $fields, "adn_ed_question", $ref_fields);
+#$ilDB->addForeignKey("fk2","adn_ep_sheet_question", $fields, "adn_ed_question", $ref_fields);
 
 ?>
 <#85>
@@ -3651,7 +3651,7 @@ $ilDB->addForeignKey("fk2","adn_ep_sheet_question", $fields, "adn_ed_question", 
 
 $fields = array("cp_professional_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1","adn_es_certificate", $fields, "adn_cp_professional", $ref_fields);
+#$ilDB->addForeignKey("fk1","adn_es_certificate", $fields, "adn_cp_professional", $ref_fields);
 
 ?>
 <#86>
@@ -3659,7 +3659,7 @@ $ilDB->addForeignKey("fk1","adn_es_certificate", $fields, "adn_cp_professional",
 
 $fields = array("ep_exam_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2","adn_es_certificate", $fields, "adn_ep_exam_event", $ref_fields);
+#$ilDB->addForeignKey("fk2","adn_es_certificate", $fields, "adn_ep_exam_event", $ref_fields);
 
 ?>
 <#87>
@@ -3667,7 +3667,7 @@ $ilDB->addForeignKey("fk2","adn_es_certificate", $fields, "adn_ep_exam_event", $
 
 $fields = array("issued_by_wmo");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk3","adn_es_certificate", $fields, "adn_md_wmo", $ref_fields);
+#$ilDB->addForeignKey("fk3","adn_es_certificate", $fields, "adn_md_wmo", $ref_fields);
 
 ?>
 <#88>
@@ -3675,7 +3675,7 @@ $ilDB->addForeignKey("fk3","adn_es_certificate", $fields, "adn_md_wmo", $ref_fie
 
 $fields = array("md_wmo_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1","adn_md_cochair", $fields, "adn_md_wmo", $ref_fields);
+#$ilDB->addForeignKey("fk1","adn_md_cochair", $fields, "adn_md_wmo", $ref_fields);
 
 ?>
 <#89>
@@ -3683,7 +3683,7 @@ $ilDB->addForeignKey("fk1","adn_md_cochair", $fields, "adn_md_wmo", $ref_fields)
 
 $fields = array("md_wmo_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1","adn_md_exam_facility", $fields, "adn_md_wmo", $ref_fields);
+#$ilDB->addForeignKey("fk1","adn_md_exam_facility", $fields, "adn_md_wmo", $ref_fields);
 
 ?>
 <#90>
@@ -3691,7 +3691,7 @@ $ilDB->addForeignKey("fk1","adn_md_exam_facility", $fields, "adn_md_wmo", $ref_f
 
 $fields = array("ta_provider_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1","adn_ta_event", $fields, "adn_ta_provider", $ref_fields);
+#$ilDB->addForeignKey("fk1","adn_ta_event", $fields, "adn_ta_provider", $ref_fields);
 
 ?>
 <#91>
@@ -3699,7 +3699,7 @@ $ilDB->addForeignKey("fk1","adn_ta_event", $fields, "adn_ta_provider", $ref_fiel
 
 $fields = array("ta_facility_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2","adn_ta_event", $fields, "adn_ta_facility", $ref_fields);
+#$ilDB->addForeignKey("fk2","adn_ta_event", $fields, "adn_ta_facility", $ref_fields);
 
 ?>
 <#92>
@@ -3707,7 +3707,7 @@ $ilDB->addForeignKey("fk2","adn_ta_event", $fields, "adn_ta_facility", $ref_fiel
 
 $fields = array("ta_provider_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1","adn_ta_facility", $fields, "adn_ta_provider", $ref_fields);
+#$ilDB->addForeignKey("fk1","adn_ta_facility", $fields, "adn_ta_provider", $ref_fields);
 
 ?>
 <#93>
@@ -3715,7 +3715,7 @@ $ilDB->addForeignKey("fk1","adn_ta_facility", $fields, "adn_ta_provider", $ref_f
 
 $fields = array("ta_provider_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1","adn_ta_instructor", $fields, "adn_ta_provider", $ref_fields);
+#$ilDB->addForeignKey("fk1","adn_ta_instructor", $fields, "adn_ta_provider", $ref_fields);
 
 ?>
 <#94>
@@ -3723,7 +3723,7 @@ $ilDB->addForeignKey("fk1","adn_ta_instructor", $fields, "adn_ta_provider", $ref
 
 $fields = array("ta_instructor_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1","adn_ta_instructor_exp", $fields, "adn_ta_instructor", $ref_fields);
+#$ilDB->addForeignKey("fk1","adn_ta_instructor_exp", $fields, "adn_ta_instructor", $ref_fields);
 
 ?>
 <#95>
@@ -3731,7 +3731,7 @@ $ilDB->addForeignKey("fk1","adn_ta_instructor_exp", $fields, "adn_ta_instructor"
 
 $fields = array("ta_expertise_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2","adn_ta_instructor_exp", $fields, "adn_ta_expertise", $ref_fields);
+#$ilDB->addForeignKey("fk2","adn_ta_instructor_exp", $fields, "adn_ta_expertise", $ref_fields);
 
 ?>
 <#96>
@@ -3739,7 +3739,7 @@ $ilDB->addForeignKey("fk2","adn_ta_instructor_exp", $fields, "adn_ta_expertise",
 
 $fields = array("ta_instructor_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1","adn_ta_instr_ttype", $fields, "adn_ta_instructor", $ref_fields);
+#$ilDB->addForeignKey("fk1","adn_ta_instr_ttype", $fields, "adn_ta_instructor", $ref_fields);
 
 ?>
 <#97>
@@ -3747,7 +3747,7 @@ $ilDB->addForeignKey("fk1","adn_ta_instr_ttype", $fields, "adn_ta_instructor", $
 
 $fields = array("ta_provider_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1","adn_ta_provider_ttype", $fields, "adn_ta_provider", $ref_fields);
+#$ilDB->addForeignKey("fk1","adn_ta_provider_ttype", $fields, "adn_ta_provider", $ref_fields);
 
 ?>
 <#98>
@@ -4351,7 +4351,7 @@ if (!$ilDB->tableColumnExists("adn_ep_sheet_question", "ed_objective_id"))
 
 $fields = array("ed_objective_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk3","adn_ep_sheet_question", $fields, "adn_ed_objective", $ref_fields);
+#$ilDB->addForeignKey("fk3","adn_ep_sheet_question", $fields, "adn_ed_objective", $ref_fields);
 ?>
 <#128>
 <?php
