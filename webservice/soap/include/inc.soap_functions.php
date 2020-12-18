@@ -1168,8 +1168,6 @@ class ilSoapFunctions {
 
 // adn-patch end
 
-}
-
 	/**
 	 * Add desktop items for user
 	 *
