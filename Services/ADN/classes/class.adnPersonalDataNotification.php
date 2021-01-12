@@ -209,7 +209,11 @@ class adnPersonalDataNotification extends ilCronJob
 
 		include_once './Services/Mail/classes/class.ilMimeMail.php';
 
-		$mail = new ilMimeMail();
+        /** @var ilMailMimeSenderFactory $senderFactory */
+        $senderFactory = $GLOBALS["DIC"]["mail.mime.sender.factory"];
+
+        $mime = new ilMimeMail();
+        $mime->From($senderFactory->system());
 		$mail->To($mail_adress);
 		$mail->Cc($ilSetting->get('adn_cron_cc',''));
 		$mail->Subject($subject);
