@@ -76,8 +76,11 @@ class ilNewAccountNotification extends ilMailNotification
 
 			//$this->sendMail([$rcp], ['system'], false);
 
-			include_once './Services/Mail/classes/class.ilMimeMail.php';
-			$mime = new ilMimeMail();
+            /** @var ilMailMimeSenderFactory $senderFactory */
+            $senderFactory = $GLOBALS["DIC"]["mail.mime.sender.factory"];
+
+            $mime = new ilMimeMail();
+            $mime->From($senderFactory->system());
 			$mime->To($rcp);
 			$mime->Subject($this->getSubject());
 			$mime->Body($this->getBody());
