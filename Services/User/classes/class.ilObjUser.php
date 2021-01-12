@@ -4582,7 +4582,7 @@ class ilObjUser extends ilObject
 				$gr[] = ilObjRole::_lookupTitle($role);
 			}
 		}
-		if(count($gr))
+		if(is_array($gr) && count($gr))
 		{
 			$body .= ($language->txt('reg_role_info').': '.implode(',',$gr)."\n");
 		}
