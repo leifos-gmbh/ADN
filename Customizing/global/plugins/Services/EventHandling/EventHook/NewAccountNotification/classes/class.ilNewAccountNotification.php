@@ -74,7 +74,7 @@ class ilNewAccountNotification extends ilMailNotification
 			$this->getMail()->appendInstallationSignature(true);
 			$this->getMail()->enableSoap(false);
 
-			$this->sendMail($rcp, ['system'], false);
+			$this->sendMail([$rcp], ['system'], false);
 
             /**
              * this is not supported anymore
