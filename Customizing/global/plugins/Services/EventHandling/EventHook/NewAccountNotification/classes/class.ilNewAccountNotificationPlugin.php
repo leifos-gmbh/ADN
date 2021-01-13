@@ -42,7 +42,7 @@ class ilNewAccountNotificationPlugin extends ilEventHookPlugin
 						$auth_mode = $a_params['user_obj']->getAuthMode();
 						if(substr($auth_mode,0,4) !== 'ldap')
 						{
-							#return false;
+							return false;
 						}
 						ilLoggerFactory::getLogger('xnan')->debug('New user creation event: ' . $a_params['user_obj']->getAuthMode());
 						$this->includeClass('class.ilNewAccountNotification.php');
