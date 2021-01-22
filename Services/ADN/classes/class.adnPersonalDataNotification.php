@@ -214,11 +214,11 @@ class adnPersonalDataNotification extends ilCronJob
 
         $mime = new ilMimeMail();
         $mime->From($senderFactory->system());
-		$mail->To($mail_adress);
-		$mail->Cc($ilSetting->get('adn_cron_cc',''));
-		$mail->Subject($subject);
-		$mail->Body($message);
-		$mail->Send();
+        $mime->To($mail_adress);
+        $mime->Cc($ilSetting->get('adn_cron_cc'));
+        $mime->Subject($subject);
+        $mime->Body($message);
+		$mime->Send();
 
 		/**
 		$ret = $mail->sendMail($mail_adress,
