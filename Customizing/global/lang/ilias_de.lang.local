@@ -747,6 +747,7 @@ adn#:#adn_score_points#:#Punkt(e)
 adn#:#adn_please_check_certificate#:#Bitte vergewissern Sie sich noch einmal, daß alle Daten korrekt sind. Ausstellende GDWS und Ausstellungsdatum können nach dem nächsten Schritt nicht mehr geändert werden, da der Bescheinigung eine neue Nummer zugeteilt wird.
 adn#:#adn_cert_not_valid_save_anyway#:#Die ursprüngliche Bescheinigung ist nicht mehr gültig. Wollen Sie wirklich eine Verlängerung erstellen?
 adn#:#adn_assignment_delete_fail_answered#:#Die Zuordnung könnte nicht gelöscht werden, da bereits Antworten vorliegen.
+adn#:#adn_assignment_save_fail_answered#:#Die Zuordnung konnte nicht gespeichert werden, da keine Kandidaten ausgewählt wurden.
 adn#:#adn_no_entries_filter#:#Es wurden keine Einträge gefunden, welche Ihren gewählten Filterkriterien entsprechen.
 adn#:#adn_sheet_question_status#:#%s von %s Fragen
 adn#:#adn_sheet_too_few#:#Zu wenige Fragen im Prüfungsbogen.

@@ -703,6 +703,7 @@ adn#:#adn_score_points#:#Point(s)
 adn#:#adn_please_check_certificate#:#Please check again all data you have entered. After saving the new number cannot be changed.
 adn#:#adn_cert_not_valid_save_anyway#:#Die ursprüngliche Bescheinigung ist nicht mehr gültig. Wollen Sie wirklich eine Verlängerung erstellen?
 adn#:#adn_assignment_delete_fail_answered#:#The assignment could not be deleted because of existing answers.
+adn#:#adn_assignment_save_fail_answered#:#The assignment could not be saved, because no candidates have been chosen.
 adn#:#adn_no_entries_filter#:#No entries did match your search criteria.
 adn#:#adn_sheet_question_status_invalid#:#with %s inactive
 adn#:#adn_candidate_last_event_mismatch#:#The type of the last training does not match the examination type.

@@ -1140,66 +1140,71 @@ class adnAnswerSheetGUI
 		include_once "Services/ADN/EP/classes/class.adnAnswerSheetAssignment.php";
 		include_once "Services/ADN/EC/classes/class.adnTest.php";
 		$delete_failed = false;
-		foreach($_REQUEST["cnd"] as $candidate_id => $sheets)
-		{
-			$no_update = false;
+		if(isset($_REQUEST['cnd']) && !empty($_REQUEST['cnd'])) {
+            foreach($_REQUEST["cnd"] as $candidate_id => $sheets)
+            {
+                $no_update = false;
 
-			// check if candidate has given answers for assigned sheets
-			$old = adnAnswerSheetAssignment::getSheetsSelect($candidate_id, $event_id);
-			if(sizeof($old))
-			{
-				foreach($old as $id => $sheet_id)
-				{
-					// Delete deprecated reports
-					if(!in_array($sheet_id,(array) $_REQUEST['cnd'][$candidate_id]))
-					{
-						include_once './Services/ADN/Report/classes/class.adnReportAnswerSheet.php';
-						adnReportAnswerSheet::deleteSheet($candidate_id,$sheet_id);
-					}
+                // check if candidate has given answers for assigned sheets
+                $old = adnAnswerSheetAssignment::getSheetsSelect($candidate_id, $event_id);
+                if(sizeof($old))
+                {
+                    foreach($old as $id => $sheet_id)
+                    {
+                        // Delete deprecated reports
+                        if(!in_array($sheet_id,(array) $_REQUEST['cnd'][$candidate_id]))
+                        {
+                            include_once './Services/ADN/Report/classes/class.adnReportAnswerSheet.php';
+                            adnReportAnswerSheet::deleteSheet($candidate_id,$sheet_id);
+                        }
 
-					$assignment = new adnAnswerSheetAssignment($id);
-					if(adnTest::hasAnswered($id))
-					{
-						// when sheet is not selected anymore and existing answers: cancel
-						if(!in_array($assignment->getSheet(), $sheets))
-						{
-							$delete_failed = true;
-							$no_update = true;
-						}
-					}
-				}
-			}
+                        $assignment = new adnAnswerSheetAssignment($id);
+                        if(adnTest::hasAnswered($id))
+                        {
+                            // when sheet is not selected anymore and existing answers: cancel
+                            if(!in_array($assignment->getSheet(), $sheets))
+                            {
+                                $delete_failed = true;
+                                $no_update = true;
+                            }
+                        }
+                    }
+                }
 
-			if(!$no_update)
-			{
-				// add new
-				foreach($sheets as $sheet_id)
-				{
-					if($sheet_id)
-					{
-						$assignment = new adnAnswerSheetAssignment(null, $candidate_id, $sheet_id);
-						if(!$assignment->getId())
-						{
-							$assignment->save();
-						}
-						else
-						{
-							unset($old[$assignment->getId()]);
-						}
-					}
-				}
+                if(!$no_update)
+                {
+                    // add new
+                    foreach($sheets as $sheet_id)
+                    {
+                        if($sheet_id)
+                        {
+                            $assignment = new adnAnswerSheetAssignment(null, $candidate_id, $sheet_id);
+                            if(!$assignment->getId())
+                            {
+                                $assignment->save();
+                            }
+                            else
+                            {
+                                unset($old[$assignment->getId()]);
+                            }
+                        }
+                    }
 
-				// remove unused
-				if(sizeof($old))
-				{
-					foreach($old as $id => $sheet_id)
-					{
-						$assignment = new adnAnswerSheetAssignment($id);
-						$assignment->delete();
-					}
-				}
-			}
-		}
+                    // remove unused
+                    if(sizeof($old))
+                    {
+                        foreach($old as $id => $sheet_id)
+                        {
+                            $assignment = new adnAnswerSheetAssignment($id);
+                            $assignment->delete();
+                        }
+                    }
+                }
+            }
+        } else {
+            ilUtil::sendFailure($lng->txt("adn_assignment_save_fail_answered"), true);
+            $ilCtrl->redirect($this, "listAssignment");
+        }
 
 		if($delete_failed)
 		{
