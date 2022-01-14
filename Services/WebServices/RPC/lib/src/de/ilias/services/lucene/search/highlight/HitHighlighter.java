@@ -105,11 +105,6 @@ public class HitHighlighter {
 		String[] fields = fieldInfo.getFieldsAsStringArray();
 		for(int i = 0; i < hits.length;i++) {
 			
-			// first score is max score
-			if(i == 0) {
-				result.setMaxScore(hits[i].score);
-			}
-			
 			StringBuffer allContent = new StringBuffer();
 			Document hitDoc = searcher.doc(hits[i].doc);
 
@@ -133,7 +128,6 @@ public class HitHighlighter {
 			
 			resObject = result.initObject(objId);
 			resItem = resObject.addItem(subItem);
-			resItem.setAbsoluteScore(hits[i].score);
 			
 			// Title
 			if(hitDoc.get("title") != null ) { 
@@ -178,17 +172,17 @@ public class HitHighlighter {
 					allContent.append(" ");
 				}
 			}
-			//logger.debug("All content" + allContent.toString());
+			logger.debug("All content" + allContent.toString());
 			token =	new StandardAnalyzer().tokenStream("content", new StringReader(allContent.toString()));
 			fragment = highlighter.getBestFragments(
 					token,
 					allContent.toString(),
 					luceneSettings.getNumFragments(),
 					HIGHLIGHT_SEPARATOR);
-			//logger.debug("Fragmented: " + fragment);
+			logger.debug("Fragmented: " + fragment);
 			
 			if(fragment.length() != 0) {
-				//logger.debug("Found fragment: " + fragment);
+				logger.debug("Found fragment: " + fragment);
 				resItem.addField(new HighlightField("content",fragment));
 			}
 		}

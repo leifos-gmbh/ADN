@@ -23,8 +23,6 @@
 package de.ilias.services.lucene.index.file;
 
 
-import de.ilias.services.settings.ConfigurationException;
-import de.ilias.services.settings.ServerSettings;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -62,27 +60,13 @@ public class ExtensionFileHandler {
         if(!file.canRead()) {
             throw new FileHandlerException("No permission to read file: " + file.getAbsolutePath());
         }
-
-		// Check file size
-		if(!checkFileSizeLimit(file)) {
-			throw new FileHandlerException("File size limit exceeded. Ignoring file " + file.getAbsolutePath());
-		}
-		
-       	logger.info("Current file is: " + file.getAbsolutePath());
-		
        
     	try {
 	        String fname = file.getName();
 	        int dotIndex = fname.lastIndexOf(".");
 	        if((dotIndex > 0) && (dotIndex < fname.length())) {
 	            String extension = fname.substring(dotIndex + 1, fname.length());
-				
-				
-				// Do not index xslx
-				if(extension.equalsIgnoreCase("xlsx")) {
-					logger.info("Ignoring xslx: " + file.getName());
-					return "";
-				}
+	            
 	            // Handled extensions are: html,pdf,txt
 	            if(extension.equalsIgnoreCase("pdf")) {
 	                logger.info("Using getPDFDocument() for " + file.getName());
@@ -153,11 +137,13 @@ public class ExtensionFileHandler {
         }
     	catch (FileHandlerException e) {
         	logger.warn("Parsing failed with message: " + e);
+        	logger.info("Current file is: " + file.getAbsolutePath());
         	return "";
     	}
     	
     	catch(Exception e) {
         	logger.warn("Parsing failed with message: " + e);
+        	logger.info("Current file is: " + file.getAbsolutePath());
         	return "";
         }
     	
@@ -185,7 +171,7 @@ public class ExtensionFileHandler {
     		else {
     			logger.warn("No content found for" + file.getName());
     		}
-    		//logger.debug("Parsed content is: " + content.toString());
+    		logger.debug("Parsed content is: " + content.toString());
     		return content.toString();
     	}
     	catch (InvalidFormatException e) {
@@ -389,29 +375,6 @@ public class ExtensionFileHandler {
         	catch (IOException e) {
 			}
         }
-	}
-
-	/**
-	 * Check file size limit
-	 * @param file
-	 * @return bool
-	 */
-	private boolean checkFileSizeLimit(File file)
-	{
-		long maxFileSize = 0;
-
-		try {
-			maxFileSize = ServerSettings.getInstance().getMaxFileSize();
-		}
-		catch(ConfigurationException e) {
-			maxFileSize = ServerSettings.DEFAULT_MAX_FILE_SIZE;
-		}
-
-		if(file.length() > maxFileSize) {
-			logger.info("File size is " + file.length() + " bytes.");
-			return false;
-		}
-		return true;
 	}
 	
 

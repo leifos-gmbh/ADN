@@ -44,7 +44,6 @@ public class ServerSettings {
 	private static Logger logger = Logger.getLogger(ServerSettings.class);
 	private static ServerSettings instance = null;
 
-	public static final long DEFAULT_MAX_FILE_SIZE = 500 * 1024 * 1024;
 
 	private InetAddress host;
 	private String hostString;
@@ -57,8 +56,6 @@ public class ServerSettings {
 	private Level logLevel;
 	private int numThreads = 1;
 	private double RAMSize = 500;
-	private int indexMaxFileSizeMB = 500;
-
 
 
 
@@ -302,20 +299,5 @@ public class ServerSettings {
 	public void setRAMSize(String purgedString) {
 
 		RAMSize = Double.valueOf(purgedString);
-	}
-
-	public int getMaxFileSizeMB()
-	{
-		return indexMaxFileSizeMB;
-	}
-
-	public long getMaxFileSize()
-	{
-		return (long) indexMaxFileSizeMB * 1024 * 1024;
-	}
-
-	public void setMaxFileSizeMB(String mb)
-	{
-		this.indexMaxFileSizeMB = Integer.valueOf(mb);
 	}
 }

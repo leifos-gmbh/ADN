@@ -43,8 +43,6 @@ public class HighlightHits implements ResultExport {
 	
 	private HashMap<Integer, HighlightObject> objects = new HashMap<Integer, HighlightObject>();
 	
-	private double maxScore = 0;
-	
 	/**
 	 * 
 	 */
@@ -70,22 +68,6 @@ public class HighlightHits implements ResultExport {
 		return objects;
 	}
 	
-	/**
-	 * Set score
-	 * @param score 
-	 */
-	public void setMaxScore(double score) {
-		maxScore = score;
-	}
-	
-	/**
-	 * Get max score
-	 * @return 
-	 */
-	public double getMaxScore() {
-		return maxScore;
-	}
-	
 	
 	public String toXML() {
 		
@@ -103,7 +85,6 @@ public class HighlightHits implements ResultExport {
 	public Element addXML() {
 
 		Element hits = new Element("Hits");
-		hits.setAttribute("maxScore",String.valueOf(getMaxScore()));
 		
 		for(Object obj : objects.values()) {
 			

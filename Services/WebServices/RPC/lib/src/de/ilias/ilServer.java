@@ -50,8 +50,6 @@ import de.ilias.services.settings.ServerSettings;
  */
 public class ilServer {
 
-	private String version = "4.4.0.1";
-	
 	private String[] arguments;
 	private String command;
 	
@@ -73,10 +71,7 @@ public class ilServer {
 		ilServer server = null;
 		
 		BasicConfigurator.configure();
-		logger.setLevel(Level.INFO);
-		
-		Logger root = Logger.getLogger("org");
-		root.setLevel(Level.OFF);
+		logger.setLevel(Level.DEBUG);
 		
 		server = new ilServer(args);
 		server.handleRequest();
@@ -90,14 +85,6 @@ public class ilServer {
 		if(arguments.length < 1) {
 			logger.error(getUsage());
 			return false;
-		}
-		
-		if(arguments.length == 1) {
-			command = arguments[0];
-			if(command.compareTo("version") == 0) {
-				System.out.println("ILIAS java server version \"" + version + "\"");
-				return true;
-			}
 		}
 		command = arguments[1];
 		if(command.compareTo("start") == 0) {
@@ -122,7 +109,7 @@ public class ilServer {
 			return createIndexer();
 		}
 		else if(command.compareTo("updateIndex") == 0) {
-			if(arguments.length < 3) {
+			if(arguments.length != 3) {
 				logger.error("Usage java -jar ilServer.jar PATH_TO_SERVER_INI updateIndex CLIENT_KEY");
 				return false;
 			}
@@ -167,7 +154,7 @@ public class ilServer {
 			}
 
 			client = initRpcClient();
-			Vector params = new Vector();
+			Vector params = new Vector<String>();
 			params.add(arguments[2]);
 			params.add(false);
 			client.execute("RPCIndexHandler.index",params);
@@ -290,8 +277,8 @@ public class ilServer {
 			// Check if webserver is alive
 			// otherwise stop execution
 			while(true) {
-
 				Thread.sleep(3000);
+				//logger.debug("Still alive...");
 				if(!rpc.isAlive()) {
 					rpc.shutdown();
 					break;
@@ -309,6 +296,9 @@ public class ilServer {
 		catch (InterruptedException e) {
 			logger.error("VM did not allow to sleep. Aborting!");
 		} 
+		catch (MalformedURLException e) {
+			logger.error("Malformed URL " + e.getMessage());
+		} 
 		catch (XmlRpcException e) {
 			System.out.println("Error starting server: " + e);
 			System.exit(1);
@@ -320,7 +310,8 @@ public class ilServer {
 			logger.error("IOException " + e.getMessage());			
 		}
 		catch(Throwable e) {
-			logger.error("IOException " + e.getMessage());			
+			logger.error("IOException " + e.getMessage());
+			e.printStackTrace();
 		}
 		return false;
 	}
@@ -343,6 +334,9 @@ public class ilServer {
 			client = initRpcClient();
 			client.execute("RPCAdministration.stop",new Vector());
 			return true;
+		} 
+		catch (MalformedURLException e) {
+			logger.error("Malformed URL " + e.getMessage());
 		} 
 		catch (ConfigurationException e) {
 			logger.error("Configuration " + e.getMessage());
@@ -374,6 +368,9 @@ public class ilServer {
 			status = (String) client.execute("RPCAdministration.status",new Vector());
 			System.out.println(status);
 			return true;
+		} 
+		catch (MalformedURLException e) {
+			logger.error("Malformed URL " + e.getMessage());
 		} 
 		catch (ConfigurationException e) {
 			logger.error("Configuration " + e.getMessage());
@@ -414,7 +411,7 @@ public class ilServer {
 		settings = ServerSettings.getInstance();
 		config = new XmlRpcClientConfigImpl();
 		config.setServerURL(new URL(settings.getServerUrl()));
-		config.setConnectionTimeout(10000);
+		config.setConnectionTimeout(0);
 		config.setReplyTimeout(0);
 		
 		client = new XmlRpcClient();

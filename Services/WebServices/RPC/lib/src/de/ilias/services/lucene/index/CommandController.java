@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Vector;
-import java.util.logging.Level;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.index.CorruptIndexException;
@@ -67,7 +66,7 @@ public class CommandController {
 		}
 	};
 	
-	private static final int MAX_ELEMENTS = 100;
+	private static final int MAX_ELEMENTS = 10000;
 
 	protected static Logger logger = Logger.getLogger(CommandController.class);
 	
@@ -172,16 +171,6 @@ public class CommandController {
 		queue.addNonIncremental();
 		queue.loadFromDb();
 	}
-
-	/**
-	 * Load queue elements from given obj ids list
-	 * @param objIds
-	 * @throws SQLException 
-	 */
-	public void initObjects(Vector<Integer> objIds)  throws SQLException {
-		
-		queue.loadFromObjectList(objIds);
-	}
 	
 	
 	/**
@@ -204,37 +193,19 @@ public class CommandController {
 					
 					// Delete document
 					deleteDocument(currentElement);
-					try {
-						addDocument(currentElement);
-					}
-					catch(ObjectDefinitionException e) {
-						logger.warn("Ignoring deprecated object type " + currentElement.getObjType());
-						getQueue().deleteCommandsByType(currentElement.getObjType());
-					}
+					addDocument(currentElement);
 				}
 				else if(command.equals("create")) {
 					
 					// Create a new document
 					// Called for new objects or objects restored from trash
-					try {
-						addDocument(currentElement);
-					}
-					catch(ObjectDefinitionException e) {
-						logger.warn("Ignoring deprecated object type " + currentElement.getObjType());
-						getQueue().deleteCommandsByType(currentElement.getObjType());
-					}
+					addDocument(currentElement);
 				}
 				else if(command.equals("update")) {
 					
 					// content changed
 					deleteDocument(currentElement);
-					try {
-						addDocument(currentElement);
-					}
-					catch(ObjectDefinitionException e) {
-						logger.warn("Ignoring deprecated object type " + currentElement.getObjType());
-						getQueue().deleteCommandsByType(currentElement.getObjType());
-					}
+					addDocument(currentElement);
 				}
 				else if(command.equals("delete")) {
 					
@@ -243,20 +214,21 @@ public class CommandController {
 				}
 				getFinished().add(currentElement.getObjId());
 				
-				// Update command queue if MAX ELEMENTS is reached.
-				if(++elementCounter > MAX_ELEMENTS) {
+				// Write to index if MAX_ELEMENTS is reached
+				if(++elementCounter == MAX_ELEMENTS) {
 					
-					synchronized(this) {
-						queue.setFinished(this.getFinished());
-						this.setFinished(new Vector<Integer>());
-						elementCounter = 0;
+					/*
+					if(!writeToIndex()) {
+						break;
 					}
+					elementCounter = 0;
+					*/
 				}
 			}
 		}
-		catch (SQLException e) {
-			logger.error(e);
-		}
+		catch (ObjectDefinitionException e) {
+			logger.warn("No definition found for objType: " + currentElement.getObjType());
+		} 
 		catch (CorruptIndexException e) {
 			logger.error(e);
 		} 
@@ -284,7 +256,6 @@ public class CommandController {
 			LuceneSettings.writeLastIndexTime();
 			
 			// Refresh index reader
-			SearchHolder.getInstance().getSearcher().getIndexReader().close();
 			SearchHolder.getInstance().init();
 			
 			// Set object ids finished
@@ -316,16 +287,9 @@ public class CommandController {
 			logger.info("Closing writer");
 			holder.getWriter().close();
 			logger.info("Writer closed");
-			
-			// reopen index reader
-			logger.info("Reopening index reader...");
-			SearchHolder.getInstance().getSearcher().getIndexReader().close();
-			SearchHolder.getInstance().init();
+
 			LuceneSettings.getInstance().refresh();
 		} 
-		catch (ConfigurationException e) {
-			logger.error("Cannot close index reader/writer: " + e);
-		}
 		catch (CorruptIndexException e) {
 			logger.fatal("Index Corrupted. Aborting!" + e);
 		} 

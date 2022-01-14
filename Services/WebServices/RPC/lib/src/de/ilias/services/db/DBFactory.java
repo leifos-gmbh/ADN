@@ -29,6 +29,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 
+import oracle.jdbc.OraclePreparedStatement;
 
 import org.apache.log4j.Logger;
 
@@ -36,7 +37,6 @@ import de.ilias.services.settings.ClientSettings;
 import de.ilias.services.settings.ConfigurationException;
 import de.ilias.services.settings.LocalSettings;
 import de.ilias.services.settings.ServerSettings;
-import oracle.jdbc.OraclePreparedStatement;
 
 /**
  * A thread local singleton for db connections
@@ -69,12 +69,7 @@ public class DBFactory {
 				logger.info("+++++++++++++++++++++++++++++++++++++++++++ New Thread local " + LocalSettings.getClientKey());
 
 				// MySQL
-				if(
-                                    client.getDbType().equalsIgnoreCase("mysql") || 
-                                    client.getDbType().equalsIgnoreCase("mysqli") ||
-                                    client.getDbType().equalsIgnoreCase("innodb")
-                                ) 
-                                {
+				if(client.getDbType().equalsIgnoreCase("mysql")) {
 
 					logger.info("Loading Mysql driver...");
 					Class.forName( "com.mysql.jdbc.Driver");
@@ -82,16 +77,16 @@ public class DBFactory {
 					logger.info("Using URL: " +
 							client.getDbUrl() + "/" +
 							client.getDbUser() + "/" +
-							"******" + "?autoReconnect=true"
+							client.getDbPass() 
 					);
 
 					return DriverManager.getConnection(
-							client.getDbUrl() + "?autoReconnect=true",
+							client.getDbUrl(),
 							client.getDbUser(),
 							client.getDbPass());
 				}
 				// Oracle
-				else if(client.getDbType().equalsIgnoreCase("oracle")) {
+				if(client.getDbType().equalsIgnoreCase("oracle")) {
 					
 					logger.info("Loading Oracle driver...");
 					Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -99,8 +94,7 @@ public class DBFactory {
 					if(client.getDbName().length() == 0) {
 						
 						String url = "jdbc:oracle:thin:" + client.getDbUser() + "/" + client.getDbPass() + "@" + client.getDbHost();
-						String log = "jdbc:oracle:thin:" + client.getDbUser() + "/" + "******" + "@" + client.getDbHost();
-						logger.info("Using tnsname.ora: " + log);
+						logger.info("Using tnsname.ora: " + url);
 						
 						try {
 							System.setProperty("oracle.net.tns_admin",server.lookupTnsAdmin());
@@ -121,11 +115,7 @@ public class DBFactory {
 					);
 					return DriverManager.getConnection(client.getDbUrl());
 				}
-				else {
-					logger.error("Unsupported db type given." + client.getDbType());
-					throw new ConfigurationException("Unsupported db type given." + client.getDbType());
-				}
-			}
+			} 
 			catch (SQLException e) {
 				logger.error("Cannot connect to database: " + e);
 			} 
@@ -246,7 +236,7 @@ public class DBFactory {
 				connection.get().close();
 			}
 			catch (Throwable e) {
-				logger.error("Cannot release db connection: ",e);
+				logger.error("Cannot release db connection: " + e);
 			}
 		}
 	}

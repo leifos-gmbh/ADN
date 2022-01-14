@@ -56,9 +56,6 @@ public class PathCreatorFactory {
 		if(name.equalsIgnoreCase("ExerciseAssignmentPathCreator")) {
 			return (PathCreator) new ExerciseAssignmentPathCreator();
 		}
-		if(name.equalsIgnoreCase("MailAttachmentPathCreator")) {
-			return (PathCreator) new MailAttachmentPathCreator();
-		}
 		
 		throw new ObjectDefinitionException("Invalid path creator name given: " + name);
 	}

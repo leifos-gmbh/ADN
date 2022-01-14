@@ -99,14 +99,13 @@ public class CommandQueue {
 		if(objIds.size() == 0) {
 			return;
 		}
-		PreparedStatement psta = DBFactory.getPreparedStatement(
-				"UPDATE search_command_queue SET finished = 1 WHERE obj_id = ?"
-		);
+		PreparedStatement psta = DBFactory.getPreparedStatement("UPDATE search_command_queue SET finished = 1 WHERE obj_id = ?");
 		for(int i = 0; i < objIds.size(); i++) {
 			psta.setInt(1,objIds.get(i));
 			psta.addBatch();
 		}
 		psta.executeBatch();
+		
 		return;
 	}
 
@@ -158,48 +157,6 @@ public class CommandQueue {
 		logger.info("Found " + counter + " new update events!");
 	}
 	
-	
-	/**
-	 * 
-	 * @param objIds 
-	 */
-	public synchronized void loadFromObjectList(Vector<Integer> objIds) throws SQLException {
-		
-		
-		PreparedStatement pst = DBFactory.getPreparedStatement(
-				"SELECT obj_id,type FROM object_data " +
-				"WHERE obj_id = ? ");
-		
-		int counter = 0;
-		for(int objId : objIds) {
-			
-			pst.setInt(1, objId);
-			ResultSet res = pst.executeQuery();
-			
-			while(res.next()) {
-				
-				CommandQueueElement element = new CommandQueueElement();
-
-				//logger.debug("Found type: " + res.getString("obj_type") + " with id " + res.getInt("obj_id"));
-				element.setObjId(res.getInt("obj_id"));
-				element.setObjType(DBFactory.getString(res, "type"));
-				element.setSubId(0);
-				element.setSubType("");
-				element.setCommand("reset");
-				element.setFinished(false);
-
-				getElements().add(element);
-				counter++;
-			}
-			try {
-				res.close();
-			} catch (SQLException e) {
-				logger.warn(e);
-			}
-		}
-		logger.info("Found " + counter + " new update events!");
-	}
-	
 
 
 	/**
@@ -228,11 +185,11 @@ public class CommandQueue {
 		} 
 		catch(SQLException e) {
 			logger.error("Invalid SQL statement: " + query);
-			logger.error("Cannot substitute reset commands", e);
+			logger.error(e);
 			throw e;
 		}
 		catch(Throwable e) {
-			logger.fatal("Cannot substitute reset commands",e);
+			logger.fatal(e);
 		}
 	}
 
@@ -254,7 +211,7 @@ public class CommandQueue {
 			return;
 		}
 		catch(SQLException e) {
-			logger.error("Cannot delete reset commands!",e);
+			logger.error("Cannot delete reset commands!" + e);
 			throw e;
 		}
 	}
@@ -263,7 +220,7 @@ public class CommandQueue {
 	 * @param string
 	 * @throws SQLException 
 	 */
-	public synchronized void deleteCommandsByType(String objType) throws SQLException {
+	private synchronized void deleteCommandsByType(String objType) throws SQLException {
 
 		try {
 			
@@ -276,7 +233,7 @@ public class CommandQueue {
 			return;
 		} 
 		catch (SQLException e) {
-			logger.fatal("Cannot delete reset commands! ",e);
+			logger.fatal("Cannot delete reset commands! " + e);
 			throw e;
 		}
 	}
@@ -288,44 +245,26 @@ public class CommandQueue {
 	private synchronized void addCommandsByType(String objType) throws SQLException {
 
 		try {
-			
-			ResultSet res = null;
-			PreparedStatement sta = null;
-			
-			if(objType.equalsIgnoreCase("help") == true) {
-				
-				sta = DBFactory.getPreparedStatement(
-					"SELECT lm_id obj_id FROM help_module "
-				);
-			}
-			else if(objType.equalsIgnoreCase("usr") != true) 
-			{
-				sta = DBFactory.getPreparedStatement(
-					"SELECT DISTINCT(oda.obj_id) FROM object_data oda JOIN object_reference ore ON oda.obj_id = ore.obj_id " +
-					"WHERE (deleted IS NULL) AND type = ? " +
-					"GROUP BY oda.obj_id");
-				DBFactory.setString(sta, 1, objType);
-			}
-			else {
-				sta = DBFactory.getPreparedStatement(
-					"SELECT obj_id FROM object_data " + 
-					"WHERE type = ? "
-				);
-				DBFactory.setString(sta, 1, objType);
-			}
+		
+			PreparedStatement sta = DBFactory.getPreparedStatement(
+				"SELECT DISTINCT(oda.obj_id) FROM object_data oda JOIN object_reference ore ON oda.obj_id = ore.obj_id " +
+				"WHERE (deleted IS NULL) AND type = ? " +
+				"GROUP BY oda.obj_id");
 
-			res = sta.executeQuery();
+			DBFactory.setString(sta, 1, objType);
+			ResultSet res = sta.executeQuery();
+			
 			logger.info("Adding new commands for object type: " + objType);
-
+			
 			// Add each single object
 			PreparedStatement objReset = DBFactory.getPreparedStatement(
 					"INSERT INTO search_command_queue (obj_id, obj_type, sub_id, sub_type, command, last_update, finished) " + 
 					"VALUES (?, ?, ?, ?, ?, ?, ?)");
-
+	
 			while(res.next()) {
-
+				
 				logger.debug("Added new reset command");
-
+				
 				objReset.setInt(1,res.getInt("obj_id"));
 				objReset.setString(2, objType);
 				objReset.setInt(3,0);
@@ -333,23 +272,19 @@ public class CommandQueue {
 				objReset.setString(5,"reset");
 				objReset.setTimestamp(6,new java.sql.Timestamp(new java.util.Date().getTime()));
 				objReset.setInt(7,0);
-
+				
 				objReset.executeUpdate();
 			}
-			
 			try {
-				if(res != null)
-				{
-					res.close();
-				}
-			} 
-			catch (SQLException e) {
+				res.close();
+			} catch (SQLException e) {
 				logger.warn("Cannot close result set: " + e);
 			}
+			return;
 		}
 		catch(SQLException e) {
 			
-			logger.fatal("Cannot build index ",e);
+			logger.fatal("Cannot build index: " + e);
 			throw e;
 		}
 		
@@ -409,7 +344,7 @@ public class CommandQueue {
 		try {
 
 			Statement delete = db.createStatement();
-			delete.executeUpdate("DELETE FROM search_command_queue");
+			delete.executeUpdate("TRUNCATE TABLE search_command_queue");
 			
 			try {
 				if(delete != null) {
@@ -439,7 +374,7 @@ public class CommandQueue {
 			}
 		}
 		catch (Exception e) {
-			logger.error("Cannot add to command queue",e);
+			logger.error(e);
 		}
 	}
 	
@@ -452,7 +387,7 @@ public class CommandQueue {
 		
 		logger.info("Deleting search_command_queue");
 		Statement delete = db.createStatement();
-		delete.execute("DELETE FROM search_command_queue");
+		delete.execute("TRUNCATE TABLE search_command_queue");
 		
 		try {
 			delete.close();
@@ -484,7 +419,7 @@ public class CommandQueue {
 			}
 		}
 		catch (Exception e) {
-			logger.error("Error deleting from command queue", e);
+			logger.error(e);
 		}
 		
 	}
@@ -518,7 +453,7 @@ public class CommandQueue {
 			}
 		}
 		catch (Exception e) {
-			logger.error("Error updating command queue", e);
+			logger.error(e);
 		}
 	}
 

@@ -95,12 +95,7 @@ public class PathUtils {
 		
 		return fullPath.toString();
 	}
-
-	/**
-	 * Build directory name of version dir according for ILIAS file versions
-	 * @param version
-	 * @return
-	 */
+	
 	public static String buildVersionDirectory(int version) {
 		
 		StringBuilder directoryName = new StringBuilder();
@@ -116,11 +111,7 @@ public class PathUtils {
 			return directoryName.toString();
 			
 		}
-		else
-		{
-			directoryName.append(String.valueOf(version));
-			return directoryName.toString();
-		}
+		return "";
 	}
 
 }
