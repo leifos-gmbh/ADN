@@ -46,9 +46,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Vector;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Level;
 import org.jdom.JDOMException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -56,11 +57,8 @@ import org.jdom.JDOMException;
  */
 public class RPCTransformationHandler {
 
-	/**
-	 *
-	 */
-	protected static Logger logger = Logger.getLogger(RPCTransformationHandler.class);
 	private FO2PDF fo2pdf;
+    protected static Logger logger = LogManager.getLogger(RPCTransformationHandler.class);
 
 	/**
 	 *
@@ -188,7 +186,6 @@ public class RPCTransformationHandler {
 		throws IOException, DocumentException {
 
 		logger.info("Filling PDF-Template...");
-		logger.setLevel(Level.DEBUG);
 		logger.debug("Input file is:" + inFile);
 
 

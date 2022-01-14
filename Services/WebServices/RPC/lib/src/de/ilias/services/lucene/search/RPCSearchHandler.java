@@ -27,7 +27,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
@@ -47,6 +47,7 @@ import de.ilias.services.settings.ConfigurationException;
 import de.ilias.services.settings.LocalSettings;
 
 import de.ilias.services.lucene.settings.*;
+import org.apache.logging.log4j.Logger;
 
 /**
  * 
@@ -56,7 +57,7 @@ import de.ilias.services.lucene.settings.*;
  */
 public class RPCSearchHandler {
 
-	Logger logger = Logger.getLogger(RPCSearchHandler.class);
+	Logger logger = LogManager.getLogger(RPCSearchHandler.class);
 	
 	/**
 	 * 

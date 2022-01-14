@@ -26,7 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
@@ -36,6 +36,7 @@ import de.ilias.services.settings.ClientSettings;
 import de.ilias.services.settings.ConfigurationException;
 import de.ilias.services.settings.LocalSettings;
 import de.ilias.services.settings.ServerSettings;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Capsulates the interaction between IndexReader and IndexWriter
@@ -46,7 +47,7 @@ import de.ilias.services.settings.ServerSettings;
  */
 public class IndexHolder {
 	
-	protected static Logger logger = Logger.getLogger(IndexHolder.class);
+	protected static Logger logger = LogManager.getLogger(IndexHolder.class);
 	
 	private static HashMap<String, IndexHolder> instances = new HashMap<String, IndexHolder>();
 	private ClientSettings settings;

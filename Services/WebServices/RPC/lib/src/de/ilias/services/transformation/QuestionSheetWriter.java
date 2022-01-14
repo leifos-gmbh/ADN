@@ -51,7 +51,8 @@ import java.util.logging.Level;
 import javax.print.attribute.HashAttributeSet;
 import javax.swing.GroupLayout;
 import org.apache.batik.css.engine.value.StringValue;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -65,7 +66,7 @@ import org.jdom.xpath.XPath;
  */
 class QuestionSheetWriter {
 
-	protected static Logger logger = Logger.getLogger(QuestionSheetWriter.class);
+	protected static Logger logger = LogManager.getLogger(QuestionSheetWriter.class);
 
 	private File inFile = null;
 	private File outFile = null;

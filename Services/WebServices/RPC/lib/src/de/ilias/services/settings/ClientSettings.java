@@ -25,7 +25,8 @@ package de.ilias.services.settings;
 import java.io.File;
 import java.util.HashMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * A singleton for each client configuration 
@@ -35,7 +36,7 @@ import org.apache.log4j.Logger;
  */
 public class ClientSettings {
 
-	protected static Logger logger = Logger.getLogger(ClientSettings.class);
+	protected static Logger logger = LogManager.getLogger(ClientSettings.class);
 	private static HashMap<String, ClientSettings> instances = new HashMap<String, ClientSettings>();
 	
 

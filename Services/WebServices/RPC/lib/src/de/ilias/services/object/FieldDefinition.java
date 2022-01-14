@@ -26,7 +26,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Field.Store;
 
@@ -34,6 +34,7 @@ import de.ilias.services.db.DBFactory;
 import de.ilias.services.lucene.index.DocumentHolder;
 import de.ilias.services.lucene.index.transform.ContentTransformer;
 import de.ilias.services.lucene.index.transform.TransformerFactory;
+import org.apache.logging.log4j.Logger;
 
 /**
  * 
@@ -43,7 +44,7 @@ import de.ilias.services.lucene.index.transform.TransformerFactory;
  */
 public class FieldDefinition {
 
-	protected static Logger logger = Logger.getLogger(FieldDefinition.class);
+	protected static Logger logger = LogManager.getLogger(FieldDefinition.class);
 	
 	private Field.Index index;
 	private Store store;

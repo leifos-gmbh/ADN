@@ -24,10 +24,13 @@ package de.ilias.services.lucene.search.highlight;
 
 import java.util.HashMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.jdom.Element;
 
 import de.ilias.services.lucene.search.ResultExport;
+import java.util.Comparator;
+import java.util.TreeMap;
+import org.apache.logging.log4j.Logger;
 
 /**
  * 
@@ -37,7 +40,7 @@ import de.ilias.services.lucene.search.ResultExport;
  */
 public class HighlightObject implements ResultExport {
 
-	protected static Logger logger = Logger.getLogger(HighlightObject.class);
+	protected static Logger logger = LogManager.getLogger(HighlightObject.class);
 	
 	private HashMap<Integer, HighlightItem> items = new HashMap<Integer, HighlightItem>();
 	private int objId;

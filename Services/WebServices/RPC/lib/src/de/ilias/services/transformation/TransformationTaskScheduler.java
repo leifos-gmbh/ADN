@@ -26,7 +26,8 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Vector;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -39,7 +40,7 @@ import org.jdom.xpath.XPath;
  */
 public class TransformationTaskScheduler {
 
-	protected static Logger logger = Logger.getLogger(TransformationTaskScheduler.class);
+	protected static Logger logger = LogManager.getLogger(TransformationTaskScheduler.class);
 
 
 	String xml = null;
@@ -51,7 +52,6 @@ public class TransformationTaskScheduler {
 	 */
 	public TransformationTaskScheduler(String xml) {
 
-		logger.setLevel(org.apache.log4j.Level.DEBUG);
 		this.xml = xml;
 	}
 

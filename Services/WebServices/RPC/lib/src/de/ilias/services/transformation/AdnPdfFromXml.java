@@ -29,13 +29,15 @@ import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfWriter;
+import de.ilias.services.lucene.index.DocumentHolder;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Vector;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
@@ -47,8 +49,8 @@ import org.jdom.xpath.XPath;
  */
 class AdnPdfFromXml {
 
-	protected static Logger logger = Logger.getLogger(AdnPdfFromXml.class);
-
+	protected static Logger logger = LogManager.getLogger(AdnPdfFromXml.class);
+	
 	private File inFile = null;
 	private File outFile = null;
 

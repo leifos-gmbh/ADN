@@ -24,7 +24,8 @@ package de.ilias.services.lucene.search;
 
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * 
@@ -37,7 +38,7 @@ public class QueryRewriter {
 	public static final int MODE_SEARCH = 1;
 	public static final int MODE_HIGHLIGHT = 2;
 
-	protected static Logger logger = Logger.getLogger(QueryRewriter.class);
+	protected static Logger logger = LogManager.getLogger(QueryRewriter.class);
 	
 	private String query;
 	private StringBuffer rewritten;
