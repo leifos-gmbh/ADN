@@ -11,25 +11,22 @@
  */
 class adnDateUtil
 {
-	/**
-	 * Calculate age in years from given date
-	 *
-	 * @param ilDateTime $a_date date
-	 * @param ilDateTime $a_reference reference date (now if not given)
-	 * @return int
-	 */
-	public static function getAge(ilDateTime $a_date, ilDateTime $a_reference = null)
+    /**
+     * Calculate age in years from given date
+     *
+     * @param ilDateTime $a_date date
+     * @param ilDateTime $a_reference reference date (now if not given)
+     * @return int
+     */
+    public static function getAge(ilDateTime $a_date, ilDateTime $a_reference = null)
     {
-		if(!$a_reference)
-		{
-			$a_reference = new ilDateTime(time(), IL_CAL_UNIX);
-		}
-		$stamp = $a_date->get(IL_CAL_UNIX);
-		$ref = $a_reference->get(IL_CAL_UNIX);
-		if($stamp < $ref)
-		{
-			return floor(($ref - $stamp)/(60*60*24*365.2425));
-		}
-	}
+        if (!$a_reference) {
+            $a_reference = new ilDateTime(time(), IL_CAL_UNIX);
+        }
+        $stamp = $a_date->get(IL_CAL_UNIX);
+        $ref = $a_reference->get(IL_CAL_UNIX);
+        if ($stamp < $ref) {
+            return floor(($ref - $stamp) / (60 * 60 * 24 * 365.2425));
+        }
+    }
 }
-?>

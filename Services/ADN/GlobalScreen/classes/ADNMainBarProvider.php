@@ -82,13 +82,9 @@ class ADNMainBarProvider extends AbstractStaticMainMenuProvider
         $items = [];
         $pos = 2;
         foreach ($this->getAllMenuItems() as $key => $sub) {
-
-            if ($key != "md")
-            {
-                $title = $this->dic->language()->txt("adn_".$key);
-            }
-            else
-            {
+            if ($key != "md") {
+                $title = $this->dic->language()->txt("adn_" . $key);
+            } else {
                 $title = $this->dic->language()->txt("adn_ad");
             }
 
@@ -99,13 +95,13 @@ class ADNMainBarProvider extends AbstractStaticMainMenuProvider
             $id = $this->if->identifier($key);
 
             $items[] = $this->mainmenu->topParentItem($id)
-                                         ->withVisibilityCallable(function() use ($key) {
+                                         ->withVisibilityCallable(function () use ($key) {
                                              return $this->checkVisibility($key);
                                          })
                                          //->withSymbol($icon)
-                                         ->withTitle($this->dic->language()->txt("adn_".$key))
+                                         ->withTitle($this->dic->language()->txt("adn_" . $key))
                                          ->withPosition($pos);
-            $pos+=2;
+            $pos += 2;
         }
         return $items;
     }
@@ -123,13 +119,13 @@ class ADNMainBarProvider extends AbstractStaticMainMenuProvider
             $pos = 10;
             foreach ($subs as $sub) {
                 $items[] = $this->mainmenu->link($this->if->identifier($sub))
-                                          ->withAction("ilias.php?baseClass=adnBaseGUI&amp;cmd=processMenuItem&amp;".
-                                              "menu_item=".$sub)
+                                          ->withAction("ilias.php?baseClass=adnBaseGUI&amp;cmd=processMenuItem&amp;" .
+                                              "menu_item=" . $sub)
                                           ->withParent($parent_id)
-                                          ->withTitle($this->dic->language()->txt("adn_".$sub))
+                                          ->withTitle($this->dic->language()->txt("adn_" . $sub))
                                           //->withSymbol($icon)
                                           ->withPosition($pos)
-                                          ->withVisibilityCallable(function() use ($key, $sub) {
+                                          ->withVisibilityCallable(function () use ($key, $sub) {
                                               return $this->checkSubVisibility($key, $sub);
                                           });
             }
@@ -139,7 +135,8 @@ class ADNMainBarProvider extends AbstractStaticMainMenuProvider
     }
 
 
-    protected function checkVisibility(string $key) : bool {
+    protected function checkVisibility(string $key) : bool
+    {
         switch ($key) {
             case self::TA:
                 return (\adnPerm::check(\adnPerm::TA, \adnPerm::READ));
@@ -159,7 +156,8 @@ class ADNMainBarProvider extends AbstractStaticMainMenuProvider
         return false;
     }
 
-    protected function checkSubVisibility(string $key, string $sub) : bool {
+    protected function checkSubVisibility(string $key, string $sub) : bool
+    {
         if ($key == self::MD) {
             if (in_array($sub, [self::MD_WOS, self::MD_CNS])) {
                 return (\adnPerm::check(\adnPerm::MD, \adnPerm::READ));
@@ -240,5 +238,4 @@ class ADNMainBarProvider extends AbstractStaticMainMenuProvider
 
         return $items;
     }
-
 }

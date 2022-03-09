@@ -15,93 +15,91 @@ include_once("./Services/Table/classes/class.ilTable2GUI.php");
  */
 class adnExamInfoLetterTableGUI extends ilTable2GUI
 {
-	/**
-	 * Constructor
-	 *
-	 * @param object $a_parent_obj parent gui object
-	 * @param string $a_parent_cmd parent default command
-	 */
-	function __construct($a_parent_obj, $a_parent_cmd)
-	{
-		global $ilCtrl, $lng;
+    /**
+     * Constructor
+     *
+     * @param object $a_parent_obj parent gui object
+     * @param string $a_parent_cmd parent default command
+     */
+    public function __construct($a_parent_obj, $a_parent_cmd)
+    {
+        global $ilCtrl, $lng;
 
-		$this->type = $a_type;
+        $this->type = $a_type;
 
-		parent::__construct($a_parent_obj, $a_parent_cmd);
-		
-		$this->setTitle($lng->txt("adn_information_letters_and_applications"));
+        parent::__construct($a_parent_obj, $a_parent_cmd);
+        
+        $this->setTitle($lng->txt("adn_information_letters_and_applications"));
 
-		if(adnPerm::check(adnPerm::EP, adnPerm::WRITE))
-		{
-			$this->addMultiCommand("confirmLettersDeletion", $lng->txt("delete"));
-			$this->addColumn("", "", "1");
-		}
+        if (adnPerm::check(adnPerm::EP, adnPerm::WRITE)) {
+            $this->addMultiCommand("confirmLettersDeletion", $lng->txt("delete"));
+            $this->addColumn("", "", "1");
+        }
 
-		$this->addColumn($this->lng->txt("adn_title"), "file");
-		$this->addColumn($this->lng->txt("actions"));
-		
-		$this->setDefaultOrderField("file");
-		$this->setDefaultOrderDirection("asc");
-		
-		$this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
-		$this->setRowTemplate("tpl.letters_row.html", "Services/ADN/EP");
-		
-		$this->importData();
-	}
+        $this->addColumn($this->lng->txt("adn_title"), "file");
+        $this->addColumn($this->lng->txt("actions"));
+        
+        $this->setDefaultOrderField("file");
+        $this->setDefaultOrderDirection("asc");
+        
+        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setRowTemplate("tpl.letters_row.html", "Services/ADN/EP");
+        
+        $this->importData();
+    }
 
-	/**
-	 * Import data from DB
-	 */
-	protected function importData()
-	{
-		include_once "Services/ADN/EP/classes/class.adnExamInfoLetter.php";
-		$letters = adnExamInfoLetter::getAllLetters();
+    /**
+     * Import data from DB
+     */
+    protected function importData()
+    {
+        include_once "Services/ADN/EP/classes/class.adnExamInfoLetter.php";
+        $letters = adnExamInfoLetter::getAllLetters();
 
-		$this->setData($letters);
-		$this->setMaxCount(sizeof($letters));
-	}
-	
-	/**
-	 * Fill table row
-	 *
-	 * @param array $a_set data array
-	 */
-	protected function fillRow($a_set)
-	{
-		global $lng, $ilCtrl;
-		
-		// actions...
+        $this->setData($letters);
+        $this->setMaxCount(sizeof($letters));
+    }
+    
+    /**
+     * Fill table row
+     *
+     * @param array $a_set data array
+     */
+    protected function fillRow($a_set)
+    {
+        global $lng, $ilCtrl;
+        
+        // actions...
 
-		if(adnPerm::check(adnPerm::EP, adnPerm::WRITE))
-		{
-			// checkbox for deletion
-			$this->tpl->setCurrentBlock("cbox");
-			$this->tpl->setVariable("VAL_ID", $a_set["id"]);
-			$this->tpl->parseCurrentBlock();
-		}
-		
-		if(adnPerm::check(adnPerm::EP, adnPerm::READ))
-		{
-			$ilCtrl->setParameter($this->parent_obj, "ilt_id", $a_set["id"]);
+        if (adnPerm::check(adnPerm::EP, adnPerm::WRITE)) {
+            // checkbox for deletion
+            $this->tpl->setCurrentBlock("cbox");
+            $this->tpl->setVariable("VAL_ID", $a_set["id"]);
+            $this->tpl->parseCurrentBlock();
+        }
+        
+        if (adnPerm::check(adnPerm::EP, adnPerm::READ)) {
+            $ilCtrl->setParameter($this->parent_obj, "ilt_id", $a_set["id"]);
 
-			// download
-			if($a_set["file"])
-			{
-				$this->tpl->setCurrentBlock("action");
-				$this->tpl->setVariable("TXT_CMD",
-					$lng->txt("download"));
-				$this->tpl->setVariable("HREF_CMD",
-					$ilCtrl->getLinkTarget($this->parent_obj, "downloadFile"));
-				$this->tpl->parseCurrentBlock();
-			}
+            // download
+            if ($a_set["file"]) {
+                $this->tpl->setCurrentBlock("action");
+                $this->tpl->setVariable(
+                    "TXT_CMD",
+                    $lng->txt("download")
+                );
+                $this->tpl->setVariable(
+                    "HREF_CMD",
+                    $ilCtrl->getLinkTarget($this->parent_obj, "downloadFile")
+                );
+                $this->tpl->parseCurrentBlock();
+            }
 
-			$ilCtrl->setParameter($this->parent_obj, "ilt_id", "");
-		}
+            $ilCtrl->setParameter($this->parent_obj, "ilt_id", "");
+        }
 
-	
-		// properties
-		$this->tpl->setVariable("VAL_NAME", $a_set["file"]);
-	}
+    
+        // properties
+        $this->tpl->setVariable("VAL_NAME", $a_set["file"]);
+    }
 }
-
-?>

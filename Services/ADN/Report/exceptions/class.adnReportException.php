@@ -13,14 +13,13 @@
  */
 class adnReportException extends ilException
 {
-	/**
-	 * Constructor
-	 * @param string $message
-	 * @param int	$a_code
-	 */
-	public function __construct($a_message, $a_code = 0)
-	{
-		parent::__construct($a_message, $a_code);
-	}
+    /**
+     * Constructor
+     * @param string $message
+     * @param int	$a_code
+     */
+    public function __construct($a_message, $a_code = 0)
+    {
+        parent::__construct($a_message, $a_code);
+    }
 }
-?>

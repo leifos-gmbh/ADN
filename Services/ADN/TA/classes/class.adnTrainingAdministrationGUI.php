@@ -16,93 +16,86 @@
  */
 class adnTrainingAdministrationGUI
 {
-	/**
-	 * Execute command
-	 */
-	public function executeCommand()
-	{
-		global $ilCtrl, $lng, $tpl;
+    /**
+     * Execute command
+     */
+    public function executeCommand()
+    {
+        global $ilCtrl, $lng, $tpl;
 
-		// set page title
-		$tpl->setTitle($lng->txt("adn_ta"));
+        // set page title
+        $tpl->setTitle($lng->txt("adn_ta"));
 
-		$next_class = $ilCtrl->getNextClass();
-		$cmd = $ilCtrl->getCmd();
+        $next_class = $ilCtrl->getNextClass();
+        $cmd = $ilCtrl->getCmd();
 
-		// menu item triggered
-		if ($cmd == "processMenuItem")
-		{
-			// determine cmd and cmdClass from menu item
-			include_once("./Services/ADN/UI/classes/class.adnMainMenuGUI.php");
-			switch ($_GET["menu_item"])
-			{
-				// list training providers
-				case adnMainMenuGUI::TA_TPS:
-					$ilCtrl->setCmdClass("adntrainingprovidergui");
-					$ilCtrl->setCmd("listTrainingProviders");
-					break;
+        // menu item triggered
+        if ($cmd == "processMenuItem") {
+            // determine cmd and cmdClass from menu item
+            include_once("./Services/ADN/UI/classes/class.adnMainMenuGUI.php");
+            switch ($_GET["menu_item"]) {
+                // list training providers
+                case adnMainMenuGUI::TA_TPS:
+                    $ilCtrl->setCmdClass("adntrainingprovidergui");
+                    $ilCtrl->setCmd("listTrainingProviders");
+                    break;
 
-				// list training providers
-				case adnMainMenuGUI::TA_TES:
-					$ilCtrl->setCmdClass("adntrainingeventgui");
-					$ilCtrl->setCmd("listTrainingEvents");
-					break;
+                // list training providers
+                case adnMainMenuGUI::TA_TES:
+                    $ilCtrl->setCmdClass("adntrainingeventgui");
+                    $ilCtrl->setCmd("listTrainingEvents");
+                    break;
 
-				// list information letters
-				case adnMainMenuGUI::TA_ILS:
-					$ilCtrl->setCmdClass("adninformationlettergui");
-					$ilCtrl->setCmd("listInformationLetters");
-					break;
+                // list information letters
+                case adnMainMenuGUI::TA_ILS:
+                    $ilCtrl->setCmdClass("adninformationlettergui");
+                    $ilCtrl->setCmd("listInformationLetters");
+                    break;
 
-				// list areas of expertise
-				case adnMainMenuGUI::TA_AES:
-					$ilCtrl->setCmdClass("adnareaofexpertisegui");
-					$ilCtrl->setCmd("listAreasOfExpertise");
-					break;
-			}
-			$next_class = $ilCtrl->getNextClass();
-		}
-		else if ($next_class == "")
-		{
-			// If no next class is responsible for handling the
-			// command, set the default class
-			// default: training provider overview
-			$ilCtrl->setCmd("");
-			$ilCtrl->setCmdClass("adntrainingprovidergui");
-			$next_class = $ilCtrl->getNextClass();
-		}
+                // list areas of expertise
+                case adnMainMenuGUI::TA_AES:
+                    $ilCtrl->setCmdClass("adnareaofexpertisegui");
+                    $ilCtrl->setCmd("listAreasOfExpertise");
+                    break;
+            }
+            $next_class = $ilCtrl->getNextClass();
+        } elseif ($next_class == "") {
+            // If no next class is responsible for handling the
+            // command, set the default class
+            // default: training provider overview
+            $ilCtrl->setCmd("");
+            $ilCtrl->setCmdClass("adntrainingprovidergui");
+            $next_class = $ilCtrl->getNextClass();
+        }
 
 
-		// forward command to next gui class in control flow
-		switch ($next_class)
-		{
-			case "adntrainingprovidergui":
-				include_once("./Services/ADN/TA/classes/class.adnTrainingProviderGUI.php");
-				$tp_gui = new adnTrainingProviderGUI();
-				$ilCtrl->forwardCommand($tp_gui);
-				break;
+        // forward command to next gui class in control flow
+        switch ($next_class) {
+            case "adntrainingprovidergui":
+                include_once("./Services/ADN/TA/classes/class.adnTrainingProviderGUI.php");
+                $tp_gui = new adnTrainingProviderGUI();
+                $ilCtrl->forwardCommand($tp_gui);
+                break;
 
-			case "adntrainingeventgui":
-				include_once("./Services/ADN/TA/classes/class.adnTrainingEventGUI.php");
-				$tp_gui = new adnTrainingEventGUI();
-				$ilCtrl->forwardCommand($tp_gui);
-				break;
+            case "adntrainingeventgui":
+                include_once("./Services/ADN/TA/classes/class.adnTrainingEventGUI.php");
+                $tp_gui = new adnTrainingEventGUI();
+                $ilCtrl->forwardCommand($tp_gui);
+                break;
 
-			case "adninformationlettergui":
-				include_once("./Services/ADN/TA/classes/class.adnInformationLetterGUI.php");
-				$il_gui = new adnInformationLetterGUI();
-				$ilCtrl->forwardCommand($il_gui);
-				break;
+            case "adninformationlettergui":
+                include_once("./Services/ADN/TA/classes/class.adnInformationLetterGUI.php");
+                $il_gui = new adnInformationLetterGUI();
+                $ilCtrl->forwardCommand($il_gui);
+                break;
 
-			case "adnareaofexpertisegui":
-				include_once("./Services/ADN/TA/classes/class.adnAreaOfExpertiseGUI.php");
-				$ae_gui = new adnAreaOfExpertiseGUI();
-				$ilCtrl->forwardCommand($ae_gui);
-				break;
-		}
+            case "adnareaofexpertisegui":
+                include_once("./Services/ADN/TA/classes/class.adnAreaOfExpertiseGUI.php");
+                $ae_gui = new adnAreaOfExpertiseGUI();
+                $ilCtrl->forwardCommand($ae_gui);
+                break;
+        }
 
-		adnBaseGUI::setHelpButton($ilCtrl->getCmdClass());
-	}
+        adnBaseGUI::setHelpButton($ilCtrl->getCmdClass());
+    }
 }
-
-?>

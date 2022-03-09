@@ -11,91 +11,88 @@ include_once("./Services/Object/classes/class.ilObjectGUI.php");
  *
  * @ilCtrl_Calls ilObjADNMasterDataGUI: ilPermissionGUI
  * @ilCtrl_IsCalledBy ilObjADNMasterDataGUI: ilAdministrationGUI
- * 
+ *
  * @ingroup ServicesADN
  */
 class ilObjADNMasterDataGUI extends ilObjectGUI
 {
-	/**
-	 * Contructor
-	 *
-	 * @access public
-	 */
-	public function __construct($a_data, $a_id, $a_call_by_reference = true, $a_prepare_output = true)
-	{
-		$this->type = 'xamd';
-		parent::__construct($a_data, $a_id, $a_call_by_reference, $a_prepare_output);
-	}
+    /**
+     * Contructor
+     *
+     * @access public
+     */
+    public function __construct($a_data, $a_id, $a_call_by_reference = true, $a_prepare_output = true)
+    {
+        $this->type = 'xamd';
+        parent::__construct($a_data, $a_id, $a_call_by_reference, $a_prepare_output);
+    }
 
-	/**
-	 * Execute command
-	 *
-	 * @access public
-	 *
-	 */
-	public function executeCommand()
-	{
-		global $rbacsystem,$ilErr,$ilAccess;
+    /**
+     * Execute command
+     *
+     * @access public
+     *
+     */
+    public function executeCommand()
+    {
+        global $rbacsystem,$ilErr,$ilAccess;
 
-		$next_class = $this->ctrl->getNextClass($this);
-		$cmd = $this->ctrl->getCmd();
+        $next_class = $this->ctrl->getNextClass($this);
+        $cmd = $this->ctrl->getCmd();
 
-		$this->prepareOutput();
+        $this->prepareOutput();
 
-		if(!$ilAccess->checkAccess('read','',$this->object->getRefId()))
-		{
-			$ilErr->raiseError($this->lng->txt('no_permission'),$ilErr->WARNING);
-		}
+        if (!$ilAccess->checkAccess('read', '', $this->object->getRefId())) {
+            $ilErr->raiseError($this->lng->txt('no_permission'), $ilErr->WARNING);
+        }
 
-		switch($next_class)
-		{
-			case 'ilpermissiongui':
-				if ($rbacsystem->checkAccess('edit_permission',$this->object->getRefId()))
-				{
-					$this->tabs_gui->setTabActive('perm_settings');
-					include_once("Services/AccessControl/classes/class.ilPermissionGUI.php");
-					$perm_gui = new ilPermissionGUI($this);
-					$ret =& $this->ctrl->forwardCommand($perm_gui);
-				}
-				break;
+        switch ($next_class) {
+            case 'ilpermissiongui':
+                if ($rbacsystem->checkAccess('edit_permission', $this->object->getRefId())) {
+                    $this->tabs_gui->setTabActive('perm_settings');
+                    include_once("Services/AccessControl/classes/class.ilPermissionGUI.php");
+                    $perm_gui = new ilPermissionGUI($this);
+                    $ret = &$this->ctrl->forwardCommand($perm_gui);
+                }
+                break;
 
-			default:
-				$this->$cmd();
-				break;
-		}
-		return true;
-	}
+            default:
+                $this->$cmd();
+                break;
+        }
+        return true;
+    }
 
-	/**
-	 * Get tabs
-	 *
-	 * @access public
-	 *
-	 */
-	public function getAdminTabs()
-	{
-		global $rbacsystem, $ilAccess;
+    /**
+     * Get tabs
+     *
+     * @access public
+     *
+     */
+    public function getAdminTabs()
+    {
+        global $rbacsystem, $ilAccess;
 
-		if ($rbacsystem->checkAccess('edit_permission',$this->object->getRefId()))
-		{
-			$this->tabs_gui->addTarget("perm_settings",
-				$this->ctrl->getLinkTargetByClass('ilpermissiongui',"perm"),
-				array(),'ilpermissiongui');
-		}
-	}
+        if ($rbacsystem->checkAccess('edit_permission', $this->object->getRefId())) {
+            $this->tabs_gui->addTarget(
+                "perm_settings",
+                $this->ctrl->getLinkTargetByClass('ilpermissiongui', "perm"),
+                array(),
+                'ilpermissiongui'
+            );
+        }
+    }
 
-	/**
-	 * View
-	 *
-	 * @param
-	 * @return
-	 */
-	function view()
-	{
-		global $ilCtrl;
+    /**
+     * View
+     *
+     * @param
+     * @return
+     */
+    public function view()
+    {
+        global $ilCtrl;
 
-		$ilCtrl->redirectByClass("ilpermissiongui", "perm");
-	}
-
+        $ilCtrl->redirectByClass("ilpermissiongui", "perm");
+    }
 }
-?>

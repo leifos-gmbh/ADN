@@ -14,52 +14,48 @@ include_once './Services/Xml/classes/class.ilXmlWriter.php';
  */
 class adnTaskScheduleWriter extends ilXmlWriter
 {
-	/**
-	 * Constructor
-	 * @return void
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
-	
-	
-	/**
-	 * Add parameter type and value
-	 * @param string $a_type
-	 * @param string $a_value
-	 * @return bool
-	 */
-	public function addParameter($a_type,$a_value)
-	{
-		switch($a_type)
-		{
-			case 'string':
-				$this->xmlStartTag('param',array('type' => 'string'));
-				$this->xmlElement('string',array(),$a_value);
-				$this->xmlEndTag('param');
-				break;
-				
-			case 'map':
-				$this->xmlStartTag('param',array('type' => 'map'));
-				foreach($a_value as $key => $val)
-				{
-					$this->xmlElement('map',array('name' => $key,'value' => $val));
-				}
-				$this->xmlEndTag('param');
-				break;
-			
-			case 'vector':
-				$this->xmlStartTag('param',array('type' => 'vector'));
-				foreach($a_value as $val)
-				{
-					$this->xmlElement('vector',array(),$val);
-				}
-				$this->xmlEndTag('param');
-				break;
-								
-		}
-		return true;
-	}
+    /**
+     * Constructor
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+    
+    
+    /**
+     * Add parameter type and value
+     * @param string $a_type
+     * @param string $a_value
+     * @return bool
+     */
+    public function addParameter($a_type, $a_value)
+    {
+        switch ($a_type) {
+            case 'string':
+                $this->xmlStartTag('param', array('type' => 'string'));
+                $this->xmlElement('string', array(), $a_value);
+                $this->xmlEndTag('param');
+                break;
+                
+            case 'map':
+                $this->xmlStartTag('param', array('type' => 'map'));
+                foreach ($a_value as $key => $val) {
+                    $this->xmlElement('map', array('name' => $key,'value' => $val));
+                }
+                $this->xmlEndTag('param');
+                break;
+            
+            case 'vector':
+                $this->xmlStartTag('param', array('type' => 'vector'));
+                foreach ($a_value as $val) {
+                    $this->xmlElement('vector', array(), $val);
+                }
+                $this->xmlEndTag('param');
+                break;
+                                
+        }
+        return true;
+    }
 }
-?>

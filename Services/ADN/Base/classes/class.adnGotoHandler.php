@@ -9,45 +9,40 @@
  */
 class adnGotoHandler
 {
-	/**
-	 * Check
-	 *
-	 * @param string $a_target
-	 * @return bool
-	 */
-	static function _check($a_target)
-	{
-		$p = explode("_", $a_target);
-		if ($p[0] == "adn" && in_array($p[1], array("candd", "certd")) && is_numeric($p[2]))
-		{
-			return true;
-		}
-		return false;
-	}
+    /**
+     * Check
+     *
+     * @param string $a_target
+     * @return bool
+     */
+    public static function _check($a_target)
+    {
+        $p = explode("_", $a_target);
+        if ($p[0] == "adn" && in_array($p[1], array("candd", "certd")) && is_numeric($p[2])) {
+            return true;
+        }
+        return false;
+    }
 
-	/**
-	 * Goto
-	 *
-	 * @param string $a_target
-	 */
-	static function _goto($a_target)
-	{
-		global $ilCtrl;
+    /**
+     * Goto
+     *
+     * @param string $a_target
+     */
+    public static function _goto($a_target)
+    {
+        global $ilCtrl;
 
-		$ilCtrl->setTargetScript("ilias.php");
-		$ilCtrl->initBaseClass("adnbasegui");
+        $ilCtrl->setTargetScript("ilias.php");
+        $ilCtrl->initBaseClass("adnbasegui");
 
-		$p = explode("_", $a_target);
+        $p = explode("_", $a_target);
 
-		if ($p[0] == "adn" && in_array($p[1], array("candd", "certd")) && is_numeric($p[2]))
-		{
-			$ilCtrl->setParameterByClass("adnpersonaldatamaintenancegui", "target", $p[1]);
-			$ilCtrl->setParameterByClass("adnpersonaldatamaintenancegui", "wmo_id", (int) $p[2]);
-			$ilCtrl->redirectByClass(array("adnbasegui", "adncertifiedprofessionalgui", "adnpersonaldatamaintenancegui"), "jumpToList");
-		}
-	}
-
-
+        if ($p[0] == "adn" && in_array($p[1], array("candd", "certd")) && is_numeric($p[2])) {
+            $ilCtrl->setParameterByClass("adnpersonaldatamaintenancegui", "target", $p[1]);
+            $ilCtrl->setParameterByClass("adnpersonaldatamaintenancegui", "wmo_id", (int) $p[2]);
+            $ilCtrl->redirectByClass(array("adnbasegui", "adncertifiedprofessionalgui", "adnpersonaldatamaintenancegui"), "jumpToList");
+        }
+    }
 }
 // cr-008 end
-?>
