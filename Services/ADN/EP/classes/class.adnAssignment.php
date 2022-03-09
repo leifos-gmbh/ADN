@@ -353,7 +353,7 @@ class adnAssignment extends adnDBBase
 		$this->setLastScoringUpdate(new ilDateTime($set["scoring_update"], IL_CAL_DATETIME, ilTimeZone::UTC));
 		$this->setLastScoringUpdateUser($set["scoring_update_user"]);
 
-		parent::read($id, "adn_ep_assignment");
+		parent::_read($id, "adn_ep_assignment");
 	}
 
 	/**
@@ -410,7 +410,7 @@ class adnAssignment extends adnDBBase
 			
 		$ilDB->insert("adn_ep_assignment", $fields);
 
-		parent::save($id, "adn_ep_assignment");
+		parent::_save($id, "adn_ep_assignment");
 
 		return $id;
 	}
@@ -433,7 +433,7 @@ class adnAssignment extends adnDBBase
 		$fields = $this->propertiesToFields();
 
 		$ilDB->update("adn_ep_assignment", $fields, array("id"=>array("integer", $id)));
-		parent::update($id, "adn_ep_assignment");
+		parent::_update($id, "adn_ep_assignment");
 
 		return true;
 	}
@@ -655,7 +655,7 @@ class adnAssignment extends adnDBBase
 	 * @param int score
 	 * @return string score text
 	 */
-	function getScoreText($a_score)
+	static function getScoreText($a_score)
 	{
 		global $lng;
 
@@ -683,7 +683,7 @@ class adnAssignment extends adnDBBase
 	 *
 	 * @return array
 	 */
-	function getAllScores()
+	static function getAllScores()
 	{
 		return array(
 			self::SCORE_NOT_SCORED =>
@@ -750,7 +750,7 @@ class adnAssignment extends adnDBBase
 	 * @param string $a_code access code
 	 * @return boolean
 	 */
-	function codeUsed($a_cp_id, $a_code)
+	static function codeUsed($a_cp_id, $a_code)
 	{
 		global $ilDB;
 
@@ -790,7 +790,7 @@ class adnAssignment extends adnDBBase
 	 * @param int $a_ass_id assignment id
 	 * @return int certified professional is
 	 */
-	public function lookupCertifiedProfessional($a_ass_id)
+	public static function lookupCertifiedProfessional($a_ass_id)
 	{
 		return self::lookupProperty($a_ass_id, "cp_professional_id");
 	}
@@ -802,7 +802,7 @@ class adnAssignment extends adnDBBase
 	 * @param string $a_code access code
 	 * @return int assignment id (0 if no assignment has been found)
 	 */
-	function getAssignmentIdForCodeAndCP($a_cp_id, $a_code)
+	static function getAssignmentIdForCodeAndCP($a_cp_id, $a_code)
 	{
 		global $ilDB;
 

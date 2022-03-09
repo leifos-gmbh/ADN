@@ -38,10 +38,11 @@ class adnCertifiedProfessional extends adnDBBase
 	protected $comment; // [string]
 	protected $subject_area; // [string]
 	protected $registered_exam; // [bool]
-	protected $foreign_certificate; // [bool]
+	protected $foreign_certificate; // [bool]	// Basisbescheinigung aus dem Auslang
 	protected $registered_by; // [int]
 	protected $blocked_until; // [ilDate]
 	protected $ilias_user_id; // [int]
+	protected $foreign_cert_handed_in; // [bool]	// Bescheinigung aus dem Ausland vorgelegt #13
 
 	/**
 	 * Constructor
@@ -575,7 +576,7 @@ class adnCertifiedProfessional extends adnDBBase
 	}
 
 	/**
-	 * Set foreign certificate
+	 * Set foreign certificate (Basisbescheinigung aus Ausland vorhanden)
 	 *
 	 * @param bool $a_value
 	 */
@@ -592,6 +593,26 @@ class adnCertifiedProfessional extends adnDBBase
 	public function hasForeignCertificate()
 	{
 		return $this->foreign_certificate;
+	}
+
+	/**
+	 * Set foreign certificate handed in (Bescheinigung aus dem Ausland vorgelegt)
+	 *
+	 * @param bool $a_value
+	 */
+	public function setForeignCertificateHandedIn($a_value)
+	{
+		$this->foreign_cert_handed_in = (bool)$a_value;
+	}
+
+	/**
+	 * Get foreign certificate handed in status
+	 *
+	 * @return bool
+	 */
+	public function hasForeignCertificateHandedIn()
+	{
+		return $this->foreign_cert_handed_in;
 	}
 
 	/**
@@ -743,7 +764,7 @@ class adnCertifiedProfessional extends adnDBBase
 
 		$res = $ilDB->query("SELECT salutation,last_name,first_name,".
 			"birthdate,citizenship,subject_area,".
-			"registered_for_exam,foreign_certificate,pa_country,pa_postal_code,".
+			"registered_for_exam,foreign_certificate,foreign_cert_handed_in,pa_country,pa_postal_code,".
 			"pa_city,pa_street,".
 			"pa_street_no,sa_salutation,sa_last_name,sa_first_name,sa_country,".
 			"sa_postal_code,sa_city,".
@@ -761,6 +782,7 @@ class adnCertifiedProfessional extends adnDBBase
 		$this->setSubjectArea($set["subject_area"]);
 		$this->setRegisteredForExam($set["registered_for_exam"]);
 		$this->setForeignCertificate($set["foreign_certificate"]);
+		$this->setForeignCertificateHandedIn($set["foreign_cert_handed_in"]);
 		$this->setPostalCountry($set["pa_country"]);
 		$this->setPostalCode($set["pa_postal_code"]);
 		$this->setPostalCity($set["pa_city"]);
@@ -787,7 +809,7 @@ class adnCertifiedProfessional extends adnDBBase
 		$this->setLastEvent($set["last_ta_event_id"]);
 		$this->setIliasUserId($set["ilias_user_id"]);
 
-		parent::read($id, "adn_cp_professional");
+		parent::_read($id, "adn_cp_professional");
 	}
 
 	/**
@@ -806,6 +828,7 @@ class adnCertifiedProfessional extends adnDBBase
 			"subject_area" => array("text", $this->getSubjectArea()),
 			"registered_for_exam" => array("integer", $this->isRegisteredForExam()),
 			"foreign_certificate" => array("integer", $this->hasForeignCertificate()),
+			"foreign_cert_handed_in" => array("integer", $this->hasForeignCertificateHandedIn()),
 			"pa_country" => array("integer", $this->getPostalCountry()),
 			"pa_postal_code" => array("text", $this->getPostalCode()),
 			"pa_city" => array("text", $this->getPostalCity()),
@@ -861,7 +884,7 @@ class adnCertifiedProfessional extends adnDBBase
 			
 		$ilDB->insert("adn_cp_professional", $fields);
 
-		parent::save($id, "adn_cp_professional");
+		parent::_save($id, "adn_cp_professional");
 		
 		return $id;
 	}
@@ -885,7 +908,7 @@ class adnCertifiedProfessional extends adnDBBase
 
 		$ilDB->update("adn_cp_professional", $fields, array("id"=>array("integer", $id)));
 
-		parent::update($id, "adn_cp_professional");
+		parent::_update($id, "adn_cp_professional");
 
 		return true;
 	}
@@ -1094,7 +1117,7 @@ class adnCertifiedProfessional extends adnDBBase
 		$sql = "SELECT a.id,a.last_name,a.first_name,a.birthdate,a.citizenship,a.subject_area,".
 			"a.registered_by_wmo_id, a.create_date, ".
 			"a.blocked_until,a.pa_country,a.pa_street,a.pa_street_no,a.pa_postal_code,a.pa_city,".
-			"a.foreign_certificate,".
+			"a.foreign_certificate,a.foreign_cert_handed_in,".
 			"a.last_ta_event_id,a.ilias_user_id".
 			" FROM adn_cp_professional a ";
 

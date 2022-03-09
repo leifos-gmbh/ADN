@@ -250,7 +250,7 @@ class adnExaminationEvent extends adnDBBase
 		$this->setCoChair2($set["co_chair_2_id"]);
 		$this->setCosts($set["additional_costs"]/100);
 		
-		parent::read($id, "adn_ep_exam_event");
+		parent::_read($id, "adn_ep_exam_event");
 	}
 
 	/**
@@ -293,7 +293,7 @@ class adnExaminationEvent extends adnDBBase
 
 		$ilDB->insert("adn_ep_exam_event", $fields);
 
-		parent::save($id, "adn_ep_exam_event");
+		parent::_save($id, "adn_ep_exam_event");
 		
 		return $id;
 	}
@@ -317,7 +317,7 @@ class adnExaminationEvent extends adnDBBase
 		
 		$ilDB->update("adn_ep_exam_event", $fields, array("id"=>array("integer", $id)));
 
-		parent::update($id, "adn_ep_exam_event");
+		parent::_update($id, "adn_ep_exam_event");
 
 		return true;
 	}

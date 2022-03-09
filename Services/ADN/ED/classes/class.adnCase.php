@@ -133,7 +133,7 @@ class adnCase extends adnDBBase
 		$this->setButan($set["butan"]);
 		$this->setText($set["text"]);
 
-		parent::read($id, "adn_ed_case");
+		parent::_read($id, "adn_ed_case");
 	}
 
 	/**
@@ -168,7 +168,7 @@ class adnCase extends adnDBBase
 			
 		$ilDB->insert("adn_ed_case", $fields);
 
-		parent::save($id, "adn_ed_case");
+		parent::_save($id, "adn_ed_case");
 		
 		return $id;
 	}
@@ -192,7 +192,7 @@ class adnCase extends adnDBBase
 		
 		$ilDB->update("adn_ed_case", $fields, array("id"=>array("integer", $id)));
 
-		parent::update($id, "adn_ed_case");
+		parent::_update($id, "adn_ed_case");
 
 		return true;
 	}

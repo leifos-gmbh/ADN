@@ -139,12 +139,17 @@ class adnPersonalDataTableGUI extends ilTable2GUI
 		$this->tpl->parseCurrentBlock();
 		$ilCtrl->setParameter($this->parent_obj, "pid", $_GET["pid"]);
 
-		$ilCtrl->setParameterByClass("adnCertificateScoringGUI", "cd_id", $a_set["id"]);
-		$this->tpl->setCurrentBlock("action");
-		$this->tpl->setVariable("HREF_CMD", $ilCtrl->getLinkTargetByClass(array("adnBaseGUI", "adnExaminationScoringGUI", "adnCertificateScoringGUI"), "createCertificate"));
-		$this->tpl->setVariable("TXT_CMD", $lng->txt("adn_add_certificate"));
-		$this->tpl->parseCurrentBlock();
-		$ilCtrl->setParameterByClass("adnCertificateScoringGUI", "cd_id", $_GET["id"]);
+		$ilCtrl->setParameterByClass("adnCertificateGUI", "pid", $a_set["id"]);
+
+		if ($a_set["foreign_cert_handed_in"])
+		{
+			$this->tpl->setCurrentBlock("action");
+			$this->tpl->setVariable("TXT_CMD", $lng->txt("adn_extend_certificate_foreign"));
+			$this->tpl->setVariable("HREF_CMD", $ilCtrl->getLinkTargetByClass(array("adnBaseGUI", "adnCertifiedProfessionalGUI", "adnCertificateGUI"), "extendCertificate"));
+			$this->tpl->parseCurrentBlock();
+		}
+
+		$ilCtrl->setParameterByClass("adnCertificateGUI", "pid", $_GET["id"]);
 
 		// properties
 		$this->tpl->setVariable("VAL_LAST_NAME", $a_set["last_name"]);

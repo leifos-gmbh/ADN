@@ -743,7 +743,9 @@ class ilAccess implements ilAccessHandler
 
         // check for a deactivated plugin
         if ($objDefinition->isPluginTypeName($a_type) && !$objDefinition->isPlugin($a_type)) {
-            return false;
+            // adn-patch start (out-commented)
+            //return false;
+            // adn-patch end
         }
         if (!$a_type) {
             return false;

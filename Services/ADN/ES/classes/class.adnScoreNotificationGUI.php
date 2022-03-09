@@ -133,7 +133,7 @@ class adnScoreNotificationGUI
 
 		// table of examination events
 		include_once("./Services/ADN/ES/classes/class.adnCandidateTableGUI.php");
-		$table = new adnCandidateTableGUI($this, "listEvents", $event_id, true);
+		$table = new adnCandidateTableGUI($this, "listParticipants", $event_id, true);
 
 		// output table
 		$tpl->setContent($table->getHTML());
@@ -148,7 +148,7 @@ class adnScoreNotificationGUI
 		
 		$event_id = $_REQUEST['ev_id'];
 		$ass_ids = $_REQUEST['ass_id'];
-		if(!count($ass_ids))
+		if(empty($ass_ids))
 		{
 			ilUtil::sendFailure($lng->txt('select_one'),true);
 			$ilCtrl->redirect($this,'listParticipants');

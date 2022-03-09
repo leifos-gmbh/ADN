@@ -106,9 +106,6 @@ class ilTable2GUI extends ilTableGUI
     const FILTER_DURATION_RANGE = 7;
 	// adn-patch start
 	const FILTER_TEXT_RANGE = 99;
-	// cr-008 start
-	const FILTER_CHECKBOX = 98;
-	// cr-008 end
 	// adn-patch end
     const FILTER_DATETIME_RANGE = 8;
     const FILTER_CHECKBOX = 9;
@@ -766,14 +763,6 @@ class ilTable2GUI extends ilTableGUI
 				$item->setComparisonMode(ilCombinationInputGUI::COMPARISON_ASCENDING);
 				$item->setSize(20);
 				break;
-
-			// cr-008 start
-			case self::FILTER_CHECKBOX:
-				include_once("./Services/Form/classes/class.ilCheckboxInputGUI.php");
-				$item = new ilCheckboxInputGUI($caption, $id);
-				$item->setValue("1");
-				break;
-			// cr-008 end
 			// adn-patch end
 
             case self::FILTER_DURATION_RANGE:

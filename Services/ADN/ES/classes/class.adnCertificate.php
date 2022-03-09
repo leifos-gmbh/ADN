@@ -449,7 +449,7 @@ class adnCertificate extends adnDBBase
 					$rec["type_".$k]);
 			}
 
-			parent::read($this->getId(), "adn_es_certificate");
+			parent::_read($this->getId(), "adn_es_certificate");
 		}
 	}
 
@@ -528,8 +528,8 @@ class adnCertificate extends adnDBBase
 
 			// lock table to keep table numbering consistent
 			$ilDB->lockTables(array(
-				0 => array('name' => 'adn_es_certificate','type' => ilDB::LOCK_WRITE),
-				1 => array('name' => 'adn_es_certificate_seq', 'type' => ilDB::LOCK_WRITE)
+				0 => array('name' => 'adn_es_certificate','type' => ilDBConstants::LOCK_WRITE),
+				1 => array('name' => 'adn_es_certificate_seq', 'type' => ilDBConstants::LOCK_WRITE)
 			));
 
 			$this->setNumber($this->determineNextNumber());
@@ -550,7 +550,7 @@ class adnCertificate extends adnDBBase
 			$ilDB->unlockTables();
 		}
 
-		parent::save($id, "adn_es_certificate");
+		parent::_save($id, "adn_es_certificate");
 
 		return $id;
 	}
@@ -580,7 +580,7 @@ class adnCertificate extends adnDBBase
 		
 		$ilDB->update("adn_es_certificate", $fields, array("id"=>array("integer", $id)));
 
-		parent::update($id, "adn_es_certificate");
+		parent::_update($id, "adn_es_certificate");
 
 		return true;
 	}
@@ -787,7 +787,7 @@ class adnCertificate extends adnDBBase
 	 *
 	 * @return array array of professional ids
 	 */
-	function getAllProfessionalsWithValidCertificates()
+	static function getAllProfessionalsWithValidCertificates()
 	{
 		global $ilDB;
 
@@ -855,7 +855,7 @@ class adnCertificate extends adnDBBase
 
 		// lock table to keep table numbering consistent
 		$ilDB->lockTables(array(0 => array('name' => 'adn_es_certificate',
-			'type' => ilDB::LOCK_WRITE)));
+			'type' => ilDBConstants::LOCK_WRITE)));
 
 		$this->setNumber($this->determineNextNumber());
 		$this->setStatus(self::STATUS_VALID);
@@ -868,7 +868,7 @@ class adnCertificate extends adnDBBase
 		// unlock table
 		$ilDB->unlockTables();
 
-		parent::save($id, "adn_es_certificate");
+		parent::_save($id, "adn_es_certificate");
 	}
 
 	/**
@@ -1242,7 +1242,7 @@ class adnCertificate extends adnDBBase
 			" FROM adn_es_duplicate".
 			" WHERE es_certificate_id = ".$ilDB->quote($a_cert_id, "integer");
 		$res = $ilDB->query($query);
-		$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+		$row = $res->fetchRow(\ilDBConstants::FETCHMODE_ASSOC);
 		return $row["num"] > 0 ? true : false;
 	}
 

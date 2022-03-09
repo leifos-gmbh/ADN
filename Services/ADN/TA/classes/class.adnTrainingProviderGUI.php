@@ -590,7 +590,7 @@ class adnTrainingProviderGUI
 	/**
 	 * Edit approved training types for provider (list all available to be selected)
 	 */
-	public function listTrainingTypes()
+	public function listTrainingTypes(ilPropertyFormGUI $form = null)
 	{
 		global $lng, $ilCtrl, $tpl, $ilTabs;
 
@@ -599,7 +599,9 @@ class adnTrainingProviderGUI
 		$this->setTabs();
 		$ilTabs->activateTab("types");
 
-		$form = $this->initTrainingTypeForm();
+		if (!$form instanceof ilPropertyFormGUI) {
+            $form = $this->initTrainingTypeForm();
+        }
 		$tpl->setContent($form->getHTML());
 	}
 
@@ -625,6 +627,7 @@ class adnTrainingProviderGUI
 			$dt = new ilDateTimeInputGUI($lng->txt("adn_approved_on"),
 				"approved_".$type);
 			$dt->setStartYear(1990);
+			$dt->setRequired(true);
 			$cb->addSubItem($dt);
 
 			if($date = $this->training_provider->IsTrainingTypeApproved($type))
@@ -653,7 +656,11 @@ class adnTrainingProviderGUI
 		global $ilCtrl, $lng;
 
 		$form = $this->initTrainingTypeForm();
-		$form->checkInput();
+		if (!$form->checkInput()) {
+		    ilUtil::sendFailure($lng->txt('fill_out_all_required_fields'));
+		    $form->setValuesByPost();
+		    return $this->listTrainingTypes($form);
+        }
 
 		include_once("./Services/ADN/TA/classes/class.adnTypesOfTraining.php");
 		$types = array();
@@ -662,7 +669,7 @@ class adnTrainingProviderGUI
 			if($form->getInput("train_type_".$type))
 			{
 				$date = $form->getInput("approved_".$type);
-				$types[$type] = new ilDate($date["date"], IL_CAL_DATE, ilTimeZone::UTC);
+				$types[$type] = new ilDate($date, IL_CAL_DATE, ilTimeZone::UTC);
 			}
 		}
 		$this->training_provider->setTypesOfTraining($types);

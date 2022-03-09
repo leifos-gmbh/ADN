@@ -93,7 +93,16 @@ class adnCertifiedProfessionalDataGUI
 	 */
 	protected function listProfessionals()
 	{
-		global $tpl;
+		global $tpl, $ilToolbar, $ilCtrl, $lng;
+
+		// cr-008 start
+		include_once("./Services/ADN/EP/classes/class.adnPreparationCandidateGUI.php");
+		$ilCtrl->setParameterByClass("adnpreparationcandidategui", "mode", adnPreparationCandidateGUI::MODE_GENERAL);
+		$ilToolbar->addButton($lng->txt("adn_ad_add_person"),
+			$ilCtrl->getLinkTargetByClass(array("adnbasegui", "adnexaminationpreparationgui", "adnpreparationcandidategui"), "createCandidate")
+		);
+		// cr-008 end
+
 
 		// table of certificates
 		include_once("./Services/ADN/CP/classes/class.adnCertifiedProfessionalDataTableGUI.php");
@@ -202,6 +211,9 @@ class adnCertifiedProfessionalDataGUI
 
 		$foreign = new ilCheckboxInputGUI($lng->txt("adn_foreign_certificate"), "foreign");
 		$form->addItem($foreign);
+
+		$foreign_cert_handed_id = new ilCheckboxInputGUI($lng->txt("adn_foreign_cert_handed_in"), "foreign_cert_handed_in");
+		$form->addItem($foreign_cert_handed_id);
 
 		$phone = new ilTextInputGUI($lng->txt("adn_phone"), "phone");
 		$phone->setMaxLength(30);
@@ -329,6 +341,7 @@ class adnCertifiedProfessionalDataGUI
 		$birthdate->setDate($this->professional->getBirthdate());
 		$citizenship->setValue($this->professional->getCitizenship());
 		$foreign->setChecked($this->professional->hasForeignCertificate());
+		$foreign_cert_handed_id->setChecked($this->professional->hasForeignCertificateHandedIn());
 		$phone->setValue($this->professional->getPhone());
 		$email->setValue($this->professional->getEmail());
 		$registered_by->setValue($this->professional->getRegisteredBy());
@@ -383,9 +396,10 @@ class adnCertifiedProfessionalDataGUI
 			$this->professional->setLastName($form->getInput("last_name"));
 			$this->professional->setFirstName($form->getInput("first_name"));
 			$date = $form->getInput("birthdate");
-			$this->professional->setBirthdate(new ilDate($date["date"], IL_CAL_DATE));
+			$this->professional->setBirthdate(new ilDate($date, IL_CAL_DATE));
 			$this->professional->setCitizenship($form->getInput("citizenship"));
 			$this->professional->setForeignCertificate($form->getInput("foreign"));
+			$this->professional->setForeignCertificateHandedIn($form->getInput("foreign_cert_handed_in"));
 			$this->professional->setRegisteredBy($form->getInput("registered_by"));
 			$this->professional->setPhone($form->getInput("phone"));
 			$this->professional->setEmail($form->getInput("email"));
@@ -409,7 +423,7 @@ class adnCertifiedProfessionalDataGUI
 			{
 				$date = $form->getInput("holdback_until");
 				$this->professional->setBlockedBy($form->getInput("holdback_by"));
-				$this->professional->setBlockedUntil(new ilDate($date["date"], IL_CAL_DATE));
+				$this->professional->setBlockedUntil(new ilDate($date, IL_CAL_DATE));
 			}
 			else
 			{

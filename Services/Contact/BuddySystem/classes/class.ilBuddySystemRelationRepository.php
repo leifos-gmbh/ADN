@@ -37,6 +37,11 @@ class ilBuddySystemRelationRepository
     {
         $relations = [];
 
+		// adn-patch start
+		// bug #146
+		return $relations;
+		// adn-patch end
+
         $res = $this->db->queryF(
             "
 			SELECT

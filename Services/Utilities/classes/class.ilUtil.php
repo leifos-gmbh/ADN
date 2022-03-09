@@ -930,15 +930,19 @@ class ilUtil
         $sel_year .= $disabled . "name=\"" . $prefix . "[y]\" id=\"" . $prefix . "_y\">\n";
         if ((strlen($startyear) == 0) || ($startyear > $year)) {
             if (!$emptyoption || $year != 0) {
-                $startyear = $year - 5;
+                // adn-patch start (5->10)
+                $startyear = $year - 10;
+                // adn-patch end
             }
         }
 
-        if (($year + 5) < (date('Y', time()) + 5)) {
-            $end_year = date('Y', time()) + 5;
+        // adn-patch start (5->10)
+        if (($year + 10) < (date('Y', time()) + 10)) {
+            $end_year = date('Y', time()) + 10;
         } else {
-            $end_year = $year + 5;
+            $end_year = $year + 10;
         }
+        // adn-patch end
 
         if ($emptyoption) {
             $sel_year .= "<option value=\"0\">----</option>\n";

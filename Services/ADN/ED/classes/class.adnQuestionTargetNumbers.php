@@ -222,7 +222,7 @@ class adnQuestionTargetNumbers extends adnDBBase
 		}
 		$this->setObjectives($obj);
 		
-		parent::read($id, "adn_ed_quest_target_nr");
+		parent::_read($id, "adn_ed_quest_target_nr");
 	}
 
 	/**
@@ -259,7 +259,7 @@ class adnQuestionTargetNumbers extends adnDBBase
 
 		$this->saveObjectives();
 
-		parent::save($id, "adn_ed_quest_target_nr");
+		parent::_save($id, "adn_ed_quest_target_nr");
 		
 		return $id;
 	}
@@ -285,7 +285,7 @@ class adnQuestionTargetNumbers extends adnDBBase
 
 		$this->saveObjectives();
 
-		parent::update($id, "adn_ed_quest_target_nr");
+		parent::_update($id, "adn_ed_quest_target_nr");
 
 		return true;
 	}
@@ -303,7 +303,7 @@ class adnQuestionTargetNumbers extends adnDBBase
 			$ilDB->manipulate("DELETE FROM adn_ed_target_nr_obj".
 				" WHERE ed_question_target_nr_id = ".$ilDB->quote($id, "integer"));
 
-			if(sizeof($this->objectives))
+			if(!empty($this->objectives))
 			{
 				foreach($this->objectives as $item)
 				{
@@ -362,7 +362,7 @@ class adnQuestionTargetNumbers extends adnDBBase
 		{
 			$where[] = "mc_case = ".$ilDB->quote($a_type, "integer");
 		}
-		if(sizeof($where))
+		if(!empty($where))
 		{
 			$sql .= " WHERE ".implode(" AND ", $where);
 		}
@@ -376,7 +376,7 @@ class adnQuestionTargetNumbers extends adnDBBase
 			$ids[] = $row["id"];
 		}
 
-		if(sizeof($all))
+		if(!empty($all))
 		{
 			$sql = "SELECT ed_question_target_nr_id, ed_objective_id, ed_subobjective_id".
 				" FROM adn_ed_target_nr_obj".
@@ -535,14 +535,14 @@ class adnQuestionTargetNumbers extends adnDBBase
 		{
 			// gather questions
 			$questions = array();
-			if(sizeof($target["objectives"]))
+			if(!empty($target["objectives"]))
 			{
 				foreach($target["objectives"] as $obj_id)
 				{
 					$questions["obj_".$obj_id] = adnMCQuestion::getByObjective($obj_id, null, true);
 				}
 			}
-			if(sizeof($target["subobjectives"]))
+			if(!empty($target["subobjectives"]))
 			{
 				foreach($target["subobjectives"] as $sobj_id)
 				{
@@ -566,7 +566,7 @@ class adnQuestionTargetNumbers extends adnDBBase
 			}
 
 			// choose random entries
-			if($target["nr_of_questions"] < sizeof($all_questions))
+			if($target["nr_of_questions"] < count($all_questions))
 			{
 				$picks = array_rand($all_questions, $target["nr_of_questions"]);
 				if($target["nr_of_questions"] == 1)
@@ -604,14 +604,14 @@ class adnQuestionTargetNumbers extends adnDBBase
 		$targets = self::getAllTargets($a_type);
 		foreach($targets as $target)
 		{
-			if(sizeof($target["objectives"]))
+			if(!empty($target["objectives"]))
 			{
 				foreach($target["objectives"] as $obj_id)
 				{
 					$objectives[] = $obj_id;
 				}
 			}
-			if(sizeof($target["subobjectives"]))
+			if(!empty($target["subobjectives"]))
 			{
 				foreach($target["subobjectives"] as $sobj_id)
 				{
@@ -671,30 +671,30 @@ class adnQuestionTargetNumbers extends adnDBBase
 			
 			// get the current number of questions
 			$counter = 0;
-			if(sizeof($target["objectives"]))
+			if(!empty($target["objectives"]))
 			{
 				foreach($target["objectives"] as $obj_id)
 				{
 					if(isset($objectives[$obj_id]))
 					{
-						$counter += sizeof($objectives[$obj_id]);
+						$counter += count($objectives[$obj_id]);
 
-						if($max_one && sizeof($objectives[$obj_id]) > 1)
+						if($max_one && count($objectives[$obj_id]) > 1)
 						{
 							$objectives_invalid[] = $obj_id;
 						}
 					}
 				}
 			}
-			if(sizeof($target["subobjectives"]))
+			if(!empty($target["subobjectives"]))
 			{
 				foreach($target["subobjectives"] as $sobj_id)
 				{
 					if(isset($subobjectives[$sobj_id]))
 					{
-						$counter += sizeof($subobjectives[$sobj_id]);
+						$counter += count($subobjectives[$sobj_id]);
 
-						if($max_one && sizeof($subobjectives[$sobj_id]) > 1)
+						if($max_one && count($subobjectives[$sobj_id]) > 1)
 						{
 							$subobjectives_invalid[] = $sobj_id;
 						}
@@ -703,7 +703,7 @@ class adnQuestionTargetNumbers extends adnDBBase
 			}
 
 			// process based on current number
-			if(sizeof($target["objectives"]))
+			if(!empty($target["objectives"]))
 			{
 				foreach($target["objectives"] as $obj_id)
 				{
@@ -715,13 +715,13 @@ class adnQuestionTargetNumbers extends adnDBBase
 					}
 					// if too many, but not if not set yet or (currently 1 and max one)
 					else if($counter > $max_nr && isset($objectives[$obj_id]) &&
-						!(sizeof($objectives[$obj_id]) == 1 && $max_one))
+						!(count($objectives[$obj_id]) == 1 && $max_one))
 					{
 						$objectives_invalid[] = $obj_id;
 					}
 				}
 			}
-			if(sizeof($target["subobjectives"]))
+			if(!empty($target["subobjectives"]))
 			{
 				foreach($target["subobjectives"] as $sobj_id)
 				{
@@ -733,7 +733,7 @@ class adnQuestionTargetNumbers extends adnDBBase
 					}
 					// if too many, but not if not set yet or (currently 1 and max one)
 					else if($counter > $max_nr && isset($subobjectives[$sobj_id]) &&
-						!(sizeof($subobjectives[$sobj_id]) == 1 && $max_one))
+						!(count($subobjectives[$sobj_id]) == 1 && $max_one))
 					{
 						$subobjectives_invalid[] = $sobj_id;
 					}

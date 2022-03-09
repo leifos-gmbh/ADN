@@ -1108,7 +1108,7 @@ class adnQuestionImport
 		$path = new adnMCQuestion();
 		$path = $path->getFilePath();
 
-		if(sizeof($this->files))
+		if(is_array($this->files) && count($this->files) > 0)
 		{
 			// create target directory
 			if(!is_dir($path))

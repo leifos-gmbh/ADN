@@ -33,6 +33,7 @@ class adnWMO extends adnDBBase
 	protected $phone; // [string]
 	protected $fax; // [string]
 	protected $email; // [string]
+	protected $notification_email; // [string]
 	protected $url; // [string]
 	protected $cost; // [array]
 
@@ -40,6 +41,7 @@ class adnWMO extends adnDBBase
 	const COST_DUPLICATE = 2;
 	const COST_EXTENSION = 3;
 	const COST_EXAM = 4;
+    const COST_EXAM_GAS_CHEM = 5;
 
 	/**
 	 * Constructor
@@ -193,6 +195,26 @@ class adnWMO extends adnDBBase
 	public function getEmail()
 	{
 		return $this->email;
+	}
+
+	/**
+	 * Set notification email
+	 *
+	 * @param string $a_email
+	 */
+	public function setNotificationEmail($a_email)
+	{
+		$this->notification_email = (string)$a_email;
+	}
+
+	/**
+	 * Get notification email
+	 *
+	 * @return string
+	 */
+	public function getNotificationEmail()
+	{
+		return $this->notification_email;
 	}
 
 	/**
@@ -559,6 +581,27 @@ class adnWMO extends adnDBBase
 		return $this->getCost(self::COST_EXAM);
 	}
 
+    /**
+     * Set exam cost for gas/chemistry
+     *
+     * @param int $a_no
+     * @param string $a_desc
+     * @param float $a_value
+     */
+    public function setCostExamGasChem($a_no, $a_desc, $a_value)
+    {
+        $this->setCost(self::COST_EXAM_GAS_CHEM, $a_no, $a_desc, $a_value);
+    }
+
+    /**
+     * get exam cost for gas/chemistry
+     * @return array("no", "desc", "value");
+     */
+    public function getCostExamGasChem()
+    {
+        return $this->getCost(self::COST_EXAM_GAS_CHEM);
+    }
+
 	/**
 	 * Set cost
 	 *
@@ -609,7 +652,7 @@ class adnWMO extends adnDBBase
 	protected function isValidCostType($a_type)
 	{
 		$valid = array(self::COST_CERTIFICATE, self::COST_DUPLICATE, self::COST_EXTENSION,
-			self::COST_EXAM);
+			self::COST_EXAM,self::COST_EXAM_GAS_CHEM);
 		if(in_array($a_type, $valid))
 		{
 			return true;
@@ -633,7 +676,8 @@ class adnWMO extends adnDBBase
 		$res = $ilDB->query("SELECT code_nr,name,subtitle,street,street_no,postal_code,city,visit_street,".
 			"visit_street_no,visit_postal_code,visit_city,bank,bank_id,account_id,bic,iban,phone,".
 			"fax,email,internet,cert_nr,cert_description,cert_cost,duplicate_nr,duplicate_description,".
-			"duplicate_cost,ext_nr,ext_description,ext_cost,exam_nr,exam_description,exam_cost".
+			"duplicate_cost,ext_nr,ext_description,ext_cost,exam_nr,exam_description,exam_cost,notification_email,".
+            "exam_gas_chem_nr,exam_gas_chem_description,exam_gas_chem_cost" .
 			" FROM adn_md_wmo".
 			" WHERE id = ".$ilDB->quote($id, "integer"));
 		$set = $ilDB->fetchAssoc($res);
@@ -657,6 +701,7 @@ class adnWMO extends adnDBBase
 		$this->setPhone($set["phone"]);
 		$this->setFax($set["fax"]);
 		$this->setEmail($set["email"]);
+		$this->setNotificationEmail($set['notification_email']);
 		$this->setURL($set["internet"]);
 
 		$this->setCostCertificate($set["cert_nr"], $set["cert_description"], $set["cert_cost"]/100);
@@ -664,8 +709,9 @@ class adnWMO extends adnDBBase
 			$set["duplicate_cost"]/100);
 		$this->setCostExtension($set["ext_nr"], $set["ext_description"], $set["ext_cost"]/100);
 		$this->setCostExam($set["exam_nr"], $set["exam_description"], $set["exam_cost"]/100);
+		$this->setCostExamGasChem($set["exam_gas_chem_nr"], $set["exam_gas_chem_description"], $set["exam_gas_chem_cost"]/100);
 
-		parent::read($id, "adn_md_wmo");
+		parent::_read($id, "adn_md_wmo");
 	}
 
 	/**
@@ -694,12 +740,14 @@ class adnWMO extends adnDBBase
 			"phone" => array("text", $this->getPhone()),
 			"fax" => array("text", $this->getFax()),
 			"email" => array("text", $this->getEmail()),
+			'notification_email' => array('text', $this->getNotificationEmail()),
 			"internet" => array("text", $this->getURL()));
 
 		$costs = array(self::COST_CERTIFICATE => "cert",
 			self::COST_DUPLICATE => "duplicate",
 			self::COST_EXTENSION => "ext",
-			self::COST_EXAM => "exam");
+			self::COST_EXAM => "exam",
+            self::COST_EXAM_GAS_CHEM => "exam_gas_chem");
 		foreach($costs as $type => $id)
 		{
 			$cost = $this->getCost($type);
@@ -729,7 +777,7 @@ class adnWMO extends adnDBBase
 		
 		$ilDB->insert("adn_md_wmo", $fields);
 
-		parent::save($id, "adn_md_wmo");
+		parent::_save($id, "adn_md_wmo");
 
 		return $id;
 	}
@@ -753,7 +801,7 @@ class adnWMO extends adnDBBase
 
 		$ilDB->update("adn_md_wmo", $fields, array("id"=>array("integer", $id)));
 
-		parent::update($id, "adn_md_wmo");
+		parent::_update($id, "adn_md_wmo");
 
 		return true;
 	}

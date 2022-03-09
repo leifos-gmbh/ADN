@@ -58,11 +58,11 @@ function initInsertions()
 /**
 * bbstyle
 */
-function bbstyle(bbnumber)
+function bbstyle(bbnumber, text_name)		// adn-patch added text_name
 {	
 	if (bbnumber != -1)
 	{
-		bbfontstyle(bbtags[bbnumber], bbtags[bbnumber+1]);
+		bbfontstyle(bbtags[bbnumber], bbtags[bbnumber+1], text_name);		// adn-patch added text_name
 	} 
 	else 
 	{
@@ -74,10 +74,10 @@ function bbstyle(bbnumber)
 /**
 * Apply bbcodes
 */
-function bbfontstyle(bbopen, bbclose)
+function bbfontstyle(bbopen, bbclose, text_name)		// adn-patch added text_name
 {
 	theSelection = false;
-		
+
 	var textarea = document.forms[form_name].elements[text_name];
 
 	textarea.focus();
@@ -109,7 +109,8 @@ function bbfontstyle(bbopen, bbclose)
 	var new_pos = caret_pos + bbopen.length;
 
 	// Open tag
-	insert_text(bbopen + bbclose);
+	// adn-patch added text_name
+	insert_text(bbopen + bbclose, null, null, text_name);
 
 	// Center the cursor when we don't have a selection
 	// Gecko and proper browsers
@@ -134,7 +135,7 @@ function bbfontstyle(bbopen, bbclose)
 /**
 * Insert text at position
 */
-function insert_text(text, spaces, popup)
+function insert_text(text, spaces, popup, text_name)	// adn-patch added text_name
 {
 	var textarea;
 	

@@ -58,7 +58,7 @@ class adnSubjectArea
 	 * @param string subject area
 	 * @return boolean true/false
 	 */
-	function hasCasePart($a_subj_area)
+	static function hasCasePart($a_subj_area)
 	{
 		$sub_with_case = self::getAreasWithCasePart();
 		return array_key_exists($a_subj_area, $sub_with_case);

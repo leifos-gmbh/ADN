@@ -176,7 +176,7 @@ adn#:#adn_delete_candidates#:#Delete
 adn#:#adn_edit_candidate#:#Edit Candidate
 adn#:#adn_salutation#:#Salutation
 adn#:#adn_applied_for_examination#:#Applied for Examination
-adn#:#adn_foreign_certificate#:#Has Foreign Certificate
+adn#:#adn_foreign_certificate#:#Has Basic Foreign Certificate
 adn#:#adn_company#:#(Shipping) Company
 adn#:#adn_comment#:#Comment
 adn#:#adn_permanent_address#:#Permanent Address
@@ -265,7 +265,8 @@ adn#:#adn_wmo_created#:#WMO was created.
 adn#:#adn_wmo_cost_certificate#:#Cost Certificate
 adn#:#adn_wmo_cost_duplicate#:#Cost Duplicate
 adn#:#adn_wmo_cost_extension#:#Cost Extension
-adn#:#adn_wmo_cost_exam#:#Cost Exam
+adn#:#adn_wmo_cost_exam#:#Cost Exam Basis
+adn#:#adn_wmo_cost_exam_gas_chem#:#Cost Exam Gas/Chemistry
 adn#:#adn_running_id#:#Running Id
 adn#:#adn_description#:#Description
 adn#:#adn_cost#:#Cost
@@ -512,6 +513,15 @@ common#:#obj_xaes#:#ADN Exam Scoring
 common#:#obj_xamd#:#ADN Master Data
 common#:#obj_xast#:#ADN Statistics
 common#:#obj_xata#:#ADN Training Administration
+common#:#obj_xaad_desc#:#Rights specifications for area ADN Administration
+common#:#obj_xacp_desc#:#Rights specifications for area ADN Certified Professionals
+common#:#obj_xaec_desc#:#Rights specifications for area ADN Exam Conduction
+common#:#obj_xaed_desc#:#Rights specifications for area ADN Exam Definition
+common#:#obj_xaep_desc#:#Rights specifications for area ADN Exam Preparation
+common#:#obj_xaes_desc#:#Rights specifications for area ADN Exam Scoring
+common#:#obj_xamd_desc#:#Rights specifications for area ADN Master Data
+common#:#obj_xast_desc#:#Rights specifications for area ADN Statistics
+common#:#objobj_xata_desc#:#Rights requirements for area ADN Training Administration
 rbac#:#xaad_visible#:#Visible
 rbac#:#xaad_read#:#Read
 rbac#:#xaad_write#:#Write
@@ -693,6 +703,7 @@ adn#:#adn_score_points#:#Point(s)
 adn#:#adn_please_check_certificate#:#Please check again all data you have entered. After saving the new number cannot be changed.
 adn#:#adn_cert_not_valid_save_anyway#:#Die ursprüngliche Bescheinigung ist nicht mehr gültig. Wollen Sie wirklich eine Verlängerung erstellen?
 adn#:#adn_assignment_delete_fail_answered#:#The assignment could not be deleted because of existing answers.
+adn#:#adn_assignment_save_fail_answered#:#The assignment could not be saved, because no candidates have been chosen.
 adn#:#adn_no_entries_filter#:#No entries did match your search criteria.
 adn#:#adn_sheet_question_status_invalid#:#with %s inactive
 adn#:#adn_candidate_last_event_mismatch#:#The type of the last training does not match the examination type.
@@ -726,17 +737,23 @@ adn#:#adn_cp_pdm#:#Manage Personal Data
 adn#:#adn_really_delete_pd#:#Sollen die folgenden Sachkundigen/Interessenten/Kandidaten wirklich gelöscht werden?
 adn#:#adn_ad_wmo_created#:#Angelegt durch
 common#:#adn_personal_data_notification#:#ADN Benachrichtigung über Löschkandidaten
-common#:#adn_personal_data_notification_desc#:#Die WSDen werden über anstehende Löschkandidaten (Sachkundige und Prüfungskandidaten) informiert.
+common#:#adn_personal_data_notification_desc#:#Die GDWSen werden über anstehende Löschkandidaten (Sachkundige und Prüfungskandidaten) informiert.
 adn#:#adn_ad_pd_all#:#Alle
 adn#:#adn_ad_pd_cand#:#Prüfungskandidaten (älter 2 Jahre)
 adn#:#adn_ad_pd_cert#:#Sachkundige (älter 7 Jahre)
 adn#:#adn_ad_created_date#:#Angelegt am
 adn#:#adn_ad_last_certificate#:#Letztes Zertifikat
-adn#:#adn_ad_wmo#:#WSD
-adn#:#adn_new_delete_candidates_mess#:#Sehr geehrter Mitarbeiter {WSD},<br /><br />in Ihrer WSD stehen folgende Nutzer zur Löschung an:<br />{USER}<br /><br />Diese Nachricht wurde automatisch erstellt.
+adn#:#adn_ad_wmo#:#GDWS
+adn#:#adn_new_delete_candidates_mess#:#Sehr geehrter Mitarbeiter {GDWS},<br /><br />in Ihrer GDWS stehen folgende Nutzer zur Löschung an:<br />{USER}<br /><br />Diese Nachricht wurde automatisch erstellt.
 adn#:#adn_new_delete_candidates_subj#:#ADN Löschung von personenbezogenen Daten
 adn#:#adn_ad_add_person#:#Person hinzufügen
 adn#:#adn_add_certificate#:#Bescheinigung hinzufügen
 adn#:#adn_save_and_add_certificate#:#Speichern und Bescheinigung hinzufügen
 adn#:#adn_subtitle#:#Subtitle
 adn#:#adn_download_certificate#:#Bescheinigung herunterladen
+adn#:#adn_foreign_cert_handed_in#:#Bescheinigung aus dem Ausland vorgelegt
+adn#:#adn_extend_certificate_foreign#:#Verlängerung erstellen (Ausland)
+adn#:#adn_save_and_add_extension#:#Speichern und Verlängerung erstellen
+adn#:#adn_create_ext_only_if_for_cert#:#Die sofortige Erstellung einer Verlängerung erfordert eine Bescheinigung aus dem Ausland.
+adn#:#adn_email_noti#:#E-Mail für Benachrichtigungen
+adn#:#adn_cron_cc#:#Kopie senden an:

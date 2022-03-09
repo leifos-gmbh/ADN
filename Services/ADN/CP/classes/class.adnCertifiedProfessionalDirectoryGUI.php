@@ -116,11 +116,10 @@ class adnCertifiedProfessionalDirectoryGUI
 		if(isset($_POST["issued_by"]))
 		{
 			$wmo = (int)$_POST["issued_by"];
-			$date_from = $_POST["date_from"]["date"];
-			$date_from = new ilDate($date_from["y"]."-".$date_from["m"]."-".
-				$date_from["d"], IL_CAL_DATE);
-			$date_to = $_POST["date_to"]["date"];
-			$date_to = new ilDate($date_to["y"]."-".$date_to["m"]."-".$date_to["d"], IL_CAL_DATE);
+			$date_from = $_POST["date_from"];
+			$date_from = new ilDate($date_from, IL_CAL_DATE);
+			$date_to = $_POST["date_to"];
+			$date_to = new ilDate($date_to, IL_CAL_DATE);
 		}
 		// reload, e.g. table sorting
 		else

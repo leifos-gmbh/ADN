@@ -60,7 +60,7 @@ adn#:#adn_st_ees#:#Verlängerungen aufgrund Arbeitszeitnachweis
 adn#:#adn_st_cos#:#Bescheinigungen aufgrund sonstiger Anträge
 adn#:#adn_st_tns#:#Summe Bescheinigungen
 adn#:#adn_md#:#Stammdaten
-adn#:#adn_md_wos#:#WSDen
+adn#:#adn_md_wos#:#GDWSen
 adn#:#adn_ta_aes#:#Fachgebiete
 adn#:#adn_ed_gts#:#Stoffe
 adn#:#adn_md_cns#:#Länder
@@ -284,7 +284,7 @@ adn#:#adn_country_deleted#:#Land wurde gelöscht.
 adn#:#adn_wmos#:#GDWS
 adn#:#adn_wmo#:#GDWS
 adn#:#adn_wmo_code#:#Behördenkennziffer
-adn#:#adn_add_wmo#:#WSD hinzufügen
+adn#:#adn_add_wmo#:#GDWS hinzufügen
 adn#:#adn_url#:#Internet
 adn#:#adn_postal_address#:#Postadresse
 adn#:#adn_visitors_address#:#Separate Besucheradresse
@@ -294,12 +294,13 @@ adn#:#adn_bank_code#:#BLZ
 adn#:#adn_bank_account#:#Kontonr.
 adn#:#adn_bank_iban#:#IBAN
 adn#:#adn_bank_bic#:#BIC
-adn#:#adn_wmo_updated#:#WSD wurde gespeichert.
-adn#:#adn_wmo_created#:#WSD wurde angelegt.
+adn#:#adn_wmo_updated#:#GDWS wurde gespeichert.
+adn#:#adn_wmo_created#:#GDWS wurde angelegt.
 adn#:#adn_wmo_cost_certificate#:#Kostengegenstand Bescheinigung
 adn#:#adn_wmo_cost_duplicate#:#Kostengegenstand Ersatzausfertigung
 adn#:#adn_wmo_cost_extension#:#Kostengegenstand Verlängerung
-adn#:#adn_wmo_cost_exam#:#Kostengegenstand Prüfungsteilnahme
+adn#:#adn_wmo_cost_exam#:#Kostengegenstand Prüfungsteilnahme Basis
+adn#:#adn_wmo_cost_exam_gas_chem#:#Kostengegenstand Prüfungsteilnahme Gas/Chemie
 adn#:#adn_wmo_cost_certificate_short#:#Bescheinigung
 adn#:#adn_wmo_cost_extension_short#:#Verlängerung
 adn#:#adn_wmo_cost_duplicate_short#:#Ersatzausfertigung
@@ -308,8 +309,8 @@ adn#:#adn_running_id#:#Laufende Nummer
 adn#:#adn_description#:#Beschreibung
 adn#:#adn_cost#:#Kosten
 adn#:#adn_sure_delete_countries#:#Wollen Sie folgende Länder wirklich löschen?
-adn#:#adn_sure_delete_wmos#:#Wollen Sie folgende WSDen wirklich löschen?
-adn#:#adn_wmo_deleted#:#WSD wurde gelöscht.
+adn#:#adn_sure_delete_wmos#:#Wollen Sie folgende GDWSen wirklich löschen?
+adn#:#adn_wmo_deleted#:#GDWS wurde gelöscht.
 adn#:#adn_cochairs#:#Beisitzer
 adn#:#adn_cochair#:#Beisitzer
 adn#:#adn_add_cochair#:#Beisitzer hinzufügen
@@ -556,6 +557,15 @@ common#:#obj_xaes#:#ADN Prüfungsnachbereitung
 common#:#obj_xamd#:#ADN Stammdaten
 common#:#obj_xast#:#ADN Statistiken
 common#:#obj_xata#:#ADN Schulungsverwaltung
+common#:#obj_xaad_desc#:#Rechtevorgaben für Bereich ADN Administration
+common#:#obj_xacp_desc#:#Rechtevorgaben für Bereich ADN Sachkundigenverwaltung
+common#:#obj_xaec_desc#:#Rechtevorgaben für Bereich ADN Prüfungsdurchführung
+common#:#obj_xaed_desc#:#Rechtevorgaben für Bereich ADN Prüfungselemente
+common#:#obj_xaep_desc#:#Rechtevorgaben für Bereich ADN Prüfungsvorbereitung
+common#:#obj_xaes_desc#:#Rechtevorgaben für Bereich ADN Prüfungsnachbereitung
+common#:#obj_xamd_desc#:#Rechtevorgaben für Bereich ADN Stammdaten
+common#:#obj_xast_desc#:#Rechtevorgaben für Bereich ADN Statistiken
+common#:#obj_xata_desc#:#Rechtevorgaben für Bereich ADN Schulungsverwaltung
 rbac#:#xaad_visible#:#Sichtbar
 rbac#:#xaad_read#:#Leserecht
 rbac#:#xaad_write#:#Schreibrecht
@@ -734,9 +744,10 @@ adn#:#adn_back_to_front_page#:#Zurück zur Startseite
 adn#:#adn_download_solutions#:#Lösungsbogen herunterladen
 adn#:#adn_your_score#:#Ihr Ergebnis
 adn#:#adn_score_points#:#Punkt(e)
-adn#:#adn_please_check_certificate#:#Bitte vergewissern Sie sich noch einmal, daß alle Daten korrekt sind. Ausstellende WSD und Ausstellungsdatum können nach dem nächsten Schritt nicht mehr geändert werden, da der Bescheinigung eine neue Nummer zugeteilt wird.
+adn#:#adn_please_check_certificate#:#Bitte vergewissern Sie sich noch einmal, daß alle Daten korrekt sind. Ausstellende GDWS und Ausstellungsdatum können nach dem nächsten Schritt nicht mehr geändert werden, da der Bescheinigung eine neue Nummer zugeteilt wird.
 adn#:#adn_cert_not_valid_save_anyway#:#Die ursprüngliche Bescheinigung ist nicht mehr gültig. Wollen Sie wirklich eine Verlängerung erstellen?
 adn#:#adn_assignment_delete_fail_answered#:#Die Zuordnung könnte nicht gelöscht werden, da bereits Antworten vorliegen.
+adn#:#adn_assignment_save_fail_answered#:#Die Zuordnung konnte nicht gespeichert werden, da keine Kandidaten ausgewählt wurden.
 adn#:#adn_no_entries_filter#:#Es wurden keine Einträge gefunden, welche Ihren gewählten Filterkriterien entsprechen.
 adn#:#adn_sheet_question_status#:#%s von %s Fragen
 adn#:#adn_sheet_too_few#:#Zu wenige Fragen im Prüfungsbogen.
@@ -752,7 +763,7 @@ adn#:#adn_certificate_foreign#:#Ausland
 adn#:#adn_certificate_germany_and_foreign#:#Deutschland und Ausland
 adn#:#adn_professional_directory_help#:#Sachkundige werden im Verzeichnis gelistet, wenn sie zu einem beliebigen Zeitpunkt innerhalb des angegebenen Zeitraums eine gültige ADN Bescheinigung hatten.
 adn#:#adn_ad_icp#:#Sachkundige importieren
-adn#:#adn_default_wmo#:#Standard-WSD
+adn#:#adn_default_wmo#:#Standard-GDWS
 adn#:#adn_default_country#:#Standard-Land
 adn#:#adn_anonymize#:#Anonymisieren
 adn#:#adn_limit#:#Limit
@@ -786,21 +797,27 @@ adn#:#adn_exam_candidate#:#Prüfungskandidat
 adn#:#adn_certificates#:#Bescheinigungen
 adn#:#adn_invoices#:#Kostenbescheide
 adn#:#adn_no_entries#:#Keine Einträge
-adn#:#adn_cp_pdm#:#Personenbezogene Daten
+adn#:#adn_cp_pdm#:#Sachkundige/Archivdaten
 adn#:#adn_really_delete_pd#:#Sollen die folgenden Sachkundigen/Interessenten/Kandidaten wirklich gelöscht werden?
 adn#:#adn_ad_wmo_created#:#Angelegt durch
 common#:#adn_personal_data_notification#:#ADN Benachrichtigung über Löschkandidaten
-common#:#adn_personal_data_notification_desc#:#Die WSDen werden über anstehende Löschkandidaten (Sachkundige und Prüfungskandidaten) informiert.
+common#:#adn_personal_data_notification_desc#:#Die GDWSen werden über anstehende Löschkandidaten (Sachkundige und Prüfungskandidaten) informiert.
 adn#:#adn_ad_pd_all#:#Alle
 adn#:#adn_ad_pd_cand#:#Prüfungskandidaten (älter 2 Jahre)
 adn#:#adn_ad_pd_cert#:#Sachkundige (älter 7 Jahre)
 adn#:#adn_ad_created_date#:#Angelegt am
 adn#:#adn_ad_last_certificate#:#Letztes Zertifikat
-adn#:#adn_ad_wmo#:#WSD
-adn#:#adn_new_delete_candidates_mess#:#Sehr geehrter Mitarbeiter {WSD},<br /><br />in Ihrer WSD stehen folgende Nutzer zur Löschung an:<br />{USER}<br /><br />Diese Nachricht wurde automatisch erstellt.
+adn#:#adn_ad_wmo#:#GDWS
+adn#:#adn_new_delete_candidates_mess#:#Sehr geehrter Mitarbeiter {GDWS},<br /><br />in Ihrer GDWS stehen folgende Nutzer zur Löschung an:<br />{USER}<br /><br />Diese Nachricht wurde automatisch erstellt.
 adn#:#adn_new_delete_candidates_subj#:#ADN Löschung von personenbezogenen Daten
 adn#:#adn_ad_add_person#:#Sachkundigen hinzufügen
 adn#:#adn_add_certificate#:#Bescheinigung hinzufügen
 adn#:#adn_save_and_add_certificate#:#Speichern und Bescheinigung hinzufügen
 adn#:#adn_subtitle#:#Untertitel
 adn#:#adn_download_certificate#:#Bescheinigung herunterladen
+adn#:#adn_foreign_cert_handed_in#:#Bescheinigung aus dem Ausland vorgelegt
+adn#:#adn_extend_certificate_foreign#:#Verlängerung erstellen (Ausland)
+adn#:#adn_save_and_add_extension#:#Speichern und Verlängerung erstellen
+adn#:#adn_create_ext_only_if_for_cert#:#Die sofortige Erstellung einer Verlängerung erfordert eine Bescheinigung aus dem Ausland.
+adn#:#adn_email_noti#:#E-Mail für Benachrichtigungen
+adn#:#adn_cron_cc#:#Kopie senden an:

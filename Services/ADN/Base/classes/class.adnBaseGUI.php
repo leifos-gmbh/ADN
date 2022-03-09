@@ -205,6 +205,12 @@ class adnBaseGUI
 	 */
 	public static function resizeImage($a_file, $a_max = 50)
 	{
+		// workaound for #143
+		if (!is_file($a_file))
+		{
+			return array("width" => $a_max, "height" => $a_max);
+		}
+
 		$img = getimagesize($a_file);
 		$width = $img[0];
 		$height = $img[1];

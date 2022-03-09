@@ -32,7 +32,7 @@ class adnPerm
 	 * @param
 	 * @return
 	 */
-	function init()
+	static function init()
 	{
 		// get all
 		if (!is_array(self::$perm_objects))

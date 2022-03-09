@@ -417,7 +417,7 @@ class adnScoringGUI
 				{
 					$candidate->setBlockedBy($form->getInput("blocked_by"));
 					$date = $form->getInput("blocked_until");
-					$candidate->setBlockedUntil(new ilDate($date["date"], IL_CAL_DATE));
+					$candidate->setBlockedUntil(new ilDate($date, IL_CAL_DATE));
 				}
 				else
 				{

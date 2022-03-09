@@ -80,7 +80,9 @@ class adnMainMenuGUI
 	// cr-008 end
 
 
-	// template
+	/**
+	 * @var ilTemplate
+	 */
 	protected $tpl;
 
 	/**
@@ -268,10 +270,13 @@ class adnMainMenuGUI
 
 		if ($GLOBALS["help_link"] != "")
 		{
-			$this->tpl->setCurrentBlock("adn_help");
-			$this->tpl->setVariable("ADN_TXT_HELP",$lng->txt("help"));
-			$this->tpl->setVariable("ADN_LINK_HELP",$GLOBALS["help_link"]);
-			$this->tpl->parseCurrentBlock();
+			if ($this->tpl->blockExists("adn_help"))
+			{
+				$this->tpl->setCurrentBlock("adn_help");
+				$this->tpl->setVariable("ADN_TXT_HELP", $lng->txt("help"));
+				$this->tpl->setVariable("ADN_LINK_HELP", $GLOBALS["help_link"]);
+				$this->tpl->parseCurrentBlock();
+			}
 		}
 
 		$this->tpl->setCurrentBlock("userisloggedin");

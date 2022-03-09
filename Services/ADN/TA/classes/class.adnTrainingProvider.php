@@ -444,7 +444,7 @@ class adnTrainingProvider extends adnDBBase
 		}
 		$this->setTypesOfTraining($types);
 
-		return parent::read($id, "adn_ta_provider");
+		parent::_read($id, "adn_ta_provider");
 	}
 
 	/**
@@ -521,7 +521,7 @@ class adnTrainingProvider extends adnDBBase
 
 		$ilDB->insert("adn_ta_provider", $fields);
 
-		parent::save($id, "adn_ta_provider");
+		parent::_save($id, "adn_ta_provider");
 
 		return $id;
 	}
@@ -545,7 +545,7 @@ class adnTrainingProvider extends adnDBBase
 
 		$ilDB->update("adn_ta_provider", $fields, array("id"=>array("integer", $id)));
 
-		parent::update($id, "adn_ta_provider");
+		parent::_update($id, "adn_ta_provider");
 
 		return true;
 	}

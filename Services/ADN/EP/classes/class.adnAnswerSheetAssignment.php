@@ -142,7 +142,7 @@ class adnAnswerSheetAssignment extends adnDBBase
 		$this->setUser($set["cp_professional_id"]);
 		$this->setGeneratedOn(new ilDateTime($set["generated_on"], IL_CAL_DATE, ilTimeZone::UTC));
 		
-		parent::read($id, "adn_ep_cand_sheet");
+		parent::_read($id, "adn_ep_cand_sheet");
 	}
 
 	/**
@@ -185,7 +185,7 @@ class adnAnswerSheetAssignment extends adnDBBase
 			
 		$ilDB->insert("adn_ep_cand_sheet", $fields);
 
-		parent::save($id, "adn_ep_cand_sheet");
+		parent::_save($id, "adn_ep_cand_sheet");
 
 		return $id;
 	}
@@ -208,7 +208,7 @@ class adnAnswerSheetAssignment extends adnDBBase
 		$fields = $this->propertiesToFields();
 
 		$ilDB->update("adn_ep_cand_sheet", $fields, array("id"=>array("integer", $id)));
-		parent::update($id, "adn_ep_cand_sheet");
+		parent::_update($id, "adn_ep_cand_sheet");
 
 		return true;
 	}
@@ -354,7 +354,7 @@ class adnAnswerSheetAssignment extends adnDBBase
 		$query = "SELECT * FROM adn_ep_cand_sheet ".
 			"WHERE ep_answer_sheet_id = ".$ilDB->quote($a_sheet_id,'integer');
 		$res = $ilDB->query($query);
-		while($row = $res->fetchRow(DB_FETCHMODE_OBJECT))
+		while($row = $res->fetchObject())
 		{
 			return true;
 		}

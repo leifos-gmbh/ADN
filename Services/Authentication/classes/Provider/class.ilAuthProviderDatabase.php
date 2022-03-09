@@ -30,6 +30,24 @@ class ilAuthProviderDatabase extends ilAuthProvider implements ilAuthProviderInt
 
         $this->getLogger()->debug('Trying to authenticate user: ' . $this->getCredentials()->getUsername());
         if ($user instanceof ilObjUser) {
+
+            // adn-patch start
+            // Check online test access code
+            include_once("./Services/ADN/EP/classes/class.adnAssignment.php");
+
+            if (adnAssignment::isValidAccessCode(
+                ilUtil::stripSlashes($_POST['username']),
+                ilUtil::stripSlashes($_POST['password'])))
+            {
+                $_SESSION["adn_online_test"] = true;
+                $_SESSION["adn_test_user"] = ilUtil::stripSlashes($_POST['username']);
+                $_SESSION["adn_access_code"] = ilUtil::stripSlashes($_POST['password']);
+                $status->setStatus(ilAuthStatus::STATUS_AUTHENTICATED);
+                $status->setAuthenticatedUserId($user->getId());
+                return true;
+            }
+            // adn-patch end
+
             if ($user->getId() == ANONYMOUS_USER_ID) {
                 $this->getLogger()->notice('Failed authentication for anonymous user id. ');
                 $this->handleAuthenticationFail($status, 'err_wrong_login');

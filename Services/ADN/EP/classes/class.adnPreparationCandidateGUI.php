@@ -104,7 +104,8 @@ class adnPreparationCandidateGUI
 					case "applyTrainingEventFilter":
 					case "resetTrainingEventFilter":
 					case "saveLastTraining":
-					case "saveCandidateAndAddCertificate":
+					case "saveCandidateAndAddExtension":
+					case "saveCandidateAndListPersonData":
 						if(adnPerm::check(adnPerm::EP, adnPerm::WRITE))
 						{
 							$this->$cmd();
@@ -320,8 +321,14 @@ class adnPreparationCandidateGUI
 		$registered = new ilCheckboxInputGUI($lng->txt("adn_applied_for_examination"), "applied");
 		$form->addItem($registered);
 
-		$foreign = new ilCheckboxInputGUI($lng->txt("adn_foreign_certificate"), "foreign");
-		$form->addItem($foreign);
+		if ($this->mode != self::MODE_GENERAL)
+		{
+			$foreign = new ilCheckboxInputGUI($lng->txt("adn_foreign_certificate"), "foreign");
+			$form->addItem($foreign);
+		}
+
+		$foreign_cert_handed_id = new ilCheckboxInputGUI($lng->txt("adn_foreign_cert_handed_in"), "foreign_cert_handed_in");
+		$form->addItem($foreign_cert_handed_id);
 
 		$phone = new ilTextInputGUI($lng->txt("adn_phone"), "phone");
 		$phone->setMaxLength(30);
@@ -457,8 +464,10 @@ class adnPreparationCandidateGUI
 			// cr-008 start
 			if ($this->mode == self::MODE_GENERAL)
 			{
-				$form->addCommandButton("saveCandidateAndAddCertificate",
-					$lng->txt("adn_save_and_add_certificate"));
+				$form->addCommandButton("saveCandidateAndListPersonData",
+					$lng->txt("save"));
+				$form->addCommandButton("saveCandidateAndAddExtension",
+					$lng->txt("adn_save_and_add_extension"));
 				$form->addCommandButton("listPersonData", $lng->txt("cancel"));
 				$form->setTitle($lng->txt("adn_ad_add_person"));
 			}
@@ -492,7 +501,11 @@ class adnPreparationCandidateGUI
 			$citizenship->setValue($this->candidate->getCitizenship());
 			$type->setValue($this->candidate->getSubjectArea());
 			$registered->setChecked($this->candidate->isRegisteredForExam());
-			$foreign->setChecked($this->candidate->hasForeignCertificate());
+			if ($this->mode != self::MODE_GENERAL)
+			{
+				$foreign->setChecked($this->candidate->hasForeignCertificate());
+			}
+			$foreign_cert_handed_id->setChecked($this->candidate->hasForeignCertificateHandedIn());
 			$phone->setValue($this->candidate->getPhone());
 			$email->setValue($this->candidate->getEmail());
 			$registered_by->setValue($this->candidate->getRegisteredBy());
@@ -575,6 +588,15 @@ class adnPreparationCandidateGUI
 		// check input
 		if ($form->checkInput())
 		{
+			// #13
+			if ($ilCtrl->getCmd() == "saveCandidateAndAddExtension" && !$form->getInput("foreign_cert_handed_in"))
+			{
+				ilUtil::sendFailure($lng->txt("adn_create_ext_only_if_for_cert"));
+				$form->setValuesByPost();
+				$this->createCandidate($form);
+				return;
+			}
+
 			if($this->showDialog($form, null, $a_edit_training))
 			{
 				return;
@@ -587,11 +609,15 @@ class adnPreparationCandidateGUI
 			$candidate->setLastName($form->getInput("last_name"));
 			$candidate->setFirstName($form->getInput("first_name"));
 			$date = $form->getInput("birthdate");
-			$candidate->setBirthdate(new ilDate($date["date"], IL_CAL_DATE));
+			$candidate->setBirthdate(new ilDate($date, IL_CAL_DATE));
 			$candidate->setCitizenship($form->getInput("citizenship"));
 			$candidate->setSubjectArea($form->getInput("type"));
 			$candidate->setRegisteredForExam($form->getInput("applied"));
-			$candidate->setForeignCertificate($form->getInput("foreign"));
+			if ($this->mode != self::MODE_GENERAL)
+			{
+				$candidate->setForeignCertificate($form->getInput("foreign"));
+			}
+			$candidate->setForeignCertificateHandedIn($form->getInput("foreign_cert_handed_in"));
 			$candidate->setRegisteredBy($form->getInput("registered_by"));
 			$candidate->setPhone($form->getInput("phone"));
 			$candidate->setEmail($form->getInput("email"));
@@ -615,7 +641,7 @@ class adnPreparationCandidateGUI
 			{
 				$date = $form->getInput("holdback_until");
 				$candidate->setBlockedBy($form->getInput("holdback_by"));
-				$candidate->setBlockedUntil(new ilDate($date["date"], IL_CAL_DATE));
+				$candidate->setBlockedUntil(new ilDate($date, IL_CAL_DATE));
 			}
 
 			if($candidate->save())
@@ -626,7 +652,7 @@ class adnPreparationCandidateGUI
 					ilUtil::sendSuccess($lng->txt("adn_candidate_created"), true);
 
 					// cr-008 start
-					if (self::MODE_GENERAL)
+					if ($this->mode == self::MODE_GENERAL)
 					{
 						$this->listPersonData();
 					}
@@ -676,11 +702,15 @@ class adnPreparationCandidateGUI
 			$this->candidate->setLastName($form->getInput("last_name"));
 			$this->candidate->setFirstName($form->getInput("first_name"));
 			$date = $form->getInput("birthdate");
-			$this->candidate->setBirthdate(new ilDate($date["date"], IL_CAL_DATE));
+			$this->candidate->setBirthdate(new ilDate($date, IL_CAL_DATE));
 			$this->candidate->setCitizenship($form->getInput("citizenship"));
 			$this->candidate->setSubjectArea($form->getInput("type"));
 			$this->candidate->setRegisteredForExam($form->getInput("applied"));
-			$this->candidate->setForeignCertificate($form->getInput("foreign"));
+			if ($this->mode != self::MODE_GENERAL)
+			{
+				$this->candidate->setForeignCertificate($form->getInput("foreign"));
+			}
+			$this->candidate->setForeignCertificateHandedIn($form->getInput("foreign_cert_handed_in"));
 			$this->candidate->setRegisteredBy($form->getInput("registered_by"));
 			$this->candidate->setPhone($form->getInput("phone"));
 			$this->candidate->setEmail($form->getInput("email"));
@@ -704,7 +734,7 @@ class adnPreparationCandidateGUI
 			{
 				$date = $form->getInput("holdback_until");
 				$this->candidate->setBlockedBy($form->getInput("holdback_by"));
-				$this->candidate->setBlockedUntil(new ilDate($date["date"], IL_CAL_DATE));
+				$this->candidate->setBlockedUntil(new ilDate($date, IL_CAL_DATE));
 			}
 			else
 			{
@@ -808,7 +838,7 @@ class adnPreparationCandidateGUI
 			$a_form->getInput("holdback"))
 		{
 			$date = $a_form->getInput("holdback_until");
-			if($date["date"] >= date("Y-m-d"))
+			if($date >= date("Y-m-d"))
 			{
 				$message = $lng->txt("adn_exam_application_holdback");
 				$button_ok = $lng->txt("adn_allow_application");
@@ -823,7 +853,7 @@ class adnPreparationCandidateGUI
 			$date = $a_form->getInput("birthdate");
 			include_once("./Services/ADN/ES/classes/class.adnCertifiedProfessional.php");
 			if(!adnCertifiedProfessional::isUserUnique($a_form->getInput("last_name"), 
-				$a_form->getInput("first_name"), new ilDate($date["date"], IL_CAL_DATE), $a_id))
+				$a_form->getInput("first_name"), new ilDate($date, IL_CAL_DATE), $a_id))
 			{
 				if(!$message)
 				{
@@ -903,14 +933,15 @@ class adnPreparationCandidateGUI
 			$cgui->addHiddenItem("last_name", $a_form->getInput("last_name"));
 			$cgui->addHiddenItem("first_name", $a_form->getInput("first_name"));
 			$date = $a_form->getInput("birthdate");
-			$date = explode("-", $date["date"]);
-			$cgui->addHiddenItem("birthdate[date][d]", $date[2]);
-			$cgui->addHiddenItem("birthdate[date][m]", $date[1]);
-			$cgui->addHiddenItem("birthdate[date][y]", $date[0]);
+			$cgui->addHiddenItem("birthdate", $date);
 			$cgui->addHiddenItem("citizenship", $a_form->getInput("citizenship"));
 			$cgui->addHiddenItem("type", $a_form->getInput("type"));
 			$cgui->addHiddenItem("applied", $a_form->getInput("applied"));
-			$cgui->addHiddenItem("foreign", $a_form->getInput("foreign"));
+			if ($this->mode != self::MODE_GENERAL)
+			{
+				$cgui->addHiddenItem("foreign", $a_form->getInput("foreign"));
+			}
+			$cgui->addHiddenItem("foreign_cert_handed_in", $a_form->getInput("foreign_cert_handed_in"));
 			$cgui->addHiddenItem("registered_by", $a_form->getInput("registered_by"));
 			$cgui->addHiddenItem("phone", $a_form->getInput("phone"));
 			$cgui->addHiddenItem("email", $a_form->getInput("email"));
@@ -933,10 +964,7 @@ class adnPreparationCandidateGUI
 			$cgui->addHiddenItem("holdback", $a_form->getInput("holdback"));
 			$cgui->addHiddenItem("holdback_by", $a_form->getInput("holdback_by"));
 			$date = $a_form->getInput("holdback_until");
-			$date = explode("-", $date["date"]);
-			$cgui->addHiddenItem("holdback_until[date][d]", $date[2]);
-			$cgui->addHiddenItem("holdback_until[date][m]", $date[1]);
-			$cgui->addHiddenItem("holdback_until[date][y]", $date[0]);
+			$cgui->addHiddenItem("holdback_until", $date);
 
 			$tpl->setContent($cgui->getHTML());
 			return true;
@@ -1157,20 +1185,34 @@ class adnPreparationCandidateGUI
 	{
 		global $ilCtrl;
 
-		$ilCtrl->redirectByClass(array("adnBaseGUI", "adncertifiedprofessionalgui", "adnPersonalDataMaintenanceGUI"), "listPersonalData");
+		$ilCtrl->redirectByClass(array("adnBaseGUI", "adncertifiedprofessionalgui", "adnCertifiedProfessionalDataGUI"), "listProfessionals");
+		//$ilCtrl->redirectByClass(array("adnBaseGUI", "adncertifiedprofessionalgui", "adnPersonalDataMaintenanceGUI"), "listPersonalData");
 	}
 
 	/**
-	 * Save candidate and edit last training
+	 * Save candidate and add extension
 	 */
-	protected function saveCandidateAndAddCertificate()
+	protected function saveCandidateAndAddExtension()
 	{
 		global $ilCtrl;
 
 		if($this->saveCandidate(true))
 		{
-			$ilCtrl->setParameterByClass("adnCertificateScoringGUI", "cd_id", $this->cd_id);
-			$ilCtrl->redirectByClass(array("adnBaseGUI", "adnExaminationScoringGUI", "adnCertificateScoringGUI"), "createCertificate");
+			$ilCtrl->setParameterByClass("adnCertificateGUI", "pid", $this->cd_id);
+			$ilCtrl->redirectByClass(array("adnBaseGUI", "adnCertifiedProfessionalGUI", "adnCertificateGUI"), "extendCertificate");
+		}
+	}
+
+	/**
+	 * Save candidate and list personal data
+	 */
+	protected function saveCandidateAndListPersonData()
+	{
+		global $ilCtrl;
+
+		if($this->saveCandidate(true))
+		{
+			$this->listPersonData();
 		}
 	}
 

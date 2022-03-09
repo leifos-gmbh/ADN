@@ -224,6 +224,7 @@ class adnLicenseGUI
 		// file
 		$file = new ilFileInputGUI($lng->txt("file"), "file");
 		$file->setSuffixes(array("pdf"));
+		$file->setALlowDeletion(true);
 		$form->addItem($file);
 
 		if ($a_mode == "create")

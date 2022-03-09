@@ -435,12 +435,12 @@ class adnProfessionalImportGUI
 			}
 			else if($a_defaults["wmo"])
 			{
-				$a_pros[$hash]["notices"][$a_counter][] = "WSD ".$wmo." ist ungültig, setze Default.";
+				$a_pros[$hash]["notices"][$a_counter][] = "GDWS ".$wmo." ist ungültig, setze Default.";
 				$wmo = $a_defaults["wmo"];
 			}
 			else
 			{
-				$a_pros[$hash]["errors"][$a_counter][] = "WSD ".$wmo." ist ungültig.";
+				$a_pros[$hash]["errors"][$a_counter][] = "GDWS ".$wmo." ist ungültig.";
 				$wmo = null;
 			}
 		}		

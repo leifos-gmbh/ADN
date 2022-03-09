@@ -182,7 +182,7 @@ class adnLicense extends adnDBBase
 		}
 		$this->setGoods($goods);
 
-		parent::read($id, "adn_ed_license");
+		parent::_read($id, "adn_ed_license");
 	}
 
 	/**
@@ -229,7 +229,7 @@ class adnLicense extends adnDBBase
 
 		$this->saveGoods();
 
-		parent::save($id, "adn_ed_license");
+		parent::_save($id, "adn_ed_license");
 		
 		return $id;
 	}
@@ -265,7 +265,7 @@ class adnLicense extends adnDBBase
 
 		$this->saveGoods();
 
-		parent::update($id, "adn_ed_license");
+		parent::_update($id, "adn_ed_license");
 
 		return true;
 	}
@@ -276,15 +276,13 @@ class adnLicense extends adnDBBase
 	protected function saveGoods()
 	{
 		global $ilDB;
-
 		$id = $this->getId();
 		if($id)
 		{
 			// remove old entries first (so we do not have to sync)
 			$ilDB->manipulate("DELETE FROM adn_ed_license_good".
 				" WHERE ed_license_id = ".$ilDB->quote($id, "integer"));
-
-			if(sizeof($this->goods))
+			if(is_array($this->goods) && count($this->goods) > 0)
 			{
 				foreach($this->goods as $good_id)
 				{

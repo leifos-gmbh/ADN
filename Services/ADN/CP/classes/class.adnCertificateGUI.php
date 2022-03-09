@@ -20,6 +20,9 @@ class adnCertificateGUI
 	
 	// current form object
 	protected $form = null;
+
+	// professional id (may not be certified, see #13)
+	protected $pid;
 	
 	/**
 	 * Constructor
@@ -30,6 +33,9 @@ class adnCertificateGUI
 		
 		// save certificate ID through requests
 		$ilCtrl->saveParameter($this, array("ct_id"));
+		$ilCtrl->saveParameter($this, array("pid"));
+
+		$this->pid = (int) $_GET["pid"];		// see #13
 		
 		$this->readCertificate();
 	}
@@ -67,6 +73,7 @@ class adnCertificateGUI
 					case 'applyFilter':
 					case 'resetFilter':
 					case 'confirmSaveExtension':
+					case 'afterExtension':
 						if (adnPerm::check(adnPerm::CP, adnPerm::READ))
 						{
 							$this->$cmd();
@@ -128,15 +135,6 @@ class adnCertificateGUI
 		$ilToolbar->addInputItem($checkbox, true);
 		$ilToolbar->setFormAction($ilCtrl->getFormAction($this));
 		$ilToolbar->addFormButton($lng->txt("adn_update_view"), "listCertificates");
-
-		// cr-008 start
-		$ilToolbar->addSeparator();
-		include_once("./Services/ADN/EP/classes/class.adnPreparationCandidateGUI.php");
-		$ilCtrl->setParameterByClass("adnpreparationcandidategui", "mode", adnPreparationCandidateGUI::MODE_GENERAL);
-		$ilToolbar->addButton($lng->txt("adn_ad_add_person"),
-			$ilCtrl->getLinkTargetByClass(array("adnbasegui", "adnexaminationpreparationgui", "adnpreparationcandidategui"), "createCandidate")
-		);
-		// cr-008 end
 
 		// table of certificates
 		include_once("./Services/ADN/CP/classes/class.adnCertificateTableGUI.php");
@@ -217,9 +215,22 @@ class adnCertificateGUI
 		global $lng, $ilCtrl, $ilUser;
 
 		// certified professional
-		$cp_id = $this->certificate->getCertifiedProfessionalId();
+		if (!is_null($this->certificate))
+		{
+			$cp_id = $this->certificate->getCertifiedProfessionalId();
+		}
+		else if ($a_mode == "extend" && $this->pid > 0)		// #13, get professional id per GET (extension for foreign certificate)
+		{
+			$cp_id = $this->pid;
+		}
 		include_once("./Services/ADN/ES/classes/class.adnCertifiedProfessional.php");
 		$cp = new adnCertifiedProfessional($cp_id);
+
+		// check if everything is ok
+		if (($this->certificate == null) && ($this->pid == 0 || !$cp->hasForeignCertificateHandedIn()))
+		{
+			throw new Exception("Extension not allowed (no certificate or foreign certificate given).");
+		}
 
 		// get form object and add input fields
 		include_once("Services/Form/classes/class.ilPropertyFormGUI.php");
@@ -241,12 +252,17 @@ class adnCertificateGUI
 			include_once("./Services/ADN/AD/classes/class.adnUser.php");
 			$ne = new ilNonEditableValueGUI($lng->txt("adn_number"), "adn_nr");
 			include_once("./Services/ADN/ES/classes/class.adnCertificate.php");
+
+			$issued_on = ($this->certificate == null)
+				? new ilDateTime(time(), IL_CAL_UNIX)
+				: $this->certificate->getIssuedOn();
+
 			$ne->setValue(
 				adnCertificate::_getFullCertificateNumber(
 					adnUser::lookupWmoId(),
 					adnCertificate::_determineNextNumber(adnUser::lookupWmoId(),
-						$this->certificate->getIssuedOn()),
-					$this->certificate->getIssuedOn()
+						$issued_on),
+					$issued_on
 				));
 			$form->addItem($ne);
 		}
@@ -269,7 +285,7 @@ class adnCertificateGUI
 		{
 			$cb = new ilCheckboxOption($caption, $id);
 			$type->addOption($cb);
-			if ($this->certificate->getType($id))
+			if ($this->certificate != null && $this->certificate->getType($id))
 			{
 				$values[] = $id;
 			}
@@ -300,7 +316,10 @@ class adnCertificateGUI
 		$wmo = new ilSelectInputGUI($lng->txt("adn_issued_by"), "issued_by_wmo");
 		$wmo->setOptions($options);
 		$wmo->setRequired(true);
-		$wmo->setValue($this->certificate->getIssuedByWmo());
+		if ($this->certificate != null)
+		{
+			$wmo->setValue($this->certificate->getIssuedByWmo());
+		}
 		// extension: wmo may be changed
 		if ($a_mode == "extend")
 		{
@@ -328,18 +347,21 @@ class adnCertificateGUI
 			$form->addItem($form->getReadOnlyItem($issued_on));
 		}
 
-		$duplicates = $this->certificate->getDuplicateDates();
-		if($duplicates)
+		if ($this->certificate != null)
 		{
-			$caption = array();
-			foreach($duplicates as $date)
+			$duplicates = $this->certificate->getDuplicateDates();
+			if ($duplicates)
 			{
-				$caption[] = ilDatePresentation::formatDate($date);
+				$caption = array();
+				foreach ($duplicates as $date)
+				{
+					$caption[] = ilDatePresentation::formatDate($date);
+				}
+				$duplicate_issued_on = new ilNonEditableValueGUI($lng->txt("adn_duplicate_issued_on"),
+					"dissued_on");
+				$duplicate_issued_on->setValue(implode("<br />", $caption));
+				$form->addItem($duplicate_issued_on);
 			}
-			$duplicate_issued_on = new ilNonEditableValueGUI($lng->txt("adn_duplicate_issued_on"),
-				"dissued_on");
-			$duplicate_issued_on->setValue(implode("<br />", $caption));
-			$form->addItem($duplicate_issued_on);
 		}
 
 		// valid until
@@ -391,7 +413,7 @@ class adnCertificateGUI
 
 		// proof
 		if (($a_mode != "duplicate") &&
-			($this->certificate->getIsExtension() || $a_mode == "extend"))
+			($a_mode == "extend" || $this->certificate->getIsExtension()))
 		{
 			$proof = new ilCheckboxGroupInputGUI($lng->txt("adn_proof"),
 				"proof");
@@ -400,7 +422,7 @@ class adnCertificateGUI
 			{
 				$cb = new ilCheckboxOption($caption, $id);
 				$proof->addOption($cb);
-				if ($this->certificate->getProof($id))
+				if ($this->certificate != null && $this->certificate->getProof($id))
 				{
 					$values[] = $id;
 				}
@@ -455,7 +477,7 @@ class adnCertificateGUI
 		{
 			$form->addCommandButton("update", $lng->txt("save"));
 		}
-		$form->addCommandButton("listCertificates", $lng->txt("cancel"));
+		$form->addCommandButton("afterExtension", $lng->txt("cancel"));
 		
 		$form->setFormAction($ilCtrl->getFormAction($this));
 
@@ -592,7 +614,7 @@ class adnCertificateGUI
 
 		// add back tab
 		$ilTabs->setBackTarget($lng->txt("back"),
-			$ilCtrl->getLinkTarget($this, "listCertificates"));
+			$ilCtrl->getLinkTarget($this, "afterExtension"));
 
 		if (is_object($a_form))
 		{
@@ -618,7 +640,7 @@ class adnCertificateGUI
 		if ($form->checkInput())
 		{
 			// check if certificate is not valid anymore
-			if (!$this->certificate->isValid())
+			if ($this->certificate != null && !$this->certificate->isValid())
 			{
 				ilUtil::sendQuestion($lng->txt("adn_cert_not_valid_save_anyway"));
 			}
@@ -646,7 +668,7 @@ class adnCertificateGUI
 			// fix command buttons
 			$form->clearCommandButtons();
 			$form->addCommandButton("confirmSaveExtension", $lng->txt("adn_create_extension"));
-			$form->addCommandButton("listCertificates", $lng->txt("cancel"));
+			$form->addCommandButton("afterExtension", $lng->txt("cancel"));
 
 			$form->setValuesByPost();
 
@@ -679,6 +701,12 @@ class adnCertificateGUI
 		if ($form->checkInput())
 		{
 			include_once("./Services/ADN/ES/classes/class.adnCertificate.php");
+
+			if ($this->certificate == null && $this->pid > 0)
+			{
+				$this->certificate = new adnCertificate();
+				$this->certificate->setCertifiedProfessionalId($this->pid);
+			}
 
 			// certificate types
 			foreach(adnCertificate::getCertificateTypes() as $id => $caption)
@@ -731,12 +759,12 @@ class adnCertificateGUI
 				$report->createExtension($this->certificate->getId());
 				
 				ilUtil::sendSuccess($lng->txt('adn_extension_created'),true);
-				$ilCtrl->redirect($this,'listCertificates');
+				$this->afterExtension();
 			}
 			catch(adnReportException $e)
 			{
 				ilUtil::sendFailure($e->getMessage(),true);
-				$ilCtrl->redirect($this,'listCertificates');
+				$this->afterExtension();
 			}
 		}
 
@@ -756,6 +784,27 @@ class adnCertificateGUI
 			));
 
 		$this->extendCertificate($form);
+	}
+
+	/**
+	 * After extension creation or cancel
+	 *
+	 * @param
+	 * @return
+	 */
+	protected function afterExtension()
+	{
+		global $ilCtrl;
+
+		if ($this->certificate == null && $this->pid > 0)
+		{
+			// #13
+			$ilCtrl->redirectByClass(array("adnCertifiedProfessionalGUI", "adnPersonalDataMaintenanceGUI"), 'listPersonalData');
+		}
+		else
+		{
+			$ilCtrl->redirect($this, 'listCertificates');
+		}
 	}
 
 
@@ -906,6 +955,9 @@ class adnCertificateGUI
 			$cost = $wmo->getCostExam();
 			$types[adnWMO::COST_EXAM] = $lng->txt("adn_wmo_cost_exam").
 				" (".$cost["no"]." - ".$cost["value"]." EUR)";
+            $cost = $wmo->getCostExamGasChem();
+            $types[adnWMO::COST_EXAM_GAS_CHEM] = $lng->txt("adn_wmo_cost_exam_gas_chem").
+                " (".$cost["no"]." - ".$cost["value"]." EUR)";
 		}
 
 		$type = new ilSelectInputGUI($lng->txt("adn_type_of_cost"), "type");

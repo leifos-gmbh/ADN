@@ -305,7 +305,7 @@ class adnExaminationQuestion extends adnDBBase
 		$this->setComment($set["last_change_comment"]);
 		$this->setFileName($set["qfile"], 1);
 		
-		parent::read($id, "adn_ed_question");
+		parent::_read($id, "adn_ed_question");
 	}
 
 	/**
@@ -378,7 +378,7 @@ class adnExaminationQuestion extends adnDBBase
 			
 		$ilDB->insert("adn_ed_question", $fields);
 
-		parent::save($id, "adn_ed_question");
+		parent::_save($id, "adn_ed_question");
 		
 		return $id;
 	}
@@ -410,7 +410,7 @@ class adnExaminationQuestion extends adnDBBase
 		
 		$ilDB->update("adn_ed_question", $fields, array("id"=>array("integer", $id)));
 
-		parent::update($id, "adn_ed_question");
+		parent::_update($id, "adn_ed_question");
 
 		return true;
 	}

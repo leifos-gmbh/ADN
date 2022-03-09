@@ -134,7 +134,7 @@ class adnDBBase
 	 * @param string $a_table
 	 * @param string $a_primary_key
 	 */
-	public function read($a_id, $a_table, $a_primary_key = "id")
+	protected function _read($a_id, $a_table, $a_primary_key = "id")
 	{
 		global $ilDB;
 
@@ -162,7 +162,7 @@ class adnDBBase
 	 * @param string $a_primary_key
 	 * @return bool
 	 */
-	public function save($a_id, $a_table, $a_primary_key = "id")
+	public function _save($a_id, $a_table, $a_primary_key = "id")
 	{
 		global $ilDB, $ilUser;
 
@@ -190,7 +190,7 @@ class adnDBBase
 	 * @param string $a_primary_key
 	 * @return bool
 	 */
-	public function update($a_id, $a_table, $a_primary_key = "id")
+	public function _update($a_id, $a_table, $a_primary_key = "id")
 	{
 		global $ilDB, $ilUser;
 		

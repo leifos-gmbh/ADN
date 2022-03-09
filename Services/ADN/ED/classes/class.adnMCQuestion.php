@@ -232,7 +232,8 @@ class adnMCQuestion extends adnExaminationQuestion
 		global $ilDB;
 
 		parent::save();
-	
+
+		$id = $this->getId();
 		$fields = $this->MCPropertiesToFields();
 
 		for($loop = 2; $loop < 6; $loop++)
@@ -327,7 +328,7 @@ class adnMCQuestion extends adnExaminationQuestion
 	 * @param int $a_q_id question id
 	 * @return int correct answer
 	 */
-	function lookupCorrectAnswer($a_q_id)
+	static function lookupCorrectAnswer($a_q_id)
 	{
 		global $ilDB;
 

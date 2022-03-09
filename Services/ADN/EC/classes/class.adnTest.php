@@ -95,7 +95,7 @@ class adnTest
 	 * @param int $a_candidate_id
 	 * @return int
 	 */
-	function lookupMCResult($a_event_id, $a_candidate_id)
+	static function lookupMCResult($a_event_id, $a_candidate_id)
 	{
 		global $ilDB;
 
@@ -178,7 +178,7 @@ class adnTest
 		$res = $ilDB->query($query);
 
 		$results = array();
-		while($row = $res->fetchRow(DB_FETCHMODE_OBJECT))
+		while($row = $res->fetchObject())
 		{
 			$results[$row->ed_question_id] = $row->answer;
 		}

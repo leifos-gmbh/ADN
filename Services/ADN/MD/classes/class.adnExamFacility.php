@@ -195,7 +195,7 @@ class adnExamFacility extends adnDBBase
 		$this->setZip($set["postal_code"]);
 		$this->setCity($set["city"]);
 
-		parent::read($id, "adn_md_exam_facility");
+		parent::_read($id, "adn_md_exam_facility");
 	}
 
 	/**
@@ -233,7 +233,7 @@ class adnExamFacility extends adnDBBase
 			
 		$ilDB->insert("adn_md_exam_facility", $fields);
 
-		parent::save($id, "adn_md_exam_facility");
+		parent::_save($id, "adn_md_exam_facility");
 		
 		return $id;
 	}
@@ -257,7 +257,7 @@ class adnExamFacility extends adnDBBase
 
 		$ilDB->update("adn_md_exam_facility", $fields, array("id"=>array("integer", $id)));
 
-		parent::update($id, "adn_md_exam_facility");
+		parent::_update($id, "adn_md_exam_facility");
 
 		return true;
 	}

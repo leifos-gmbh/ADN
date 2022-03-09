@@ -177,7 +177,7 @@ class adnTrainingEvent extends adnDBBase
 		$this->setDateTo(new ilDate($set["date_to"], IL_CAL_DATE, ilTimeZone::UTC));
 		$this->setFacility($set["ta_facility_id"]);
 
-		parent::read($id, "adn_ta_event");
+		parent::_read($id, "adn_ta_event");
 	}
 
 	/**
@@ -215,7 +215,7 @@ class adnTrainingEvent extends adnDBBase
 			
 		$ilDB->insert("adn_ta_event", $fields);
 
-		parent::save($id, "adn_ta_event");
+		parent::_save($id, "adn_ta_event");
 		
 		return $id;
 	}
@@ -239,7 +239,7 @@ class adnTrainingEvent extends adnDBBase
 		
 		$ilDB->update("adn_ta_event", $fields, array("id"=>array("integer", $id)));
 
-		parent::update($id, "adn_ta_event");
+		parent::_update($id, "adn_ta_event");
 
 		return true;
 	}

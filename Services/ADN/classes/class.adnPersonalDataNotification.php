@@ -51,9 +51,17 @@ class adnPersonalDataNotification extends ilCronJob
 		return true;
 	}
 
+	public function hasCustomSettings()
+	{
+		return true;
+	}
+
 	public function run()
 	{
 		global $lng;
+
+		$log = ilLoggerFactory::getLogger("root");
+		$log->notice("started");
 
 		$status = ilCronJobResult::STATUS_NO_ACTION;
 		$status_details = null;
@@ -78,12 +86,20 @@ class adnPersonalDataNotification extends ilCronJob
 
 		include_once "Services/ADN/AD/classes/class.adnPersonalData.php";
 		$cand = adnPersonalData::getData(array(), "cand");
+
+		$log->notice("got candidate data: ".count($cand));
+
+
 		$wmo = array();
 		foreach ($cand as $c)
 		{
 			$wmo[$c["registered_by_wmo_id"]]["cand"][] = $c;
 		}
 		$cert = adnPersonalData::getData(array(), "cert");
+
+		$log->notice("got certificate data: ".count($cert));
+
+
 //		var_dump($cand);
 //		var_dump($cert);
 //		exit;
@@ -100,10 +116,17 @@ class adnPersonalDataNotification extends ilCronJob
 			$cert_nr =  (is_array($data["cert"]))
 				? count($data["cert"])
 				: 0;
+
+			$log->notice("wmo: ".$wmo_id.", items: ".($cand_nr + $cert_nr));
+
 			if (($cand_nr + $cert_nr) > 0)
 			{
+				$log->notice("before send mail...");
+
 				// send email to wmo
 				$this->sendMail($wmo_id, $cand_nr, $cert_nr);
+
+				$log->notice("...after send mail");
 
 				// mails were sent - set cron job status accordingly
 				$status = ilCronJobResult::STATUS_OK;
@@ -133,7 +156,9 @@ class adnPersonalDataNotification extends ilCronJob
 	 */
 	protected function sendMail($a_wmo_id, $a_cand_nr, $a_cert_nr)
 	{
-		global $lng;
+		global $lng, $ilSetting;
+
+		$log = ilLoggerFactory::getLogger("root");
 
 		//include_once "./Services/Notification/classes/class.ilSystemNotification.php";
 		//$ntf = new ilSystemNotification();
@@ -150,13 +175,16 @@ class adnPersonalDataNotification extends ilCronJob
 
 		include_once("./Services/ADN/MD/classes/class.adnWMO.php");
 		$wmo = new adnWMO($a_wmo_id);
-		$mail_adress = $wmo->getEmail();
+
+		// use notification email
+		$mail_adress = $wmo->getNotificationEmail();
+
 
 		$lng->loadLanguageModule("adn");
 		$message = $lng->txtlng("adn", "adn_new_delete_candidates_mess", "de");
 		$subject = $lng->txtlng("adn", "adn_new_delete_candidates_subj", "de");
 
-		$message = str_replace("{WSD}", $wmo->getName(), $message);
+		$message = str_replace("{GDWS}", $wmo->getName(), $message);
 		$user_str = "";
 		if ($a_cand_nr > 0)
 		{
@@ -175,15 +203,55 @@ class adnPersonalDataNotification extends ilCronJob
 		$mail = new ilMail(ANONYMOUS_USER_ID);
 		$mail->enableSOAP(false); // #10410
 //	echo "-$a_wmo_id-$mail_adress-";
+
+		$log->notice("sending to:".$mail_adress);
+		$log->notice("subject:".$subject);
+
+		include_once './Services/Mail/classes/class.ilMimeMail.php';
+
+        /** @var ilMailMimeSenderFactory $senderFactory */
+        $senderFactory = $GLOBALS["DIC"]["mail.mime.sender.factory"];
+
+        $mime = new ilMimeMail();
+        $mime->From($senderFactory->system());
+        $mime->To($mail_adress);
+        $mime->Cc($ilSetting->get('adn_cron_cc'));
+        $mime->Subject($subject);
+        $mime->Body($message);
+		$mime->Send();
+
+		/**
 		$ret = $mail->sendMail($mail_adress,
-			null,
+			$ilSetting->get('adn_cron_cc',''),
 			null,
 			$subject,
 			$message,
 			null,
 			array("email"));
-	//echo $ret; exit;
+		 *
+		 */
+
 	}
+
+	public function addCustomSettingsToForm(ilPropertyFormGUI $a_form)
+	{
+		global $lng, $ilSetting;
+
+		$lng->loadLanguageModule('adn');
+		$mail = new ilTextInputGUI($lng->txt('adn_cron_cc'),'cc');
+		$mail->setValue($ilSetting->get('adn_cron_cc'));
+		$a_form->addItem($mail);
+
+		return $a_form;
+	}
+
+	public function saveCustomSettings(ilPropertyFormGUI $a_form)
+	{
+		global $ilSetting;
+
+		$ilSetting->set('adn_cron_cc', $a_form->getInput('cc'));
+	}
+
 
 	/*public function addToExternalSettingsForm($a_form_id, array &$a_fields, $a_is_active)
 	{

@@ -252,10 +252,15 @@ class adnReportInvitation extends adnReport
 		$facility .= $fac->getZip().' '.$fac->getCity();
 
 		$map['exam_fac'] = $facility;
-		
+
 		// Costs 
 		$costs = $this->getEvent()->getCosts();
-		$e_cost = $wmo->getCostExam();
+		$event_type = $this->getEvent()->getType();
+		if($event_type == "gas" || $event_type == "chem") {
+            $e_cost = $wmo->getCostExamGasChem();
+        } else {
+            $e_cost = $wmo->getCostExam();
+        }
 		$costs += $e_cost['value'];
 		$map['exam_charge'] = sprintf('%01.2f EUR',$costs);
 		$map['exam_charge'] = str_replace('.', ',',$map['exam_charge']);

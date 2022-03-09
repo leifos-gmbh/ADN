@@ -41,6 +41,7 @@ class adnSubobjective extends adnDBBase
 	 */
 	public static function lookupIdByObjective($a_objective)
 	{
+		/** @var ilDBInterface $ilDB */
 		global $ilDB;
 		
 		$query = 'SELECT id from adn_ed_subobjective '.
@@ -48,7 +49,7 @@ class adnSubobjective extends adnDBBase
 		$res = $ilDB->query($query);
 		
 		$ids = array();
-		while($row = $res->fetchRow(DB_FETCHMODE_OBJECT))
+		while($row = $res->fetchObject())
 		{
 			$ids[] = $row->id;
 		}
@@ -177,7 +178,7 @@ class adnSubobjective extends adnDBBase
 		$this->setTopic($set["topic"]);
 		$this->setNumber($set["nr"]);
 
-		parent::read($id, "adn_ed_subobjective");
+		parent::_read($id, "adn_ed_subobjective");
 	}
 
 	/**
@@ -212,7 +213,7 @@ class adnSubobjective extends adnDBBase
 			
 		$ilDB->insert("adn_ed_subobjective", $fields);
 
-		parent::save($id, "adn_ed_subobjective");
+		parent::_save($id, "adn_ed_subobjective");
 		
 		return $id;
 	}
@@ -236,7 +237,7 @@ class adnSubobjective extends adnDBBase
 		
 		$ilDB->update("adn_ed_subobjective", $fields, array("id"=>array("integer", $id)));
 
-		parent::update($id, "adn_ed_subobjective");
+		parent::_update($id, "adn_ed_subobjective");
 
 		return true;
 	}

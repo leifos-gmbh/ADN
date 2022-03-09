@@ -202,7 +202,7 @@ class adnGoodRelatedAnswer extends adnDBBase
 		}
 		$this->setGoods($goods);
 
-		parent::read($id, "adn_ed_good_rel_answer");
+		parent::_read($id, "adn_ed_good_rel_answer");
 	}
 
 	/**
@@ -238,7 +238,7 @@ class adnGoodRelatedAnswer extends adnDBBase
 
 		$this->saveGoods();
 
-		parent::save($id, "adn_ed_good_rel_answer");
+		parent::_save($id, "adn_ed_good_rel_answer");
 		
 		return $id;
 	}
@@ -264,7 +264,7 @@ class adnGoodRelatedAnswer extends adnDBBase
 
 		$this->saveGoods();
 
-		parent::update($id, "adn_ed_good_rel_answer");
+		parent::_update($id, "adn_ed_good_rel_answer");
 
 		return true;
 	}
