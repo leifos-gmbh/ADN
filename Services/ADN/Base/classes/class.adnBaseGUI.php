@@ -45,7 +45,7 @@ class adnBaseGUI
 		$lng->loadLanguageModule("adn");
 
 		// set the standard template
-		$tpl->getStandardTemplate();
+//		$tpl->getStandardTemplate();
 
 		$next_class = $ilCtrl->getNextClass();
 		$cmd = $ilCtrl->getCmd();
@@ -192,7 +192,7 @@ class adnBaseGUI
 		}
 
 		// output the screen
-		$tpl->show();
+		$tpl->printToStdOut();
 	}
 
 

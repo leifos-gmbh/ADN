@@ -2217,8 +2217,8 @@ abstract class ilDBPdo implements ilDBInterface, ilDBPdoInterface
 		}
 
 
-		$fields = implode($a_fields, ",");
-		$ref_fields = implode($a_ref_fields, ",");
+		$fields = implode(",", $a_fields);
+		$ref_fields = implode(",", $a_ref_fields);
 		$c_name = $this->foreignKeyName($a_table, $a_name);
 
 		$q = "ALTER TABLE $a_table ".

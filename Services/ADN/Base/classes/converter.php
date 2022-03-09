@@ -7,7 +7,7 @@
  * Only execute this if you know what you're doing
  */
 
-exit();
+return();
 echo ("Start script");
 error_reporting(E_ALL);
 set_time_limit(0);

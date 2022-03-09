@@ -3840,12 +3840,11 @@ if (!$ilDB->tableColumnExists("adn_ep_assignment", "archived"))
 
 		// create role record
 		$query = "INSERT INTO role_data ".
-			"(role_id,allow_register,assign_users,disk_quota) ".
+			"(role_id,allow_register,assign_users) ".
 			"VALUES ".
 			"(".$ilDB->quote($id, 'integer').",".
 			$ilDB->quote(false, 'integer').",".
-			$ilDB->quote(false, 'integer').",".
-			$ilDB->quote(0, 'integer').")"
+			$ilDB->quote(false, 'integer').")"
 			;
 		$ilDB->manipulate($query);
 
