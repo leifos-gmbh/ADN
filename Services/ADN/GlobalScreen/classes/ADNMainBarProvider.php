@@ -129,8 +129,8 @@ class ADNMainBarProvider extends AbstractStaticMainMenuProvider
                                           ->withTitle($this->dic->language()->txt("adn_".$sub))
                                           //->withSymbol($icon)
                                           ->withPosition($pos)
-                                          ->withVisibilityCallable(function() {
-                                              return true;
+                                          ->withVisibilityCallable(function() use ($key, $sub) {
+                                              return $this->checkSubVisibility($key, $sub);
                                           });
             }
             $pos += 10;
@@ -157,6 +157,19 @@ class ADNMainBarProvider extends AbstractStaticMainMenuProvider
                 return (\adnPerm::check(\adnPerm::MD, \adnPerm::READ) || \adnPerm::check(\adnPerm::AD, \adnPerm::READ));
         }
         return false;
+    }
+
+    protected function checkSubVisibility(string $key, string $sub) : bool {
+        if ($key == self::MD) {
+            if (in_array($sub, [self::MD_WOS, self::MD_CNS])) {
+                return (\adnPerm::check(\adnPerm::MD, \adnPerm::READ));
+            }
+            if (in_array($sub, [self::AD_MNT, self::AD_CHR, self::AD_USR, self::AD_MCX, self::AD_ICP])) {
+                return (\adnPerm::check(\adnPerm::AD, \adnPerm::READ));
+            }
+            return false;
+        }
+        return true;    // all others, are checked on the top level
     }
 
     protected function getAllMenuItems() : array
@@ -217,20 +230,13 @@ class ADNMainBarProvider extends AbstractStaticMainMenuProvider
 
         $items[self::MD] = array();
 
-        if(\adnPerm::check(\adnPerm::MD, \adnPerm::READ))
-        {
-            $items[self::MD][] = self::MD_WOS;
-            $items[self::MD][] = self::MD_CNS;
-        }
-
-        if(\adnPerm::check(\adnPerm::AD, \adnPerm::READ))
-        {
-            $items[self::MD][] = self::AD_MNT;
-            $items[self::MD][] = self::AD_CHR;
-            $items[self::MD][] = self::AD_USR;
-            $items[self::MD][] = self::AD_MCX;
-            $items[self::MD][] = self::AD_ICP;
-        }
+        $items[self::MD][] = self::MD_WOS;
+        $items[self::MD][] = self::MD_CNS;
+        $items[self::MD][] = self::AD_MNT;
+        $items[self::MD][] = self::AD_CHR;
+        $items[self::MD][] = self::AD_USR;
+        $items[self::MD][] = self::AD_MCX;
+        $items[self::MD][] = self::AD_ICP;
 
         return $items;
     }
