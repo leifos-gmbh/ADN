@@ -51,7 +51,7 @@ class adnBaseGUI
         $cmd = $ilCtrl->getCmd();
 
         // online test
-        if ($_SESSION["adn_online_test"]) {
+        if (isset($_SESSION["adn_online_test"])) {
             $next_class = "adntestgui";
             if ($ilCtrl->getNextClass() == "") {
                 $ilCtrl->setCmdClass("adntestgui");

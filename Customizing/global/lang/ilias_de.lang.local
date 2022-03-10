@@ -722,11 +722,11 @@ adn#:#adn_question_overview#:#Fragenübersicht
 adn#:#adn_report_score_points#:#%s von %s Punkten
 adn#:#adn_report_created_score_notification#:#Die Antwortschreiben wurden erstellt.
 adn#:#adn_report_score_err_not_scored#:#Es konnten keine Antwortschreiben erstellt werden, da die ausgewählten Kandidaten nicht bewertet wurden.
-adn#:#adn_finish_test#:#Test beenden
+adn#:#adn_finish_test#:#Prüfung abschließen
 adn#:#adn_show_question#:#Frage anzeigen
 adn#:#adn_answered#:#Beantwortet
 adn#:#adn_really_finish_test#:#Wollen Sie den Test wirklich beenden?
-adn#:#adn_test_finished#:#Der Test wurde beendet.
+adn#:#adn_test_finished#:#Vielen Dank! Bitte melden Sie sich ab.
 adn#:#adn_es_oas#:#Online-Antwortbögen
 adn#:#adn_report_invoice_created#:#Der Kostenbescheid wurde erstellt
 adn#:#adn_online_answer_sheets#:#Antwortbögen
@@ -821,3 +821,9 @@ adn#:#adn_save_and_add_extension#:#Speichern und Verlängerung erstellen
 adn#:#adn_create_ext_only_if_for_cert#:#Die sofortige Erstellung einer Verlängerung erfordert eine Bescheinigung aus dem Ausland.
 adn#:#adn_email_noti#:#E-Mail für Benachrichtigungen
 adn#:#adn_cron_cc#:#Kopie senden an:
+adn#:#adn_intro#:#Erläuterungen
+adn#:#adn_start#:#Prüfung beginnen
+adn#:#adn_intro1#:#Die Prüfung umfasst 30 Fragen.
+adn#:#adn_intro2#:#Die Prüfung dauert 60 Minuten.
+adn#:#adn_intro3#:#Wählen Sie zu jeder Frage genau eine Antwortmöglichkeit aus.
+adn#:#adn_question_x_of_y#:#Frage %x von %y

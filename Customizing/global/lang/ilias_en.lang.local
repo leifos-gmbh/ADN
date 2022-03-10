@@ -675,14 +675,14 @@ adn#:#adn_online_test#:#ADN Online Test
 adn#:#adn_previous_question#:#Previous Question
 adn#:#adn_next_question#:#Next Question
 adn#:#adn_question_overview#:#Question Overview
-adn#:#adn_finish_test#:#Finish Test
+adn#:#adn_finish_test#:#Finish Exam
 adn#:#adn_report_score_points#:#%s of %s points
 adn#:#adn_report_created_score_notification#:#Created score notification letters
 adn#:#adn_report_score_err_not_scored#:#Please choose only candidates with status "Passed" or "Failed"
 adn#:#adn_show_question#:#Show Question
 adn#:#adn_answered#:#Answered
 adn#:#adn_really_finish_test#:#Do you really want to finish the test?
-adn#:#adn_test_finished#:#The test has been finished.
+adn#:#adn_test_finished#:#Thank you! Please log out.
 adn#:#adn_es_oas#:#Online Answer Sheets
 adn#:#adn_online_answer_sheets#:#Answer Sheets
 adn#:#adn_given_answer#:#Given Answer
@@ -757,3 +757,9 @@ adn#:#adn_save_and_add_extension#:#Speichern und Verlängerung erstellen
 adn#:#adn_create_ext_only_if_for_cert#:#Die sofortige Erstellung einer Verlängerung erfordert eine Bescheinigung aus dem Ausland.
 adn#:#adn_email_noti#:#E-Mail für Benachrichtigungen
 adn#:#adn_cron_cc#:#Kopie senden an:
+adn#:#adn_intro#:#Erläuterungen
+adn#:#adn_start#:#Prüfung beginnen
+adn#:#adn_intro1#:#Die Prüfung umfasst 30 Fragen.
+adn#:#adn_intro2#:#Die Prüfung dauert 60 Minuten.
+adn#:#adn_intro3#:#Wählen Sie zu jeder Frage genau eine Antwortmöglichkeit aus.
+adn#:#adn_question_x_of_y#:#Frage %x von %y

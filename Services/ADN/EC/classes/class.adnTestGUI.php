@@ -98,7 +98,8 @@ class adnTestGUI
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("showNextQuestion");
+                //$cmd = $ilCtrl->getCmd("showNextQuestion");
+                $cmd = $ilCtrl->getCmd("showIntro");
 
                 switch ($cmd) {
                     // commands that need read permission
@@ -111,12 +112,38 @@ class adnTestGUI
                     case "finishTestConfirmation":
                     case "finishTest":
                     case "showImage":
+                    case "showIntro":
                         $this->$cmd();
                         break;
 
                 }
                 break;
         }
+    }
+
+    protected function showIntro()
+    {
+        global $tpl, $DIC, $lng, $ilCtrl;
+
+        $list = $DIC->ui()->factory()->listing()->unordered(
+            [
+                $lng->txt("adn_intro1"),
+                $lng->txt("adn_intro2"),
+                $lng->txt("adn_intro3")
+            ]
+        );
+        $panel = $DIC->ui()->factory()->panel()->standard(
+            $lng->txt("adn_intro"),
+            $list
+        );
+        $button = $DIC->ui()->factory()->button()->standard(
+            $lng->txt("adn_start"),
+            $ilCtrl->getLinkTarget($this, "showNextQuestion")
+        );
+
+        $tpl->setContent($DIC->ui()->renderer()->render(
+            [$panel, $button]
+        ));
     }
 
     /**
@@ -193,8 +220,8 @@ class adnTestGUI
         global $ilCtrl;
 
         $this->saveAnswer();
-        
-        $ilCtrl->setParameter($this, "q_id", "");
+
+        $ilCtrl->setParameter($this, "q_id", $_GET["q_id"]);
         $ilCtrl->redirect($this, "showQuestionList");
     }
 
@@ -203,7 +230,13 @@ class adnTestGUI
      */
     public function showQuestionList()
     {
-        global $tpl;
+        global $tpl, $ilToolbar, $lng, $ilCtrl;
+
+        $ilCtrl->setParameter($this, "q_id", $_GET["q_id"]);
+        $ilToolbar->addButton(
+            $lng->txt("adn_finish_test"),
+            $ilCtrl->getLinkTarget($this, "finishTestConfirmation")
+        );
 
         include_once("./Services/ADN/EC/classes/class.adnTestQuestionListTableGUI.php");
         $table = new adnTestQuestionListTableGUI(
@@ -295,7 +328,17 @@ class adnTestGUI
             $img = "<div><img src=\"" . $ilCtrl->getLinkTarget($this, "showImage") . "\" /></div>";
         }
 
-        $qtpl->setVariable("QUESTION", "<b>" . $lng->txt("adn_question") . " " . $qnr . "</b>: " .
+        $cnt = !is_array($this->questions)
+            ? 0
+            : count($this->questions);
+        $head = $lng->txt("adn_question_x_of_y");
+        $head = str_replace("%x", $qnr, $head);
+        $head = str_replace("%y", $cnt, $head);
+        $qtpl->setVariable(
+            "QUESTION_HEAD",
+            $head
+        );
+        $qtpl->setVariable("QUESTION",
             $img . str_replace($markups, $markups_html, $question->getQuestion()));
         $qtpl->setVariable("FORMACTION", $ilCtrl->getFormAction($this));
         $qtpl->setVariable("TOOLBAR", $tb->getHTML());

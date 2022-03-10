@@ -78,6 +78,10 @@ class ADNMainBarProvider extends AbstractStaticMainMenuProvider
 
     public function getStaticTopItems() : array
     {
+        if (isset($_SESSION["adn_online_test"])) {
+            return [];
+        }
+
         $this->dic->language()->loadLanguageModule("adn");
         $items = [];
         $pos = 2;

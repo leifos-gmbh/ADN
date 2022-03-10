@@ -135,6 +135,11 @@ class ilDashboardGUI
     {
         global $DIC;
 
+        // adn-patch start
+        ilUtil::redirect("ilias.php?baseClass=adnBaseGUI");
+        return;
+        // adn-patch end
+
         $context = $DIC->globalScreen()->tool()->context();
         $context->stack()->desktop();
 
