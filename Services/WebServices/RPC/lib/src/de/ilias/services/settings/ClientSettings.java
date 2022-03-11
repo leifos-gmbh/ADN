@@ -23,9 +23,7 @@
 package de.ilias.services.settings;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -102,20 +100,6 @@ public class ClientSettings {
 	public static boolean exists(String clientKey) {
 
 		return instances.containsKey(clientKey);
-	}
-
-	/**
-	 * get all clients
-	 * @return
-	 */
-	public static ArrayList<String> getClients() {
-
-		ArrayList<String> clients = new ArrayList<String>();
-
-		for(Map.Entry<String, ClientSettings> entry : instances.entrySet()) {
-			clients.add(entry.getKey());
-		}
-		return clients;
 	}
 
 	
@@ -235,9 +219,9 @@ public class ClientSettings {
 			logger.error("Absolute path required: " + iliasIniFile);
 			throw new ConfigurationException("Absolute path required: " + iliasIniFile);
 		}
-		if (!this.iliasIniFile.canRead()) {
-			logger.error("Path not readable: " + iliasIniFile);
-			throw new ConfigurationException("Path not readable: " + iliasIniFile);
+		if (!this.iliasIniFile.canWrite()) {
+			logger.error("Path not writable: " + iliasIniFile);
+			throw new ConfigurationException("Path not writable: " + iliasIniFile);
 		}
 		if (this.iliasIniFile.isDirectory()) {
 			logger.error("Directory name given: " + iliasIniFile);
@@ -272,13 +256,13 @@ public class ClientSettings {
 	 */
 	public String getDbUrl() {
 
-		if(getDbType().equalsIgnoreCase("mysql") || getDbType().equalsIgnoreCase("innodb")) {
+		if(getDbType().equals("mysql")) {
 			
 			if(getDbPort().length() > 0) {
-				return getDbHost() + ":" + getDbPort() + "/" + getDbName();
+				return "jdbc:mysql://" + getDbHost() + ":" + getDbPort() + "/" + getDbName();
 			}
 			else {
-				return getDbHost() + "/" + getDbName();
+				return "jdbc:mysql://" + getDbHost() + "/" + getDbName();
 			}
 		}
 		else {
@@ -297,26 +281,6 @@ public class ClientSettings {
 	 * @return the dbType
 	 */
 	public String getDbType() {
-
-		if(dbType.equalsIgnoreCase("innodb")) {
-			return "mysql";
-		}
-		if(dbType.equalsIgnoreCase("mysql")) {
-			return "mysql";
-		}
-		if(dbType.equalsIgnoreCase("mysqli")) {
-			return "mysql";
-		}
-		if(dbType.equalsIgnoreCase("pdo-mysql-myisam")) {
-			return "mysql";
-		}
-		if(dbType.equalsIgnoreCase("pdo-mysql-innodb")) {
-			return "mysql";
-		}
-		if(dbType.equalsIgnoreCase("pdo-mysql-galera")) {
-			return "mysql";
-		}
-
 		return dbType;
 	}
 

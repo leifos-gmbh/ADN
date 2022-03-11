@@ -37,12 +37,7 @@ public class QueryRewriter {
 
 	public static final int MODE_SEARCH = 1;
 	public static final int MODE_HIGHLIGHT = 2;
-	// begin-patch user-search
-	public static final int MODE_MAIL_HIGHLIGHT = 3;
-	// begin-patch user-search
 
-	public static final int MODE_USER_HIGHLIGHT = 4;
-			
 	protected static Logger logger = LogManager.getLogger(QueryRewriter.class);
 	
 	private String query;
@@ -65,25 +60,13 @@ public class QueryRewriter {
 	public String rewrite() {
 		
 		switch(mode) {
-			case MODE_SEARCH:
-				return rewriteSearch();
-			case MODE_HIGHLIGHT:
-				return rewriteHighlight();
-		case MODE_USER_HIGHLIGHT:
-			return rewriteUserHighlight();
-		}
-		
-		return getQuery();
-	}
-	
-	public String rewrite(int userId, int folderId) {
-		
-		if(mode == MODE_MAIL_HIGHLIGHT) {
-			return rewriteMailHighlight(userId, folderId);
+		case MODE_SEARCH:
+			return rewriteSearch();
+		case MODE_HIGHLIGHT:
+			return rewriteHighlight();
 		}
 		return getQuery();
 	}
-			
 	
 	public String rewrite(Vector<Integer> objIds) {
 		
@@ -109,29 +92,6 @@ public class QueryRewriter {
 		logger.debug("Searching for: " + rewritten.toString());
 		return rewritten.toString();
 	}
-	
-	/**
-	 * rewrite mail search
-	 * @param folderId
-	 * @return 
-	 */
-	private String rewriteMailHighlight(int userId, int folderId) {
-		
-		rewritten.append("( ");
-		rewritten.append(getQuery());
-		rewritten.append(") AND ((");
-		rewritten.append("objId:");
-		rewritten.append(userId);
-		if(folderId > 0) {
-			rewritten.append(" AND ");
-			rewritten.append("mfolder_id:");
-			rewritten.append(folderId);
-		}
-		rewritten.append(") AND docType:separated) ");
-		
-		logger.debug("Searching for: " + rewritten.toString());
-		return rewritten.toString();
-	}
 
 	/**
 	 * @return
@@ -144,21 +104,6 @@ public class QueryRewriter {
 		rewritten.append(" AND +docType:combined");
 		
 		logger.debug("Searching for: " + rewritten.toString());
-		return rewritten.toString();
-	}
-	
-	/**
-	 * Rewrite user search 
-	 * @return 
-	 */
-	private String rewriteUserHighlight() {
-		
-		rewritten.append("(");
-		rewritten.append(getQuery());
-		rewritten.append(")");
-		rewritten.append(" AND type:usr");
-		
-		logger.info("Searching for:" + rewritten.toString());
 		return rewritten.toString();
 	}
 

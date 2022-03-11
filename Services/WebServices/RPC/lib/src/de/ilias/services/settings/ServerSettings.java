@@ -62,7 +62,6 @@ public class ServerSettings {
 	private static Logger logger;
 	private static ServerSettings instance = null;
 
-	public static final long DEFAULT_MAX_FILE_SIZE = 500 * 1024 * 1024;
 
 	private InetAddress host;
 	private String hostString;
@@ -75,8 +74,6 @@ public class ServerSettings {
 	private Level logLevel;
 	private int numThreads = 1;
 	private double RAMSize = 500;
-	private int indexMaxFileSizeMB = 500;
-
 
 
 
@@ -128,7 +125,7 @@ public class ServerSettings {
 		builder.append("http://");
 		builder.append(getHostString());
 		builder.append(":" + getPort());
-		builder.append("/xmlrpc");		
+		builder.append("/xmlrpc");
 		return builder.toString();
 	}
 
@@ -301,26 +298,18 @@ public class ServerSettings {
 			Filter.Result.ACCEPT,
 			Filter.Result.DENY
 		)
-			.addAttribute("level", Level.ERROR);
-		consoleAppender
-			.add(layout)
-			.add(treshold);
-			
+			.addAttribute("level", Level.FATAL);
+		consoleAppender.add(treshold);
 		builder.add(consoleAppender);
 		
 		AppenderComponentBuilder rollingAppender = builder.newAppender("rolling", "RollingFile")
 			.addAttribute("fileName", this.getLogFile().getAbsolutePath())
-			.addAttribute("filePattern", this.getLogFile().getAbsolutePath() + ".%i")
+			.addAttribute("filePattern", this.getLogFile().getName() + ".%d")
 			.add(layout)
 			.addComponent(component);
 		
 		builder.add(rollingAppender);
-		builder.add(builder.newLogger("de.ilias", this.logLevel)
-			.add(builder.newAppenderRef("rolling"))
-			.add(builder.newAppenderRef("console"))
-			.addAttribute("additivity", false)
-		);
-		builder.add(builder.newLogger("org.apache", Level.FATAL)
+		builder.add(builder.newLogger("de.ilias", Level.INFO)
 			.add(builder.newAppenderRef("rolling"))
 			.add(builder.newAppenderRef("console"))
 			.addAttribute("additivity", false)
@@ -330,8 +319,9 @@ public class ServerSettings {
 			.add(builder.newAppenderRef("console"))
 		);
 		Configurator.initialize(builder.build());
+		
 		ServerSettings.logger = LogManager.getLogger(ServerSettings.class);
-					
+
 	}
 
 	/**
@@ -353,20 +343,5 @@ public class ServerSettings {
 	public void setRAMSize(String purgedString) {
 
 		RAMSize = Double.valueOf(purgedString);
-	}
-
-	public int getMaxFileSizeMB()
-	{
-		return indexMaxFileSizeMB;
-	}
-
-	public long getMaxFileSize()
-	{
-		return (long) indexMaxFileSizeMB * 1024 * 1024;
-	}
-
-	public void setMaxFileSizeMB(String mb)
-	{
-		this.indexMaxFileSizeMB = Integer.valueOf(mb);
 	}
 }

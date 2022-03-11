@@ -50,8 +50,6 @@ import org.apache.logging.log4j.Logger;
  */
 public class ilServer {
 
-	private String version = "4.4.0.1";
-	
 	private String[] arguments;
 	private String command;
 	
@@ -72,10 +70,9 @@ public class ilServer {
 		
 		ilServer server = null;
 		server = new ilServer(args);
-		boolean success = server.handleRequest();
-		System.exit(success ? 0 : 1);
+		server.handleRequest();
 	}
-	
+		
 	
 	private boolean initLogging()
 	{
@@ -91,13 +88,13 @@ public class ilServer {
 			// init after configuration
 			logger = LogManager.getLogger(ilServer.class);
 			return true;
-			
+		
 		} catch (ConfigurationException | IOException ex) {
 			System.err.println("Failed to initialize logging: "  + ex.getMessage());
 		}
-		return false;
+		return true;
 	}
-	
+
 
 	/**
 	 * @return success status
@@ -105,25 +102,16 @@ public class ilServer {
 	private boolean handleRequest() {
 		
 		if(arguments.length < 1) {
-			System.err.println(this.getUsage());
+			logger.error(getUsage());
 			return false;
-		}
-		
-		if(!this.initLogging()) {
-			return false;
-		}
-		
-		if(arguments.length == 1) {
-			command = arguments[0];
-			if(command.compareTo("version") == 0) {
-				System.out.println("ILIAS java server version \"" + version + "\"");
-				return true;
-			}
 		}
 		command = arguments[1];
 		if(command.compareTo("start") == 0) {
 			if(arguments.length != 2) {
 				System.err.println("Usage: java -jar ilServer.jar PATH_TO_SERVER_INI start");
+				return false;
+			}
+			if(!initLogging()) {
 				return false;
 			}
 			return startServer();
@@ -143,7 +131,7 @@ public class ilServer {
 			return createIndexer();
 		}
 		else if(command.compareTo("updateIndex") == 0) {
-			if(arguments.length < 3) {
+			if(arguments.length != 3) {
 				logger.error("Usage java -jar ilServer.jar PATH_TO_SERVER_INI updateIndex CLIENT_KEY");
 				return false;
 			}
@@ -188,7 +176,7 @@ public class ilServer {
 			}
 
 			client = initRpcClient();
-			Vector params = new Vector();
+			Vector params = new Vector<String>();
 			params.add(arguments[2]);
 			params.add(false);
 			client.execute("RPCIndexHandler.index",params);
@@ -312,6 +300,7 @@ public class ilServer {
 			// otherwise stop execution
 			while(true) {
 				Thread.sleep(3000);
+				//logger.debug("Still alive...");
 				if(!rpc.isAlive()) {
 					rpc.shutdown();
 					break;
@@ -322,24 +311,25 @@ public class ilServer {
 			
 		} 
 		catch (ConfigurationException e) {
+			//logger.error(e);
 			System.exit(1);
 			return false;
 		} 
 		catch (InterruptedException e) {
 			logger.error("VM did not allow to sleep. Aborting!");
 		} 
+		catch (MalformedURLException e) {
+			logger.error("Malformed URL " + e.getMessage());
+		} 
 		catch (XmlRpcException e) {
 			System.out.println("Error starting server: " + e);
 			System.exit(1);
 		} 
-		catch (IOException e) {
-			logger.error("IOException " + e.getMessage());
-		}
 		catch (Exception e) {
 			logger.error("IOException " + e.getMessage());			
 		}
 		catch(Throwable e) {
-			logger.error("IOException " + e.getMessage());			
+			logger.error("IOException " + e.getMessage());
 		}
 		return false;
 	}
@@ -360,9 +350,11 @@ public class ilServer {
 			parser.parseServerSettings(arguments[0],false);
 			
 			client = initRpcClient();
-			logger.debug("Client execute");
 			client.execute("RPCAdministration.stop",new Vector());
 			return true;
+		} 
+		catch (MalformedURLException e) {
+			logger.error("Malformed URL " + e.getMessage());
 		} 
 		catch (ConfigurationException e) {
 			logger.error("Configuration " + e.getMessage());
@@ -370,9 +362,6 @@ public class ilServer {
 		catch (XmlRpcException e) {
 			logger.error("XMLRPC " + e.getMessage());
 		} 
-		catch (IOException e) {
-			logger.error("IOException " + e.getMessage());
-		}
 		return false;
 	}
 	
@@ -395,6 +384,9 @@ public class ilServer {
 			System.out.println(status);
 			return true;
 		} 
+		catch (MalformedURLException e) {
+			logger.error("Malformed URL " + e.getMessage());
+		} 
 		catch (ConfigurationException e) {
 			logger.error("Configuration " + e.getMessage());
 		} 
@@ -402,10 +394,6 @@ public class ilServer {
 			System.out.println(ilServerStatus.STOPPED);
 			System.exit(1);
 		} 
-		catch (IOException e) {
-			System.out.println(ilServerStatus.STOPPED);
-			System.exit(1);
-		}
 		return false;
 	}
 	
@@ -430,12 +418,13 @@ public class ilServer {
 		XmlRpcClientConfigImpl config;
 		ServerSettings settings;
 		
+		
 		settings = ServerSettings.getInstance();
 		config = new XmlRpcClientConfigImpl();
 		config.setServerURL(new URL(settings.getServerUrl()));
-		config.setConnectionTimeout(10000);
+		config.setConnectionTimeout(0);
 		config.setReplyTimeout(0);
-
+		
 		client = new XmlRpcClient();
 		client.setTransportFactory(new XmlRpcCommonsTransportFactory(client));
 		client.setConfig(config);

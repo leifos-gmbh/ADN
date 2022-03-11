@@ -114,7 +114,7 @@ public class FieldInfo {
 	/**
 	 * Load default fields 
 	 */
-	protected void initDefaultFields() {
+	private void initDefaultFields() {
 
 		addField("title");
 		addField("description");

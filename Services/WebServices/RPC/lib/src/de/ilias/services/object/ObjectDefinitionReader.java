@@ -45,9 +45,6 @@ public class ObjectDefinitionReader {
 	private static HashMap<File, ObjectDefinitionReader> instances = new HashMap<File, ObjectDefinitionReader>();
 	
 	public static final String objectPropertyName = "LuceneObjectDefinition.xml";
-	public static final String pluginPath = "Customizing/global/plugins";
-
-
 	private Vector<File> objectPropertyFiles = new Vector<File>();
 	
 
@@ -111,20 +108,11 @@ public class ObjectDefinitionReader {
 			throw new ConfigurationException("Absolute path required. Path: " + absolutePath.getAbsolutePath());
 		}
 		
-		// Traverse through Modules
+		// Traverse through Modules and Services
 		File start = new File(absolutePath.getAbsoluteFile() + System.getProperty("file.separator") + "Modules");
 		logger.debug("Start path is : " + start.getAbsoluteFile());
 		traverse(start);
-
-		// Traverse through Modules
-		File services = new File(absolutePath.getAbsoluteFile() + System.getProperty("file.separator") + "Services");
-		logger.debug("Start path is : " + start.getAbsoluteFile());
-		traverse(services);
-
-		// Traverse through Plugins
-		File plugin = new File(absolutePath.getAbsoluteFile() + System.getProperty("file.separator") + ObjectDefinitionReader.pluginPath);
-		logger.debug("Start path is : " + plugin.getAbsoluteFile());
-		traverse(plugin);
+		
 	}
 	
 	/**
@@ -133,11 +121,6 @@ public class ObjectDefinitionReader {
 	 */
 	private void traverse(File dir) {
 		
-		if(dir == null) {
-			return;
-		}
-		logger.debug("Start path is : " + dir.getAbsoluteFile());
-
 		File[] entries = dir.listFiles(
 				new FileFilter()
 				{
@@ -152,16 +135,13 @@ public class ObjectDefinitionReader {
 						}
 						//logger.debug(path.getName() + " <-> " + objectPropertyName);
 						if(path.getName().equalsIgnoreCase(objectPropertyName)) {
-							logger.info("Found: " + path.getAbsolutePath());
+							logger.debug("Found: " + path.getAbsolutePath());
 							objectPropertyFiles.add(path);
 						}
 						return false;
 					}
 				});
-
-		if(entries == null) {
-			return;
-		}
+		
 		for(int i = 0; i < entries.length; i++) {
 			// there are only directories
 			traverse(entries[i]);

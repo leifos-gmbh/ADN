@@ -68,11 +68,10 @@ public class FileDataSource extends DataSource {
 				return;
 			}
 			file = getPathCreator().buildFile(el, res);
-			String extension = getPathCreator().getExtension(el, res);
 			
 			// Analyze encoding (transfer encoding), parse file extension and finally read content
 			for(Object field : getFields()) {
-				((FieldDefinition) field).writeDocument(handler.getContent(file, extension));
+				((FieldDefinition) field).writeDocument(handler.getContent(file));
 			}
 			logger.debug("File path is: " + file.getAbsolutePath());
 			return;

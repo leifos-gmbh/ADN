@@ -28,9 +28,6 @@ import de.ilias.services.db.DBFactory;
 import de.ilias.services.settings.LocalSettings;
 import org.apache.logging.log4j.Logger;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
 /**
  * 
  *
@@ -51,29 +48,6 @@ public class CommandControllerThread extends Thread {
 		
 		clientKey = ck;
 		controller = con;
-		
-		this.setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-
-			/**
-			 * Overwrite uncuaght exception handler
-			 */
-			public void uncaughtException(Thread t, Throwable e) {
-				
-				logger.error("Caught uncaught error: " + e);
-
-				try {
-					
-					CommandControllerThread nt = new CommandControllerThread(clientKey,controller);
-					nt.start();
-					nt.join();
-				}
-				catch(Exception ex) {
-					logger.error("New error " + ex);
-				}
-			}
-		});
-		
-		
 	}
 	
 	/**
@@ -91,15 +65,11 @@ public class CommandControllerThread extends Thread {
 			controller.start();
 		} 
 		catch (Exception e) {
-			StringWriter writer = new StringWriter();
-			e.printStackTrace(new PrintWriter(writer));
-			logger.error(writer.toString());
-			logger.error("Cannot start indexer thread: " + e.getMessage());
+			logger.error("Cannot start indexer thread: " + e);
 			this.interrupt();
 		}
 		finally {
 			DBFactory.closeAll();
 		}
 	}
-			
 }

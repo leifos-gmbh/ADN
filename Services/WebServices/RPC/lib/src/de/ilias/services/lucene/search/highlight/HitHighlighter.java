@@ -47,8 +47,6 @@ import de.ilias.services.lucene.settings.LuceneSettings;
 import de.ilias.services.settings.ConfigurationException;
 import de.ilias.services.settings.LocalSettings;
 import org.apache.logging.log4j.Logger;
-import org.apache.lucene.index.IndexableField;
-import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
 
 /**
  * 
@@ -95,7 +93,7 @@ public class HitHighlighter {
 	 * @throws CorruptIndexException 
 	 * 
 	 */
-	public void highlight() throws CorruptIndexException, IOException, InvalidTokenOffsetsException {
+	public void highlight() throws CorruptIndexException, IOException {
 
 		result = new HighlightHits();
 		HighlightObject resObject;
@@ -107,11 +105,6 @@ public class HitHighlighter {
 		
 		String[] fields = fieldInfo.getFieldsAsStringArray();
 		for(int i = 0; i < hits.length;i++) {
-			
-			// first score is max score
-			if(i == 0) {
-				result.setMaxScore(hits[i].score);
-			}
 			
 			StringBuffer allContent = new StringBuffer();
 			Document hitDoc = searcher.doc(hits[i].doc);
@@ -136,7 +129,6 @@ public class HitHighlighter {
 			
 			resObject = result.initObject(objId);
 			resItem = resObject.addItem(subItem);
-			resItem.setAbsoluteScore(hits[i].score);
 			
 			// Title
 			if(hitDoc.get("title") != null ) { 
@@ -175,23 +167,23 @@ public class HitHighlighter {
 					continue;
 				}
 				
-				IndexableField[] separatedFields = hitDoc.getFields(fields[j]);
+				Field[] separatedFields = hitDoc.getFields(fields[j]);
 				for(int k = 0; k < separatedFields.length; k++) {
 					allContent.append(separatedFields[k].stringValue());
 					allContent.append(" ");
 				}
 			}
-			//logger.debug("All content" + allContent.toString());
+			logger.debug("All content" + allContent.toString());
 			token =	new StandardAnalyzer().tokenStream("content", new StringReader(allContent.toString()));
 			fragment = highlighter.getBestFragments(
 					token,
 					allContent.toString(),
 					luceneSettings.getNumFragments(),
 					HIGHLIGHT_SEPARATOR);
-			//logger.debug("Fragmented: " + fragment);
+			logger.debug("Fragmented: " + fragment);
 			
 			if(fragment.length() != 0) {
-				//logger.debug("Found fragment: " + fragment);
+				logger.debug("Found fragment: " + fragment);
 				resItem.addField(new HighlightField("content",fragment));
 			}
 		}

@@ -49,8 +49,6 @@ public class DBFactory {
 
 	private static Logger logger = LogManager.getLogger(DBFactory.class);
 	
-	private static String MARIA_DB_CONNECTOR = "jdbc:mariadb://";
-	
 	private static ThreadLocal<HashMap<String, PreparedStatement>> ps = new ThreadLocal<HashMap<String,PreparedStatement>>() {
 		protected HashMap<String, PreparedStatement> initialValue() {
 			
@@ -74,22 +72,22 @@ public class DBFactory {
 				// MySQL
 				if(client.getDbType().equalsIgnoreCase("mysql")) {
 
-					logger.info("Loading maria db driver...");
-					logger.info("Using jdbc url: " +
+					logger.info("Loading Mysql driver...");
+					Class.forName( "com.mysql.jdbc.Driver");
+
+					logger.info("Using URL: " +
 							client.getDbUrl() + "/" +
 							client.getDbUser() + "/" +
-							"******" + "?autoReconnect=true"
+							client.getDbPass() 
 					);
 
 					return DriverManager.getConnection(
-						DBFactory.MARIA_DB_CONNECTOR + 
-						client.getDbUrl() + "?autoReconnect=true",
-						client.getDbUser(),
-						client.getDbPass()
-					);
+							client.getDbUrl(),
+							client.getDbUser(),
+							client.getDbPass());
 				}
 				// Oracle
-				else if(client.getDbType().equalsIgnoreCase("oracle")) {
+				if(client.getDbType().equalsIgnoreCase("oracle")) {
 					
 					logger.info("Loading Oracle driver...");
 					Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -97,8 +95,7 @@ public class DBFactory {
 					if(client.getDbName().length() == 0) {
 						
 						String url = "jdbc:oracle:thin:" + client.getDbUser() + "/" + client.getDbPass() + "@" + client.getDbHost();
-						String log = "jdbc:oracle:thin:" + client.getDbUser() + "/" + "******" + "@" + client.getDbHost();
-						logger.info("Using tnsname.ora: " + log);
+						logger.info("Using tnsname.ora: " + url);
 						
 						try {
 							System.setProperty("oracle.net.tns_admin",server.lookupTnsAdmin());
@@ -119,11 +116,7 @@ public class DBFactory {
 					);
 					return DriverManager.getConnection(client.getDbUrl());
 				}
-				else {
-					logger.error("Unsupported db type given." + client.getDbType());
-					throw new ConfigurationException("Unsupported db type given." + client.getDbType());
-				}
-			}
+			} 
 			catch (SQLException e) {
 				logger.error("Cannot connect to database: " + e);
 			} 
@@ -133,7 +126,7 @@ public class DBFactory {
 			catch (ClassNotFoundException e) {
 				// no oracle driver!
 				logger.error(e);
-				logger.error("Could not load the JDBC driver.");
+				logger.error("Could not load the JDBC driver. Check your CLASSPATH for a proper Oracle JDBC driver.");
 			}
 			return null;
 		}
@@ -244,7 +237,7 @@ public class DBFactory {
 				connection.get().close();
 			}
 			catch (Throwable e) {
-				logger.error("Cannot release db connection: ",e);
+				logger.error("Cannot release db connection: " + e);
 			}
 		}
 	}

@@ -70,11 +70,6 @@ public class TransformerFactory {
 			map.put(name, new TagSanitizer());
 			return map.get(name);
 		}
-		if(name.equalsIgnoreCase("MimeTypeExtractor")) {
-			map.put(name, new MimeTypeExtractor());
-			return map.get(name);
-		}
-		
 		logger.error("Cannot find transformer with name: " + name);
 		return null;
 	}

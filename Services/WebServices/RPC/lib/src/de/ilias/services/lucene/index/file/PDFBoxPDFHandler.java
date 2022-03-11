@@ -25,7 +25,6 @@ package de.ilias.services.lucene.index.file;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.util.logging.Level;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -50,19 +49,22 @@ public class PDFBoxPDFHandler implements FileHandler {
 	public String getContent(InputStream is) throws FileHandlerException {
 
 		PDDocument pddo = null;
-		PDFTextStripper stripper = null;
-		String str = new String("");
+		StringWriter writer = new StringWriter();
 		
 		try {
-
+			PDFTextStripper stripper;
 			pddo = PDDocument.load(is);
 
 			if(pddo.isEncrypted()) {
 				logger.warn("PDF Document is encrypted. Trying empty password...");
-				return "";
+				return writer.toString();
 			}
+			
+			writer = new StringWriter();
 			stripper = new PDFTextStripper();
-			str = stripper.getText(pddo);
+			stripper.writeText(pddo, writer);
+			return writer.toString();
+
 		}
 		catch (NumberFormatException e) {
 			logger.warn("Invalid PDF version number given. Aborting");
@@ -77,14 +79,17 @@ public class PDFBoxPDFHandler implements FileHandler {
 		}
 		finally {
 			try {
+				logger.debug("Closing pdDocument");
 				if(pddo != null)
 					pddo.close();
+				if(writer != null)
+					writer.close();
 			}
 			catch (IOException e) {
 				;
 			}
 		}
-		return str;
+		return writer.toString();
 	}
 
 	/**

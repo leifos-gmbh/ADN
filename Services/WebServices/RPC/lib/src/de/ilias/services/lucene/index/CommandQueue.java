@@ -36,9 +36,7 @@ import de.ilias.services.lucene.settings.LuceneSettings;
 import de.ilias.services.object.ObjectDefinition;
 import de.ilias.services.object.ObjectDefinitions;
 import de.ilias.services.settings.ClientSettings;
-import de.ilias.services.settings.ConfigurationException;
 import de.ilias.services.settings.LocalSettings;
-import java.util.logging.Level;
 import org.apache.logging.log4j.Logger;
 
 
@@ -102,14 +100,14 @@ public class CommandQueue {
 		if(objIds.size() == 0) {
 			return;
 		}
-		PreparedStatement psta = DBFactory.getPreparedStatement(
-				"UPDATE search_command_queue SET finished = 1 WHERE obj_id = ?"
-		);
+		PreparedStatement psta = DBFactory.getPreparedStatement("UPDATE search_command_queue SET finished = 1 WHERE obj_id = ?");
 		for(int i = 0; i < objIds.size(); i++) {
 			psta.setInt(1,objIds.get(i));
 			psta.addBatch();
 		}
 		psta.executeBatch();
+		
+		return;
 	}
 
 
@@ -134,6 +132,8 @@ public class CommandQueue {
 				new java.sql.Timestamp(LuceneSettings.getInstance().getLastIndexTime().getTime()));
 		ResultSet res = pst.executeQuery();
 		
+		
+		
 		int counter = 0;
 		while(res.next()) {
 			
@@ -154,49 +154,6 @@ public class CommandQueue {
 			res.close();
 		} catch (SQLException e) {
 			logger.warn(e);
-		}
-		logger.info("Found " + counter + " new update events!");
-	}
-	
-	
-	/**
-	 * 
-	 * @param objIds 
-	 */
-	public synchronized void loadFromObjectList(Vector<Integer> objIds) throws SQLException {
-		
-		
-		PreparedStatement pst = DBFactory.getPreparedStatement(
-				"SELECT obj_id,type FROM object_data " +
-				"WHERE obj_id = ? ");
-		
-		int counter = 0;
-		for(int objId : objIds) {
-			
-			pst.setInt(1, objId);
-			ResultSet res = pst.executeQuery();
-			
-			while(res.next()) {
-				
-				CommandQueueElement element = new CommandQueueElement();
-
-				//logger.debug("Found type: " + res.getString("obj_type") + " with id " + res.getInt("obj_id"));
-				element.setObjId(res.getInt("obj_id"));
-				element.setObjType(DBFactory.getString(res, "type"));
-				element.setSubId(0);
-				element.setSubType("");
-				element.setCommand("reset");
-				element.setFinished(false);
-
-				getElements().add(element);
-				counter++;
-			}
-			try {
-				res.close();
-			} catch (SQLException e) {
-				logger.warn(e);
-				throw e;
-			}
 		}
 		logger.info("Found " + counter + " new update events!");
 	}
@@ -229,11 +186,11 @@ public class CommandQueue {
 		} 
 		catch(SQLException e) {
 			logger.error("Invalid SQL statement: " + query);
-			logger.error("Cannot substitute reset commands", e);
+			logger.error(e);
 			throw e;
 		}
 		catch(Throwable e) {
-			logger.fatal("Cannot substitute reset commands",e);
+			logger.fatal(e);
 		}
 	}
 
@@ -252,9 +209,10 @@ public class CommandQueue {
 				"AND obj_id = 0 ");
 			DBFactory.setString(sta, 1, objType);
 			sta.executeUpdate();
+			return;
 		}
 		catch(SQLException e) {
-			logger.error("Cannot delete reset commands!",e);
+			logger.error("Cannot delete reset commands!" + e);
 			throw e;
 		}
 	}
@@ -263,7 +221,7 @@ public class CommandQueue {
 	 * @param string
 	 * @throws SQLException 
 	 */
-	public synchronized void deleteCommandsByType(String objType) throws SQLException {
+	private synchronized void deleteCommandsByType(String objType) throws SQLException {
 
 		try {
 			
@@ -273,9 +231,10 @@ public class CommandQueue {
 				"AND obj_id > 0");
 			DBFactory.setString(sta, 1, objType);
 			sta.executeUpdate();
+			return;
 		} 
 		catch (SQLException e) {
-			logger.fatal("Cannot delete reset commands! ",e);
+			logger.fatal("Cannot delete reset commands! " + e);
 			throw e;
 		}
 	}
@@ -287,43 +246,25 @@ public class CommandQueue {
 	private synchronized void addCommandsByType(String objType) throws SQLException {
 
 		try {
-			
-			ResultSet res = null;
-			PreparedStatement sta = null;
-			
-			if(objType.equalsIgnoreCase("help") == true) {
-				
-				sta = DBFactory.getPreparedStatement(
-					"SELECT lm_id obj_id FROM help_module "
-				);
-			}
-			else if(objType.equalsIgnoreCase("usr") != true) 
-			{
-				sta = DBFactory.getPreparedStatement(
-					"SELECT DISTINCT(oda.obj_id) FROM object_data oda JOIN object_reference ore ON oda.obj_id = ore.obj_id " +
-					"WHERE (deleted IS NULL) AND type = ? " +
-					"GROUP BY oda.obj_id");
-				DBFactory.setString(sta, 1, objType);
-			}
-			else {
-				sta = DBFactory.getPreparedStatement(
-					"SELECT obj_id FROM object_data " + 
-					"WHERE type = ? "
-				);
-				DBFactory.setString(sta, 1, objType);
-			}
+		
+			PreparedStatement sta = DBFactory.getPreparedStatement(
+				"SELECT DISTINCT(oda.obj_id) FROM object_data oda JOIN object_reference ore ON oda.obj_id = ore.obj_id " +
+				"WHERE (deleted IS NULL) AND type = ? " +
+				"GROUP BY oda.obj_id");
 
-			res = sta.executeQuery();
+			DBFactory.setString(sta, 1, objType);
+			ResultSet res = sta.executeQuery();
+			
 			logger.info("Adding new commands for object type: " + objType);
-
+			
 			// Add each single object
 			PreparedStatement objReset = DBFactory.getPreparedStatement(
 					"INSERT INTO search_command_queue (obj_id, obj_type, sub_id, sub_type, command, last_update, finished) " + 
 					"VALUES (?, ?, ?, ?, ?, ?, ?)");
-
+	
 			while(res.next()) {
-
-				logger.debug("Added new reset command for " + res.getInt("obj_id"));
+				
+				logger.debug("Added new reset command");
 				
 				objReset.setInt(1,res.getInt("obj_id"));
 				objReset.setString(2, objType);
@@ -332,30 +273,22 @@ public class CommandQueue {
 				objReset.setString(5,"reset");
 				objReset.setTimestamp(6,new java.sql.Timestamp(new java.util.Date().getTime()));
 				objReset.setInt(7,0);
-
-				try {
-					objReset.executeUpdate();
-				}
-				catch(SQLException e) {
-					logger.info("Ignoring duplicate key failure for obj_id: " + res.getInt("obj_id"));
-				}
+				
+				objReset.executeUpdate();
 			}
-			
 			try {
-				if(res != null)
-				{
-					res.close();
-				}
-			} 
-			catch (SQLException e) {
+				res.close();
+			} catch (SQLException e) {
 				logger.warn("Cannot close result set: " + e);
 			}
+			return;
 		}
 		catch(SQLException e) {
 			
-			logger.fatal("Cannot build index ",e);
+			logger.fatal("Cannot build index: " + e);
 			throw e;
 		}
+		
 	}
 	
 	
@@ -399,17 +332,12 @@ public class CommandQueue {
 		resetType.setTimestamp(6,new java.sql.Timestamp(new java.util.Date().getTime()));
 		resetType.setInt(7,0);
 
-		try {
-			resetType.executeUpdate();
-		}
-		catch (SQLException e) {
-			logger.error("Command queue update failed with message: " + e.getMessage());
-			throw e;
-		}
+		resetType.executeUpdate();
 	}
 
 	/**
-	 * Delete and add all types
+	 * Delete  and add all types
+	 * @param type
 	 * @throws SQLException 
 	 */
 	public synchronized void addAll() throws SQLException {
@@ -417,7 +345,7 @@ public class CommandQueue {
 		try {
 
 			Statement delete = db.createStatement();
-			delete.executeUpdate("DELETE FROM search_command_queue");
+			delete.executeUpdate("TRUNCATE TABLE search_command_queue");
 			
 			try {
 				if(delete != null) {
@@ -443,18 +371,11 @@ public class CommandQueue {
 					pst.setString(5,"reset_all");
 					pst.setTimestamp(6,new java.sql.Timestamp(new java.util.Date().getTime()));
 					pst.setInt(7,0);
-					
-				try {
-					pst.executeUpdate();
-				}
-				catch(SQLException e) {
-					logger.error("Cannot add to command queue",e);
-					throw e;
-				}
+				pst.executeUpdate();
 			}
 		}
-		catch (ConfigurationException e) {
-			logger.error("Cannot add to command queue",e);
+		catch (Exception e) {
+			logger.error(e);
 		}
 	}
 	
@@ -467,24 +388,21 @@ public class CommandQueue {
 		
 		logger.info("Deleting search_command_queue");
 		Statement delete = db.createStatement();
-		delete.execute("DELETE FROM search_command_queue");
+		delete.execute("TRUNCATE TABLE search_command_queue");
 		
 		try {
 			delete.close();
 		}
 		catch (SQLException e) {
 			logger.warn(e);
-			throw e;
 		}
 		logger.info("Search command queue deleted");
 	}
 
 	/**
-	 * Delete non incremental search command queue elements
-	 * @throws java.sql.SQLException
-	 * @throws de.ilias.services.settings.ConfigurationException
+	 * 
 	 */
-	public synchronized void deleteNonIncremental()  throws SQLException, ConfigurationException {
+	public synchronized void deleteNonIncremental()  throws SQLException {
 
 		try {
 			ClientSettings client = ClientSettings.getInstance(LocalSettings.getClientKey());
@@ -496,23 +414,21 @@ public class CommandQueue {
 				if(((ObjectDefinition) def).getIndexType() == ObjectDefinition.TYPE_FULL) {
 					
 					DBFactory.setString(pst, 1, ((ObjectDefinition) def).getType());
+					//pst.setString(1, ((ObjectDefinition) def).getType());
 					pst.executeUpdate();
 				}
 			}
 		}
-		catch (ConfigurationException | SQLException e) {
-			logger.error("Error deleting from command queue", e);
-			throw e;
+		catch (Exception e) {
+			logger.error(e);
 		}
 		
 	}
 
 	/**
-	 * Add non incremental search command queue elements
-	 * @throws java.sql.SQLException
-	 * @throws de.ilias.services.settings.ConfigurationException
+	 * 
 	 */
-	public synchronized void addNonIncremental() throws SQLException, ConfigurationException {
+	public synchronized void addNonIncremental() throws SQLException {
 
 		try {
 
@@ -533,19 +449,12 @@ public class CommandQueue {
 					pst.setString(5,"reset_all");
 					pst.setTimestamp(6,new java.sql.Timestamp(new java.util.Date().getTime()));
 					pst.setInt(7,0);
-					
-					try {
-						pst.executeUpdate();
-					}
-					catch(SQLException e) {
-						logger.info("Add non incremental failed failed with message: " + e.getMessage());
-					}
+					pst.executeUpdate();
 				}
 			}
 		}
-		catch (ConfigurationException | SQLException e) {
-			logger.error("Error updating command queue", e);
-			throw e;
+		catch (Exception e) {
+			logger.error(e);
 		}
 	}
 

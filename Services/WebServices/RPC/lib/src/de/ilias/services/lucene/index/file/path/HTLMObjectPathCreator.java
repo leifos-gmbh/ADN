@@ -79,9 +79,4 @@ public class HTLMObjectPathCreator implements PathCreator {
 		return buildFile(el, null);
 	}
 
-	@Override
-	public String getExtension(CommandQueueElement el, ResultSet res) {
-		return "";
-	}
-
 }

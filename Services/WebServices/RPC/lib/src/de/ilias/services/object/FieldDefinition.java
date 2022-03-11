@@ -28,6 +28,8 @@ import java.util.Vector;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.Field.Store;
+
 import de.ilias.services.db.DBFactory;
 import de.ilias.services.lucene.index.DocumentHolder;
 import de.ilias.services.lucene.index.transform.ContentTransformer;
@@ -41,50 +43,15 @@ import org.apache.logging.log4j.Logger;
  * @version $Id$
  */
 public class FieldDefinition {
-	
+
 	protected static Logger logger = LogManager.getLogger(FieldDefinition.class);
-
-	/**
-	 * Possible index types
-	 */
-	public static final int INDEX_NO = 0;
-	public static final int INDEX_ANALYZED = 1;
-	public static final int INDEX_NOT_ANALYZED = 2;
-
-	/**
-	 * Is stored
-	 */
-	private Field.Store store = Field.Store.NO;
-		
-
-	/**
-	 * Index field type
-	 */
-	public int indexType = FieldDefinition.INDEX_NO;
 	
-	/**
-	 * Name if field
-	 */
-	private String name;
-	
-	/**
-	 * Column name
-	 */
+	private Field.Index index;
+	private Store store;
 	private String column;
-	
-	/**
-	 * Type
-	 */
 	private String type = "text";
-	
-	/**
-	 * Is global document type
-	 */
-	private boolean global = false;
-	
-	/**
-	 * Is dynamic
-	 */
+	private String name;
+	private boolean global = true;
 	private boolean isDynamic = false;
 	
 	Vector<TransformerDefinition> transformers = new Vector<TransformerDefinition>();
@@ -102,22 +69,27 @@ public class FieldDefinition {
 	public FieldDefinition(String store, String index, String name, String column, String type, String isGlobal, String dynamicName) {
 
 		if(store.equalsIgnoreCase("YES")) {
-			this.store = Field.Store.YES;
+			this.store = Store.YES;
 		}
-		
+		else if(store.equalsIgnoreCase("NO")) {
+			this.store = Store.NO;
+		}
 		if(index.equalsIgnoreCase("NO")) {
-			this.indexType = INDEX_NO;
+			this.index = Field.Index.NO;
 		}
 		else if(index.equalsIgnoreCase("ANALYZED")) {
-			this.indexType = INDEX_ANALYZED;
+			this.index = Field.Index.ANALYZED;
 		}
 		else if(index.equalsIgnoreCase("NOT_ANALYZED")) {
-			this.indexType = INDEX_NOT_ANALYZED;
+			this.index = Field.Index.NOT_ANALYZED;
 		}
 		if(isGlobal == null || isGlobal.equalsIgnoreCase("YES")) {
 			this.global = true;
 		}
-
+		else {
+			this.global = false;
+		}
+		
 		if(dynamicName != null) {
 			this.name = dynamicName;
 			this.isDynamic = true;
@@ -129,28 +101,39 @@ public class FieldDefinition {
 		this.column = column;
 		
 		if(type != null && type.length() != 0) {
-			this.type = type;
+			this.setType(type);
 		}
 	}
 	
 	/**
 	 * @return the index
 	 */
-	public Integer getIndexType() {
-		return indexType;
+	public Field.Index getIndex() {
+		return index;
 	}
 
 
 	/**
 	 * @param index the index to set
 	 */
-	public void setIndexType(int type) {
-		this.indexType = type;
+	public void setIndex(Field.Index index) {
+		this.index = index;
 	}
 
-	
-	public Field.Store getStore() {
-		return this.store;
+
+	/**
+	 * @return the store
+	 */
+	public Store getStore() {
+		return store;
+	}
+
+
+	/**
+	 * @param store the store to set
+	 */
+	public void setStore(Field.Store store) {
+		this.store = store;
 	}
 
 
@@ -297,11 +280,10 @@ public class FieldDefinition {
 	 */
 	@Override
 	public String toString() {
-	
+		
 		StringBuffer out = new StringBuffer();
 
-		out.append(
-			getIndexType() + " " + getColumn() + " " + getName());
+		out.append("Field: " + getStore() + " " + getIndex() + " " + getColumn() + " " + getName());
 		out.append("\n");
 		
 		for(Object tr : getTransformers()) {
@@ -321,7 +303,6 @@ public class FieldDefinition {
 
 		try {
 			String value;
-			boolean indexed = false;
 			
 			if(getType().equalsIgnoreCase("clob")) {
 				value = DBFactory.getCLOB(res,getColumn());
@@ -342,11 +323,7 @@ public class FieldDefinition {
 				String fieldName = parseName(res);
 
 				logger.debug("Found value: " + purged + " for name: " + fieldName);
-				
-				if(getIndexType().equals(INDEX_ANALYZED)) {
-					indexed = true;
-				}
-				DocumentHolder.factory().add(fieldName, purged, isGlobal(), store, indexed);
+				DocumentHolder.factory().add(fieldName, purged, isGlobal(), store, index);
 			}
 			return;
 		}
@@ -360,17 +337,13 @@ public class FieldDefinition {
 	 */
 	public void writeDocument(String content) {
 
-		boolean indexed = false;
-		
 		if(content != null && content.length() != 0) {
 
 			String purged = callTransformers(content);
-			
-			if(getIndexType().equals(INDEX_ANALYZED)) {
-				indexed = true;
-			}
-			DocumentHolder.factory().add(getName(),purged, isGlobal(), store, indexed);
+			DocumentHolder.factory().add(getName(),purged, isGlobal(), store, index);
+			return;
 		}
+		
 	}
 
 	
@@ -386,7 +359,7 @@ public class FieldDefinition {
 		
 		for(int i = 0; i < getTransformers().size(); i++) {
 			
-			logger.debug(getTransformers().get(i).getName());
+			logger.info(getTransformers().get(i).getName());
 			trans = TransformerFactory.factory(getTransformers().get(i).getName());
 			if(trans != null) 
 				value = trans.transform(value);

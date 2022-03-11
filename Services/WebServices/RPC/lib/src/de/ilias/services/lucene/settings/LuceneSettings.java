@@ -54,7 +54,6 @@ public class LuceneSettings {
 	private int numFragments = 3;
 	private int defaultOperator = OPERATOR_AND;
 	private Date lastIndexTime = new java.util.Date();
-	private int prefixWildcard = 0;
 	
 	/**
 	 * Constructor
@@ -140,16 +139,6 @@ public class LuceneSettings {
 		this.defaultOperator = defaultOperator;
 	}
 	
-	public boolean isPrefixWildcardQueryEnabled()
-	{
-		return this.prefixWildcard > 0 ? true : false;
-	}
-	
-	public void enablePrefixWildcardQuery(int stat) {
-		
-		this.prefixWildcard = stat;
-	}
-	
 	public static void writeLastIndexTime() throws SQLException {
 		
 		Statement sta = DBFactory.factory().createStatement();
@@ -204,24 +193,6 @@ public class LuceneSettings {
 			setDefaultOperator(Integer.parseInt(res.getString("value")));
 			logger.info("Default Operator is: " + getDefaultOperator());
 		}
-		
-		res = sta.executeQuery("SELECT value FROM settings WHERE module = 'common' " +
-			"AND keyword = 'lucene_prefix_wildcard'");
-		while(res.next()) {
-			
-			try {
-				if(res.getString("value").length() > 0) {
-					this.enablePrefixWildcardQuery(Integer.parseInt(res.getString("value")));
-				}
-			}
-			catch(NumberFormatException e) {
-				logger.warn("Read invalid setting: " + e.getMessage());
-				this.enablePrefixWildcardQuery(0);
-			}
-			logger.info("Prefix wildcard queries enabled: " + (this.isPrefixWildcardQueryEnabled() ? "yes" : "no"));
-		}
-		
-		
 		
 		res = sta.executeQuery("SELECT value FROM settings WHERE module = 'common' " +
 			"AND keyword = 'lucene_fragment_size'");

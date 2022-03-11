@@ -23,8 +23,6 @@
 package de.ilias.services.lucene.index.file;
 
 
-import de.ilias.services.settings.ConfigurationException;
-import de.ilias.services.settings.ServerSettings;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -57,110 +55,96 @@ public class ExtensionFileHandler {
      * @return
      * @throws FileHandlerException
      */
-    public String getContent(File file, String extension) throws FileHandlerException {
+    public String getContent(File file) throws FileHandlerException {
 
     	// Stop here if no read permission is given
         if(!file.canRead()) {
             throw new FileHandlerException("No permission to read file: " + file.getAbsolutePath());
         }
-
-		// Check file size
-		if(!checkFileSizeLimit(file)) {
-			throw new FileHandlerException("File size limit exceeded. Ignoring file " + file.getAbsolutePath());
-		}
-		
-       	logger.info("Current file is: " + file.getAbsolutePath());
-		try {
-			String fname = file.getName();
-			int dotIndex = fname.lastIndexOf(".");
-			if ((extension.length() == 0)
-				&& (dotIndex > 0)
-				&& (dotIndex < fname.length())) {
-				extension = fname.substring(dotIndex + 1, fname.length());
-			}
-			if (extension.equalsIgnoreCase("")) {
-				logger.warn("no valid extension found for: " + file.getName());
-				return "";
-			}
-			// Do not index xslx
-			if (extension.equalsIgnoreCase("xlsx")) {
-				logger.info("Ignoring xslx: " + file.getName());
-				return "";
-			}
-			// Handled extensions are: html,pdf,txt
-			if (extension.equalsIgnoreCase("pdf")) {
-				logger.info("Using getPDFDocument() for " + file.getName());
-				return getPDFDocument(file);
-			}
-			// HTML
-			if (extension.equalsIgnoreCase("html") || extension.equalsIgnoreCase("htm")) {
-				logger.info("Using getHTMLDocument() for " + file.getName());
-				return getHTMLDocument(file);
-			}
-			if (extension.equalsIgnoreCase("txt") || extension.length() == 0) {
-				logger.info("Using getTextDocument() for: " + file.getName());
-				return getTextDocument(file);
-			}
-			// Open office
-			if (extension.equalsIgnoreCase("odt")) {
-				logger.info("Using getOpenOfficeDocument() for " + file.getName());
-				return getOpenOfficeDocument(file);
-			}
-			if (extension.equalsIgnoreCase("ott")) {
-				logger.info("Using getOpenOfficeDocument() for " + file.getName());
-				return getOpenOfficeDocument(file);
-			}
-			if (extension.equalsIgnoreCase("stw")) {
-				logger.info("Using getOpenOfficeDocument() for " + file.getName());
-				return getOpenOfficeDocument(file);
-			}
-			if (extension.equalsIgnoreCase("sxw")) {
-				logger.info("Using getOpenOfficeDocument() for " + file.getName());
-				return getOpenOfficeDocument(file);
-			}
-			if (extension.equalsIgnoreCase("odg")) {
-				logger.info("Using getOpenOfficeDocument() for " + file.getName());
-				return getOpenOfficeDocument(file);
-			}
-			if (extension.equalsIgnoreCase("odp")) {
-				logger.info("Using getOpenOfficeDocument() for " + file.getName());
-				return getOpenOfficeDocument(file);
-			}
-			if (extension.equalsIgnoreCase("sti")) {
-				logger.info("Using getOpenOfficeDocument() for " + file.getName());
-				return getOpenOfficeDocument(file);
-			}
-			if (extension.equalsIgnoreCase("sxd")) {
-				logger.info("Using getOpenOfficeDocument() for " + file.getName());
-				return getOpenOfficeDocument(file);
-			}
-			if (extension.equalsIgnoreCase("sxw")) {
-				logger.info("Using getOpenOfficeDocument() for " + file.getName());
-				return getOpenOfficeDocument(file);
-			}
-			// Flat XML OO documents
-			if (extension.equalsIgnoreCase("fodt")) {
-				logger.info("Using getOpenOfficeDocument() for " + file.getName());
-				return getFlatOpenOfficeDocument(file);
-			}
-			if (extension.equalsIgnoreCase("fodp")) {
-				logger.info("Using getOpenOfficeDocument() for " + file.getName());
-				return getFlatOpenOfficeDocument(file);
-			}
-
-			// RTF
-			if (extension.equalsIgnoreCase("rtf")) {
-				logger.info("Using getRTFDocument() for " + file.getName());
-				return getRTFDocument(file);
-			}
+       
+    	try {
+	        String fname = file.getName();
+	        int dotIndex = fname.lastIndexOf(".");
+	        if((dotIndex > 0) && (dotIndex < fname.length())) {
+	            String extension = fname.substring(dotIndex + 1, fname.length());
+	            
+	            // Handled extensions are: html,pdf,txt
+	            if(extension.equalsIgnoreCase("pdf")) {
+	                logger.info("Using getPDFDocument() for " + file.getName());
+	                return getPDFDocument(file);
+	            }
+	            // HTML
+	            if(extension.equalsIgnoreCase("html") || extension.equalsIgnoreCase("htm")) {
+	                logger.info("Using getHTMLDocument() for " + file.getName());
+	                return getHTMLDocument(file);
+	            }
+	            if(extension.equalsIgnoreCase("txt") || extension.length() == 0) {
+	                logger.info("Using getTextDocument() for: " + file.getName() );
+	                return getTextDocument(file);
+	            }
+	            // Open office
+	            if(extension.equalsIgnoreCase("odt")) {
+	            	logger.info("Using getOpenOfficeDocument() for " + file.getName());
+	            	return getOpenOfficeDocument(file);
+	            }
+	            if(extension.equalsIgnoreCase("ott")) {
+	            	logger.info("Using getOpenOfficeDocument() for " + file.getName());
+	            	return getOpenOfficeDocument(file);
+	            }
+	            if(extension.equalsIgnoreCase("stw")) {
+	            	logger.info("Using getOpenOfficeDocument() for " + file.getName());
+	            	return getOpenOfficeDocument(file);
+	            }
+	            if(extension.equalsIgnoreCase("sxw")) {
+	            	logger.info("Using getOpenOfficeDocument() for " + file.getName());
+	            	return getOpenOfficeDocument(file);
+	            }
+	            if(extension.equalsIgnoreCase("odg")) {
+	            	logger.info("Using getOpenOfficeDocument() for " + file.getName());
+	            	return getOpenOfficeDocument(file);
+	            }
+	            if(extension.equalsIgnoreCase("odp")) {
+	            	logger.info("Using getOpenOfficeDocument() for " + file.getName());
+	            	return getOpenOfficeDocument(file);
+	            }
+	            if(extension.equalsIgnoreCase("sti")) {
+	            	logger.info("Using getOpenOfficeDocument() for " + file.getName());
+	            	return getOpenOfficeDocument(file);
+	            }
+	            if(extension.equalsIgnoreCase("sxd")) {
+	            	logger.info("Using getOpenOfficeDocument() for " + file.getName());
+	            	return getOpenOfficeDocument(file);
+	            }
+	            if(extension.equalsIgnoreCase("sxw")) {
+	            	logger.info("Using getOpenOfficeDocument() for " + file.getName());
+	            	return getOpenOfficeDocument(file);
+	            }
+	            // Flat XML OO documents
+	            if(extension.equalsIgnoreCase("fodt")) {
+	            	logger.info("Using getOpenOfficeDocument() for " + file.getName());
+	            	return getFlatOpenOfficeDocument(file);
+	            }
+	            if(extension.equalsIgnoreCase("fodp")) {
+	            	logger.info("Using getOpenOfficeDocument() for " + file.getName());
+	            	return getFlatOpenOfficeDocument(file);
+	            }
+	            
+	            // RTF
+	            if(extension.equalsIgnoreCase("rtf")) {
+	            	logger.info("Using getRTFDocument() for " + file.getName());
+	            	return getRTFDocument(file);
+	            }
+	        }
         }
     	catch (FileHandlerException e) {
         	logger.warn("Parsing failed with message: " + e);
+        	logger.info("Current file is: " + file.getAbsolutePath());
         	return "";
     	}
     	
     	catch(Exception e) {
         	logger.warn("Parsing failed with message: " + e);
+        	logger.info("Current file is: " + file.getAbsolutePath());
         	return "";
         }
     	
@@ -188,7 +172,7 @@ public class ExtensionFileHandler {
     		else {
     			logger.warn("No content found for" + file.getName());
     		}
-    		//logger.debug("Parsed content is: " + content.toString());
+    		logger.debug("Parsed content is: " + content.toString());
     		return content.toString();
     	}
     	catch (InvalidFormatException e) {
@@ -392,29 +376,6 @@ public class ExtensionFileHandler {
         	catch (IOException e) {
 			}
         }
-	}
-
-	/**
-	 * Check file size limit
-	 * @param file
-	 * @return bool
-	 */
-	private boolean checkFileSizeLimit(File file)
-	{
-		long maxFileSize = 0;
-
-		try {
-			maxFileSize = ServerSettings.getInstance().getMaxFileSize();
-		}
-		catch(ConfigurationException e) {
-			maxFileSize = ServerSettings.DEFAULT_MAX_FILE_SIZE;
-		}
-
-		if(file.length() > maxFileSize) {
-			logger.info("File size is " + file.length() + " bytes.");
-			return false;
-		}
-		return true;
 	}
 	
 
