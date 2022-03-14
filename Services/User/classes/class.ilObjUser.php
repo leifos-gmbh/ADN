@@ -2407,6 +2407,9 @@ class ilObjUser extends ilObject
      */
     public function isPasswordChangeDemanded()
     {
+        // begin-patch adn
+        return false;
+        // end-patch adn
         if ($this->id == ANONYMOUS_USER_ID) {
             return false;
         }
