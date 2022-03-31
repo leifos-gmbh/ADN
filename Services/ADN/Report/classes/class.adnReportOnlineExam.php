@@ -143,7 +143,7 @@ class adnReportOnlineExam extends adnReport
         $this->initEvent();
 
         // Write on task (merge them in one PDF)
-        include_once './Services/ADN/Report/classes/clas.adnTaskScheduleWriter.php';
+        include_once './Services/ADN/Report/classes/class.adnTaskScheduleWriter.php';
         $writer = new adnTaskScheduleWriter();
         $writer->xmlStartTag('tasks');
 
