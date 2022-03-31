@@ -1323,7 +1323,7 @@ class adnCertifiedProfessional extends adnDBBase
             // create ilias user for professional candidate
             $user = new ilObjUser();
             $user->setGender("m");
-            $user->setLogin("pruefkand_" . $a_cp_id);
+            $user->setLogin("ADN" . $a_cp_id);
             $user->setFirstname("Prüfungskandidat");
             $user->setLastname($a_cp_id);
             $user->setActive(true);

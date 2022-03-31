@@ -340,7 +340,6 @@ class adnExamFacility extends adnDBBase
         if ($a_wmo_id) {
             $sql .= " AND md_wmo_id = " . $ilDB->quote($a_wmo_id, "integer");
         }
-
         $res = $ilDB->query($sql);
         $all = array();
         while ($row = $ilDB->fetchAssoc($res)) {
