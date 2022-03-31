@@ -28,7 +28,10 @@ class adnReportFileUtils
     const TPL_REPORT_ATTENDANCE_LIST = 'adn_report_attendance_list.pdf';
     const TPL_REPORT_ATTENDANCE_LIST_G = 'adn_report_attendance_list_g.pdf';
     const TPL_REPORT_ATTENDANCE_LIST_C = 'adn_report_attendance_list_c.pdf';
-    
+    const TPL_REPORT_ATTENDANCE_LIST_ONE_CHAIR = 'adn_report_attendance_list_one_chair.pdf';
+    const TPL_REPORT_ATTENDANCE_LIST_G_ONE_CHAIR = 'adn_report_attendance_list_g_one_chair.pdf';
+    const TPL_REPORT_ATTENDANCE_LIST_C_ONE_CHAIR = 'adn_report_attendance_list_c_one_chair.pdf';
+
     const TPL_REPORT_SCORE_NOTIFICATION_SUCCESS_BASE = 'adn_report_score_base.pdf';
     const TPL_REPORT_SCORE_NOTIFICATION_SUCCESS_GAS = 'adn_report_score_gas.pdf';
     const TPL_REPORT_SCORE_NOTIFICATION_SUCCESS_CHEM = 'adn_report_score_chem.pdf';

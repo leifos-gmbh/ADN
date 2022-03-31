@@ -168,17 +168,30 @@ class adnReportAttendanceList extends adnReport
                 case 'gas':
                     $map = $this->getBaseMap(array());
                     $map = $this->addCandidates($map, true, $offset);
-                    $form = adnReportFileUtils::getTemplatePathByType(
-                        adnReportFileUtils::TPL_REPORT_ATTENDANCE_LIST_G
-                    );
+                    if ($this->getEvent()->getCoChair2()) {
+                        $form = adnReportFileUtils::getTemplatePathByType(
+                            adnReportFileUtils::TPL_REPORT_ATTENDANCE_LIST_G
+                        );
+                    } else {
+                        $form = adnReportFileUtils::getTemplatePathByType(
+                            adnReportFileUtils::TPL_REPORT_ATTENDANCE_LIST_G_ONE_CHAIR
+                        );
+                    }
+
                     break;
 
                 case 'chem':
                     $map = $this->getBaseMap(array());
                     $map = $this->addCandidates($map, true, $offset);
-                    $form = adnReportFileUtils::getTemplatePathByType(
-                        adnReportFileUtils::TPL_REPORT_ATTENDANCE_LIST_C
-                    );
+                    if ($this->getEvent()->getCoChair2()) {
+                        $form = adnReportFileUtils::getTemplatePathByType(
+                            adnReportFileUtils::TPL_REPORT_ATTENDANCE_LIST_C
+                        );
+                    } else {
+                        $form = adnReportFileUtils::getTemplatePathByType(
+                            adnReportFileUtils::TPL_REPORT_ATTENDANCE_LIST_C_ONE_CHAIR
+                        );
+                    }
                     break;
 
 
@@ -186,9 +199,15 @@ class adnReportAttendanceList extends adnReport
                 default:
                     $map = $this->getBaseMap(array());
                     $map = $this->addCandidates($map, false, $offset);
-                    $form = adnReportFileUtils::getTemplatePathByType(
-                        adnReportFileUtils::TPL_REPORT_ATTENDANCE_LIST
-                    );
+                    if ($this->getEvent()->getCoChair2()) {
+                        $form = adnReportFileUtils::getTemplatePathByType(
+                            adnReportFileUtils::TPL_REPORT_ATTENDANCE_LIST
+                        );
+                    } else {
+                        $form = adnReportFileUtils::getTemplatePathByType(
+                            adnReportFileUtils::TPL_REPORT_ATTENDANCE_LIST_ONE_CHAIR
+                        );
+                    }
                     break;
             }
 
@@ -286,10 +305,12 @@ class adnReportAttendanceList extends adnReport
         $map['wsd_second'] = str_pad($this->getCoChairName(
             $this->getEvent()->getCoChair1()
         ) . ' ', 150, '.');
-        $map['wsd_third'] = str_pad($this->getCoChairName(
-            $this->getEvent()->getCoChair2()
-        ) . ' ', 150, '.');
-        
+        if ($this->getEvent()->getCoChair2()) {
+            $map['wsd_third'] = str_pad($this->getCoChairName(
+                                            $this->getEvent()->getCoChair2()
+                                        ) . ' ', 150, '.');
+        }
+
         $contact = $this->getWMO()->getName() . ', ' .
             $this->getWMO()->getPostalStreet() . ' ' . $this->getWMO()->getPostalStreetNumber() . ' in ' .
             $this->getWMO()->getPostalZip() . ' ' . $this->getWMO()->getPostalCity();
