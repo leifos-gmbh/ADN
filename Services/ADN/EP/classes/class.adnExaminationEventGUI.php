@@ -266,15 +266,17 @@ class adnExaminationEventGUI
         $cochairs = adnCoChair::getCoChairsSelect(null, $cos);
         
         $chair = new ilSelectInputGUI($lng->txt("adn_chairman"), "chair");
+        $chair->setRequired(true);
         $chair->setOptions($cochairs);
         $form->addItem($chair);
 
         $cochair1 = new ilSelectInputGUI($lng->txt("adn_cochair") . " 1", "cochair1");
+        $cochair1->setRequired(true);
         $cochair1->setOptions($cochairs);
         $form->addItem($cochair1);
 
         $cochair2 = new ilSelectInputGUI($lng->txt("adn_cochair") . " 2", "cochair2");
-        $cochair2->setOptions($cochairs);
+        $cochair2->setOptions(['' => $lng->txt('select_one')] + $cochairs);
         $form->addItem($cochair2);
 
         $cost = new ilNumberInputGUI($lng->txt("adn_additional_costs"), "cost");
@@ -337,7 +339,7 @@ class adnExaminationEventGUI
             $event->setFacility($form->getInput("facility"));
             $event->setChairman($form->getInput("chair"));
             $event->setCoChair1($form->getInput("cochair1"));
-            $event->setCoChair2($form->getInput("cochair2"));
+            $event->setCoChair2($form->getInput("cochair2") ? $form->getInput('cochair2') : null);
             $event->setCosts($form->getInput("cost"));
 
             // converting form input to ilDateTime

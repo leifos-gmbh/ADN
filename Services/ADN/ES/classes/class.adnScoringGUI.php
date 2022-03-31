@@ -236,6 +236,7 @@ class adnScoringGUI
         
         // has participated
         $participated = new ilCheckboxInputGUI($lng->txt("adn_participated"), "has_participated");
+        $participated->setRequired(true);
         $participated->setChecked($assignment->getHasParticipated());
         $form->addItem($participated);
 
@@ -380,6 +381,9 @@ class adnScoringGUI
                 #ilUtil::sendFailure($lng->txt("adn_blocked_and_passed_not_allowed"), true);
                 #$extra_checks_ok = false;
             }
+            if (!$form->getInput('has_participated')) {
+                $extra_checks_ok = false;
+            }
 
             if ($extra_checks_ok) {
 
@@ -432,6 +436,7 @@ class adnScoringGUI
         }
 
         // input not valid: show form again
+        ilUtil::sendFailure($lng->txt('err_check_input'));
         $form->setValuesByPost();
         $this->editScoring($form);
     }
