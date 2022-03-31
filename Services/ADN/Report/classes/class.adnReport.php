@@ -236,10 +236,6 @@ abstract class adnReport
     /**
      * Parse formatting of questions, solutions.
      * Each e.g [f]abc[\f] is parsed as <phrase bold="1">abc</phrase>
-     *
-     * @param object $writer
-     * @param object $text
-     * @return
      */
     protected function parseFormatting($writer, $text)
     {

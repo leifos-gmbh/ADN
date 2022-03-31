@@ -17,12 +17,17 @@ class adnReportOnlineExam extends adnReport
     private $event_id = 0;
     private $event = null;
 
+    private ilLanguage $lng;
+
     /**
      * Contructor
      * @return
      */
     public function __construct($event_id = 0)
     {
+        global $DIC;
+
+        $this->lng = $DIC->language();
         parent::__construct();
         $this->event_id = $event_id;
     }
@@ -138,7 +143,7 @@ class adnReportOnlineExam extends adnReport
         $this->initEvent();
 
         // Write on task (merge them in one PDF)
-        include_once './Services/ADN/Report/classes/class.adnTaskScheduleWriter.php';
+        include_once './Services/ADN/Report/classes/clas.adnTaskScheduleWriter.php';
         $writer = new adnTaskScheduleWriter();
         $writer->xmlStartTag('tasks');
 
@@ -164,7 +169,8 @@ class adnReportOnlineExam extends adnReport
                         'answer_1' => $qst->getAnswerA(),
                         'answer_2' => $qst->getAnswerB(),
                         'answer_3' => $qst->getAnswerC(),
-                        'answer_4' => $qst->getAnswerD()
+                        'answer_4' => $qst->getAnswerD(),
+                        'solution' => $qst->getCorrectAnswer()
                     );
                 }
             }
@@ -207,6 +213,8 @@ class adnReportOnlineExam extends adnReport
             $header .= $pro->getPostalStreet() . ' ' . $pro->getPostalStreetNumber() . ', ';
             $header .= $pro->getPostalCode() . ' ' . $pro->getPostalCity();
             $xml->xmlElement('pageHeader', array(), $header);
+
+            $this->addExamInfoToAssignment($xml, $pro, $ass);
             
             // get sheet(s) for current candidate
             $cand_sheets = adnAnswerSheetAssignment::getAllSheets(
@@ -227,7 +235,7 @@ class adnReportOnlineExam extends adnReport
                         $a_code
                     );
                 }
-                
+
                 // add questions for current sheet
                 foreach ((array) $questions[$cand_sheet['ep_answer_sheet_id']] as $qst) {
                     $qstid = $qst['id'];
@@ -240,16 +248,31 @@ class adnReportOnlineExam extends adnReport
 
                     $xml->xmlStartTag('paragraph', array('type' => 'phrase'));
                     $this->parseFormatting($xml, $qst['question']);
-                    #$this->parseFormatting($xml, $lng->txt('ass_question').': '.$qst['question']);
+                    $xml->xmlEndTag('paragraph');
+
+                    $prefixes = [
+                        '1' => 'A. ',
+                        '2' => 'B. ',
+                        '3' => 'C. ',
+                        '4' => 'D. '
+                    ];
+                    foreach (['1','2','3','4'] as $answer) {
+                        $xml->xmlStartTag('paragraph', ['type' => 'phrase']);
+                        $this->parseFormatting($xml, $prefixes[$answer] . $qst['answer_' . $answer]['text']);
+                        $xml->xmlEndTag('paragraph');
+                    }
+
+                    $xml->xmlStartTag('paragraph', ['type' => 'phrase']);
+                    $this->parseFormatting($xml, 'Richtige Antwort: ' . strtoupper($qst['solution']));
                     $xml->xmlEndTag('paragraph');
 
                     if (isset($res[$qstid]) and isset($qst['answer_' . $res[$qstid]])) {
                         $xml->xmlStartTag('paragraph', array('type' => 'phrase'));
-                        $this->parseFormatting($xml, 'Antwort: ' . $qst['answer_' . $res[$qstid]]['text']);
+                        $this->parseFormatting($xml, 'Gegebene Antwort: ' . $prefixes[$res[$qstid]]);
                         $xml->xmlEndTag('paragraph');
                     } else {
                         $xml->xmlStartTag('paragraph', array('type' => 'phrase'));
-                        $this->parseFormatting($xml, 'Antwort: Nicht beantwortet');
+                        $this->parseFormatting($xml, 'Gegebene Antwort: Nicht beantwortet');
                         $xml->xmlEndTag('paragraph');
                     }
                     $xml->xmlElement(
@@ -319,6 +342,28 @@ class adnReportOnlineExam extends adnReport
         } catch (adnReportException $e) {
             throw $e;
         }
+    }
+
+    protected function addExamInfoToAssignment(ilXmlWriter $writer, adnCertifiedProfessional $pro, array $assignment) : void
+    {
+        $writer->xmlStartTag('pageInfoTable', ['columns' => 2]);
+        $writer->xmlElement('column', ['type' => 'bold'], $this->lng->txt('adn_oex_examination_info'));
+        $writer->xmlElement(
+            'column',
+            ['type' => 'phrase'],
+            ilDatePresentation::formatPeriod(
+                $this->getEvent()->getDateFrom(),
+                $this->getEvent()->getDateTo()
+            ) . ', ' . $this->lng->txt('adn_train_type_' . $this->getEvent()->getType())
+        );
+        $writer->xmlElement('column', ['type' => 'bold'], $this->lng->txt('adn_oex_professional_info'));
+
+        $professional_info =
+            ilObjUser::_lookupLogin($pro->getIliasUserId()) . ', ' .
+            $assignment['access_code'];
+        $writer->xmlElement('column', ['type' => 'phrase'], $professional_info);
+        $writer->xmlEndTag('pageInfoTable');
+
     }
 
     /**
@@ -463,7 +508,7 @@ class adnReportOnlineExam extends adnReport
     
     /**
      * Get event
-     * @return object adnExaminationEvent
+     * @return adnExaminationEvent
      */
     public function getEvent()
     {
