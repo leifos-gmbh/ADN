@@ -149,8 +149,7 @@ class ilTimeInputGUI extends ilSubEnabledFormPropertyGUI implements ilTableFilte
 				true, array('minute_steps' => $this->getMinuteStepSize(),
 					'disabled' => $this->getDisabled())));
 
-		$tpl->setVariable("TXT_TIME", "(".$lng->txt("hh_mm").")");
-
+		$tpl->setVariable("TXT_TIME", $lng->txt("adn_hh_mm"));
 		$tpl->parseCurrentBlock();
 
 		return $tpl->get();
