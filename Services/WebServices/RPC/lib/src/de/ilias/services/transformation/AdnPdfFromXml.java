@@ -22,11 +22,14 @@
 
 package de.ilias.services.transformation;
 
+import com.lowagie.text.BadElementException;
+import com.lowagie.text.Cell;
 import com.lowagie.text.Chunk;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Font;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
+import com.lowagie.text.Table;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfWriter;
 import de.ilias.services.lucene.index.DocumentHolder;
@@ -36,8 +39,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Vector;
+import java.util.logging.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jdom.DataConversionException;
 import org.jdom.Document;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
@@ -62,6 +67,7 @@ class AdnPdfFromXml {
 	private Font fontTable;
 	private Font fontTableBold;
 	private Font fontNormal;
+	private Font fontSmall;
 	private Font fontSmallBold;
 
 	private SimplePageHeader header = new SimplePageHeader();
@@ -99,6 +105,7 @@ class AdnPdfFromXml {
 			org.jdom.Element page = (org.jdom.Element) xmlSheet.getRootElement();
 
 			parsePageHeader((org.jdom.Element) XPath.selectSingleNode(page, "pageHeader"));
+			parsePageInfoTable((org.jdom.Element) XPath.selectSingleNode(page, "pageInfoTable"));
 			parseParagraphs(page);
 
 
@@ -156,9 +163,10 @@ class AdnPdfFromXml {
 		this.fontHeaderA = new Font(Font.HELVETICA,12);
 		this.fontHeaderB = new Font(Font.HELVETICA,10);
 		this.fontTable = new Font(Font.HELVETICA,9);
-		this.fontTableBold = new Font(Font.BOLD,9);
+		this.fontTableBold = new Font(Font.HELVETICA,9,Font.BOLD);
 		this.fontNormal = new Font(Font.HELVETICA,9);
-		this.fontSmallBold = new Font(Font.BOLD,8);
+		this.fontSmall = new Font(Font.HELVETICA, 8);
+		this.fontSmallBold = new Font(Font.HELVETICA, 8, Font.BOLD);
 	}
 
 	/**
@@ -171,7 +179,50 @@ class AdnPdfFromXml {
 			return;
 		}
 		this.header.setPhrase(
-				new Phrase(header.getTextTrim(),fontSmallBold));
+				new Phrase(header.getTextTrim(),fontSmall));
+	}
+	
+	private void parsePageInfoTable(org.jdom.Element infoTable) {
+		
+		if (infoTable == null) {
+			return;
+		}
+		
+		try {
+			Table table;
+			Cell cell;
+			Font font;
+			
+			table = new Table(infoTable.getAttribute("columns").getIntValue());
+			table.setWidth(100);
+			table.setWidths(new float[] {30,70});
+			table.setPadding(2);
+			table.setSpacing(2);
+			
+			Iterator columnIte = infoTable.getChildren("column").iterator();
+			while (columnIte.hasNext()) {
+
+				org.jdom.Element para = (org.jdom.Element) columnIte.next();
+				
+				if(para.getAttributeValue("type").equals("bold")) {
+					font = fontTableBold;
+				} else {
+					font = fontTable;
+				}
+				
+				cell = new Cell(new Paragraph(para.getTextTrim(), font));
+				cell.setBorder(0);
+				table.addCell(cell);
+			}			
+			pdf.add(table);
+			pdf.add(new Paragraph(" "));
+			
+		} catch (BadElementException ex) {
+			logger.error(ex.getMessage());
+		} catch (DocumentException | DataConversionException ex) {
+			logger.error(ex.getMessage());
+		}
+		
 	}
 
 
