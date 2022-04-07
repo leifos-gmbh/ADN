@@ -48,9 +48,15 @@ class AdministrationMainBarProvider extends AbstractStaticMainMenuProvider
                     if ($group_item == "---") {
                         continue;
                     }
-
                     $icon = $this->dic->ui()->factory()->symbol()->icon()->standard($titems[$group_item]["type"], $titems[$group_item]["title"])
                         ->withIsOutlined(true);
+
+                    // adn-patch start
+                    if ($group == "adn") {
+                        $icon = $this->dic->ui()->factory()->symbol()->icon()->standard("adm", $titems[$group_item]["title"])
+                                          ->withIsOutlined(true);
+                    }
+                    // adn-patch end
 
                     $ref_id = $titems[$group_item]["ref_id"];
                     if ($_GET["admin_mode"] != 'repository' && $ref_id == ROOT_FOLDER_ID) {
@@ -100,6 +106,9 @@ class AdministrationMainBarProvider extends AbstractStaticMainMenuProvider
     protected function getIconForGroup(string $group, string $title) : Icon
     {
         $icon_map = array(
+            // adn-patch start
+            "adn" => "icon_sysa",
+            // adn-patch end
             "maintenance" => "icon_sysa",
             "layout_and_navigation" => "icon_laya",
             "repository_and_objects" => "icon_repa",
@@ -189,6 +198,10 @@ class AdministrationMainBarProvider extends AbstractStaticMainMenuProvider
 
         // admin menu layout
         $layout = array(
+            // adn-patch start
+            "adn" =>
+                array("xaad", "xaec","xaed", "xaes", "xaep", "xacp", "xata", "xamd", "xast"),
+            // adn-patch end
             "maintenance" =>
                 array("adm", "lngf", "hlps", "wfe", "pdfg", 'fils', 'logs', 'sysc', "recf", "root"),
             "layout_and_navigation" =>
