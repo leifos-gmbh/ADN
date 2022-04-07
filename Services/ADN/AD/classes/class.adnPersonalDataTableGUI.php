@@ -16,6 +16,12 @@ include_once("./Services/Table/classes/class.ilTable2GUI.php");
  */
 class adnPersonalDataTableGUI extends ilTable2GUI
 {
+
+    protected string $mode;
+    /**
+     * @var array<string, mixed>
+     */
+    protected array $filter;
     /**
      * Constructor
      *

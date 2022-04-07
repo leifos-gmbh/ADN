@@ -13,16 +13,16 @@
  */
 class adnExaminationQuestion extends adnDBBase
 {
-    protected $id; // [int]
-    protected $objective_id; // [int]
-    protected $subobjective_id; // [int]
-    protected $backup_of; // [int]
-    protected $number; // [string]
-    protected $name; // [string]
-    protected $question; // [string]
-    protected $status; // [int]
-    protected $status_date; // [ilDateTime]
-    protected $comment; // [string]
+    protected int $id = 0;
+    protected int $objective_id = 0;
+    protected int $subobjective_id= 0;
+    protected int $backup_of = 0;
+    protected string $number = '';
+    protected string $name = '';
+    protected string $question = '';
+    protected int $status = 0;
+    protected ?ilDateTime $status_date = null;
+    protected string $comment = '';
 
     /**
      * Constructor
@@ -287,16 +287,16 @@ class adnExaminationQuestion extends adnDBBase
             " FROM adn_ed_question" .
             " WHERE id = " . $ilDB->quote($this->getId(), "integer"));
         $set = $ilDB->fetchAssoc($res);
-        $this->setBackupOf($set["backup_of"]);
-        $this->setObjective($set["ed_objective_id"]);
-        $this->setSubobjective($set["ed_subobjective_id"]);
-        $this->setName($set["title"]);
-        $this->setNumber($set["nr"]);
-        $this->setQuestion($set["question"]);
-        $this->setStatus($set["status"]);
-        $this->setStatusDate(new ilDateTime($set["status_date"], IL_CAL_DATETIME, ilTimeZone::UTC));
-        $this->setComment($set["last_change_comment"]);
-        $this->setFileName($set["qfile"], 1);
+        $this->setBackupOf((int) $set["backup_of"]);
+        $this->setObjective((int) $set["ed_objective_id"]);
+        $this->setSubobjective((int) $set["ed_subobjective_id"]);
+        $this->setName((string) $set["title"]);
+        $this->setNumber((int) $set["nr"]);
+        $this->setQuestion((string) $set["question"]);
+        $this->setStatus((bool) $set["status"]);
+        $this->setStatusDate(new ilDateTime((int) $set["status_date"], IL_CAL_DATETIME, ilTimeZone::UTC));
+        $this->setComment((string) $set["last_change_comment"]);
+        $this->setFileName((string) $set["qfile"], 1);
         
         parent::_read($id, "adn_ed_question");
     }

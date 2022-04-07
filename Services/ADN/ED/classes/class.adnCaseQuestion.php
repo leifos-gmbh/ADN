@@ -13,9 +13,12 @@ include_once "Services/ADN/ED/classes/class.adnExaminationQuestion.php";
  */
 class adnCaseQuestion extends adnExaminationQuestion
 {
-    protected $answer; // [string]
-    protected $good_specific; // [bool]
-    protected $goods; // [array]
+    protected string $answer = '';
+    protected bool $good_specific = false;
+    /**
+     * @var int[]
+     */
+    protected array $goods = [];
 
     /**
      * Set default answer
@@ -47,7 +50,7 @@ class adnCaseQuestion extends adnExaminationQuestion
         $this->good_specific = (bool) $a_specific;
 
         if (!$this->good_specific) {
-            $this->setGoods(null);
+            $this->setGoods([]);
         }
     }
 

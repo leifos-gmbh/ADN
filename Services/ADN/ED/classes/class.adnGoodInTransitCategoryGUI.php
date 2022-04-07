@@ -18,10 +18,10 @@ include_once "Services/ADN/ED/classes/class.adnGoodInTransit.php";
 class adnGoodInTransitCategoryGUI
 {
     // current type
-    protected $type = null;
+    protected string $type = '';
 
     // current category object
-    protected $category = null;
+    protected ?adnGoodInTransitCategory $category = null;
     
     /**
      * Constructor

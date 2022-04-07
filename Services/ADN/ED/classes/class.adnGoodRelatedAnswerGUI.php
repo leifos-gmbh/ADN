@@ -16,13 +16,13 @@
 class adnGoodRelatedAnswerGUI
 {
     // current case question id
-    protected $question_id = null;
+    protected int $question_id = 0;
 
     // current answer object
-    protected $answer = null;
+    protected ?adnGoodRelatedAnswer $answer = null;
 
     // gas/chem
-    protected $show_butan_or_empty;
+    protected bool $show_butan_or_empty = false;
     
     /**
      * Constructor

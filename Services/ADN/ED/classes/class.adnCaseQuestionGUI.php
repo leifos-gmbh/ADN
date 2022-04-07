@@ -18,7 +18,7 @@ include_once("./Services/ADN/ED/classes/class.adnExaminationQuestionGUI.php");
 class adnCaseQuestionGUI extends adnExaminationQuestionGUI
 {
     // current case question object
-    protected $question = null;
+    protected ?adnCaseQuestion $question = null;
     
     /**
      * Constructor

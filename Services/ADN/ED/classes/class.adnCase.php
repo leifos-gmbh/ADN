@@ -11,10 +11,10 @@
  */
 class adnCase extends adnDBBase
 {
-    protected $id; // [int]
-    protected $subject_area; // [string]
-    protected $butan; // [bool]
-    protected $text; // [string]
+    protected int $id;
+    protected string $subject_area;
+    protected bool $butan;
+    protected string $text;
 
     /**
      * Constructor

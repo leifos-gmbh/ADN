@@ -16,6 +16,11 @@ include_once("./Services/ADN/ED/classes/class.adnExaminationQuestionGUI.php");
  */
 class adnTestQuestionListTableGUI extends ilTable2GUI
 {
+    protected int $cand_sheet_id;
+    /**
+     * @var int[]
+     */
+    protected array $questions;
     /**
      * Constructor
      *

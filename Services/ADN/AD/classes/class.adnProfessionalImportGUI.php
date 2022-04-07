@@ -13,26 +13,26 @@
  */
 class adnProfessionalImportGUI
 {
-    const COL_CERTIFICATE_NR = 0;
-    const COL_CERTIFICATE_YEAR = 1;
-    const COL_LAST_NAME = 2;
-    const COL_FIRST_NAME = 3;
-    const COL_BIRTHDATE = 4;
-    const COL_CITIZENSHIP = 5;
-    const COL_CERTIFICATE_DRY = 6;
-    const COL_CERTIFICATE_TANK = 7;
-    const COL_CERTIFICATE_GAS = 8;
-    const COL_CERTIFICATE_CHEM = 9;
-    const COL_CERTIFICATE_VALID_UNTIL = 10;
-    const COL_CERTIFICATE_ISSUED_ON = 11;
-    const COL_CERTIFICATE_ISSUED_BY_WMO = 12;
-    const COL_CERTIFICATE_SIGNATURE = 13;
+    protected const COL_CERTIFICATE_NR = 0;
+    protected const COL_CERTIFICATE_YEAR = 1;
+    protected const COL_LAST_NAME = 2;
+    protected const COL_FIRST_NAME = 3;
+    protected const COL_BIRTHDATE = 4;
+    protected const COL_CITIZENSHIP = 5;
+    protected const COL_CERTIFICATE_DRY = 6;
+    protected const COL_CERTIFICATE_TANK = 7;
+    protected const COL_CERTIFICATE_GAS = 8;
+    protected const COL_CERTIFICATE_CHEM = 9;
+    protected const COL_CERTIFICATE_VALID_UNTIL = 10;
+    protected const COL_CERTIFICATE_ISSUED_ON = 11;
+    protected const COL_CERTIFICATE_ISSUED_BY_WMO = 12;
+    protected const COL_CERTIFICATE_SIGNATURE = 13;
     
     // unused
-    const COL_POSTAL_STREET = null;
-    const COL_POSTAL_STREET_NUMBER = null;
-    const COL_POSTAL_CODE = null;
-    const COL_POSTAL_CITY = null;
+    protected const COL_POSTAL_STREET = null;
+    protected const COL_POSTAL_STREET_NUMBER = null;
+    protected const COL_POSTAL_CODE = null;
+    protected const COL_POSTAL_CITY = null;
     
     /**
      * Execute command

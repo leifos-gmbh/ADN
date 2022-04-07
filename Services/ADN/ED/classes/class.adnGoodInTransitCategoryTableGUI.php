@@ -15,7 +15,7 @@ include_once("./Services/Table/classes/class.ilTable2GUI.php");
  */
 class adnGoodInTransitCategoryTableGUI extends ilTable2GUI
 {
-    protected $type; // [string]
+    protected string $type = '';
 
     /**
      * Constructor

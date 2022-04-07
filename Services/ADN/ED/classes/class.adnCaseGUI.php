@@ -18,13 +18,13 @@ include_once("./Services/ADN/ED/classes/class.adnSubjectArea.php");
 class adnCaseGUI
 {
     // current type
-    protected $type = null;
+    protected string $type = '';
 
     // current subtype
-    protected $butan = null;
+    protected bool $butan = false;
 
     // current case object
-    protected $case = null;
+    protected ?adnCase $case = null;
     
     /**
      * Constructor

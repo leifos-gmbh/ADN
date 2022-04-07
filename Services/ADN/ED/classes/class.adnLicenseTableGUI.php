@@ -15,7 +15,7 @@ include_once("./Services/Table/classes/class.ilTable2GUI.php");
  */
 class adnLicenseTableGUI extends ilTable2GUI
 {
-    protected $type; // [int]
+    protected int $type;
     
     /**
      * Constructor

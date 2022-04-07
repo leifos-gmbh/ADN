@@ -18,8 +18,21 @@ include_once("./Services/ADN/EC/classes/class.adnTest.php");
  */
 class adnTestGUI
 {
-    const MODE_ONLINE = "online";
-    const MODE_ELEARNING = "elearning";
+    public const MODE_ONLINE = "online";
+    public const MODE_ELEARNING = "elearning";
+
+    protected string $mode;
+    /**
+     * @var int[]
+     */
+    protected array $questions = [];
+    protected ?adnCertifiedProfessional $cp = null;
+    protected int $cp_id = 0;
+    protected ?adnAssignment $ass = null;
+    protected int $ass_id = 0;
+    protected int $event_id = 0;
+    protected ?adnAnswerSheet $sheet = null;
+    protected int $cand_sheet_id = 0;
 
     /**
      * Constructor

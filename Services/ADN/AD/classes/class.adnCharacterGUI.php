@@ -14,7 +14,7 @@
 class adnCharacterGUI
 {
     // current character object
-    protected $character = null;
+    protected ?adnCharacter $character = null;
     
     /**
      * Constructor

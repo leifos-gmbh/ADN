@@ -15,8 +15,15 @@ include_once("./Services/Table/classes/class.ilTable2GUI.php");
  */
 class adnExaminationQuestionTableGUI extends ilTable2GUI
 {
-    protected $case_questions; // [bool]
-    protected $backups; // [array]
+    protected bool $case_questions;
+    /**
+     * @var int[]
+     */
+    protected array $backups = [];
+    /**
+     * @var array<string, mixed>
+     */
+    protected array $filter = [];
 
     /**
      * Constructor

@@ -11,9 +11,9 @@
  */
 class adnCharacter
 {
-    protected $id; // [int]
-    protected $name; // [string]
-    protected $code; // [int]
+    protected int $id;
+    protected string $name;
+    protected int $code;
 
     /**
      * Constructor

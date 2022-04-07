@@ -15,8 +15,8 @@ include_once("./Services/Table/classes/class.ilTable2GUI.php");
  */
 class adnGoodRelatedAnswerTableGUI extends ilTable2GUI
 {
-    protected $question_id; // [int]
-    protected $show_butan_or_empty; // [bool]
+    protected int $question_id;
+    protected bool $show_butan_or_empty = false;
 
     /**
      * Constructor

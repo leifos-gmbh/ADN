@@ -22,7 +22,7 @@ include_once("./Services/ADN/Base/classes/class.adnPerm.php");
  */
 class adnBaseGUI
 {
-    protected static $help_done;
+    protected static bool $help_done = false;
 
     /**
      * Constructor

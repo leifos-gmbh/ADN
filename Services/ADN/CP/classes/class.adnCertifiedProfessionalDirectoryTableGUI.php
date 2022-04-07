@@ -15,19 +15,19 @@ include_once("./Services/Table/classes/class.ilTable2GUI.php");
  */
 class adnCertifiedProfessionalDirectoryTableGUI extends ilTable2GUI
 {
-    // [array] options for select filters (needed for value mapping)
-    protected $filter_options;
 
-    // [ilDateTime]
-    protected $date_from;
+    protected array $filter_options = [];
 
-    // [ilDateTime]
-    protected $date_to;
+    protected ilDate $date_from;
 
-    // [int]
-    protected $wmo;
+    protected ilDate $date_to;
 
-    protected $distinct_wmo_ids = array();
+    protected int $wmo;
+
+    /**
+     * @var int[]
+     */
+    protected array $distinct_wmo_ids = array();
 
     /**
      * Constructor

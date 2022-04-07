@@ -11,15 +11,15 @@
  */
 class adnGoodRelatedAnswer extends adnDBBase
 {
-    protected $id; // [int]
-    protected $question_id; // [int]
-    protected $answer; // [string]
-    protected $butan_or_empty; // [int]
-    protected $goods; // [array]
+    protected int $id = 0;
+    protected int $question_id = 0;
+    protected string $answer = '';
+    protected int $butan_or_empty = 0;
+    protected array $goods = [];
 
-    const TYPE_EMPTY = 1;
-    const TYPE_BUTAN = 2;
-    const TYPE_BUTAN_OR_EMPTY = 3;
+    public const TYPE_EMPTY = 1;
+    public const TYPE_BUTAN = 2;
+    public const TYPE_BUTAN_OR_EMPTY = 3;
 
     /**
      * Constructor

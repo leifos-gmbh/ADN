@@ -15,11 +15,13 @@ include_once("./Services/Table/classes/class.ilTable2GUI.php");
  */
 class adnCertificateTableGUI extends ilTable2GUI
 {
-    // [array] options for select filters (needed for value mapping)
-    protected $filter_options;
-
-    // [object] certified professional
-    protected $cp;
+    /**
+     * @var array<string, mixed>
+     */
+    protected array $filter;
+    protected adnCertifiedProfessional $cp;
+    protected int $cp_id;
+    protected int $user_wmo;
 
     /**
      * Constructor

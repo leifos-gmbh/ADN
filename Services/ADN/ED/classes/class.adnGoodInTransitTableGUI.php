@@ -16,7 +16,7 @@ include_once "Services/ADN/ED/classes/class.adnGoodInTransit.php";
  */
 class adnGoodInTransitTableGUI extends ilTable2GUI
 {
-    protected $type; // [int]
+    protected int $type = 0;
 
     /**
      * Constructor
@@ -30,7 +30,7 @@ class adnGoodInTransitTableGUI extends ilTable2GUI
     {
         global $ilCtrl, $lng;
 
-        $this->type = (string) $a_type;
+        $this->type = $a_type;
 
         $this->setId("adn_ed_git");
 

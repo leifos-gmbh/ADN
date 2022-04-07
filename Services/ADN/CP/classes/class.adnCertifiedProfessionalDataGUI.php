@@ -15,8 +15,7 @@
  */
 class adnCertifiedProfessionalDataGUI
 {
-    // current professional object
-    protected $professional = null;
+    protected ?adnCertifiedProfessional $professional = null;
     
     /**
      * Constructor

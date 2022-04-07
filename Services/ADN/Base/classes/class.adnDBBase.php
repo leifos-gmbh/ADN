@@ -18,14 +18,14 @@
  */
 class adnDBBase
 {
-    protected $create_date; // [ilDateTime]
-    protected $create_user; // [int]
-    protected $last_update; // [ilDateTime]
-    protected $last_update_user; // [int]
-    protected $archived; // [bool]
-    protected $file_name; // [string]
-    protected $new_file; // [string]
-    protected $file_dir; // [string]
+    protected ilDateTime $create_date;
+    protected int $create_user;
+    protected ilDateTime $last_update;
+    protected int $last_update_user;
+    protected bool $archived;
+    protected string $file_name;
+    protected string $new_file;
+    protected string $file_dir;
 
     /**
      * Set creation date

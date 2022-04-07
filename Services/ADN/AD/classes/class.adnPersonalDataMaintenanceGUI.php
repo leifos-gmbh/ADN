@@ -14,16 +14,15 @@
  */
 class adnPersonalDataMaintenanceGUI
 {
-    /**
-     * @var int
-     */
-    protected $pid;
+    protected int $pid;
 
-    protected $mode;
+    protected string $mode;
 
-    const MODE_ALL = "all";
-    const MODE_CAND = "cand";
-    const MODE_CERT = "cert";
+    protected const MODE_ALL = "all";
+    protected const MODE_CAND = "cand";
+    protected const MODE_CERT = "cert";
+
+    protected ilLanguage $lng;
 
     /**
      * Constructor

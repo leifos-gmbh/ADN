@@ -11,20 +11,23 @@
  */
 class adnPerm
 {
-    const READ = "read";
-    const WRITE = "write";
+    public const READ = "read";
+    public const WRITE = "write";
 
-    const TA = "ta";
-    const ED = "ed";
-    const EP = "ep";
-    const EC = "ec";
-    const ES = "es";
-    const CP = "cp";
-    const ST = "st";
-    const MD = "md";
-    const AD = "ad";
+    public const TA = "ta";
+    public const ED = "ed";
+    public const EP = "ep";
+    public const EC = "ec";
+    public const ES = "es";
+    public const CP = "cp";
+    public const ST = "st";
+    public const MD = "md";
+    public const AD = "ad";
 
-    public static $perm_objects;
+    /**
+     * @var array<string, object>
+     */
+    public static array $perm_objects = [];
 
     /**
      * Init

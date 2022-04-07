@@ -11,17 +11,17 @@
  */
 class adnGoodInTransit extends adnDBBase
 {
-    protected $id; // [int]
-    protected $number; // [int]
-    protected $name; // [string]
-    protected $type; // [int]
-    protected $category_id; // [int]
-    protected $class; // [string]
-    protected $class_code; // [string]
-    protected $packing_group; // [string]
+    protected int $id;
+    protected int $number;
+    protected string $name;
+    protected int $type;
+    protected int $category_id;
+    protected string $class;
+    protected string $class_code;
+    protected string $packing_group;
 
-    const TYPE_GAS = 1;
-    const TYPE_CHEMICALS = 2;
+    public const TYPE_GAS = 1;
+    public const TYPE_CHEMICALS = 2;
 
     /**
      * Constructor

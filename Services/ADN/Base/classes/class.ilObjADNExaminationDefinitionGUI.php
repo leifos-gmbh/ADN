@@ -16,6 +16,7 @@ include_once("./Services/Object/classes/class.ilObjectGUI.php");
  */
 class ilObjADNExaminationDefinitionGUI extends ilObjectGUI
 {
+    protected string $type;
     /**
      * Contructor
      *

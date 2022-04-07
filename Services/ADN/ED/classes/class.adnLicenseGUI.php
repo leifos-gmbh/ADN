@@ -18,10 +18,10 @@ include_once "Services/ADN/ED/classes/class.adnLicense.php";
 class adnLicenseGUI
 {
     // current type
-    protected $type = null;
+    protected string $type = '';
 
     // current license object
-    protected $license = null;
+    protected ?adnLicense $license = null;
     
     /**
      * Constructor

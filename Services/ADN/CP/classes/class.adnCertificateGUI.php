@@ -16,13 +16,13 @@
 class adnCertificateGUI
 {
     // current certificate object
-    protected $certificate = null;
+    protected ?adnCertificate $certificate = null;
     
     // current form object
-    protected $form = null;
+    protected ?ilPropertyFormGUI $form = null;
 
     // professional id (may not be certified, see #13)
-    protected $pid;
+    protected int $pid;
     
     /**
      * Constructor
