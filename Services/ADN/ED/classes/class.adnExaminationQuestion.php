@@ -594,13 +594,7 @@ class adnExaminationQuestion extends adnDBBase
                     break;
 
                 case "question":
-                    if (get_class($ilDB) == "ilDBMySQL") {
-                        $field = "q.question";
-                    }
-                    // order by clob will fail
-                    else {
-                        $field = "CAST(q.question as VARCHAR2(100))";
-                    }
+                    $field = "q.question";
                     break;
 
                 case "status":
