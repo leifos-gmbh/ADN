@@ -13,11 +13,11 @@
  */
 class adnSubjectArea
 {
-    const DRY_MATERIAL = "dm";
-    const TANK = "tank";
-    const COMBINED = "comb";
-    const GAS = "gas";
-    const CHEMICAL = "chem";
+    public const DRY_MATERIAL = "dm";
+    protected const TANK = "tank";
+    protected const COMBINED = "comb";
+    public const GAS = "gas";
+    public const CHEMICAL = "chem";
 
     /**
      * Get all areas

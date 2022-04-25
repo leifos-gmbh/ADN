@@ -16,7 +16,7 @@
 class adnObjectiveGUI
 {
     // current objective object
-    protected $objective = null;
+    protected ?adnObjective $objective = null;
 
     /**
      * Constructor

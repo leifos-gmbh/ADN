@@ -16,7 +16,7 @@ include_once("./Services/Table/classes/class.ilTable2GUI.php");
 class adnAccessCodesTableGUI extends ilTable2GUI
 {
     // [int] id of examination event
-    protected $event_id;
+    protected int $event_id;
 
     /**
      * Constructor

@@ -11,10 +11,10 @@
  */
 class adnAnswerSheetAssignment extends adnDBBase
 {
-    protected $id; // [int]
-    protected $user_id; // [int]
-    protected $sheet_id; // [int]
-    protected $generated_on; // [ilDateTime]
+    protected int $id = 0;
+    protected int $user_id = 0;
+    protected int $sheet_id = 0;
+    protected ilDateTime $generated_on;
 
     /**
      * Constructor

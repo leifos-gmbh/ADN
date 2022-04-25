@@ -17,7 +17,11 @@ include_once "Services/ADN/ED/classes/class.adnObjective.php";
  */
 class adnObjectiveTableGUI extends ilTable2GUI
 {
-    protected $type;
+    protected string $type;
+    /**
+     * @var array<string, mixed>
+     */
+    protected array $filter = [];
     
     /**
      * Constructor

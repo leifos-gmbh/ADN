@@ -15,10 +15,10 @@ include_once("./Services/Table/classes/class.ilTable2GUI.php");
  */
 class adnQuestionTargetNumbersObjectiveTableGUI extends ilTable2GUI
 {
-    protected $area_id; // [string]
-    protected $type; // [string]
-    protected $entry; // [object]
-    protected $mode; // [string]
+    protected string $area_id;
+    protected string $type;
+    protected ?adnQuestionTargetNumbers $entry;
+    protected string $mode;
 
     /**
      * Constructor
@@ -36,7 +36,7 @@ class adnQuestionTargetNumbersObjectiveTableGUI extends ilTable2GUI
         $a_area_id,
         $a_type,
         $a_entry = null,
-        $a_mode = false
+        $a_mode = ''
     )
     {
         global $ilCtrl, $lng, $ilToolbar;

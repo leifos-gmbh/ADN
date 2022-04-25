@@ -25,12 +25,30 @@ include_once "Services/ADN/ED/classes/class.adnQuestionExport.php";
  */
 class adnQuestionImport
 {
-    protected $objectives; // [array]
-    protected $subobjectives; // [array]
-    protected $good_categories; // [array]
-    protected $goods; // [array]
-    protected $files; // [array]
-    protected $log; // [array]
+    /**
+     * @var array<int, array<string, mixed>>
+     */
+    protected array $objectives;
+    /**
+     * @var array<int, array<string, int>>
+     */
+    protected array $subobjectives;
+    /**
+     * @var string[]
+     */
+    protected array $good_categories;
+    /**
+     * @var int[]
+     */
+    protected array $goods;
+    /**
+     * @var string[]
+     */
+    protected array $files;
+    /**
+     * @var array<string, array<string, array<int, mixed>>>
+     */
+    protected array $log;
 
     /**
      * Import mc question data from zip file (or string)

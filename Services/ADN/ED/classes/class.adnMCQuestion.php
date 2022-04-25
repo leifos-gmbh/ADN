@@ -13,11 +13,11 @@ include_once "Services/ADN/ED/classes/class.adnExaminationQuestion.php";
  */
 class adnMCQuestion extends adnExaminationQuestion
 {
-    protected $correct; // [string]
-    protected $answer_a_text; // [string]
-    protected $answer_b_text; // [string]
-    protected $answer_c_text; // [string]
-    protected $answer_d_text; // [string]
+    protected string $correct;
+    protected string $answer_a_text = '';
+    protected string $answer_b_text = '';
+    protected string $answer_c_text = '';
+    protected string $answer_d_text = '';
 
     /**
      * Set correct answer

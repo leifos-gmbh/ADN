@@ -24,13 +24,26 @@ include_once "Services/ADN/ED/classes/class.adnGoodInTransitCategory.php";
  */
 class adnQuestionExport
 {
-    protected $objectives; // [array]
-    protected $subobjectives; // [array]
-    protected $goods; // [array]
-    protected $good_categories; // [array]
-    protected $targets; // [array]
-    protected $files; // [array]
-    protected $log; // [array]
+    /**
+     * @var array<int, array<string, mixed>>
+     */
+    protected array $objectives = [];
+    /**
+     * @var array<int, array<string, int>>
+     */
+    protected array $subobjectives = [];
+    /**
+     * @var int[]
+     */
+    protected array $goods;
+    /**
+     * @var string[]
+     */
+    protected array $good_categories;
+    /**
+     * @var string[]
+     */
+    protected array $files;
     
     /**
      * Build export data

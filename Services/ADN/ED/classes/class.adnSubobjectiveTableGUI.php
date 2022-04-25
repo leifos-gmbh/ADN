@@ -15,7 +15,7 @@ include_once("./Services/Table/classes/class.ilTable2GUI.php");
  */
 class adnSubobjectiveTableGUI extends ilTable2GUI
 {
-    protected $objective_id; // [int]
+    protected int $objective_id;
     
     /**
      * Constructor

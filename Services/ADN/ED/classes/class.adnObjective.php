@@ -11,27 +11,30 @@
  */
 class adnObjective extends adnDBBase
 {
-    protected $id; // [int]
-    protected $catalog_area_id; // [int]
-    protected $type; // [int]
-    protected $number; // [string]
-    protected $name; // [string]
-    protected $topic; // [string]
-    protected $sheet_subjected; // [bool]
+    protected int $id = 0;
+    protected int $catalog_area_id = 0;
+    protected int $type = 0;
+    /**
+     * @var string|int
+     */
+    protected $number;
+    protected string $name = '';
+    protected string $topic = '';
+    protected bool $sheet_subjected = false;
 
-    const TYPE_MC = 1;
-    const TYPE_CASE = 2;
+    public const TYPE_MC = 1;
+    public const TYPE_CASE = 2;
 
     /**
      * Constructor
      *
      * @param int $a_id instance id
      */
-    public function __construct($a_id = null)
+    public function __construct($a_id = 0)
     {
         global $ilCtrl;
 
-        if ($a_id) {
+        if ($a_id !== 0) {
             $this->setId($a_id);
             $this->read();
         }

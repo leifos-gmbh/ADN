@@ -11,31 +11,37 @@
  */
 class adnAnswerSheet extends adnDBBase
 {
-    protected $id; // [int]
-    protected $event_id; // [int]
-    protected $type; // [string]
-    protected $nr; // [int]
-    protected $butan; // [bool]
-    protected $license; // [int]
-    protected $previous_good; // [int]
-    protected $new_good; // [int]
-    protected $generated_on; // [ilDate]
-    protected $questions; // [array]
-    protected $question_map; // [array]
+    protected int $id = 0;
+    protected int $event_id = 0;
+    protected string $type = '';
+    protected int $nr = 0;
+    protected bool $butan = false;
+    protected int $license = 0;
+    protected int $previous_good = 0;
+    protected int $new_good = 0;
+    protected ?ilDate $generated_on = null;
+    /**
+     * @var int[]
+     */
+    protected array $questions = [];
+    /**
+     * @var int[]
+     */
+    protected array $question_map = [];
 
-    const TYPE_MC = 1;
-    const TYPE_CASE = 2;
+    public const TYPE_MC = 1;
+    public const TYPE_CASE = 2;
 
     /**
      * Constructor
      *
      * @param int $a_id instance id
      */
-    public function __construct($a_id = null)
+    public function __construct($a_id = 0)
     {
         global $ilCtrl;
 
-        if ($a_id) {
+        if ($a_id !== 0) {
             $this->setId($a_id);
             $this->read();
         }

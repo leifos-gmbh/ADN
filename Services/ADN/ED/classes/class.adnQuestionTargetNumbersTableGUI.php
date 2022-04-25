@@ -15,9 +15,9 @@ include_once("./Services/Table/classes/class.ilTable2GUI.php");
  */
 class adnQuestionTargetNumbersTableGUI extends ilTable2GUI
 {
-    protected $area_id; // [string]
-    protected $type; // [string]
-    protected $overall; // [int]
+    protected string $area_id;
+    protected string $type;
+    protected int $overall = 0;
 
     /**
      * Constructor

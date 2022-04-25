@@ -14,7 +14,7 @@
 class adnSubobjectiveGUI
 {
     // current subobjective object
-    protected $subobjective = null;
+    protected ?adnSubobjective $subobjective = null;
 
     /**
      * Constructor

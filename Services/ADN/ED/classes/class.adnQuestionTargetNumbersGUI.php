@@ -16,13 +16,13 @@
 class adnQuestionTargetNumbersGUI
 {
     // current area id
-    protected $area_id = null;
+    protected string $area_id = '';
 
     // current type
-    protected $type = null;
+    protected string $type = '';
 
     // current target object
-    protected $target = null;
+    protected ?adnQuestionTargetNumbers $target = null;
     
     /**
      * Constructor

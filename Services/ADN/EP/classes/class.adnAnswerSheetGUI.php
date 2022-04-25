@@ -18,7 +18,7 @@ include_once("./Services/ADN/ED/classes/class.adnExaminationQuestionGUI.php");
 class adnAnswerSheetGUI
 {
     // current sheet object
-    protected $sheet = null;
+    protected ?adnAnswerSheet $sheet = null;
     
     /**
      * Constructor

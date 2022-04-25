@@ -17,20 +17,16 @@ include_once("./Services/ADN/ED/classes/class.adnExaminationQuestionGUI.php");
  */
 class adnAnswerSheetQuestionTableGUI extends ilTable2GUI
 {
-    // [array] captions for foreign keys
-    protected $map;
+    protected adnAnswerSheet $sheet;
 
-    // [adnAnswerSheet] answer sheet
-    protected $sheet;
+    protected int $objective_id;
 
-    // [int] objective
-    protected $objective_id;
+    protected int $subobjective_id;
 
-    // [int] subobjective
-    protected $subobjective_id;
-
-    // [array] questions (objective is subjected)
-    protected $question_ids;
+    /**
+     * @var int[]
+     */
+    protected array $question_ids;
     
     /**
      * Constructor
@@ -48,7 +44,7 @@ class adnAnswerSheetQuestionTableGUI extends ilTable2GUI
         adnAnswerSheet $a_sheet,
         $a_obj_id,
         $a_sobj_id,
-        array $a_question_ids = null
+        array $a_question_ids = []
     )
     {
         global $ilCtrl, $lng;

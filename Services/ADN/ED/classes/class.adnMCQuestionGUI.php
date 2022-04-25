@@ -16,7 +16,7 @@ include_once("./Services/ADN/ED/classes/class.adnExaminationQuestionGUI.php");
 class adnMCQuestionGUI extends adnExaminationQuestionGUI
 {
     // current mc question object
-    protected $question = null;
+    protected ?adnMCQuestion $question = null;
 
     /**
      * Constructor

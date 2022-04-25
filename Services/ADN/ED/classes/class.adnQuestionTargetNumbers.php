@@ -11,26 +11,29 @@
  */
 class adnQuestionTargetNumbers extends adnDBBase
 {
-    protected $id; // [int]
-    protected $area_id; // [string]
-    protected $type; // [int]
-    protected $number; // [int]
-    protected $single; // [bool]
-    protected $objectives; // [array]
+    protected int $id = 0;
+    protected string $area_id = '';
+    protected int $type = 0;
+    protected int $number = 0;
+    protected bool $single = false;
+    /**
+     * @var array<string, array<int, array<string, mixed>>>
+     */
+    protected array $objectives = [];
 
-    const TYPE_MC = 1;
-    const TYPE_CASE = 2;
+    protected const TYPE_MC = 1;
+    public const TYPE_CASE = 2;
 
     /**
      * Constructor
      *
      * @param int $a_id instance id
      */
-    public function __construct($a_id = null)
+    public function __construct($a_id = 0)
     {
         global $ilCtrl;
 
-        if ($a_id) {
+        if ($a_id !== 0) {
             $this->setId($a_id);
             $this->read();
         }
