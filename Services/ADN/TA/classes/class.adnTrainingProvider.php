@@ -11,23 +11,24 @@
  */
 class adnTrainingProvider extends adnDBBase
 {
-    protected $id; // [int]
-    protected $name; // [string]
-    protected $contact; // [string]
-    protected $street; // [string]
-    protected $street_no; // [string]
-    protected $po_box; // [string]
-    protected $zip; // [string]
-    protected $city; // [string]
-    protected $alt_street; // [string]
-    protected $alt_street_no; // [string]
-    protected $alt_po_box; // [string]
-    protected $alt_zip; // [string]
-    protected $alt_city; // [string]
-    protected $phone; // [string]
-    protected $fax; // [string]
-    protected $email; // [string]
-    protected $training_types; // [array]
+    protected int $id = 0;
+    protected string $name = '';
+    protected string $contact = '';
+    protected string $street = '';
+    protected string $po_box = '';
+    protected string $zip = '';
+    protected string $city = '';
+    protected string $alt_street = '';
+    protected string $alt_po_box = '';
+    protected string $alt_zip = '';
+    protected string $alt_city = '';
+    protected string $phone = '';
+    protected string $fax = '';
+    protected string $email = '';
+    /**
+     * @var array<string, ilDate>
+     */
+    protected array $training_types = [];
 
     /**
      * Constructor

@@ -16,7 +16,7 @@
 class adnAreaOfExpertiseGUI
 {
     // current area object
-    protected $area = null;
+    protected ?adnAreaOfExpertise $area = null;
     
     /**
      * Constructor

@@ -15,11 +15,9 @@
  */
 class adnTrainingFacilityGUI
 {
-    // current provider id
-    protected $provider_id = null;
-    
-    // current facility object
-    protected $facility = null;
+    protected int $provider_id = 0;
+
+    protected ?adnTrainingFacility $facility = null;
     
     /**
      * Constructor

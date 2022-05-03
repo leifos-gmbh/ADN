@@ -13,12 +13,18 @@
  */
 class adnInstructor extends adnDBBase
 {
-    protected $id; // [int]
-    protected $provider_id; // [int]
-    protected $last_name; // [string]
-    protected $first_name; // [string]
-    protected $training_types; // [array]
-    protected $expertise; // [array]
+    protected int $id = 0;
+    protected int $provider_id = 0;
+    protected string $last_name = '';
+    protected string $first_name = '';
+    /**
+     * @var string[]
+     */
+    protected array $training_types = [];
+    /**
+     * @var int[]
+     */
+    protected array $expertise = [];
 
     /**
      * Constructor

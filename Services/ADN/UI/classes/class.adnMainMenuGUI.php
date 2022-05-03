@@ -14,76 +14,76 @@
 class adnMainMenuGUI
 {
     // training administration
-    const TA = "ta";
-    const TA_TPS = "ta_tps";	// training providers
-    const TA_TES = "ta_tes";	// training events
-    const TA_ILS = "ta_ils";	// information letters
-    const TA_AES = "ta_aes";	// expertise
+    public const TA = "ta";
+    public const TA_TPS = "ta_tps";	// training providers
+    public const TA_TES = "ta_tes";	// training events
+    public const TA_ILS = "ta_ils";	// information letters
+    public const TA_AES = "ta_aes";	// expertise
 
     // examination definition
-    const ED = "ed";
-    const ED_OBS = "ed_obs";	// objectives
-    const ED_EQS = "ed_eqs";	// questions
-    const ED_NQS = "ed_nqs";	// target number of questions
-    const ED_CAS = "ed_cas";	// case
-    const ED_LIC = "ed_lic";	// license
-    const ED_GTS = "ed_gts";	// goods
+    public const ED = "ed";
+    public const ED_OBS = "ed_obs";	// objectives
+    public const ED_EQS = "ed_eqs";	// questions
+    public const ED_NQS = "ed_nqs";	// target number of questions
+    public const ED_CAS = "ed_cas";	// case
+    public const ED_LIC = "ed_lic";	// license
+    public const ED_GTS = "ed_gts";	// goods
 
     // exam preparation
-    const EP = "ep";
-    const EP_ILS = "ep_ils";	// information letters
-    const EP_EES = "ep_ees";	// examination events
-    const EP_ECS = "ep_ecs";	// candidates
-    const EP_CES = "ep_ces";	// candidates/events
-    const EP_INS = "ep_ins";	// invitations
-    const EP_ASS = "ep_ass";	// answer sheets
-    const EP_ACS = "ep_acs";	// access codes (online)
-    const EP_ALS = "ep_als";	// attendance
+    public const EP = "ep";
+    public const EP_ILS = "ep_ils";	// information letters
+    public const EP_EES = "ep_ees";	// examination events
+    public const EP_ECS = "ep_ecs";	// candidates
+    public const EP_CES = "ep_ces";	// candidates/events
+    public const EP_INS = "ep_ins";	// invitations
+    public const EP_ASS = "ep_ass";	// answer sheets
+    public const EP_ACS = "ep_acs";	// access codes (online)
+    public const EP_ALS = "ep_als";	// attendance
 
     // examination scoring
-    const ES = "es";
-    const ES_SCS = "es_scs";	// scoring
-    const ES_CTS = "es_cts";	// certificates
-    const ES_SNS = "es_sns";	// notification
-    const ES_OAS = "es_oas";	// online answer sheets
+    public const ES = "es";
+    public const ES_SCS = "es_scs";	// scoring
+    public const ES_CTS = "es_cts";	// certificates
+    public const ES_SNS = "es_sns";	// notification
+    public const ES_OAS = "es_oas";	// online answer sheets
     
     // certified professionals
-    const CP = "cp";
-    const CP_CTS = "cp_cts";	// certificates
-    const CP_DIR = "cp_dir";	// directory
-    const CP_CPR = "cp_cpr";	// professionals
+    public const CP = "cp";
+    public const CP_CTS = "cp_cts";	// certificates
+    public const CP_DIR = "cp_dir";	// directory
+    public const CP_CPR = "cp_cpr";	// professionals
 
     // statistics
-    const ST = "st";
-    const ST_EXS = "st_exs";	// exams
-    const ST_ERS = "st_ers";	// extensions, refreshed
-    const ST_EES = "st_ees";	// extensions, experience
-    const ST_COS = "st_cos";	// certificates, other applications
-    const ST_TNS = "st_tns";	// certificates, total
-    const ST_TGC = "st_tgc";	// certificates, gas/chemicals
+    public const ST = "st";
+    public const ST_EXS = "st_exs";	// exams
+    public const ST_ERS = "st_ers";	// extensions, refreshed
+    public const ST_EES = "st_ees";	// extensions, experience
+    public const ST_COS = "st_cos";	// certificates, other applications
+    public const ST_TNS = "st_tns";	// certificates, total
+    public const ST_TGC = "st_tgc";	// certificates, gas/chemicals
 
     // master data
-    const MD = "md";
-    const MD_WOS = "md_wos";	// wmos
-    const MD_CNS = "md_cns";	// countries
+    public const MD = "md";
+    public const MD_WOS = "md_wos";	// wmos
+    public const MD_CNS = "md_cns";	// countries
 
     // administration
-    const AD = "ad";
-    const AD_MNT = "ad_mnt";	// maintenance mode
-    const AD_CHR = "ad_chr";	// special characters
-    const AD_USR = "ad_usr";	// user
-    const AD_MCX = "ad_mcx";	// export mc questions
-    const AD_ICP = "ad_icp";	// import professionals
+    public const AD = "ad";
+    public const AD_MNT = "ad_mnt";	// maintenance mode
+    public const AD_CHR = "ad_chr";	// special characters
+    public const AD_USR = "ad_usr";	// user
+    public const AD_MCX = "ad_mcx";	// export mc questions
+    public const AD_ICP = "ad_icp";	// import professionals
 
     // cr-008 start
-    const CP_PDM = "cp_pdm";	// maintenance personal data
+    public const CP_PDM = "cp_pdm";	// maintenance personal data
     // cr-008 end
 
 
-    /**
-     * @var ilTemplate
-     */
-    protected $tpl;
+
+    protected ilGlobalTemplate $tpl;
+
+    protected ?ilMainMenuGUI $mm_gui = null;
 
     /**
      * Constructor

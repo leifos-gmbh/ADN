@@ -17,10 +17,14 @@ include_once("./Services/ADN/EC/classes/class.adnTest.php");
  */
 class adnOnlineAnswersTableGUI extends ilTable2GUI
 {
-    protected $cp_id; // [int]
-    protected $event_id; // [int]
-    protected $questions; // [array]
-    protected $sheet; // [object] current mc sheet
+    protected int $cand_sheet_id = 0;
+    protected int $cp_id = 0;
+    protected int $event_id = 0;
+    /**
+     * @var array<string, int>
+     */
+    protected array $questions = [];
+    protected ?adnAnswerSheet $sheet = null;
 
     /**
      * Constructor

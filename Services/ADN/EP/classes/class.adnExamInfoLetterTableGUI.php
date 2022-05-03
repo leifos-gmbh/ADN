@@ -25,7 +25,6 @@ class adnExamInfoLetterTableGUI extends ilTable2GUI
     {
         global $ilCtrl, $lng;
 
-        $this->type = $a_type;
 
         parent::__construct($a_parent_obj, $a_parent_cmd);
         

@@ -13,11 +13,15 @@ include_once("./Services/Table/classes/class.ilTable2GUI.php");
  */
 class adnStatisticsExamsTableGUI extends ilTable2GUI
 {
-    // [array] captions for foreign keys
-    protected $map;
+    /**
+     * @var array<string, array<int, string>>
+     */
+    protected array $map;
 
-    // [array] current filter
-    protected $filter;
+    /**
+     * @var array<string, mixed>
+     */
+    protected array $filter;
     
     /**
      * Constructor

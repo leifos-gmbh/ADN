@@ -15,7 +15,7 @@ include_once("./Services/Table/classes/class.ilTable2GUI.php");
  */
 class adnInstructorTableGUI extends ilTable2GUI
 {
-    protected $provider_id; // [int]
+    protected int $provider_id = 0;
     
     /**
      * Constructor

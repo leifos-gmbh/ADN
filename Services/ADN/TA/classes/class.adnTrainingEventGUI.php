@@ -13,17 +13,13 @@
  */
 class adnTrainingEventGUI
 {
-    // current provider id
-    protected $provider_id = null;
+    protected int $provider_id = 0;
 
-    // current training event object
-    protected $training_event = null;
+    protected ?adnTrainingEvent $training_event = null;
 
-    // current context
-    protected $not_overview = null;
+    protected bool $not_overview = false;
 
-    // archived mode
-    protected $archived = false;
+    protected bool $archived = false;
     
     /**
      * Constructor

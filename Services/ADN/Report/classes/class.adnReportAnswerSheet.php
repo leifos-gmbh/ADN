@@ -18,19 +18,22 @@ include_once './Services/ADN/MD/classes/class.adnWMO.php';
 
 class adnReportAnswerSheet extends adnReport
 {
-    const TYPE_DRY = 1;
-    const TYPE_TANK = 2;
-    const TYPE_COMB = 3;
-    const TYPE_GAS = 4;
-    const TYPE_CHEM = 5;
+    protected const TYPE_DRY = 1;
+    protected const TYPE_TANK = 2;
+    protected const TYPE_COMB = 3;
+    protected const TYPE_GAS = 4;
+    protected const TYPE_CHEM = 5;
     
-    private $event = null;
-    private $wmo = null;
-    private $type = null;
-    
-    private $candidates = array();
+    private adnExaminationEvent $event;
+    private adnWMO $wmo;
+    private string $type = '';
 
-    private $has_case_part = false;
+    /**
+     * @var int[]
+     */
+    private array $candidates = [];
+
+    private bool $has_case_part;
 
     /**
      * Contructor

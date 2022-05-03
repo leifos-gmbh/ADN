@@ -16,10 +16,10 @@
 class adnExamFacilityGUI
 {
     // current wmo id
-    protected $wmo_id = null;
+    protected int $wmo_id = 0;
 
     // current facility object
-    protected $facility = null;
+    protected ?adnExamFacility $facility = null;
     
     /**
      * Constructor

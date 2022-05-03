@@ -16,8 +16,7 @@
  */
 class adnTrainingProviderGUI
 {
-    // current training provider object
-    protected $training_provider = null;
+    protected ?adnTrainingProvider $training_provider = null;
     
     /**
      * Constructor

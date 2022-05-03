@@ -11,26 +11,26 @@
  */
 class adnExaminationEvent extends adnDBBase
 {
-    protected $id; // [int]
-    protected $type; // [string]
-    protected $date_from; // [ilDateTime]
-    protected $date_to; // [ilDateTime]
-    protected $facility; // [int]
-    protected $chairman; // [int]
-    protected $co_chair1; // [int]
-    protected $co_chair2; // [int]
-    protected $costs; // [float]
+    protected int $id;
+    protected string $type = '';
+    protected ?ilDateTime $date_from = null;
+    protected ?ilDateTime $date_to = null;
+    protected int $facility = 0;
+    protected int $chairman = 0;
+    protected int $co_chair1 = 0;
+    protected int $co_chair2 = 0;
+    protected float $costs = 0;
 
     /**
      * Constructor
      *
      * @param int $a_id instance id
      */
-    public function __construct($a_id = null)
+    public function __construct($a_id = 0)
     {
         global $ilCtrl;
 
-        if ($a_id) {
+        if ($a_id !== 0) {
             $this->setId($a_id);
             $this->read();
         }

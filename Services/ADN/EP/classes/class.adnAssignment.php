@@ -13,19 +13,19 @@ include_once("./Services/ADN/Base/classes/class.adnDBBase.php");
  */
 class adnAssignment extends adnDBBase
 {
-    protected $id; // [int]
-    protected $user_id; // [int]
-    protected $event_id; // [int]
-    protected $invited_on; // [ilDate]
-    protected $scoring_update; // [ilDate]
-    protected $scoring_update_user; // [int]
+    protected int $id;
+    protected int $user_id;
+    protected int $event_id;
+    protected ?ilDate $invited_on = null;
+    protected ?ilDate $scoring_update = null;
+    protected int $scoring_update_user = 0;
 
-    const SCORE_NOT_SCORED = 0;
-    const SCORE_FAILED = 1;
-    const SCORE_PASSED = 2;
-    const SCORE_FAILED_SUM = 3;
+    public const SCORE_NOT_SCORED = 0;
+    public const SCORE_FAILED = 1;
+    public const SCORE_PASSED = 2;
+    public const SCORE_FAILED_SUM = 3;
 
-    const TOTAL_SCORE_REQUIRED = 44;
+    public const TOTAL_SCORE_REQUIRED = 44;
 
     /**
      * Constructor
@@ -34,16 +34,16 @@ class adnAssignment extends adnDBBase
      * @param int $a_user_id
      * @param int $a_event_id
      */
-    public function __construct($a_id = null, $a_user_id = null, $a_event_id = null)
+    public function __construct($a_id = 0, $a_user_id = 0, $a_event_id = 0)
     {
         global $ilCtrl;
 
-        if (!$a_id && $a_user_id && $a_event_id) {
+        if ($a_id === 0 && $a_user_id !== 0 && $a_event_id !== 0) {
             $this->setUser($a_user_id);
             $this->setEvent($a_event_id);
             $a_id = $this->find($a_user_id, $a_event_id);
         }
-        if ($a_id) {
+        if ($a_id !== 0) {
             $this->setId($a_id);
             $this->read();
         }

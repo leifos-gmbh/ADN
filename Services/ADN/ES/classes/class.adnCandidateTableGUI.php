@@ -15,9 +15,10 @@ include_once("./Services/Table/classes/class.ilTable2GUI.php");
  */
 class adnCandidateTableGUI extends ilTable2GUI
 {
-    protected $event_id; // [int] id of examination event
-    protected $notification_mode; // [bool]
-    protected $has_case_part; // [bool]
+    protected adnExaminationEvent $event;
+    protected int $event_id;
+    protected bool $notification_mode;
+    protected bool $has_case_part = false;
 
     /**
      * Constructor

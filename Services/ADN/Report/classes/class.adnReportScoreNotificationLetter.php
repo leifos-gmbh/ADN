@@ -17,22 +17,26 @@ include_once './Services/ADN/MD/classes/class.adnWMO.php';
 
 class adnReportScoreNotificationLetter extends adnReport
 {
-    const TYPE_DM = 1;
-    const TYPE_GAS = 2;
-    const TYPE_CHEM = 3;
+    protected const TYPE_DM = 1;
+    protected const TYPE_GAS = 2;
+    protected const TYPE_CHEM = 3;
     
-    const SUCCESS = 1;
-    const FAILED = 2;
-    const NOT_SCORED = 3;
-    const FAILED_LIMIT = 4;
-    const FAILED_BOTH = 5;
-    const FAILED_MC = 6;
-    const FAILED_CASE = 7;
+    protected const SUCCESS = 1;
+    protected const FAILED = 2;
+    protected const NOT_SCORED = 3;
+    protected const FAILED_LIMIT = 4;
+    protected const FAILED_BOTH = 5;
+    protected const FAILED_MC = 6;
+    protected const FAILED_CASE = 7;
     
-    private $event = null;
-    private $type = null;
-    
-    private $assignments = array();
+    private adnExaminationEvent $event;
+    private int $type = 0;
+    private adnWMO $wmo;
+
+    /**
+     * @var int[]
+     */
+    private array $assignments = [];
 
     /**
      * Contructor

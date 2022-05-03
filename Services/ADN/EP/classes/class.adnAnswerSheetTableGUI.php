@@ -15,14 +15,14 @@ include_once("./Services/Table/classes/class.ilTable2GUI.php");
  */
 class adnAnswerSheetTableGUI extends ilTable2GUI
 {
-    // [array] captions for foreign keys
-    protected $map;
+    /**
+     * @var array<string, mixed>
+     */
+    protected array $map = [];
 
-    // [int] examination event
-    protected $event_id;
+    protected int $event_id;
 
-    // [bool]
-    protected $archived;
+    protected bool $archived;
     
     /**
      * Constructor

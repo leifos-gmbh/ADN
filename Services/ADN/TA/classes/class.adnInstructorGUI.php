@@ -15,11 +15,9 @@
  */
 class adnInstructorGUI
 {
-    // current provider id
-    protected $provider_id = null;
-    
-    // current instructor object
-    protected $instructor = null;
+    protected int $provider_id = 0;
+
+    protected ?adnInstructor $instructor = null;
     
     /**
      * Constructor

@@ -13,16 +13,16 @@
  */
 class adnTypesOfTraining
 {
-    const DRY_MATERIAL = "dm";
-    const TANK = "tank";
-    const COMBINED = "comb";
-    const GAS = "gas";
-    const CHEMICAL = "chem";
-    const REP_DRY_MATERIAL = "rep_dm";
-    const REP_TANK = "rep_tank";
-    const REP_COMBINED = "rep_comb";
-    const REP_GAS = "rep_gas";
-    const REP_CHEMICAL = "rep_chem";
+    protected const DRY_MATERIAL = "dm";
+    protected const TANK = "tank";
+    protected const COMBINED = "comb";
+    protected const GAS = "gas";
+    protected const CHEMICAL = "chem";
+    protected const REP_DRY_MATERIAL = "rep_dm";
+    protected const REP_TANK = "rep_tank";
+    protected const REP_COMBINED = "rep_comb";
+    protected const REP_GAS = "rep_gas";
+    protected const REP_CHEMICAL = "rep_chem";
 
     /**
      * Get all types

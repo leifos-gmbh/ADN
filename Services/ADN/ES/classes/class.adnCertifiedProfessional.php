@@ -13,45 +13,45 @@
  */
 class adnCertifiedProfessional extends adnDBBase
 {
-    protected $id; // [int]
-    protected $salutation; // [string]
-    protected $last_name; // [string]
-    protected $first_name; // [string]
-    protected $birthdate; // [ilDate]
-    protected $citizenship; // [int]
-    protected $postal_country; // [int]
-    protected $postal_code; // [string]
-    protected $postal_city; // [string]
-    protected $postal_street; // [string]
-    protected $postal_street_no; // [string]
-    protected $shipping_salutation; // [string]
-    protected $shipping_last_name; // [string]
-    protected $shipping_first_name; // [string]
-    protected $shipping_country; // [int]
-    protected $shipping_code; // [string]
-    protected $shipping_city; // [string]
-    protected $shipping_street; // [string]
-    protected $shipping_street_no; // [string]
-    protected $shipping_active; // [bool]
-    protected $phone; // [string]
-    protected $email; // [string]
-    protected $comment; // [string]
-    protected $subject_area; // [string]
-    protected $registered_exam; // [bool]
-    protected $foreign_certificate; // [bool]	// Basisbescheinigung aus dem Auslang
-    protected $registered_by; // [int]
-    protected $blocked_until; // [ilDate]
-    protected $ilias_user_id; // [int]
-    protected $foreign_cert_handed_in; // [bool]	// Bescheinigung aus dem Ausland vorgelegt #13
+    protected int $id = 0;
+    protected string $salutation = '';
+    protected string $last_name = '';
+    protected string $first_name = '';
+    protected ?ilDate $birthdate = null;
+    protected int $citizenship = 0;
+    protected int $postal_country = 0;
+    protected string $postal_code = '';
+    protected string $postal_city = '';
+    protected string $postal_street = '';
+    protected string $postal_street_no = '';
+    protected string $shipping_salutation = '';
+    protected string $shipping_last_name = '';
+    protected string $shipping_first_name = '';
+    protected int $shipping_country = 0;
+    protected string $shipping_code = '';
+    protected string $shipping_city = '';
+    protected string $shipping_street = '';
+    protected string $shipping_street_no = '';
+    protected bool $shipping_active = false;
+    protected string $phone = '';
+    protected string $email = '';
+    protected string $comment = '';
+    protected string $subject_area = '';
+    protected bool $registered_exam = false;
+    protected bool $foreign_certificate = false; // Basisbescheinigung aus dem Auslang
+    protected int $registered_by = 0;
+    protected ?ilDate $blocked_until = null;
+    protected int $ilias_user_id = 0;
+    protected bool $foreign_cert_handed_in = false; // Bescheinigung aus dem Ausland vorgelegt #13
 
     /**
      * Constructor
      */
-    public function __construct($a_id = null)
+    public function __construct($a_id = 0)
     {
         global $ilCtrl;
 
-        if ($a_id) {
+        if ($a_id !== 0) {
             $this->setId($a_id);
             $this->read();
         }
@@ -177,7 +177,7 @@ class adnCertifiedProfessional extends adnDBBase
     public function setCitizenship($a_value)
     {
         if (!(int) $a_value) {
-            $this->citizenship = null;
+            $this->citizenship = 0;
         } else {
             $this->citizenship = (int) $a_value;
         }
@@ -201,7 +201,7 @@ class adnCertifiedProfessional extends adnDBBase
     public function setPostalCountry($a_value)
     {
         if (!(int) $a_value) {
-            $this->postal_country = null;
+            $this->postal_country = 0;
         } else {
             $this->postal_country = (int) $a_value;
         }

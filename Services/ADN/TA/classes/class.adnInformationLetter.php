@@ -11,8 +11,8 @@
  */
 class adnInformationLetter extends adnDBBase
 {
-    protected $id; // [int]
-    protected $name; // [string]
+    protected int $id = 0;
+    protected string $name = '';
 
     /**
      * Constructor

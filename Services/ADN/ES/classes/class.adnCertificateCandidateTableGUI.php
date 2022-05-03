@@ -14,8 +14,11 @@ include_once("./Services/Table/classes/class.ilTable2GUI.php");
  */
 class adnCertificateCandidateTableGUI extends ilTable2GUI
 {
-    protected $event_id; // [int] id of examination event
-    protected $map; // [array] captions for foreign keys
+    protected int $event_id;
+    /**
+     * @var array<string, mixed>
+     */
+    protected array $map = [];
 
     /**
      * Constructor

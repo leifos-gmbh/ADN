@@ -13,46 +13,49 @@
  */
 class adnWMO extends adnDBBase
 {
-    protected $id; // [int]
-    protected $name; // [string]
-    protected $subtitle; // [string]
-    protected $code; // [string]
-    protected $postal_street; // [string]
-    protected $postal_street_no; // [int]
-    protected $postal_zip; // [string]
-    protected $postal_city; // [string]
-    protected $visitor_street; // [string]
-    protected $visitor_street_no; // [string]
-    protected $visitor_zip; // [string]
-    protected $visitor_city; // [string]
-    protected $bank_institution; // [string]
-    protected $bank_code; // [string]
-    protected $bank_account; // [string]
-    protected $bank_iban; // [string]
-    protected $bank_bic; // [string]
-    protected $phone; // [string]
-    protected $fax; // [string]
-    protected $email; // [string]
-    protected $notification_email; // [string]
-    protected $url; // [string]
-    protected $cost; // [array]
+    protected int $id = 0;
+    protected string $name = '';
+    protected string $subtitle = '';
+    protected string $code = '';
+    protected string $postal_street = '';
+    protected int $postal_street_no = 0;
+    protected string $postal_zip = '';
+    protected string $postal_city = '';
+    protected string $visitor_street = '';
+    protected string $visitor_street_no = '';
+    protected string $visitor_zip = '';
+    protected string $visitor_city = '';
+    protected string $bank_institution = '';
+    protected string $bank_code = '';
+    protected string $bank_account = '';
+    protected string $bank_iban = '';
+    protected string $bank_bic = '';
+    protected string $phone = '';
+    protected string $fax = '';
+    protected string $email = '';
+    protected string $notification_email = '';
+    protected string $url = '';
+    /**
+     * @var array<string, mixed>
+     */
+    protected array $cost = [];
 
-    const COST_CERTIFICATE = 1;
-    const COST_DUPLICATE = 2;
-    const COST_EXTENSION = 3;
-    const COST_EXAM = 4;
-    const COST_EXAM_GAS_CHEM = 5;
+    public const COST_CERTIFICATE = 1;
+    public const COST_DUPLICATE = 2;
+    public const COST_EXTENSION = 3;
+    public const COST_EXAM = 4;
+    public const COST_EXAM_GAS_CHEM = 5;
 
     /**
      * Constructor
      *
      * @param int $a_id instance id
      */
-    public function __construct($a_id = null)
+    public function __construct($a_id = 0)
     {
         global $ilCtrl;
 
-        if ($a_id) {
+        if ($a_id !== 0) {
             $this->setId($a_id);
             $this->read();
         }

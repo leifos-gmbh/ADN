@@ -19,19 +19,23 @@ include_once './Services/ADN/Report/classes/class.adnReport.php';
 
 class adnReportStatistics extends adnReport
 {
-    const TYPE_EXAM = 1;
-    const TYPE_EXTENSION_EXP = 2;
-    const TYPE_EXTENSION_REF = 3;
-    const TYPE_CERTIFICATES_OTHER = 4;
-    const TYPE_CERTIFICATES_GC = 5;
-    const TYPE_CERTIFICATES_SUM = 6;
-    
-    private $data = array();
-    
-    private $from = null;
-    private $until = null;
+    public const TYPE_EXAM = 1;
+    public const TYPE_EXTENSION_EXP = 2;
+    public const TYPE_EXTENSION_REF = 3;
+    public const TYPE_CERTIFICATES_OTHER = 4;
+    public const TYPE_CERTIFICATES_GC = 5;
+    public const TYPE_CERTIFICATES_SUM = 6;
 
-    private $wmo = 0;
+    /**
+     * @var array<string, mixed>
+     */
+    private array $data = [];
+    private string $type = '';
+    
+    private ?ilDateTime $from = null;
+    private ?ilDateTime $until = null;
+
+    private int $wmo = 0;
 
     /**
      * Contructor

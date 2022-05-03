@@ -13,21 +13,20 @@
  */
 class adnTrainingEvent extends adnDBBase
 {
-    protected $id; // [int]
-    protected $provider_id; // [int]
-    protected $type; // [string]
-    protected $date_from; // [ilDate]
-    protected $date_to; // [ilDate]
-    protected $facility_id; // [int]
+    protected int $id = 0;
+    protected int $provider_id = 0;
+    protected string $type = '';
+    protected ?ilDate $date_from = null;
+    protected ?ilDate $date_to = null;
 
     /**
      * Constructor
      *
      * @param int $a_id instance id
      */
-    public function __construct($a_id = null)
+    public function __construct($a_id = 0)
     {
-        if ($a_id) {
+        if ($a_id !== 0) {
             $this->setId($a_id);
             $this->read();
         }

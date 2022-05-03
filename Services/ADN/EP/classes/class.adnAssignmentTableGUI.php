@@ -16,27 +16,26 @@ include_once("./Services/Table/classes/class.ilTable2GUI.php");
  */
 class adnAssignmentTableGUI extends ilTable2GUI
 {
-    // [adnExaminationEvent] examination event
-    protected $event;
+    protected ?adnExaminationEvent $event = null;
 
-    // [array] captions for foreign keys
-    protected $map;
+    /**
+     * @var array<string, mixed>
+     */
+    protected array $map = [];
 
-    // [bool] certificate column active?
-    protected $has_certificate;
-    
-    // [int] view mode
-    protected $mode;
+    protected bool $has_certificate = false;
 
-    // [bool] current or past event
-    protected $archived;
+    protected int $mode;
 
-    // [array] displayed candidate ids
-    protected $all_candidate_ids = array();
+    protected bool $archived;
+    /**
+     * @var int[]
+     */
+    protected array $all_candidate_ids = [];
 
 
-    const MODE_ASSIGNMENT = 1;
-    const MODE_INVITATION = 2;
+    public const MODE_ASSIGNMENT = 1;
+    public const MODE_INVITATION = 2;
 
     /**
      * Constructor

@@ -15,17 +15,20 @@ include_once './Services/ADN/Report/classes/class.adnReport.php';
 
 class adnReportAttendanceList extends adnReport
 {
-    const TYPE_DM = 1;
-    const TYPE_GAS = 2;
-    const TYPE_CHEM = 3;
+    protected const TYPE_DM = 1;
+    protected const TYPE_GAS = 2;
+    protected const TYPE_CHEM = 3;
     
-    const LIMIT_ENTRIES = 12;
+    protected const LIMIT_ENTRIES = 12;
     
-    private $event = null;
-    private $wmo = null;
-    private $type = null;
-    
-    private $candidates = array();
+    private ?adnExaminationEvent $event = null;
+    private ?adnWMO $wmo = null;
+    private string $type = '';
+
+    /**
+     * @var int[]
+     */
+    private $candidates = [];
 
     /**
      * Contructor

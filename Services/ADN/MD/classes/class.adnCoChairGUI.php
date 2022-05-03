@@ -16,10 +16,10 @@
 class adnCoChairGUI
 {
     // current wmo id
-    protected $wmo_id = null;
+    protected int $wmo_id;
 
     // current cochair object
-    protected $cochair = null;
+    protected ?adnCoChair $cochair = null;
     
     /**
      * Constructor

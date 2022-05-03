@@ -11,24 +11,25 @@
  */
 class adnExamFacility extends adnDBBase
 {
-    protected $id; // [int]
-    protected $wmo_id; // [int]
-    protected $company; // [string]
-    protected $street; // [string]
-    protected $street_no; // [string]
-    protected $zip; // [string]
-    protected $city; // [string]
+    protected int $id = 0;
+    protected int $wmo_id = 0;
+    protected string $company = '';
+    protected string $street = '';
+    protected string $street_no = '';
+    protected string $zip = '';
+    protected string $city = '';
+    protected string $name = '';
 
     /**
      * Constructor
      *
      * @param int $a_id instance id
      */
-    public function __construct($a_id = null)
+    public function __construct($a_id = 0)
     {
         global $ilCtrl;
 
-        if ($a_id) {
+        if ($a_id !== 0) {
             $this->setId($a_id);
             $this->read();
         }

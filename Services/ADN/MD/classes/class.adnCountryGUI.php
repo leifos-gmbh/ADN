@@ -16,7 +16,7 @@
 class adnCountryGUI
 {
     // current country object
-    protected $country = null;
+    protected ?adnCountry $country = null;
     
     /**
      * Constructor

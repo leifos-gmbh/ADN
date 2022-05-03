@@ -15,7 +15,7 @@
 class adnScoringGUI
 {
     // current certificate object
-    protected $scoring = null;
+    protected ?adnScoring $scoring = null;
     
     // current form object
     protected $form = null;

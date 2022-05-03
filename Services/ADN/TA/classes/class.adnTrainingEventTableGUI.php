@@ -17,11 +17,20 @@ include_once "Services/ADN/TA/classes/class.adnTrainingFacility.php";
  */
 class adnTrainingEventTableGUI extends ilTable2GUI
 {
-    protected $provider_id; // [int]
-    protected $current; // [bool]
-    protected $overview; // [bool]
-    protected $restrict_type; // [string]
-    
+    protected int $provider_id;
+    protected bool $current;
+    protected bool $overview;
+    protected bool $assignment;
+    protected string $restrict_type;
+    /**
+     * @var array<string, mixed>
+     */
+    protected array $filter = [];
+    /**
+     * @var array<string, string>
+     */
+    protected array $legend = [];
+
     /**
      * Constructor
      *
@@ -36,11 +45,11 @@ class adnTrainingEventTableGUI extends ilTable2GUI
     public function __construct(
         $a_parent_obj,
         $a_parent_cmd,
-        $a_provider_id = false,
+        $a_provider_id = 0,
         $a_current = true,
         $a_assignment = false,
         $a_overview = false,
-        $a_restrict_type = null
+        $a_restrict_type = ''
     )
     {
         global $ilCtrl, $lng;
@@ -51,7 +60,7 @@ class adnTrainingEventTableGUI extends ilTable2GUI
         $this->overview = (bool) $a_overview;
         $this->restrict_type = (string) $a_restrict_type;
         if ($this->assignment) {
-            $this->current = null;
+            $this->current = false;
         }
         
         $this->setId("adn_ta_te" . (int) $a_current . (int) $a_overview);

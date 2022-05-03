@@ -15,17 +15,23 @@ include_once("./Services/Table/classes/class.ilTable2GUI.php");
  */
 class adnPreparationCandidateTableGUI extends ilTable2GUI
 {
-    // [array] captions for foreign keys
-    protected $map;
+    /**
+     * @var array<string, mixed>
+     */
+    protected array $map = [];
 
-    // [array] current filter
-    protected $filter;
+    /**
+     * @var array<string, mixed>
+     */
+    protected array $filter;
+    /**
+     * @var array<string, string>
+     */
+    protected array $filter_options;
 
-    // [bool] show professionals
-    protected $show_professionals;
+    protected bool $show_professionals;
 
-    // [bool] show prospects
-    protected $show_prospects;
+    protected bool $show_prospects;
 
     /**
      * Constructor

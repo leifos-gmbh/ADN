@@ -15,15 +15,13 @@ include_once './Services/ADN/Report/classes/class.adnReport.php';
  */
 class adnReportInvoice extends adnReport
 {
-    private $cert = null;
-    private $type = null;
-    
-    private $pro = null;
-    private $wmo = null;
+    private adnCertificate $cert;
+    private adnCertifiedProfessional $pro;
+    private adnWMO $wmo;
 
-    private $invoice_type = null;
-    private $code = null;
-    private $due = null;
+    private string $invoice_type = '';
+    private string $code = '';
+    private ?ilDate $due = null;
     
 
     /**

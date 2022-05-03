@@ -23,8 +23,7 @@ class adnCertificateScoringGUI
         
         // save certificate ID through requests cr-008 added cd_id
         $ilCtrl->saveParameter($this, array("ct_id", "ev_id", "ass_id", "cd_id"));
-        
-        // $this->readCertificate();
+
     }
     
     /**
@@ -73,17 +72,7 @@ class adnCertificateScoringGUI
                 break;
         }
     }
-    
-    /**
-     * Read certificate
-     */
-    protected function readCertificate()
-    {
-        if ((int) $_GET["ct_id"] > 0) {
-            include_once("./Services/ADN/CP/classes/class.adnCertificate.php");
-            $this->scoring = new adnCertificate((int) $_GET["ct_id"]);
-        }
-    }
+
     
     /**
      * List all examination events

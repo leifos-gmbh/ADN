@@ -16,7 +16,7 @@
 class adnExamInfoLetterGUI
 {
     // current letter object
-    protected $letter = null;
+    protected ?adnExamInfoLetter $letter = null;
     
     /**
      * Constructor

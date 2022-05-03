@@ -15,11 +15,9 @@
  */
 class adnExaminationEventGUI
 {
-    // [adnExaminationEvent] current event object
-    protected $event = null;
+    protected ?adnExaminationEvent $event = null;
 
-    // [bool] current or past events
-    protected $archived = null;
+    protected bool $archived = false;
 
     /**
      * Constructor

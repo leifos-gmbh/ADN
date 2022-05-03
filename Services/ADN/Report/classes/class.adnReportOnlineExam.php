@@ -14,8 +14,8 @@ include_once './Services/ADN/Report/classes/class.adnReport.php';
 
 class adnReportOnlineExam extends adnReport
 {
-    private $event_id = 0;
-    private $event = null;
+    private int $event_id;
+    private ?adnExaminationEvent $event = null;
 
     /**
      * Contructor

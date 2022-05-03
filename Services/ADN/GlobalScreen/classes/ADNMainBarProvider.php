@@ -11,69 +11,69 @@ use ilPDSelectedItemsBlockViewSettings;
 class ADNMainBarProvider extends AbstractStaticMainMenuProvider
 {
     // training administration
-    const TA = "ta";
-    const TA_TPS = "ta_tps";	// training providers
-    const TA_TES = "ta_tes";	// training events
-    const TA_ILS = "ta_ils";	// information letters
-    const TA_AES = "ta_aes";	// expertise
+    protected const TA = "ta";
+    protected const TA_TPS = "ta_tps";	// training providers
+    protected const TA_TES = "ta_tes";	// training events
+    protected const TA_ILS = "ta_ils";	// information letters
+    protected const TA_AES = "ta_aes";	// expertise
 
     // examination definition
-    const ED = "ed";
-    const ED_OBS = "ed_obs";	// objectives
-    const ED_EQS = "ed_eqs";	// questions
-    const ED_NQS = "ed_nqs";	// target number of questions
-    const ED_CAS = "ed_cas";	// case
-    const ED_LIC = "ed_lic";	// license
-    const ED_GTS = "ed_gts";	// goods
+    protected const ED = "ed";
+    protected const ED_OBS = "ed_obs";	// objectives
+    protected const ED_EQS = "ed_eqs";	// questions
+    protected const ED_NQS = "ed_nqs";	// target number of questions
+    protected const ED_CAS = "ed_cas";	// case
+    protected const ED_LIC = "ed_lic";	// license
+    protected const ED_GTS = "ed_gts";	// goods
 
     // exam preparation
-    const EP = "ep";
-    const EP_ILS = "ep_ils";	// information letters
-    const EP_EES = "ep_ees";	// examination events
-    const EP_ECS = "ep_ecs";	// candidates
-    const EP_CES = "ep_ces";	// candidates/events
-    const EP_INS = "ep_ins";	// invitations
-    const EP_ASS = "ep_ass";	// answer sheets
-    const EP_ACS = "ep_acs";	// access codes (online)
-    const EP_ALS = "ep_als";	// attendance
+    protected const EP = "ep";
+    protected const EP_ILS = "ep_ils";	// information letters
+    protected const EP_EES = "ep_ees";	// examination events
+    protected const EP_ECS = "ep_ecs";	// candidates
+    protected const EP_CES = "ep_ces";	// candidates/events
+    protected const EP_INS = "ep_ins";	// invitations
+    protected const EP_ASS = "ep_ass";	// answer sheets
+    protected const EP_ACS = "ep_acs";	// access codes (online)
+    protected const EP_ALS = "ep_als";	// attendance
 
     // examination scoring
-    const ES = "es";
-    const ES_SCS = "es_scs";	// scoring
-    const ES_CTS = "es_cts";	// certificates
-    const ES_SNS = "es_sns";	// notification
-    const ES_OAS = "es_oas";	// online answer sheets
+    protected const ES = "es";
+    protected const ES_SCS = "es_scs";	// scoring
+    protected const ES_CTS = "es_cts";	// certificates
+    protected const ES_SNS = "es_sns";	// notification
+    protected const ES_OAS = "es_oas";	// online answer sheets
 
     // certified professionals
-    const CP = "cp";
-    const CP_CTS = "cp_cts";	// certificates
-    const CP_DIR = "cp_dir";	// directory
-    const CP_CPR = "cp_cpr";	// professionals
+    protected const CP = "cp";
+    protected const CP_CTS = "cp_cts";	// certificates
+    protected const CP_DIR = "cp_dir";	// directory
+    protected const CP_CPR = "cp_cpr";	// professionals
 
     // statistics
-    const ST = "st";
-    const ST_EXS = "st_exs";	// exams
-    const ST_ERS = "st_ers";	// extensions, refreshed
-    const ST_EES = "st_ees";	// extensions, experience
-    const ST_COS = "st_cos";	// certificates, other applications
-    const ST_TNS = "st_tns";	// certificates, total
-    const ST_TGC = "st_tgc";	// certificates, gas/chemicals
+    protected const ST = "st";
+    protected const ST_EXS = "st_exs";	// exams
+    protected const ST_ERS = "st_ers";	// extensions, refreshed
+    protected const ST_EES = "st_ees";	// extensions, experience
+    protected const ST_COS = "st_cos";	// certificates, other applications
+    protected const ST_TNS = "st_tns";	// certificates, total
+    protected const ST_TGC = "st_tgc";	// certificates, gas/chemicals
 
     // master data
-    const MD = "md";
-    const MD_WOS = "md_wos";	// wmos
-    const MD_CNS = "md_cns";	// countries
+    protected const MD = "md";
+    protected const MD_WOS = "md_wos";	// wmos
+    protected const MD_CNS = "md_cns";	// countries
 
     // administration
-    const AD = "ad";
-    const AD_MNT = "ad_mnt";	// maintenance mode
-    const AD_CHR = "ad_chr";	// special characters
-    const AD_USR = "ad_usr";	// user
-    const AD_MCX = "ad_mcx";	// export mc questions
-    const AD_ICP = "ad_icp";	// import professionals
+    protected const AD = "ad";
+    protected const AD_MNT = "ad_mnt";	// maintenance mode
+    protected const AD_CHR = "ad_chr";	// special characters
+    protected const AD_USR = "ad_usr";	// user
+    protected const AD_MCX = "ad_mcx";	// export mc questions
+    protected const AD_ICP = "ad_icp";	// import professionals
 
     // cr-008 start
-    const CP_PDM = "cp_pdm";	// maintenance personal data
+    protected const CP_PDM = "cp_pdm";	// maintenance personal data
     // cr-008 end
 
     public function getStaticTopItems() : array

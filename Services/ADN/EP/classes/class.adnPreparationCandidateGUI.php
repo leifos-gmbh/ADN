@@ -16,18 +16,15 @@
 class adnPreparationCandidateGUI
 {
     // cr-008 start
-    const MODE_CANDIDATE = "";
-    const MODE_GENERAL = "general";
+    public const MODE_CANDIDATE = '';
+    public const MODE_GENERAL = 'general';
     // cr-008 end
 
     // current candidate object
-    protected $candidate = null;
+    protected ?adnCertifiedProfessional $candidate = null;
 
     // cr-008 start
-    /**
-     * @var string
-     */
-    protected $mode = "";
+    protected string $mode = '';
     // cr-008 end
     
     /**

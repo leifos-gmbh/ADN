@@ -11,21 +11,21 @@
  */
 class adnExamInfoLetter extends adnDBBase
 {
-    protected $id; // [int]
-    protected $file; // [string]
+    protected int $id;
+    protected string $file = '';
 
     /**
      * Constructor
      *
      * @param int $a_id instance id
      */
-    public function __construct($a_id = null)
+    public function __construct($a_id = 0)
     {
         global $ilCtrl;
 
         $this->setFileDirectory("ep_information_letter");
 
-        if ($a_id) {
+        if ($a_id !== 0) {
             $this->setId($a_id);
             $this->read();
         }

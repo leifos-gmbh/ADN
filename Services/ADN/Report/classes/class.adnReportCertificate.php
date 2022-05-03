@@ -17,10 +17,11 @@ include_once './Services/ADN/Report/classes/class.adnReport.php';
  */
 class adnReportCertificate extends adnReport
 {
-    const TYPE_DUPLICATE = 1;
 
-    private $certificate_ids = null;
-    private $type = null;
+    /**
+     * @var int[]
+     */
+    private $certificate_ids;
 
     /**
      * Contructor

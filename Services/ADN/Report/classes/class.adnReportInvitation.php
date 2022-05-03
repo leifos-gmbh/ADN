@@ -16,14 +16,17 @@ include_once './Services/ADN/Report/classes/class.adnReport.php';
 
 class adnReportInvitation extends adnReport
 {
-    const TYPE_DM = 1;
-    const TYPE_GAS = 2;
-    const TYPE_CHEM = 3;
+    protected const TYPE_DM = 1;
+    protected const TYPE_GAS = 2;
+    protected const TYPE_CHEM = 3;
     
-    private $event = null;
-    private $type = null;
-    
-    private $candidates = array();
+    private ?adnExaminationEvent $event;
+    private int $type = 0;
+
+    /**
+     * @var int[]
+     */
+    private array $candidates = [];
 
     /**
      * Contructor

@@ -16,26 +16,31 @@ include_once("./Services/Table/classes/class.ilTable2GUI.php");
  */
 class adnExaminationEventTableGUI extends ilTable2GUI
 {
-    // [array] options for select filters (needed for value mapping)
-    protected $filter_options;
+    // options for select filters (needed for value mapping)
+    /**
+     * @var array<string, string>
+     */
+    protected array $filter_options = [];
 
-    // [int] view mode
-    protected $mode;
+    protected int $mode = 0;
 
-    // [bool] show current or past events
-    protected $archived;
+    protected bool $archived = false;
+    /**
+     * @var array<string, string>
+     */
+    protected array $legend = [];
 
     // modes for different usages of this table
-    const MODE_SCORING = 1;
-    const MODE_CERTIFICATE = 2;
-    const MODE_PREPARATION = 3;
-    const MODE_ASSIGNMENT = 4;
-    const MODE_SHEET = 5;
-    const MODE_INVITATION = 6;
-    const MODE_ATTENDANCE = 7;
-    const MODE_NOTIFICATION = 8;
-    const MODE_TEST_PREP = 9;
-    const MODE_ONLINE = 10;
+    public const MODE_SCORING = 1;
+    public const MODE_CERTIFICATE = 2;
+    public const MODE_PREPARATION = 3;
+    public const MODE_ASSIGNMENT = 4;
+    public const MODE_SHEET = 5;
+    public const MODE_INVITATION = 6;
+    public const MODE_ATTENDANCE = 7;
+    public const MODE_NOTIFICATION = 8;
+    public const MODE_TEST_PREP = 9;
+    public const MODE_ONLINE = 10;
 
     /**
      * Constructor

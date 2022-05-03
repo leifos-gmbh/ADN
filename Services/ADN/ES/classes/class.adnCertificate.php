@@ -13,36 +13,41 @@
 class adnCertificate extends adnDBBase
 {
     // certificate types
-    const DRY_MATERIAL = "dm";
-    const TANK = "tank";
-    const GAS = "gas";
-    const CHEMICALS = "chem";
+    public const DRY_MATERIAL = 'dm';
+    public const TANK = 'tank';
+    public const GAS = 'gas';
+    public const CHEMICALS = 'chem';
 
     // proof types (training and experience)
-    const PROOF_TRAIN_DRY = "proof_train_dm";
-    const PROOF_TRAIN_TANK = "proof_train_tank";
-    const PROOF_TRAIN_COMBINED = "proof_train_combined";
-    const PROOF_TRAIN_GAS = "proof_train_gas";
-    const PROOF_TRAIN_CHEMICALS = "proof_train_chem";
-    const PROOF_EXP_GAS = "proof_exp_gas";
-    const PROOF_EXP_CHEMICALS = "proof_exp_chem";
+    public const PROOF_TRAIN_DRY = 'proof_train_dm';
+    public const PROOF_TRAIN_TANK = 'proof_train_tank';
+    public const PROOF_TRAIN_COMBINED = 'proof_train_combined';
+    public const PROOF_TRAIN_GAS = 'proof_train_gas';
+    public const PROOF_TRAIN_CHEMICALS = 'proof_train_chem';
+    public const PROOF_EXP_GAS = 'proof_exp_gas';
+    public const PROOF_EXP_CHEMICALS = 'proof_exp_chem';
 
     // status
-    const STATUS_VALID = 0;
-    const STATUS_INVALID = 1;
+    public const STATUS_VALID = 0;
+    public const STATUS_INVALID = 1;
 
-    protected $id; // [int]
-    protected $number = 0; // [int]
-    protected $cert_prof_id = 0; // [int]
-    protected $exam_id = null; // [int]
-    protected $signed_by = ""; // [string]
-    protected $issued_by_wmo = 0; // [int]
-    protected $is_extension = false; // [bool]
-    protected $file = ""; // [string]
-    protected $status = self::STATUS_VALID; // [int]
+    protected int $id = 0;
+    protected int $number = 0;
+    protected int $cert_prof_id = 0;
+    protected int $exam_id = 0;
+    protected string $signed_by = '';
+    protected int $issued_by_wmo = 0;
+    protected bool $is_extension = false;
+    protected string $file = '';
+    protected int $status = self::STATUS_VALID;
+    protected ?ilDateTime $issued_on = null;
+    protected ?ilDateTime $valid_until = null;
 
     // certificate types array
-    protected $type = array(
+    /**
+     * @var array<string, bool>
+     */
+    protected array $type = array(
         self::DRY_MATERIAL => false,
         self::TANK => false,
         self::GAS => false,
@@ -50,7 +55,10 @@ class adnCertificate extends adnDBBase
     );
 
     // proof types (training and experience) array
-    protected $proof = array(
+    /**
+     * @var array<string, bool>
+     */
+    protected array $proof = array(
         self::PROOF_TRAIN_DRY => false,
         self::PROOF_TRAIN_TANK => false,
         self::PROOF_TRAIN_COMBINED => false,
@@ -376,16 +384,6 @@ class adnCertificate extends adnDBBase
     public function getStatus()
     {
         return $this->status;
-    }
-
-    /**
-     * Get type chem
-     *
-     * @return bool type chem
-     */
-    public function getTypeChem()
-    {
-        return $this->type_chem;
     }
 
     /**

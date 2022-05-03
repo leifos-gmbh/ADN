@@ -11,19 +11,19 @@
  */
 class adnAreaOfExpertise extends adnDBBase
 {
-    protected $id; // [int]
-    protected $name; // [string]
+    protected int $id = 0;
+    protected string $name = '';
 
     /**
      * Constructor
      *
      * @param int $a_id instance id
      */
-    public function __construct($a_id = null)
+    public function __construct($a_id = 0)
     {
         global $ilCtrl;
 
-        if ($a_id) {
+        if ($a_id !== 0) {
             $this->setId($a_id);
             $this->read();
         }

@@ -15,7 +15,7 @@ include_once("./Services/Table/classes/class.ilTable2GUI.php");
  */
 class adnExamFacilityTableGUI extends ilTable2GUI
 {
-    protected $wmo_id; // [int]
+    protected int $wmo_id = 0;
     
     /**
      * Constructor

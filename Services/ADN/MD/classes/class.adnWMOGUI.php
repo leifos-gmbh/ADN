@@ -16,7 +16,7 @@
 class adnWMOGUI
 {
     // current office object
-    protected $wmo = null;
+    protected ?adnWMO $office = null;
     
     /**
      * Constructor

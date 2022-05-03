@@ -15,12 +15,18 @@ include_once './Services/ADN/Report/classes/class.adnReport.php';
 
 class adnReportDirectory extends adnReport
 {
-    private $data = array();
+    /**
+     * @var string[]
+     */
+    private array $data = [];
     
-    private $from = null;
-    private $until = null;
+    private ?ilDateTime $from = null;
+    private ?ilDateTime $until = null;
 
-    private $wmo_ids = array();
+    /**
+     * @var int[]
+     */
+    private array $wmo_ids = [];
 
     /**
      * Contructor

@@ -15,8 +15,7 @@
  */
 class adnAssignmentGUI
 {
-    // [bool] current or past events
-    protected $archived = null;
+    protected bool $archived = false;
     
     /**
      * Constructor

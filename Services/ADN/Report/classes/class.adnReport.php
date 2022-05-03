@@ -22,13 +22,11 @@ abstract class adnReport
     const FORMATTING_HIGHER = 3;
     const FORMATTING_DEEPER = 4;
     
-    private $cFormattingStack = array();
     
+    private string $outfile = '';
     
-    private $outfile = null;
-    
-    private $basedir = 'adn/report';
-    private $datadir = '';
+    private string $basedir = 'adn/report';
+    private string $datadir = '';
     
     
     /**
