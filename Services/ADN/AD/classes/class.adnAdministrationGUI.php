@@ -16,13 +16,20 @@
  */
 class adnAdministrationGUI
 {
-    public function executeCommand()
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilCtrl $ctrl;
+    protected ilLanguage $lng;
+
+    public function __construct()
     {
         global $DIC;
-        
-        $tpl = $DIC->ui()->mainTemplate();
-        $ilCtrl = $DIC->ctrl();
-        $lng = $DIC->language();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->ctrl = $DIC->ctrl();
+        $this->lng = $DIC->language();
+    }
+    
+    public function executeCommand()
+    {
 
         // set page title
         $this->tpl->setTitle($this->lng->txt("adn_ad"));
