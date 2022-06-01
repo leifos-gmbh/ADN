@@ -48,7 +48,6 @@ class adnAssignmentTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd, $a_event_id, $a_mode, $a_archived = false)
     {
-        global $ilCtrl, $lng;
 
         parent::__construct($a_parent_obj, $a_parent_cmd);
 
@@ -59,7 +58,7 @@ class adnAssignmentTableGUI extends ilTable2GUI
         include_once "Services/ADN/EP/classes/class.adnExaminationEvent.php";
         $this->event = new adnExaminationEvent((int) $a_event_id);
 
-        $this->setTitle($lng->txt("adn_candidates") . ": " .
+        $this->setTitle($this->lng->txt("adn_candidates") . ": " .
             adnExaminationEvent::lookupName($this->event->getId()));
 
         include_once "Services/ADN/MD/classes/class.adnWMO.php";
@@ -70,7 +69,7 @@ class adnAssignmentTableGUI extends ilTable2GUI
 
         if ($this->mode == self::MODE_INVITATION) {
             if (adnPerm::check(adnPerm::EP, adnPerm::WRITE)) {
-                $this->addMultiCommand("saveInvitations", $lng->txt("adn_generate_invitations"));
+                $this->addMultiCommand("saveInvitations", $this->lng->txt("adn_generate_invitations"));
             }
             $this->addColumn("", "", 1);
         }
@@ -97,13 +96,13 @@ class adnAssignmentTableGUI extends ilTable2GUI
                 $this->addColumn($this->lng->txt("adn_assigned"), "assigned");
 
 
-                $this->map["deadline"] = array(0 => $lng->txt("no"),
-                    1 => $lng->txt("yes"));
+                $this->map["deadline"] = array(0 => $this->lng->txt("no"),
+                    1 => $this->lng->txt("yes"));
 
-                $this->map["certificate"] = array(0 => $lng->txt("no"),
-                    1 => $lng->txt("adn_certificate_germany"),
-                    2 => $lng->txt("adn_certificate_foreign"),
-                    3 => $lng->txt("adn_certificate_germany_and_foreign"));
+                $this->map["certificate"] = array(0 => $this->lng->txt("no"),
+                    1 => $this->lng->txt("adn_certificate_germany"),
+                    2 => $this->lng->txt("adn_certificate_foreign"),
+                    3 => $this->lng->txt("adn_certificate_germany_and_foreign"));
 
                 if (adnPerm::check(adnPerm::EP, adnPerm::WRITE) && !$this->archived) {
                     $this->addCommandButton(
@@ -126,7 +125,7 @@ class adnAssignmentTableGUI extends ilTable2GUI
         $this->setDefaultOrderField("last_name");
         $this->setDefaultOrderDirection("asc");
 
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.candidate_assignment_row.html", "Services/ADN/EP");
     
         $this->importData();
@@ -268,15 +267,14 @@ class adnAssignmentTableGUI extends ilTable2GUI
      */
     public function initFilter()
     {
-        global $lng;
 
         $wsd = $this->addFilterItemByMetaType(
             "registered_by",
             self::FILTER_SELECT,
             false,
-            $lng->txt("adn_registered_by")
+            $this->lng->txt("adn_registered_by")
         );
-        $wsd->setOptions(array(0 => $lng->txt("adn_filter_all")) + $this->map["registered_by"]);
+        $wsd->setOptions(array(0 => $this->lng->txt("adn_filter_all")) + $this->map["registered_by"]);
         $wsd->readFromSession();
         $this->filter["wmo"] = $wsd->getValue();
     }
@@ -298,7 +296,6 @@ class adnAssignmentTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
         
         $this->all_candidate_ids[] = $a_set["id"];
         
@@ -333,9 +330,9 @@ class adnAssignmentTableGUI extends ilTable2GUI
             } else {
                 $this->tpl->setCurrentBlock("cbox_static");
                 if ($a_set["assigned"]) {
-                    $this->tpl->setVariable("VAL_ASSIGNED", $lng->txt("yes"));
+                    $this->tpl->setVariable("VAL_ASSIGNED", $this->lng->txt("yes"));
                 } else {
-                    $this->tpl->setVariable("VAL_ASSIGNED", $lng->txt("no"));
+                    $this->tpl->setVariable("VAL_ASSIGNED", $this->lng->txt("no"));
                 }
                 $this->tpl->parseCurrentBlock();
             }

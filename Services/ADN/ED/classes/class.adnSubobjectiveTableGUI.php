@@ -26,7 +26,6 @@ class adnSubobjectiveTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd, $a_objective_id = 0)
     {
-        global $ilCtrl, $lng;
 
         $this->objective_id = (int) $a_objective_id;
         
@@ -36,11 +35,11 @@ class adnSubobjectiveTableGUI extends ilTable2GUI
 
         include_once "Services/ADN/ED/classes/class.adnObjective.php";
         $this->objective = new adnObjective($this->objective_id);
-        $this->setTitle($lng->txt("adn_subobjectives") . ": " .
+        $this->setTitle($this->lng->txt("adn_subobjectives") . ": " .
             $this->objective->buildADNNumber() . " " . $this->objective->getName());
 
         if (adnPerm::check(adnPerm::ED, adnPerm::WRITE)) {
-            $this->addMultiCommand("confirmSubobjectiveDeletion", $lng->txt("delete"));
+            $this->addMultiCommand("confirmSubobjectiveDeletion", $this->lng->txt("delete"));
             $this->addColumn("", "", "1");
         }
 
@@ -54,7 +53,7 @@ class adnSubobjectiveTableGUI extends ilTable2GUI
 
         $this->setRowTemplate("tpl.subobjective_row.html", "Services/ADN/ED");
 
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
     
         $this->importData();
     }
@@ -78,23 +77,22 @@ class adnSubobjectiveTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
 
         // actions...
 
         if (adnPerm::check(adnPerm::ED, adnPerm::WRITE)) {
             // ...edit
-            $ilCtrl->setParameter($this->parent_obj, "sob_id", $a_set["id"]);
+            $this->ctrl->setParameter($this->parent_obj, "sob_id", $a_set["id"]);
 
             $this->tpl->setCurrentBlock("action");
-            $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_edit_subobjective"));
+            $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_edit_subobjective"));
             $this->tpl->setVariable(
                 "HREF_CMD",
-                $ilCtrl->getLinkTarget($this->parent_obj, "editSubobjective")
+                $this->ctrl->getLinkTarget($this->parent_obj, "editSubobjective")
             );
             $this->tpl->parseCurrentBlock();
 
-            $ilCtrl->setParameter($this->parent_obj, "sob_id", "");
+            $this->ctrl->setParameter($this->parent_obj, "sob_id", "");
 
             // checkbox for deletion
             $this->tpl->setCurrentBlock("cbox");

@@ -17,16 +17,26 @@ class adnInformationLetterGUI
 {
     // current letter object
     protected ?adnInformationLetter $letter = null;
-    
+
+    protected ilCtrl $ctrl;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilLanguage $lng;
+    protected ilToolbarGUI $toolbar;
+    protected ilTabsGUI $tabs;
     /**
      * Constructor
      */
     public function __construct()
     {
-        global $ilCtrl;
+        global $DIC;
+        $this->ctrl = $DIC->ctrl();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->lng = $DIC->language();
+        $this->toolbar = $DIC->toolbar();
+        $this->tabs = $DIC->tabs();
 
         // save letter ID through requests
-        $ilCtrl->saveParameter($this, array("il_id"));
+        $this->ctrl->saveParameter($this, array("il_id"));
         
         $this->readInformationLetter();
     }
@@ -36,18 +46,17 @@ class adnInformationLetterGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl, $tpl, $lng;
 
-        $tpl->setTitle($lng->txt("adn_ta") . " - " . $lng->txt("adn_ta_ils"));
+        $this->tpl->setTitle($this->lng->txt("adn_ta") . " - " . $this->lng->txt("adn_ta_ils"));
         
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
         
         // forward command to next gui class in control flow
         switch ($next_class) {
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("listInformationLetters");
+                $cmd = $this->ctrl->getCmd("listInformationLetters");
                 
                 switch ($cmd) {
                     // commands that need read permission
@@ -91,19 +100,18 @@ class adnInformationLetterGUI
      */
     public function listInformationLetters()
     {
-        global $tpl, $lng, $ilCtrl, $ilToolbar;
 
         if (adnPerm::check(adnPerm::TA, adnPerm::WRITE)) {
-            $ilToolbar->addButton(
-                $lng->txt("adn_add_information_letter"),
-                $ilCtrl->getLinkTarget($this, "addInformationLetter")
+            $this->toolbar->addButton(
+                $this->lng->txt("adn_add_information_letter"),
+                $this->ctrl->getLinkTarget($this, "addInformationLetter")
             );
         }
 
         include_once("./Services/ADN/TA/classes/class.adnInformationLetterTableGUI.php");
         $table = new adnInformationLetterTableGUI($this, "listInformationLetters");
 
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
     
     /**
@@ -113,17 +121,16 @@ class adnInformationLetterGUI
      */
     protected function addInformationLetter(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $ilTabs, $ilCtrl, $lng;
 
-        $ilTabs->setBackTarget(
-            $lng->txt("back"),
-            $ilCtrl->getLinkTarget($this, "listInformationLetters")
+        $this->tabs->setBackTarget(
+            $this->lng->txt("back"),
+            $this->ctrl->getLinkTarget($this, "listInformationLetters")
         );
 
         if (!$a_form) {
             $a_form = $this->initInformationLetterForm("create");
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
     
     /**
@@ -134,38 +141,37 @@ class adnInformationLetterGUI
      */
     protected function initInformationLetterForm($a_mode = "edit")
     {
-        global $lng, $ilCtrl;
         
         // get form object and add input fields
         include_once("Services/Form/classes/class.ilPropertyFormGUI.php");
         $form = new ilPropertyFormGUI();
         
         // name
-        $name = new ilTextInputGUI($lng->txt("adn_name"), "name");
+        $name = new ilTextInputGUI($this->lng->txt("adn_name"), "name");
         $name->setMaxLength(200);
         $name->setRequired(true);
         $form->addItem($name);
 
         // file
-        $file = new ilFileInputGUI($lng->txt("file"), "file");
+        $file = new ilFileInputGUI($this->lng->txt("file"), "file");
         $file->setRequired(true);
         $form->addItem($file);
 
         if ($a_mode == "create") {
             // creation: save/cancel buttons and title
-            $form->addCommandButton("saveInformationLetter", $lng->txt("save"));
-            $form->addCommandButton("listInformationLetters", $lng->txt("cancel"));
-            $form->setTitle($lng->txt("adn_add_information_letter"));
+            $form->addCommandButton("saveInformationLetter", $this->lng->txt("save"));
+            $form->addCommandButton("listInformationLetters", $this->lng->txt("cancel"));
+            $form->setTitle($this->lng->txt("adn_add_information_letter"));
         } else {
             $name->setValue($this->letter->getName());
             
             // editing: update/cancel buttons and title
-            $form->addCommandButton("updateInformationLetter", $lng->txt("save"));
-            $form->addCommandButton("listInformationLetters", $lng->txt("cancel"));
-            $form->setTitle($lng->txt("adn_edit_information_letter"));
+            $form->addCommandButton("updateInformationLetter", $this->lng->txt("save"));
+            $form->addCommandButton("listInformationLetters", $this->lng->txt("cancel"));
+            $form->setTitle($this->lng->txt("adn_edit_information_letter"));
         }
         
-        $form->setFormAction($ilCtrl->getFormAction($this));
+        $form->setFormAction($this->ctrl->getFormAction($this));
 
         return $form;
     }
@@ -175,7 +181,6 @@ class adnInformationLetterGUI
      */
     protected function saveInformationLetter()
     {
-        global $tpl, $lng, $ilCtrl;
         
         $form = $this->initInformationLetterForm("create");
         
@@ -191,8 +196,8 @@ class adnInformationLetterGUI
             
             if ($letter->save()) {
                 // show success message and return to list
-                ilUtil::sendSuccess($lng->txt("adn_information_letter_created"), true);
-                $ilCtrl->redirect($this, "listInformationLetters");
+                ilUtil::sendSuccess($this->lng->txt("adn_information_letter_created"), true);
+                $this->ctrl->redirect($this, "listInformationLetters");
             }
         }
 
@@ -206,25 +211,24 @@ class adnInformationLetterGUI
      */
     protected function confirmInformationLettersDeletion()
     {
-        global $ilCtrl, $tpl, $lng, $ilTabs;
         
         // check whether at least one item has been seleced
         if (!is_array($_POST["letter_id"]) || count($_POST["letter_id"]) == 0) {
-            ilUtil::sendFailure($lng->txt("no_checkbox"), true);
-            $ilCtrl->redirect($this, "listInformationLetters");
+            ilUtil::sendFailure($this->lng->txt("no_checkbox"), true);
+            $this->ctrl->redirect($this, "listInformationLetters");
         } else {
-            $ilTabs->setBackTarget(
-                $lng->txt("back"),
-                $ilCtrl->getLinkTarget($this, "listInformationLetters")
+            $this->tabs->setBackTarget(
+                $this->lng->txt("back"),
+                $this->ctrl->getLinkTarget($this, "listInformationLetters")
             );
 
             // display confirmation message
             include_once("./Services/Utilities/classes/class.ilConfirmationGUI.php");
             $cgui = new ilConfirmationGUI();
-            $cgui->setFormAction($ilCtrl->getFormAction($this));
-            $cgui->setHeaderText($lng->txt("adn_sure_delete_information_letters"));
-            $cgui->setCancel($lng->txt("cancel"), "listInformationLetters");
-            $cgui->setConfirm($lng->txt("delete"), "deleteInformationLetters");
+            $cgui->setFormAction($this->ctrl->getFormAction($this));
+            $cgui->setHeaderText($this->lng->txt("adn_sure_delete_information_letters"));
+            $cgui->setCancel($this->lng->txt("cancel"), "listInformationLetters");
+            $cgui->setConfirm($this->lng->txt("delete"), "deleteInformationLetters");
 
             // list objects that should be deleted
             include_once("./Services/ADN/TA/classes/class.adnInformationLetter.php");
@@ -232,7 +236,7 @@ class adnInformationLetterGUI
                 $cgui->addItem("letter_id[]", $i, adnInformationLetter::lookupName($i));
             }
             
-            $tpl->setContent($cgui->getHTML());
+            $this->tpl->setContent($cgui->getHTML());
         }
     }
     
@@ -241,7 +245,6 @@ class adnInformationLetterGUI
      */
     protected function deleteInformationLetters()
     {
-        global $ilCtrl, $lng;
         
         include_once("./Services/ADN/TA/classes/class.adnInformationLetter.php");
         
@@ -251,8 +254,8 @@ class adnInformationLetterGUI
                 $letter->delete();
             }
         }
-        ilUtil::sendSuccess($lng->txt("adn_information_letter_deleted"), true);
-        $ilCtrl->redirect($this, "listInformationLetters");
+        ilUtil::sendSuccess($this->lng->txt("adn_information_letter_deleted"), true);
+        $this->ctrl->redirect($this, "listInformationLetters");
     }
 
     /**
@@ -260,14 +263,13 @@ class adnInformationLetterGUI
      */
     protected function downloadInformationLetter()
     {
-        global $ilCtrl, $lng;
         
         $file = $this->letter->getFilePath() . $this->letter->getId();
         if (file_exists($file)) {
             ilUtil::deliverFile($file, $this->letter->getFileName());
         } else {
-            ilUtil::sendFailure($lng->txt("adn_file_corrupt"), true);
-            $ilCtrl->redirect($this, "listInformationLetters");
+            ilUtil::sendFailure($this->lng->txt("adn_file_corrupt"), true);
+            $this->ctrl->redirect($this, "listInformationLetters");
         }
     }
 }

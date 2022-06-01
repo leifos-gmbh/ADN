@@ -17,16 +17,27 @@ class adnAreaOfExpertiseGUI
 {
     // current area object
     protected ?adnAreaOfExpertise $area = null;
+
+    protected ilCtrl $ctrl;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilLanguage $lng;
+    protected ilToolbarGUI $toolbar;
+    protected ilTabsGUI $tabs;
     
     /**
      * Constructor
      */
     public function __construct()
     {
-        global $ilCtrl;
+        global $DIC;
+        $this->ctrl = $DIC->ctrl();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->lng = $DIC->language();
+        $this->toolbar = $DIC->toolbar();
+        $this->tabs = $DIC->tabs();
 
         // save area ID through requests
-        $ilCtrl->saveParameter($this, array("ae_id"));
+        $this->ctrl->saveParameter($this, array("ae_id"));
         
         $this->readAreaOfExpertise();
     }
@@ -36,18 +47,17 @@ class adnAreaOfExpertiseGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl, $tpl, $lng;
 
-        $tpl->setTitle($lng->txt("adn_ta") . " - " . $lng->txt("adn_ta_aes"));
+        $this->tpl->setTitle($this->lng->txt("adn_ta") . " - " . $this->lng->txt("adn_ta_aes"));
         
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
         
         // forward command to next gui class in control flow
         switch ($next_class) {
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("listAreasOfExpertise");
+                $cmd = $this->ctrl->getCmd("listAreasOfExpertise");
                 
                 switch ($cmd) {
                     // commands that need read permission
@@ -90,19 +100,18 @@ class adnAreaOfExpertiseGUI
      */
     public function listAreasOfExpertise()
     {
-        global $tpl, $lng, $ilCtrl, $ilToolbar;
 
         if (adnPerm::check(adnPerm::TA, adnPerm::WRITE)) {
-            $ilToolbar->addButton(
-                $lng->txt("adn_add_area_of_expertise"),
-                $ilCtrl->getLinkTarget($this, "addAreaOfExpertise")
+            $this->toolbar->addButton(
+                $this->lng->txt("adn_add_area_of_expertise"),
+                $this->ctrl->getLinkTarget($this, "addAreaOfExpertise")
             );
         }
 
         include_once("./Services/ADN/TA/classes/class.adnAreaOfExpertiseTableGUI.php");
         $table = new adnAreaOfExpertiseTableGUI($this, "listAreasOfExpertise");
 
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
     
     /**
@@ -112,14 +121,13 @@ class adnAreaOfExpertiseGUI
      */
     protected function addAreaOfExpertise(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $ilTabs, $ilCtrl, $lng;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listAreasOfExpertise"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listAreasOfExpertise"));
 
         if (!$a_form) {
             $a_form = $this->initAreaOfExpertiseForm("create");
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
     
     /**
@@ -129,14 +137,13 @@ class adnAreaOfExpertiseGUI
      */
     protected function editAreaOfExpertise(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $ilTabs, $ilCtrl, $lng;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listAreasOfExpertise"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listAreasOfExpertise"));
 
         if (!$a_form) {
             $a_form = $this->initAreaOfExpertiseForm("edit");
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
     
     /**
@@ -147,33 +154,32 @@ class adnAreaOfExpertiseGUI
      */
     protected function initAreaOfExpertiseForm($a_mode = "edit")
     {
-        global $lng, $ilCtrl;
         
         // get form object and add input fields
         include_once("Services/Form/classes/class.ilPropertyFormGUI.php");
         $form = new ilPropertyFormGUI();
         
         // name
-        $name = new ilTextInputGUI($lng->txt("adn_name"), "name");
+        $name = new ilTextInputGUI($this->lng->txt("adn_name"), "name");
         $name->setMaxLength(200);
         $name->setRequired(true);
         $form->addItem($name);
 
         if ($a_mode == "create") {
             // creation: save/cancel buttons and title
-            $form->addCommandButton("saveAreaOfExpertise", $lng->txt("save"));
-            $form->addCommandButton("listAreasOfExpertise", $lng->txt("cancel"));
-            $form->setTitle($lng->txt("adn_add_area_of_expertise"));
+            $form->addCommandButton("saveAreaOfExpertise", $this->lng->txt("save"));
+            $form->addCommandButton("listAreasOfExpertise", $this->lng->txt("cancel"));
+            $form->setTitle($this->lng->txt("adn_add_area_of_expertise"));
         } else {
             $name->setValue($this->area->getName());
             
             // editing: update/cancel buttons and title
-            $form->addCommandButton("updateAreaOfExpertise", $lng->txt("save"));
-            $form->addCommandButton("listAreasOfExpertise", $lng->txt("cancel"));
-            $form->setTitle($lng->txt("adn_edit_area_of_expertise"));
+            $form->addCommandButton("updateAreaOfExpertise", $this->lng->txt("save"));
+            $form->addCommandButton("listAreasOfExpertise", $this->lng->txt("cancel"));
+            $form->setTitle($this->lng->txt("adn_edit_area_of_expertise"));
         }
         
-        $form->setFormAction($ilCtrl->getFormAction($this));
+        $form->setFormAction($this->ctrl->getFormAction($this));
 
         return $form;
     }
@@ -183,7 +189,6 @@ class adnAreaOfExpertiseGUI
      */
     protected function saveAreaOfExpertise()
     {
-        global $tpl, $lng, $ilCtrl;
         
         $form = $this->initAreaOfExpertiseForm("create");
         
@@ -196,8 +201,8 @@ class adnAreaOfExpertiseGUI
             
             if ($area->save()) {
                 // show success message and return to list
-                ilUtil::sendSuccess($lng->txt("adn_area_of_expertise_created"), true);
-                $ilCtrl->redirect($this, "listAreasOfExpertise");
+                ilUtil::sendSuccess($this->lng->txt("adn_area_of_expertise_created"), true);
+                $this->ctrl->redirect($this, "listAreasOfExpertise");
             }
         }
 
@@ -211,7 +216,6 @@ class adnAreaOfExpertiseGUI
      */
     protected function updateAreaOfExpertise()
     {
-        global $lng, $ilCtrl, $tpl;
         
         $form = $this->initAreaOfExpertiseForm("edit");
         
@@ -222,8 +226,8 @@ class adnAreaOfExpertiseGUI
             
             if ($this->area->update()) {
                 // show success message and return to list
-                ilUtil::sendSuccess($lng->txt("adn_area_of_expertise_updated"), true);
-                $ilCtrl->redirect($this, "listAreasOfExpertise");
+                ilUtil::sendSuccess($this->lng->txt("adn_area_of_expertise_updated"), true);
+                $this->ctrl->redirect($this, "listAreasOfExpertise");
             }
         }
         
@@ -237,25 +241,24 @@ class adnAreaOfExpertiseGUI
      */
     protected function confirmAreasOfExpertiseDeletion()
     {
-        global $ilCtrl, $tpl, $lng, $ilTabs;
         
         // check whether at least one item has been seleced
         if (!is_array($_POST["area_id"]) || count($_POST["area_id"]) == 0) {
-            ilUtil::sendFailure($lng->txt("no_checkbox"), true);
-            $ilCtrl->redirect($this, "listAreasOfExpertise");
+            ilUtil::sendFailure($this->lng->txt("no_checkbox"), true);
+            $this->ctrl->redirect($this, "listAreasOfExpertise");
         } else {
-            $ilTabs->setBackTarget(
-                $lng->txt("back"),
-                $ilCtrl->getLinkTarget($this, "listAreasOfExpertise")
+            $this->tabs->setBackTarget(
+                $this->lng->txt("back"),
+                $this->ctrl->getLinkTarget($this, "listAreasOfExpertise")
             );
             
             // display confirmation message
             include_once("./Services/Utilities/classes/class.ilConfirmationGUI.php");
             $cgui = new ilConfirmationGUI();
-            $cgui->setFormAction($ilCtrl->getFormAction($this));
-            $cgui->setHeaderText($lng->txt("adn_sure_delete_areas_of_expertise"));
-            $cgui->setCancel($lng->txt("cancel"), "listAreasOfExpertise");
-            $cgui->setConfirm($lng->txt("delete"), "deleteAreasOfExpertise");
+            $cgui->setFormAction($this->ctrl->getFormAction($this));
+            $cgui->setHeaderText($this->lng->txt("adn_sure_delete_areas_of_expertise"));
+            $cgui->setCancel($this->lng->txt("cancel"), "listAreasOfExpertise");
+            $cgui->setConfirm($this->lng->txt("delete"), "deleteAreasOfExpertise");
 
             // list objects that should be deleted
             include_once("./Services/ADN/TA/classes/class.adnAreaOfExpertise.php");
@@ -263,7 +266,7 @@ class adnAreaOfExpertiseGUI
                 $cgui->addItem("area_id[]", $i, adnAreaOfExpertise::lookupName($i));
             }
             
-            $tpl->setContent($cgui->getHTML());
+            $this->tpl->setContent($cgui->getHTML());
         }
     }
     
@@ -272,7 +275,6 @@ class adnAreaOfExpertiseGUI
      */
     protected function deleteAreasOfExpertise()
     {
-        global $ilCtrl, $lng;
         
         include_once("./Services/ADN/TA/classes/class.adnAreaOfExpertise.php");
         
@@ -282,7 +284,7 @@ class adnAreaOfExpertiseGUI
                 $area->delete();
             }
         }
-        ilUtil::sendSuccess($lng->txt("adn_area_of_expertise_deleted"), true);
-        $ilCtrl->redirect($this, "listAreasOfExpertise");
+        ilUtil::sendSuccess($this->lng->txt("adn_area_of_expertise_deleted"), true);
+        $this->ctrl->redirect($this, "listAreasOfExpertise");
     }
 }

@@ -17,11 +17,16 @@ include_once("./Services/Authentication/classes/class.ilAuthUtils.php");		// to 
  */
 class adnELDownloader
 {
+
+    protected ilLanguage $lng;
     /**
      * Constructor
      */
     public function __construct()
     {
+        global $DIC;
+        $this->lng = $DIC->language();
+
     }
 
     /**
@@ -70,9 +75,8 @@ class adnELDownloader
             case "scoring_sheet":
                 $this->initAuth($_REQUEST["sid"]);
                 $this->initIlias();
-                
-                global $lng;
-                $lng->loadLanguageModule("adn");
+
+                $this->lng->loadLanguageModule("adn");
                 
 //				var_dump($_SESSION["sheet_questions"]);
 //				var_dump($_SESSION["given_answer"]);

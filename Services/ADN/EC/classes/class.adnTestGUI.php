@@ -34,11 +34,21 @@ class adnTestGUI
     protected ?adnAnswerSheet $sheet = null;
     protected int $cand_sheet_id = 0;
 
+    protected ilLanguage $lng;
+    protected ilCtrl $ctrl;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilToolbarGUI $toolbar;
+
     /**
      * Constructor
      */
     public function __construct($a_mode = self::MODE_ONLINE, $a_questions = null)
     {
+        global $DIC;
+        $this->lng = $DIC->language();
+        $this->ctrl = $DIC->ctrl();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->toolbar = $DIC->toolbar();
         $this->mode = $a_mode;
         if ($a_mode == self::MODE_ONLINE) {
             $this->determineCandidateAndExamination();
@@ -56,7 +66,6 @@ class adnTestGUI
      */
     public function determineCandidateAndExamination()
     {
-        global $lng;
 
         $login = $_SESSION["adn_test_user"];
         $code = $_SESSION["adn_access_code"];
@@ -91,7 +100,7 @@ class adnTestGUI
                 $this->questions[] = array("nr" => $cnt++, "q_id" => $q_id);
             }
         } else {
-            ilUtil::sendFailure($lng->txt("adn_no_mc_sheet_found"));
+            ilUtil::sendFailure($this->lng->txt("adn_no_mc_sheet_found"));
         }
     }
 
@@ -100,11 +109,10 @@ class adnTestGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl, $lng, $tpl;
 
-        $tpl->setTitle($lng->txt("adn_online_test"));
+        $this->tpl->setTitle($this->lng->txt("adn_online_test"));
 
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
 
         // forward command to next gui class in control flow
         switch ($next_class) {
@@ -112,7 +120,7 @@ class adnTestGUI
             // this class is responsible to process the command
             default:
                 //$cmd = $ilCtrl->getCmd("showNextQuestion");
-                $cmd = $ilCtrl->getCmd("showIntro");
+                $cmd = $this->ctrl->getCmd("showIntro");
 
                 switch ($cmd) {
                     // commands that need read permission
@@ -136,25 +144,25 @@ class adnTestGUI
 
     protected function showIntro()
     {
-        global $tpl, $DIC, $lng, $ilCtrl;
+        global $DIC;
 
         $list = $DIC->ui()->factory()->listing()->unordered(
             [
-                $lng->txt("adn_intro1"),
-                $lng->txt("adn_intro2"),
-                $lng->txt("adn_intro3")
+                $this->lng->txt("adn_intro1"),
+                $this->lng->txt("adn_intro2"),
+                $this->lng->txt("adn_intro3")
             ]
         );
         $panel = $DIC->ui()->factory()->panel()->standard(
-            $lng->txt("adn_intro"),
+            $this->lng->txt("adn_intro"),
             $list
         );
         $button = $DIC->ui()->factory()->button()->standard(
-            $lng->txt("adn_start"),
-            $ilCtrl->getLinkTarget($this, "showNextQuestion")
+            $this->lng->txt("adn_start"),
+            $this->ctrl->getLinkTarget($this, "showNextQuestion")
         );
 
-        $tpl->setContent($DIC->ui()->renderer()->render(
+        $this->tpl->setContent($DIC->ui()->renderer()->render(
             [$panel, $button]
         ));
     }
@@ -164,10 +172,9 @@ class adnTestGUI
      */
     public function showNextQuestion()
     {
-        global $ilCtrl, $lng;
 
         if ((int) $_POST["q_id"] > 0 && (int) $_POST["given_anser"] == 0) {
-            ilUtil::sendInfo($lng->txt("adn_no_answer_given_next"), true);
+            ilUtil::sendInfo($this->lng->txt("adn_no_answer_given_next"), true);
         }
 
         $this->saveAnswer();
@@ -182,8 +189,8 @@ class adnTestGUI
             }
         }
 
-        $ilCtrl->setParameter($this, "q_id", $next_q_id);
-        $ilCtrl->redirect($this, "showQuestion");
+        $this->ctrl->setParameter($this, "q_id", $next_q_id);
+        $this->ctrl->redirect($this, "showQuestion");
     }
 
     /**
@@ -191,10 +198,9 @@ class adnTestGUI
      */
     public function showPreviousQuestion()
     {
-        global $ilCtrl, $lng;
 
         if ((int) $_POST["q_id"] > 0 && (int) $_POST["given_anser"] == 0) {
-            ilUtil::sendInfo($lng->txt("adn_no_answer_given_prev"), true);
+            ilUtil::sendInfo($this->lng->txt("adn_no_answer_given_prev"), true);
         }
 
         $this->saveAnswer();
@@ -209,8 +215,8 @@ class adnTestGUI
             }
         }
 
-        $ilCtrl->setParameter($this, "q_id", $next_q_id);
-        $ilCtrl->redirect($this, "showQuestion");
+        $this->ctrl->setParameter($this, "q_id", $next_q_id);
+        $this->ctrl->redirect($this, "showQuestion");
     }
 
     /**
@@ -218,11 +224,10 @@ class adnTestGUI
      */
     public function jumpToQuestion()
     {
-        global $ilCtrl;
 
         $this->saveAnswer();
-        $ilCtrl->setParameter($this, "q_id", $_GET["q_id"]);
-        $ilCtrl->redirect($this, "showQuestion");
+        $this->ctrl->setParameter($this, "q_id", $_GET["q_id"]);
+        $this->ctrl->redirect($this, "showQuestion");
     }
 
     /**
@@ -230,12 +235,11 @@ class adnTestGUI
      */
     public function jumpToQuestionList()
     {
-        global $ilCtrl;
 
         $this->saveAnswer();
 
-        $ilCtrl->setParameter($this, "q_id", $_GET["q_id"]);
-        $ilCtrl->redirect($this, "showQuestionList");
+        $this->ctrl->setParameter($this, "q_id", $_GET["q_id"]);
+        $this->ctrl->redirect($this, "showQuestionList");
     }
 
     /**
@@ -243,12 +247,11 @@ class adnTestGUI
      */
     public function showQuestionList()
     {
-        global $tpl, $ilToolbar, $lng, $ilCtrl;
 
-        $ilCtrl->setParameter($this, "q_id", $_GET["q_id"]);
-        $ilToolbar->addButton(
-            $lng->txt("adn_finish_test"),
-            $ilCtrl->getLinkTarget($this, "finishTestConfirmation")
+        $this->ctrl->setParameter($this, "q_id", $_GET["q_id"]);
+        $this->toolbar->addButton(
+            $this->lng->txt("adn_finish_test"),
+            $this->ctrl->getLinkTarget($this, "finishTestConfirmation")
         );
 
         include_once("./Services/ADN/EC/classes/class.adnTestQuestionListTableGUI.php");
@@ -258,7 +261,7 @@ class adnTestGUI
             $this->questions,
             $this->cand_sheet_id
         );
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -266,13 +269,12 @@ class adnTestGUI
      */
     protected function showQuestion()
     {
-        global $tpl, $ilCtrl, $lng;
 
         $markups = array("[u]", "[/u]", "[f]", "[/f]", "[h]", "[/h]", "[t]", "[/t]");
         $markups_html = array("<u>", "</u>", "<b>", "</b>", "<sup>", "</sup>", "<sub>", "</sub>");
 
         $q_id = (int) $_GET["q_id"];
-        $ilCtrl->setParameter($this, "q_id", $q_id);
+        $this->ctrl->setParameter($this, "q_id", $q_id);
 
         $first = false;
         $last = false;
@@ -295,13 +297,13 @@ class adnTestGUI
         $tb->setCloseFormTag(false);
         $tb->setOpenFormTag(false);
         if (!$first) {
-            $tb->addFormButton($lng->txt("adn_previous_question"), "showPreviousQuestion");
+            $tb->addFormButton($this->lng->txt("adn_previous_question"), "showPreviousQuestion");
         }
         if (!$last) {
-            $tb->addFormButton($lng->txt("adn_next_question"), "showNextQuestion");
+            $tb->addFormButton($this->lng->txt("adn_next_question"), "showNextQuestion");
         }
-        $tb->addFormButton($lng->txt("adn_question_overview"), "jumpToQuestionList");
-        $tb->addFormButton($lng->txt("adn_finish_test"), "finishTestConfirmation");
+        $tb->addFormButton($this->lng->txt("adn_question_overview"), "jumpToQuestionList");
+        $tb->addFormButton($this->lng->txt("adn_finish_test"), "finishTestConfirmation");
 
         $question = new adnMCQuestion($q_id);
 
@@ -323,8 +325,8 @@ class adnTestGUI
             $answer = $question->$m();
             $img = "";
             if ($question->getFilename($k + 1)) {
-                $ilCtrl->setParameter($this, "img", $k + 1);
-                $img = "<div><img src=\"" . $ilCtrl->getLinkTarget($this, "showImage") . "\" /></div>";
+                $this->ctrl->setParameter($this, "img", $k + 1);
+                $img = "<div><img src=\"" . $this->ctrl->getLinkTarget($this, "showImage") . "\" /></div>";
             }
             $qtpl->setVariable(
                 "ANSWER",
@@ -337,14 +339,14 @@ class adnTestGUI
 
         $img = "";
         if ($question->getFilename(1)) {
-            $ilCtrl->setParameter($this, "img", 1);
-            $img = "<div><img src=\"" . $ilCtrl->getLinkTarget($this, "showImage") . "\" /></div>";
+            $this->ctrl->setParameter($this, "img", 1);
+            $img = "<div><img src=\"" . $this->ctrl->getLinkTarget($this, "showImage") . "\" /></div>";
         }
 
         $cnt = !is_array($this->questions)
             ? 0
             : count($this->questions);
-        $head = $lng->txt("adn_question_x_of_y");
+        $head = $this->lng->txt("adn_question_x_of_y");
         $head = str_replace("%x", $qnr, $head);
         $head = str_replace("%y", $cnt, $head);
         $qtpl->setVariable(
@@ -353,12 +355,12 @@ class adnTestGUI
         );
         $qtpl->setVariable("QUESTION",
             $img . str_replace($markups, $markups_html, $question->getQuestion()));
-        $qtpl->setVariable("FORMACTION", $ilCtrl->getFormAction($this));
+        $qtpl->setVariable("FORMACTION", $this->ctrl->getFormAction($this));
         $qtpl->setVariable("TOOLBAR", $tb->getHTML());
         $qtpl->setVariable("QID", $q_id);
         //$qtpl->setVariable("TOOLBAR2", $tb->getHTML());
 
-        $tpl->setContent($qtpl->get());
+        $this->tpl->setContent($qtpl->get());
     }
 
     /**
@@ -384,20 +386,19 @@ class adnTestGUI
      */
     public function finishTestConfirmation()
     {
-        global $tpl, $lng, $ilToolbar, $ilCtrl;
 
         $this->saveAnswer();
 
-        ilUtil::sendQuestion($lng->txt("adn_really_finish_test"));
+        ilUtil::sendQuestion($this->lng->txt("adn_really_finish_test"));
 
-        $ilCtrl->setParameter($this, "q_id", $_GET["q_id"]);
-        $ilToolbar->addButton(
-            $lng->txt("yes"),
-            $ilCtrl->getLinkTarget($this, "finishTest")
+        $this->ctrl->setParameter($this, "q_id", $_GET["q_id"]);
+        $this->toolbar->addButton(
+            $this->lng->txt("yes"),
+            $this->ctrl->getLinkTarget($this, "finishTest")
         );
-        $ilToolbar->addButton(
-            $lng->txt("no"),
-            $ilCtrl->getLinkTarget($this, "showQuestion")
+        $this->toolbar->addButton(
+            $this->lng->txt("no"),
+            $this->ctrl->getLinkTarget($this, "showQuestion")
         );
     }
 
@@ -406,13 +407,12 @@ class adnTestGUI
      */
     public function finishTest()
     {
-        global $lng, $ilToolbar, $ilCtrl;
 
         if ($this->mode == self::MODE_ELEARNING) {
-            $ilCtrl->redirectByClass("adnelearninggui", "showResult");
+            $this->ctrl->redirectByClass("adnelearninggui", "showResult");
         } else {
-            ilUtil::sendSuccess($lng->txt("adn_test_finished"));
-            $ilToolbar->addButton($lng->txt("logout"), "logout.php");
+            ilUtil::sendSuccess($this->lng->txt("adn_test_finished"));
+            $this->toolbar->addButton($this->lng->txt("logout"), "logout.php");
         }
     }
 

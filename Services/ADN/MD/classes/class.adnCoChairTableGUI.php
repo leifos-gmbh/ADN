@@ -26,7 +26,6 @@ class adnCoChairTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd, $a_wmo_id)
     {
-        global $ilCtrl, $lng;
 
         $this->wmo_id = (int) $a_wmo_id;
 
@@ -35,10 +34,10 @@ class adnCoChairTableGUI extends ilTable2GUI
         $this->setId("adn_tbl_mdcch");
 
         include_once "Services/ADN/MD/classes/class.adnWMO.php";
-        $this->setTitle($lng->txt("adn_cochairs") . ": " . adnWMO::lookupName($this->wmo_id));
+        $this->setTitle($this->lng->txt("adn_cochairs") . ": " . adnWMO::lookupName($this->wmo_id));
 
         if (adnPerm::check(adnPerm::MD, adnPerm::WRITE)) {
-            $this->addMultiCommand("confirmDeleteCoChairs", $lng->txt("delete"));
+            $this->addMultiCommand("confirmDeleteCoChairs", $this->lng->txt("delete"));
             $this->addColumn("", "");
         }
         
@@ -49,7 +48,7 @@ class adnCoChairTableGUI extends ilTable2GUI
         $this->setDefaultOrderField("salutation");
         $this->setDefaultOrderDirection("asc");
 
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.cochair_row.html", "Services/ADN/MD");
 
         $this->importData();
@@ -60,7 +59,6 @@ class adnCoChairTableGUI extends ilTable2GUI
      */
     protected function importData()
     {
-        global $lng;
         
         include_once "Services/ADN/MD/classes/class.adnCoChair.php";
         $cochairs = adnCoChair::getAllCoChairs($this->wmo_id);
@@ -68,7 +66,7 @@ class adnCoChairTableGUI extends ilTable2GUI
         // value mapping (to have correct sorting)
         if (sizeof($cochairs)) {
             foreach ($cochairs as $idx => $item) {
-                $cochairs[$idx]["salutation"] = $lng->txt("adn_salutation_" . $item["salutation"]);
+                $cochairs[$idx]["salutation"] = $this->lng->txt("adn_salutation_" . $item["salutation"]);
             }
         }
 
@@ -83,23 +81,22 @@ class adnCoChairTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
 
         // actions...
 
         if (adnPerm::check(adnPerm::MD, adnPerm::WRITE)) {
-            $ilCtrl->setParameter($this->parent_obj, "cch_id", $a_set["id"]);
+            $this->ctrl->setParameter($this->parent_obj, "cch_id", $a_set["id"]);
 
             // edit
             $this->tpl->setCurrentBlock("action");
-            $this->tpl->setVariable("TXT_CMD", $lng->txt("edit"));
+            $this->tpl->setVariable("TXT_CMD", $this->lng->txt("edit"));
             $this->tpl->setVariable(
                 "HREF_CMD",
-                $ilCtrl->getLinkTarget($this->parent_obj, "editCoChair")
+                $this->ctrl->getLinkTarget($this->parent_obj, "editCoChair")
             );
             $this->tpl->parseCurrentBlock();
 
-            $ilCtrl->setParameter($this->parent_obj, "cch_id", "");
+            $this->ctrl->setParameter($this->parent_obj, "cch_id", "");
 
             // checkbox for deletion
             $this->tpl->setCurrentBlock("cbox");

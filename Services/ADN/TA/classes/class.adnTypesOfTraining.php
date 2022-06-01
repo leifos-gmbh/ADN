@@ -31,7 +31,8 @@ class adnTypesOfTraining
      */
     public static function getAllTypes()
     {
-        global $lng;
+        global $DIC;
+        $lng = $DIC->language();
 
         return array(
             self::DRY_MATERIAL => $lng->txt("adn_train_type_" . self::DRY_MATERIAL),
@@ -55,7 +56,8 @@ class adnTypesOfTraining
      */
     public static function getTextRepresentation($a_type_of_training)
     {
-        global $lng;
+        global $DIC;
+        $lng = $DIC->language();
         
         return $lng->txt("adn_train_type_" . $a_type_of_training);
     }

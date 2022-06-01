@@ -17,16 +17,17 @@ class adnMCQuestionGUI extends adnExaminationQuestionGUI
 {
     // current mc question object
     protected ?adnMCQuestion $question = null;
-
+    protected ilToolbarGUI $toolbar;
     /**
      * Constructor
      */
     public function __construct()
     {
-        global $ilCtrl;
-
+        global $DIC;
+        $this->toolbar = $DIC->toolbar();
+        parent::__construct();
         // save mc question ID through requests
-        $ilCtrl->saveParameter($this, array("eq_id"));
+        $this->ctrl->saveParameter($this, array("eq_id"));
     
         $this->readMCQuestion();
     }
@@ -36,20 +37,19 @@ class adnMCQuestionGUI extends adnExaminationQuestionGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl, $lng, $tpl;
 
-        $tpl->setTitle($lng->txt("adn_ed") . " - " . $lng->txt("adn_ed_eqs"));
+        $this->tpl->setTitle($this->lng->txt("adn_ed") . " - " . $this->lng->txt("adn_ed_eqs"));
 
         $this->setTabs("mc_questions");
 
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
 
         // forward command to next gui class in control flow
         switch ($next_class) {
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("listMCQuestions");
+                $cmd = $this->ctrl->getCmd("listMCQuestions");
 
                 switch ($cmd) {
                     // commands that need read permission
@@ -99,18 +99,17 @@ class adnMCQuestionGUI extends adnExaminationQuestionGUI
      */
     protected function listMCQuestions()
     {
-        global $tpl, $ilToolbar, $ilCtrl, $lng;
 
         // add button incl. area select
         if (adnPerm::check(adnPerm::ED, adnPerm::WRITE)) {
             include_once("./Services/ADN/ED/classes/class.adnObjective.php");
             $options = adnObjective::getAllMCCatalogAreas();
             include_once("./Services/Form/classes/class.ilSelectInputGUI.php");
-            $si = new ilSelectInputGUI($lng->txt("adn_catalog_area"), "catalog_area");
+            $si = new ilSelectInputGUI($this->lng->txt("adn_catalog_area"), "catalog_area");
             $si->setOptions($options);
-            $ilToolbar->addInputItem($si, true);
-            $ilToolbar->setFormAction($ilCtrl->getFormAction($this, "addMCQuestion"));
-            $ilToolbar->addFormButton($lng->txt("adn_add_mc_question"), "addMCQuestion");
+            $this->toolbar->addInputItem($si, true);
+            $this->toolbar->setFormAction($this->ctrl->getFormAction($this, "addMCQuestion"));
+            $this->toolbar->addFormButton($this->lng->txt("adn_add_mc_question"), "addMCQuestion");
         }
 
         // table of mc questions
@@ -118,7 +117,7 @@ class adnMCQuestionGUI extends adnExaminationQuestionGUI
         $table = new adnExaminationQuestionTableGUI($this, "listMCQuestions");
 
         // output table
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -154,13 +153,12 @@ class adnMCQuestionGUI extends adnExaminationQuestionGUI
      */
     protected function addMCQuestion(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl;
 
         if (!$a_form) {
             $area = (int) $_REQUEST["catalog_area"];
             $a_form = $this->initMCQuestionForm($area, "create");
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
 
     /**
@@ -170,12 +168,11 @@ class adnMCQuestionGUI extends adnExaminationQuestionGUI
      */
     protected function editMCQuestion(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl;
 
         if (!$a_form) {
             $a_form = $this->initMCQuestionForm($this->question->getCatalogArea(), "edit");
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
 
     /**
@@ -183,13 +180,12 @@ class adnMCQuestionGUI extends adnExaminationQuestionGUI
      */
     protected function showMCQuestion()
     {
-        global $tpl, $lng, $ilTabs, $ilCtrl;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listMCQuestions"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listMCQuestions"));
 
         $form = $this->initMCQuestionForm($this->question->getCatalogArea(), "show");
         $form = $form->convertToReadonly();
-        $tpl->setContent($form->getHTML());
+        $this->tpl->setContent($form->getHTML());
     }
 
     /**
@@ -197,15 +193,14 @@ class adnMCQuestionGUI extends adnExaminationQuestionGUI
      */
     protected function showMCBackup()
     {
-        global $tpl, $lng, $ilTabs, $ilCtrl;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listMCQuestions"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listMCQuestions"));
 
         $this->question->readBackup();
 
         $form = $this->initMCQuestionForm($this->question->getCatalogArea(), "backup");
         $form = $form->convertToReadonly();
-        $tpl->setContent($form->getHTML());
+        $this->tpl->setContent($form->getHTML());
     }
 
     /**
@@ -217,11 +212,10 @@ class adnMCQuestionGUI extends adnExaminationQuestionGUI
      */
     protected function initMCQuestionForm($a_catalog_area, $a_mode = "edit")
     {
-        global $lng, $ilCtrl, $ilTabs;
 
-        $ilTabs->setBackTarget(
-            $lng->txt("back"),
-            $ilCtrl->getLinkTarget($this, "listMCQuestions")
+        $this->tabs->setBackTarget(
+            $this->lng->txt("back"),
+            $this->ctrl->getLinkTarget($this, "listMCQuestions")
         );
 
         $form = $this->initBaseForm($a_catalog_area, $a_mode);
@@ -233,7 +227,7 @@ class adnMCQuestionGUI extends adnExaminationQuestionGUI
             "c" => "C",
             "d" => "D"
         );
-        $correct = new ilRadioGroupInputGUI($lng->txt("adn_correct_answer"), "correct_answer");
+        $correct = new ilRadioGroupInputGUI($this->lng->txt("adn_correct_answer"), "correct_answer");
         foreach ($options as $option => $caption) {
             $correct->addOption(new ilRadioOption($caption, $option));
         }
@@ -246,12 +240,12 @@ class adnMCQuestionGUI extends adnExaminationQuestionGUI
         foreach (array("A", "B", "C", "D") as $n) {
             include_once("./Services/Form/classes/class.ilFormSectionHeaderGUI.php");
             $sh = new ilFormSectionHeaderGUI();
-            $sh->setTitle($lng->txt("adn_answer") . " " . $n);
+            $sh->setTitle($this->lng->txt("adn_answer") . " " . $n);
             $form->addItem($sh);
 
             // answer
             $answer[$n]["text"] = new ilTextAreaInputGUI(
-                $lng->txt("adn_answer_text"),
+                $this->lng->txt("adn_answer_text"),
                 "answer_text_" . $n
             );
             $answer[$n]["text"]->setCols(80);
@@ -263,7 +257,7 @@ class adnMCQuestionGUI extends adnExaminationQuestionGUI
 
             // answer image
             $answer[$n]["image"] = new ilImageFileInputGUI(
-                $lng->txt("adn_image_for_answer"),
+                $this->lng->txt("adn_image_for_answer"),
                 "answer_image_" . $n
             );
             $form->addItem($answer[$n]["image"]);
@@ -271,9 +265,9 @@ class adnMCQuestionGUI extends adnExaminationQuestionGUI
 
         if ($a_mode == "create") {
             // creation: save/cancel buttons and title
-            $form->addCommandButton("saveMCQuestion", $lng->txt("save"));
-            $form->addCommandButton("listMCQuestions", $lng->txt("cancel"));
-            $form->setTitle($lng->txt("adn_add_mc_question"));
+            $form->addCommandButton("saveMCQuestion", $this->lng->txt("save"));
+            $form->addCommandButton("listMCQuestions", $this->lng->txt("cancel"));
+            $form->setTitle($this->lng->txt("adn_add_mc_question"));
         } else {
             $this->addFormLastChange($form, $a_mode);
 
@@ -286,9 +280,9 @@ class adnMCQuestionGUI extends adnExaminationQuestionGUI
                 if ($answer_values["image"]) {
                     $file = $this->question->getFilePath() . $this->question->getId() . "_" . ($idx + 2);
                     if (file_exists($file)) {
-                        $ilCtrl->setParameter($this, "img", ($idx + 2));
-                        $answer[$n]["image"]->setImage($ilCtrl->getLinkTarget($this, "showImage"));
-                        $ilCtrl->setParameter($this, "img", "");
+                        $this->ctrl->setParameter($this, "img", ($idx + 2));
+                        $answer[$n]["image"]->setImage($this->ctrl->getLinkTarget($this, "showImage"));
+                        $this->ctrl->setParameter($this, "img", "");
                         $answer[$n]["image"]->setAlt($answer_values["image"]);
                     }
                 }
@@ -297,23 +291,23 @@ class adnMCQuestionGUI extends adnExaminationQuestionGUI
             switch ($a_mode) {
                 case "edit":
                     // editing: update/cancel buttons and title
-                    $form->addCommandButton("updateMCQuestion", $lng->txt("save"));
-                    $form->addCommandButton("updateBackupMCQuestion", $lng->txt("adn_save_backup"));
-                    $form->addCommandButton("listMCQuestions", $lng->txt("cancel"));
-                    $form->setTitle($lng->txt("adn_edit_mc_question"));
+                    $form->addCommandButton("updateMCQuestion", $this->lng->txt("save"));
+                    $form->addCommandButton("updateBackupMCQuestion", $this->lng->txt("adn_save_backup"));
+                    $form->addCommandButton("listMCQuestions", $this->lng->txt("cancel"));
+                    $form->setTitle($this->lng->txt("adn_edit_mc_question"));
                     break;
 
                 case "show":
-                    $form->setTitle($lng->txt("adn_show_details"));
+                    $form->setTitle($this->lng->txt("adn_show_details"));
                     break;
 
                 case "backup":
-                    $form->setTitle($lng->txt("adn_show_backup"));
+                    $form->setTitle($this->lng->txt("adn_show_backup"));
                     break;
             }
         }
 
-        $form->setFormAction($ilCtrl->getFormAction($this));
+        $form->setFormAction($this->ctrl->getFormAction($this));
 
         return $form;
     }
@@ -323,7 +317,6 @@ class adnMCQuestionGUI extends adnExaminationQuestionGUI
      */
     protected function saveMCQuestion()
     {
-        global $tpl, $lng, $ilCtrl;
 
         $form = $this->initMCQuestionForm((int) $_REQUEST["catalog_area"], "create");
 
@@ -347,9 +340,9 @@ class adnMCQuestionGUI extends adnExaminationQuestionGUI
 
                 if ($question->save()) {
                     // show success message and return to list
-                    ilUtil::sendSuccess($lng->txt("adn_mc_question_created"), true);
-                    $ilCtrl->setParameter($this, "eq_id", $question->getId());
-                    $ilCtrl->redirect($this, "listMCQuestions");
+                    ilUtil::sendSuccess($this->lng->txt("adn_mc_question_created"), true);
+                    $this->ctrl->setParameter($this, "eq_id", $question->getId());
+                    $this->ctrl->redirect($this, "listMCQuestions");
                 }
             }
         }
@@ -364,7 +357,6 @@ class adnMCQuestionGUI extends adnExaminationQuestionGUI
      */
     protected function updateMCQuestion()
     {
-        global $lng, $ilCtrl, $tpl;
 
         $form = $this->initMCQuestionForm((int) $_REQUEST["catalog_area"], "edit");
 
@@ -390,8 +382,8 @@ class adnMCQuestionGUI extends adnExaminationQuestionGUI
 
                 if ($this->question->update()) {
                     // show success message and return to list
-                    ilUtil::sendSuccess($lng->txt("adn_mc_question_updated"), true);
-                    $ilCtrl->redirect($this, "listMCQuestions");
+                    ilUtil::sendSuccess($this->lng->txt("adn_mc_question_updated"), true);
+                    $this->ctrl->redirect($this, "listMCQuestions");
                 }
             }
         }
@@ -406,7 +398,6 @@ class adnMCQuestionGUI extends adnExaminationQuestionGUI
      */
     protected function updateBackupMCQuestion()
     {
-        global $lng;
 
         // only 1 backup per questions
         $this->question->removeBackups();
@@ -428,7 +419,7 @@ class adnMCQuestionGUI extends adnExaminationQuestionGUI
 
             $this->updateMCQuestion();
         } else {
-            ilUtil::sendSuccess($lng->txt("adn_backup_fail"));
+            ilUtil::sendSuccess($this->lng->txt("adn_backup_fail"));
         }
     }
 
@@ -437,25 +428,24 @@ class adnMCQuestionGUI extends adnExaminationQuestionGUI
      */
     protected function confirmQuestionDeletion()
     {
-        global $ilCtrl, $tpl, $lng, $ilTabs;
 
         // check whether at least one item has been seleced
         if (!is_array($_POST["question_id"]) || count($_POST["question_id"]) == 0) {
-            ilUtil::sendFailure($lng->txt("no_checkbox"), true);
-            $ilCtrl->redirect($this, "listMCQuestions");
+            ilUtil::sendFailure($this->lng->txt("no_checkbox"), true);
+            $this->ctrl->redirect($this, "listMCQuestions");
         } else {
-            $ilTabs->setBackTarget(
-                $lng->txt("back"),
-                $ilCtrl->getLinkTarget($this, "listMCQuestions")
+            $this->tabs->setBackTarget(
+                $this->lng->txt("back"),
+                $this->ctrl->getLinkTarget($this, "listMCQuestions")
             );
 
             // display confirmation message
             include_once("./Services/Utilities/classes/class.ilConfirmationGUI.php");
             $cgui = new ilConfirmationGUI();
-            $cgui->setFormAction($ilCtrl->getFormAction($this));
-            $cgui->setHeaderText($lng->txt("adn_sure_delete_mc_questions"));
-            $cgui->setCancel($lng->txt("cancel"), "listMCQuestions");
-            $cgui->setConfirm($lng->txt("delete"), "deleteMCQuestion");
+            $cgui->setFormAction($this->ctrl->getFormAction($this));
+            $cgui->setHeaderText($this->lng->txt("adn_sure_delete_mc_questions"));
+            $cgui->setCancel($this->lng->txt("cancel"), "listMCQuestions");
+            $cgui->setConfirm($this->lng->txt("delete"), "deleteMCQuestion");
 
             // list objects that should be deleted
             foreach ($_POST["question_id"] as $i) {
@@ -463,7 +453,7 @@ class adnMCQuestionGUI extends adnExaminationQuestionGUI
                 $cgui->addItem("question_id[]", $i, adnMCQuestion::lookupName($i));
             }
 
-            $tpl->setContent($cgui->getHTML());
+            $this->tpl->setContent($cgui->getHTML());
         }
     }
 
@@ -472,7 +462,6 @@ class adnMCQuestionGUI extends adnExaminationQuestionGUI
      */
     protected function deleteMCQuestion()
     {
-        global $ilCtrl, $lng;
 
         include_once("./Services/ADN/ED/classes/class.adnMCQuestion.php");
 
@@ -482,7 +471,7 @@ class adnMCQuestionGUI extends adnExaminationQuestionGUI
                 $question->delete();
             }
         }
-        ilUtil::sendSuccess($lng->txt("adn_mc_question_deleted"), true);
-        $ilCtrl->redirect($this, "listMCQuestions");
+        ilUtil::sendSuccess($this->lng->txt("adn_mc_question_deleted"), true);
+        $this->ctrl->redirect($this, "listMCQuestions");
     }
 }

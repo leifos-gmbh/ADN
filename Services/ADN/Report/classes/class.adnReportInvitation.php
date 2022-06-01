@@ -104,7 +104,6 @@ class adnReportInvitation extends adnReport
      */
     public function create()
     {
-        global $ilUser;
         
         include_once './Services/ADN/Report/classes/class.adnReportFileUtils.php';
 
@@ -177,7 +176,7 @@ class adnReportInvitation extends adnReport
             $map = $this->addStandardRightColumn(
                 $map,
                 $wmo,
-                $ilUser->getId()
+                $this->user->getId()
             );
             
             //  Fill standard address
@@ -213,7 +212,7 @@ class adnReportInvitation extends adnReport
         $writer->xmlEndTag('action');
         $writer->xmlEndTag('tasks');
 
-        $GLOBALS['ilLog']->write($writer->xmlDumpMem(true));
+        $this->log->info($writer->xmlDumpMem(true));
         
         try {
             $adapter = new adnRpcAdapter();
@@ -234,9 +233,8 @@ class adnReportInvitation extends adnReport
      */
     public function addInvitationFields($map, $wmo, $candidate)
     {
-        global $lng,$ilUser;
         
-        $lng->loadLanguageModule('dateplaner');
+        $this->lng->loadLanguageModule('dateplaner');
         
         include_once './Services/ADN/MD/classes/class.adnWMO.php';
         include_once './Services/Calendar/classes/class.ilCalendarUtil.php';
@@ -245,10 +243,10 @@ class adnReportInvitation extends adnReport
         include_once './Services/ADN/ES/classes/class.adnCertifiedProfessional.php';
         $cand = new adnCertifiedProfessional($candidate);
         $map['rcp_salutation'] =
-            $lng->txt('adn_report_salutation_' . $cand->getSalutation()) . ' ' .
+            $this->lng->txt('adn_report_salutation_' . $cand->getSalutation()) . ' ' .
             $cand->getLastName() . ', ';
         
-        $map['iss_lastname'] = $ilUser->getLastname();
+        $map['iss_lastname'] = $this->user->getLastname();
 
         include_once './Services/ADN/MD/classes/class.adnExamFacility.php';
         $fac = new adnExamFacility($this->getEvent()->getFacility());
@@ -278,12 +276,12 @@ class adnReportInvitation extends adnReport
         // Date of exam
         $exam = $this->getEvent()->getDateFrom();
         $weekday = $exam->get(IL_CAL_FKT_DATE, 'D');
-        $weekday = $lng->txt(substr($weekday, 0, 2) . '_long');
+        $weekday = $this->lng->txt(substr($weekday, 0, 2) . '_long');
         $map['exam_date'] = sprintf(
-            $lng->txt('adn_date_long'),
+            $this->lng->txt('adn_date_long'),
             $weekday,
             $exam->get(IL_CAL_FKT_DATE, 'd.m.Y') . ', ' . $exam->get(IL_CAL_FKT_DATE, 'H:i')
-        ) . ' ' . $lng->txt('adn_report_date_clock');
+        ) . ' ' . $this->lng->txt('adn_report_date_clock');
         
         
         return $map;

@@ -20,7 +20,8 @@ class adnUser
      */
     public static function lookupWMOId()
     {
-        global $ilUser;
+        global $DIC;
+        $ilUser = $DIC->user();
 
         // get value of wmo code of user
         $ud = $ilUser->getUserDefinedData();
@@ -52,7 +53,8 @@ class adnUser
      */
     public static function getAllUsers()
     {
-        global $rbacreview;
+        global $DIC;
+        $rbacreview = $DIC->rbac()->review();
 
         // get role ids from name (hardcoded)
         $zsuk_id = array_pop(ilObject::_getIdsForTitle("ZSUK", "role"));

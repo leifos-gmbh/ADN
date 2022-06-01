@@ -25,7 +25,6 @@ class adnELResultTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd, $a_questions, $a_answers)
     {
-        global $ilCtrl, $lng;
 
         $this->questions = array();
         $cnt = 1;
@@ -39,14 +38,14 @@ class adnELResultTableGUI extends ilTable2GUI
 
         $this->setData($this->questions);
 
-        $this->setTitle($lng->txt("adn_questions"));
+        $this->setTitle($this->lng->txt("adn_questions"));
         $this->addColumn($this->lng->txt("adn_nr"));
         $this->addColumn($this->lng->txt("adn_question"));
         $this->addColumn($this->lng->txt("adn_correct"));
         
         $this->setLimit(100);
 
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.test_questions_row.html", "Services/ADN/EL");
     }
     
@@ -57,7 +56,6 @@ class adnELResultTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
 
         $markups = array("[u]", "[/u]", "[f]", "[/f]", "[h]", "[/h]", "[t]", "[/t]");
         $markups_html = array("<u>", "</u>", "<b>", "</b>", "<sup>", "</sup>", "<sub>", "</sub>");
@@ -92,11 +90,11 @@ class adnELResultTableGUI extends ilTable2GUI
 
         $this->tpl->setVariable(
             "TXT_YOUR_ANSWER",
-            str_replace($markups, $markups_html, $lng->txt("adn_your_answer"))
+            str_replace($markups, $markups_html, $this->lng->txt("adn_your_answer"))
         );
         $this->tpl->setVariable(
             "TXT_CORRECT_ANSWER",
-            str_replace($markups, $markups_html, $lng->txt("adn_correct_answer"))
+            str_replace($markups, $markups_html, $this->lng->txt("adn_correct_answer"))
         );
         if ($a == $g) {
             $this->tpl->setVariable("VAL_CORRECT", "X");

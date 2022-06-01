@@ -24,7 +24,6 @@ class adnSubobjective extends adnDBBase
      */
     public function __construct($a_id = 0)
     {
-        global $ilCtrl;
 
         if ($a_id !== 0) {
             $this->setId($a_id);
@@ -34,14 +33,13 @@ class adnSubobjective extends adnDBBase
     
     /**
      * Get ids by objective
-     * @global ilDB $ilDB
      * @param int $a_objective
      * @return int[]
      */
     public static function lookupIdByObjective($a_objective)
     {
-        /** @var ilDBInterface $ilDB */
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
         
         $query = 'SELECT id from adn_ed_subobjective ' .
             'WHERE ed_objective_id = ' . $ilDB->quote($a_objective, 'integer');
@@ -159,17 +157,16 @@ class adnSubobjective extends adnDBBase
      */
     public function read()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if (!$id) {
             return;
         }
 
-        $res = $ilDB->query("SELECT title,nr,topic,ed_objective_id" .
+        $res = $this->db->query("SELECT title,nr,topic,ed_objective_id" .
             " FROM adn_ed_subobjective" .
-            " WHERE id = " . $ilDB->quote($this->getId(), "integer"));
-        $set = $ilDB->fetchAssoc($res);
+            " WHERE id = " . $this->db->quote($this->getId(), "integer"));
+        $set = $this->db->fetchAssoc($res);
         $this->setObjective($set["ed_objective_id"]);
         $this->setName($set["title"]);
         $this->setTopic($set["topic"]);
@@ -200,15 +197,14 @@ class adnSubobjective extends adnDBBase
      */
     public function save()
     {
-        global $ilDB;
 
-        $this->setId($ilDB->nextId("adn_ed_subobjective"));
+        $this->setId($this->db->nextId("adn_ed_subobjective"));
         $id = $this->getId();
 
         $fields = $this->propertiesToFields();
         $fields["id"] = array("integer", $id);
             
-        $ilDB->insert("adn_ed_subobjective", $fields);
+        $this->db->insert("adn_ed_subobjective", $fields);
 
         parent::_save($id, "adn_ed_subobjective");
         
@@ -222,7 +218,6 @@ class adnSubobjective extends adnDBBase
      */
     public function update()
     {
-        global $ilDB;
         
         $id = $this->getId();
         if (!$id) {
@@ -231,7 +226,7 @@ class adnSubobjective extends adnDBBase
 
         $fields = $this->propertiesToFields();
         
-        $ilDB->update("adn_ed_subobjective", $fields, array("id" => array("integer", $id)));
+        $this->db->update("adn_ed_subobjective", $fields, array("id" => array("integer", $id)));
 
         parent::_update($id, "adn_ed_subobjective");
 
@@ -245,7 +240,6 @@ class adnSubobjective extends adnDBBase
      */
     public function delete()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if ($id) {
@@ -266,10 +260,10 @@ class adnSubobjective extends adnDBBase
                 $this->update();
             } else {
                 ilLoggerFactory::getLogger('adn')->info('------ deleting subobjective.');
-                $ilDB->manipulate("DELETE FROM adn_ed_target_nr_obj" .
-                    " WHERE ed_subobjective_id = " . $ilDB->quote($id, "integer"));
-                $ilDB->manipulate("DELETE FROM adn_ed_subobjective" .
-                    " WHERE id = " . $ilDB->quote($id, "integer"));
+                $this->db->manipulate("DELETE FROM adn_ed_target_nr_obj" .
+                    " WHERE ed_subobjective_id = " . $this->db->quote($id, "integer"));
+                $this->db->manipulate("DELETE FROM adn_ed_subobjective" .
+                    " WHERE id = " . $this->db->quote($id, "integer"));
                 $this->setId(null);
             }
             return true;
@@ -290,7 +284,8 @@ class adnSubobjective extends adnDBBase
         $a_with_archived = false
     )
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id,title AS name,nr,topic" .
             " FROM adn_ed_subobjective" .
@@ -329,7 +324,8 @@ class adnSubobjective extends adnDBBase
      */
     public static function getSubobjectivesSelect($a_objective_id = null, $a_old_value = null)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id,nr,title" .
             " FROM adn_ed_subobjective";
@@ -370,7 +366,8 @@ class adnSubobjective extends adnDBBase
      */
     protected static function lookupProperty($a_id, $a_prop)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query("SELECT " . $a_prop .
             " FROM adn_ed_subobjective" .
@@ -397,22 +394,21 @@ class adnSubobjective extends adnDBBase
      */
     public function isUniqueNumber()
     {
-        global $ilDB;
 
         $id = $this->getId();
         $obj = $this->getObjective();
 
         $sql = "SELECT id FROM adn_ed_subobjective" .
-            " WHERE ed_objective_id = " . $ilDB->quote($obj, "integer") .
-            " AND nr = " . $ilDB->quote($this->getNumber(), "text");
-        " AND archived < " . $ilDB->quote(1, "integer");
+            " WHERE ed_objective_id = " . $this->db->quote($obj, "integer") .
+            " AND nr = " . $this->db->quote($this->getNumber(), "text");
+        " AND archived < " . $this->db->quote(1, "integer");
 
         if ($id) {
-            $sql .= " AND id <> " . $ilDB->quote($id, "integer");
+            $sql .= " AND id <> " . $this->db->quote($id, "integer");
         }
 
-        $set = $ilDB->query($sql);
-        return !(bool) $ilDB->numRows($set);
+        $set = $this->db->query($sql);
+        return !(bool) $this->db->numRows($set);
     }
 
     /**

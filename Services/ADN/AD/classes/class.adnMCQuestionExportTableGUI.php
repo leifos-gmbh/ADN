@@ -21,13 +21,12 @@ class adnMCQuestionExportTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd)
     {
-        global $ilCtrl, $lng;
 
         parent::__construct($a_parent_obj, $a_parent_cmd);
 
         $this->setId("adn_tbl_admcx");
 
-        $this->setTitle($lng->txt("adn_export_mc_questions"));
+        $this->setTitle($this->lng->txt("adn_export_mc_questions"));
         
         $this->addColumn("", "");
         $this->addColumn($this->lng->txt("file"), "name");
@@ -37,10 +36,10 @@ class adnMCQuestionExportTableGUI extends ilTable2GUI
         $this->setDefaultOrderField("file");
         $this->setDefaultOrderDirection("asc");
 
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.file_row.html", "Services/ADN/AD");
 
-        $this->addMultiCommand("confirmDeleteFiles", $lng->txt("delete"));
+        $this->addMultiCommand("confirmDeleteFiles", $this->lng->txt("delete"));
 
         $this->importData();
     }
@@ -71,23 +70,22 @@ class adnMCQuestionExportTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
 
         // actions...
 
         if (adnPerm::check(adnPerm::AD, adnPerm::WRITE)) {
-            $ilCtrl->setParameter($this->parent_obj, "exf_id", $a_set["id"]);
+            $this->ctrl->setParameter($this->parent_obj, "exf_id", $a_set["id"]);
 
             // edit
             $this->tpl->setCurrentBlock("action");
-            $this->tpl->setVariable("TXT_CMD", $lng->txt("download"));
+            $this->tpl->setVariable("TXT_CMD", $this->lng->txt("download"));
             $this->tpl->setVariable(
                 "HREF_CMD",
-                $ilCtrl->getLinkTarget($this->parent_obj, "downloadFile")
+                $this->ctrl->getLinkTarget($this->parent_obj, "downloadFile")
             );
             $this->tpl->parseCurrentBlock();
 
-            $ilCtrl->setParameter($this->parent_obj, "exf_id", "");
+            $this->ctrl->setParameter($this->parent_obj, "exf_id", "");
         }
 
         // properties

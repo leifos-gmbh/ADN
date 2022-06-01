@@ -22,16 +22,27 @@ class adnGoodInTransitGUI
 
     // current good object
     protected ?adnGoodInTransit $good = null;
+
+    protected ilCtrl $ctrl;
+    protected ilLanguage $lng;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilToolbarGUI $toolbar;
+    protected ilTabsGUI $tabs;
     
     /**
      * Constructor
      */
     public function __construct()
     {
-        global $ilCtrl;
+        global $DIC;
+        $this->ctrl = $DIC->ctrl();
+        $this->lng = $DIC->language();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->toolbar = $DIC->toolbar();
+        $this->tabs = $DIC->tabs();
 
         // save good ID through requests
-        $ilCtrl->saveParameter($this, array("gd_id"));
+        $this->ctrl->saveParameter($this, array("gd_id"));
         
         $this->readGood();
     }
@@ -41,24 +52,23 @@ class adnGoodInTransitGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl, $lng, $tpl;
 
-        $tpl->setTitle($lng->txt("adn_ed") . " - " . $lng->txt("adn_ed_gts"));
+        $this->tpl->setTitle($this->lng->txt("adn_ed") . " - " . $this->lng->txt("adn_ed_gts"));
         
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
         
         // forward command to next gui class in control flow
         switch ($next_class) {
             case "adngoodintransitcategorygui":
                 include_once("./Services/ADN/ED/classes/class.adnGoodInTransitCategoryGUI.php");
                 $ct_gui = new adnGoodInTransitCategoryGUI();
-                $ilCtrl->forwardCommand($ct_gui);
+                $this->ctrl->forwardCommand($ct_gui);
                 break;
 
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("listGasGoods");
+                $cmd = $this->ctrl->getCmd("listGasGoods");
 
                 // determine type from cmd (Gas|Chem)
                 if (strstr($cmd, "Gas")) {
@@ -120,12 +130,11 @@ class adnGoodInTransitGUI
      */
     protected function listGoods()
     {
-        global $tpl, $lng, $ilCtrl, $ilToolbar;
 
         if (adnPerm::check(adnPerm::ED, adnPerm::WRITE)) {
-            $ilToolbar->addButton(
-                $lng->txt("adn_add_good_in_transit"),
-                $ilCtrl->getLinkTarget($this, "add" . $this->type . "Good")
+            $this->toolbar->addButton(
+                $this->lng->txt("adn_add_good_in_transit"),
+                $this->ctrl->getLinkTarget($this, "add" . $this->type . "Good")
             );
         }
 
@@ -137,7 +146,7 @@ class adnGoodInTransitGUI
             $this->type
         );
 
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
     
     /**
@@ -147,9 +156,8 @@ class adnGoodInTransitGUI
      */
     protected function addGood(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $ilTabs, $ilCtrl, $lng;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget(
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget(
             $this,
             "list" . $this->type . "Goods"
         ));
@@ -157,7 +165,7 @@ class adnGoodInTransitGUI
         if (!$a_form) {
             $a_form = $this->initGoodForm("create");
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
     
     /**
@@ -167,9 +175,8 @@ class adnGoodInTransitGUI
      */
     protected function editGood(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $ilTabs, $ilCtrl, $lng;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget(
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget(
             $this,
             "list" . $this->type . "Goods"
         ));
@@ -177,7 +184,7 @@ class adnGoodInTransitGUI
         if (!$a_form) {
             $a_form = $this->initGoodForm("edit");
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
     
     /**
@@ -188,21 +195,20 @@ class adnGoodInTransitGUI
      */
     protected function initGoodForm($a_mode = "edit")
     {
-        global $lng, $ilCtrl;
         
         // get form object and add input fields
         include_once("Services/Form/classes/class.ilPropertyFormGUI.php");
         $form = new ilPropertyFormGUI();
 
         // number
-        $number = new ilNumberInputGUI($lng->txt("adn_un_nr"), "number");
+        $number = new ilNumberInputGUI($this->lng->txt("adn_un_nr"), "number");
         $number->setRequired(true);
         $number->setSize(4);
         $number->setMaxLength(4);
         $form->addItem($number);
         
         // name
-        $name = new ilTextInputGUI($lng->txt("adn_name"), "name");
+        $name = new ilTextInputGUI($this->lng->txt("adn_name"), "name");
         $name->setRequired(true);
         $name->setMaxLength(200);
         $form->addItem($name);
@@ -211,8 +217,8 @@ class adnGoodInTransitGUI
         include_once "Services/ADN/ED/classes/class.adnGoodInTransitCategory.php";
         $options = adnGoodInTransitCategory::getCategoriesSelect($this->typetoConst());
         if ($options) {
-            $cats = new ilRadioGroupInputGUI($lng->txt("adn_good_in_transit_category"), "cat");
-            $cat_none = new ilRadioOption($lng->txt("adn_no_good_in_transit_category"), 0);
+            $cats = new ilRadioGroupInputGUI($this->lng->txt("adn_good_in_transit_category"), "cat");
+            $cat_none = new ilRadioOption($this->lng->txt("adn_no_good_in_transit_category"), 0);
             $cats->addOption($cat_none);
             foreach ($options as $cat_id => $cat_name) {
                 $cats->addOption(new ilRadioOption($cat_name, $cat_id));
@@ -223,21 +229,21 @@ class adnGoodInTransitGUI
         // available only with chemicals
         if ($this->type == "Chem") {
             // class
-            $class = new ilTextInputGUI($lng->txt("adn_class"), "class");
+            $class = new ilTextInputGUI($this->lng->txt("adn_class"), "class");
             $class->setMaxLength(5);
             $class->setSize(5);
             $class->setRequired(true);
             $form->addItem($class);
 
             // class code
-            $ccode = new ilTextInputGUI($lng->txt("adn_class_code"), "ccode");
+            $ccode = new ilTextInputGUI($this->lng->txt("adn_class_code"), "ccode");
             $ccode->setMaxLength(5);
             $ccode->setSize(5);
             $ccode->setRequired(true);
             $form->addItem($ccode);
 
             // packing group
-            $packing = new ilTextInputGUI($lng->txt("adn_packing_group"), "packing");
+            $packing = new ilTextInputGUI($this->lng->txt("adn_packing_group"), "packing");
             $packing->setMaxLength(5);
             $packing->setSize(5);
             $packing->setRequired(true);
@@ -245,16 +251,16 @@ class adnGoodInTransitGUI
         }
 
         // file
-        $file = new ilFileInputGUI($lng->txt("adn_material_file"), "file");
+        $file = new ilFileInputGUI($this->lng->txt("adn_material_file"), "file");
         $file->setSuffixes(array("pdf"));
         $file->setALlowDeletion(true);
         $form->addItem($file);
 
         if ($a_mode == "create") {
             // creation: save/cancel buttons and title
-            $form->addCommandButton("save" . $this->type . "Good", $lng->txt("save"));
-            $form->addCommandButton("list" . $this->type . "Goods", $lng->txt("cancel"));
-            $form->setTitle($lng->txt("adn_add_good_in_transit"));
+            $form->addCommandButton("save" . $this->type . "Good", $this->lng->txt("save"));
+            $form->addCommandButton("list" . $this->type . "Goods", $this->lng->txt("cancel"));
+            $form->setTitle($this->lng->txt("adn_add_good_in_transit"));
         } else {
             $number->setValue($this->good->getNumber());
             $name->setValue($this->good->getName());
@@ -271,12 +277,12 @@ class adnGoodInTransitGUI
             }
             
             // editing: update/cancel buttons and title
-            $form->addCommandButton("update" . $this->type . "Good", $lng->txt("save"));
-            $form->addCommandButton("list" . $this->type . "Goods", $lng->txt("cancel"));
-            $form->setTitle($lng->txt("adn_edit_good_in_transit"));
+            $form->addCommandButton("update" . $this->type . "Good", $this->lng->txt("save"));
+            $form->addCommandButton("list" . $this->type . "Goods", $this->lng->txt("cancel"));
+            $form->setTitle($this->lng->txt("adn_edit_good_in_transit"));
         }
         
-        $form->setFormAction($ilCtrl->getFormAction($this));
+        $form->setFormAction($this->ctrl->getFormAction($this));
 
         return $form;
     }
@@ -286,7 +292,6 @@ class adnGoodInTransitGUI
      */
     protected function saveGood()
     {
-        global $tpl, $lng, $ilCtrl;
         
         $form = $this->initGoodForm("create");
         
@@ -313,8 +318,8 @@ class adnGoodInTransitGUI
             
             if ($good->save()) {
                 // show success message and return to list
-                ilUtil::sendSuccess($lng->txt("adn_good_in_transit_created"), true);
-                $ilCtrl->redirect($this, "list" . $this->type . "Goods");
+                ilUtil::sendSuccess($this->lng->txt("adn_good_in_transit_created"), true);
+                $this->ctrl->redirect($this, "list" . $this->type . "Goods");
             }
         }
 
@@ -328,7 +333,6 @@ class adnGoodInTransitGUI
      */
     protected function updateGood()
     {
-        global $lng, $ilCtrl, $tpl;
         
         $form = $this->initGoodForm("edit");
         
@@ -358,8 +362,8 @@ class adnGoodInTransitGUI
             
             if ($this->good->update()) {
                 // show success message and return to list
-                ilUtil::sendSuccess($lng->txt("adn_good_in_transit_updated"), true);
-                $ilCtrl->redirect($this, "list" . $this->type . "Goods");
+                ilUtil::sendSuccess($this->lng->txt("adn_good_in_transit_updated"), true);
+                $this->ctrl->redirect($this, "list" . $this->type . "Goods");
             }
         }
         
@@ -373,25 +377,24 @@ class adnGoodInTransitGUI
      */
     protected function confirmGoodsDeletion()
     {
-        global $ilCtrl, $tpl, $lng, $ilTabs;
         
         // check whether at least one item has been seleced
         if (!is_array($_POST["good_id"]) || count($_POST["good_id"]) == 0) {
-            ilUtil::sendFailure($lng->txt("no_checkbox"), true);
-            $ilCtrl->redirect($this, "list" . $this->type . "Goods");
+            ilUtil::sendFailure($this->lng->txt("no_checkbox"), true);
+            $this->ctrl->redirect($this, "list" . $this->type . "Goods");
         } else {
-            $ilTabs->setBackTarget(
-                $lng->txt("back"),
-                $ilCtrl->getLinkTarget($this, "list" . $this->type . "Goods")
+            $this->tabs->setBackTarget(
+                $this->lng->txt("back"),
+                $this->ctrl->getLinkTarget($this, "list" . $this->type . "Goods")
             );
 
             // display confirmation message
             include_once("./Services/Utilities/classes/class.ilConfirmationGUI.php");
             $cgui = new ilConfirmationGUI();
-            $cgui->setFormAction($ilCtrl->getFormAction($this));
-            $cgui->setHeaderText($lng->txt("adn_sure_delete_goods_in_transit"));
-            $cgui->setCancel($lng->txt("cancel"), "list" . $this->type . "Goods");
-            $cgui->setConfirm($lng->txt("delete"), "delete" . $this->type . "Goods");
+            $cgui->setFormAction($this->ctrl->getFormAction($this));
+            $cgui->setHeaderText($this->lng->txt("adn_sure_delete_goods_in_transit"));
+            $cgui->setCancel($this->lng->txt("cancel"), "list" . $this->type . "Goods");
+            $cgui->setConfirm($this->lng->txt("delete"), "delete" . $this->type . "Goods");
 
             // list objects that should be deleted
             include_once("./Services/ADN/ED/classes/class.adnGoodInTransit.php");
@@ -399,7 +402,7 @@ class adnGoodInTransitGUI
                 $cgui->addItem("good_id[]", $i, adnGoodInTransit::lookupName($i));
             }
             
-            $tpl->setContent($cgui->getHTML());
+            $this->tpl->setContent($cgui->getHTML());
         }
     }
     
@@ -408,7 +411,6 @@ class adnGoodInTransitGUI
      */
     protected function deleteGoods()
     {
-        global $ilCtrl, $lng;
         
         include_once("./Services/ADN/ED/classes/class.adnGoodInTransit.php");
         
@@ -418,8 +420,8 @@ class adnGoodInTransitGUI
                 $good->delete();
             }
         }
-        ilUtil::sendSuccess($lng->txt("adn_good_in_transit_deleted"), true);
-        $ilCtrl->redirect($this, "list" . $this->type . "Goods");
+        ilUtil::sendSuccess($this->lng->txt("adn_good_in_transit_deleted"), true);
+        $this->ctrl->redirect($this, "list" . $this->type . "Goods");
     }
 
     /**
@@ -427,14 +429,13 @@ class adnGoodInTransitGUI
      */
     protected function downloadFile()
     {
-        global $ilCtrl, $lng;
 
         $file = $this->good->getFilePath() . $this->good->getId();
         if (file_exists($file)) {
             ilUtil::deliverFile($file, $this->good->getFileName());
         } else {
-            ilUtil::sendFailure($lng->txt("adn_file_corrupt"), true);
-            $ilCtrl->redirect($this, "listGoods");
+            ilUtil::sendFailure($this->lng->txt("adn_file_corrupt"), true);
+            $this->ctrl->redirect($this, "listGoods");
         }
     }
 
@@ -445,50 +446,49 @@ class adnGoodInTransitGUI
      */
     public function setTabs($a_activate)
     {
-        global $ilTabs, $lng, $txt, $ilCtrl;
 
-        $ilTabs->addTab(
+        $this->tabs->addTab(
             "gas",
-            $lng->txt("adn_goods_in_transit_gas"),
-            $ilCtrl->getLinkTarget($this, "listGasGoods")
+            $this->lng->txt("adn_goods_in_transit_gas"),
+            $this->ctrl->getLinkTarget($this, "listGasGoods")
         );
 
-        $ilTabs->addTab(
+        $this->tabs->addTab(
             "chem",
-            $lng->txt("adn_goods_in_transit_chemicals"),
-            $ilCtrl->getLinkTarget($this, "listChemGoods")
+            $this->lng->txt("adn_goods_in_transit_chemicals"),
+            $this->ctrl->getLinkTarget($this, "listChemGoods")
         );
 
-        $ilTabs->activateTab(strtolower($this->type));
+        $this->tabs->activateTab(strtolower($this->type));
 
         if ($this->type == "Gas") {
-            $ilTabs->addSubTab(
+            $this->tabs->addSubTab(
                 "gas_goods",
-                $lng->txt("adn_goods_in_transit"),
-                $ilCtrl->getLinkTarget($this, "listGasGoods")
+                $this->lng->txt("adn_goods_in_transit"),
+                $this->ctrl->getLinkTarget($this, "listGasGoods")
             );
 
-            $ilTabs->addSubTab(
+            $this->tabs->addSubTab(
                 "gas_cats",
-                $lng->txt("adn_good_in_transit_categories"),
-                $ilCtrl->getLinkTargetByClass("adngoodintransitcategorygui", "listGasCategories")
+                $this->lng->txt("adn_good_in_transit_categories"),
+                $this->ctrl->getLinkTargetByClass("adngoodintransitcategorygui", "listGasCategories")
             );
 
-            $ilTabs->activateSubTab("gas_goods");
+            $this->tabs->activateSubTab("gas_goods");
         } else {
-            $ilTabs->addSubTab(
+            $this->tabs->addSubTab(
                 "chem_goods",
-                $lng->txt("adn_goods_in_transit"),
-                $ilCtrl->getLinkTarget($this, "listChemGoods")
+                $this->lng->txt("adn_goods_in_transit"),
+                $this->ctrl->getLinkTarget($this, "listChemGoods")
             );
 
-            $ilTabs->addSubTab(
+            $this->tabs->addSubTab(
                 "chem_cats",
-                $lng->txt("adn_good_in_transit_categories"),
-                $ilCtrl->getLinkTargetByClass("adngoodintransitcategorygui", "listChemCategories")
+                $this->lng->txt("adn_good_in_transit_categories"),
+                $this->ctrl->getLinkTargetByClass("adngoodintransitcategorygui", "listChemCategories")
             );
 
-            $ilTabs->activateSubTab("chem_goods");
+            $this->tabs->activateSubTab("chem_goods");
         }
     }
 

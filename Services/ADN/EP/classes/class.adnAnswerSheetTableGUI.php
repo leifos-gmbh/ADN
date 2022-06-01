@@ -34,7 +34,6 @@ class adnAnswerSheetTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd, $a_event_id, $a_archived)
     {
-        global $ilCtrl, $lng;
 
         parent::__construct($a_parent_obj, $a_parent_cmd);
 
@@ -43,11 +42,11 @@ class adnAnswerSheetTableGUI extends ilTable2GUI
         $this->setId("adn_tbl_pcd");
 
         include_once "Services/ADN/EP/classes/class.adnExaminationEvent.php";
-        $this->setTitle($lng->txt("adn_answer_sheets") . ": " .
+        $this->setTitle($this->lng->txt("adn_answer_sheets") . ": " .
             adnExaminationEvent::lookupName($this->event_id));
         
         if (!$this->archived && adnPerm::check(adnPerm::EP, adnPerm::WRITE)) {
-            $this->addMultiCommand("confirmSheetsDeletion", $lng->txt("adn_delete_answer_sheets"));
+            $this->addMultiCommand("confirmSheetsDeletion", $this->lng->txt("adn_delete_answer_sheets"));
             $this->addColumn("", "", 1);
         }
         
@@ -65,7 +64,7 @@ class adnAnswerSheetTableGUI extends ilTable2GUI
         $this->map["type"] = array(adnAnswerSheet::TYPE_MC => $this->lng->txt("adn_type_mc"),
             adnAnswerSheet::TYPE_CASE => $this->lng->txt("adn_type_case"));
 
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.sheet_row.html", "Services/ADN/EP");
 
         $this->importData();
@@ -100,23 +99,22 @@ class adnAnswerSheetTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
 
         if (!$this->archived) {
             // actions...
 
-            $ilCtrl->setParameter($this->parent_obj, "sh_id", $a_set["id"]);
+            $this->ctrl->setParameter($this->parent_obj, "sh_id", $a_set["id"]);
 
             // list questions
             $this->tpl->setCurrentBlock("action");
-            $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_questions"));
+            $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_questions"));
             $this->tpl->setVariable(
                 "HREF_CMD",
-                $ilCtrl->getLinkTarget($this->parent_obj, "listQuestionsForSheet")
+                $this->ctrl->getLinkTarget($this->parent_obj, "listQuestionsForSheet")
             );
             $this->tpl->parseCurrentBlock();
 
-            $ilCtrl->setParameter($this->parent_obj, "sh_id", "");
+            $this->ctrl->setParameter($this->parent_obj, "sh_id", "");
 
             if (adnPerm::check(adnPerm::EP, adnPerm::WRITE)) {
                 $this->tpl->setCurrentBlock("cbox");

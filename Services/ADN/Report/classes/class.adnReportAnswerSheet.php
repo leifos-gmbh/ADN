@@ -214,7 +214,7 @@ class adnReportAnswerSheet extends adnReport
 
             if (count((array) $sheets) < ($this->hasCasePart() ? 2 : 1)) {
                 throw new adnReportException(
-                    $GLOBALS['lng']->txt('adn_report_err_not_generated')
+                    $this->lng->txt('adn_report_err_not_generated')
                 );
             }
 
@@ -222,7 +222,7 @@ class adnReportAnswerSheet extends adnReport
             foreach ((array) $sheets as $sheet_data) {
                 if (!self::lookupCandidateSheetGenerated($cand, $sheet_data['ep_answer_sheet_id'])) {
                     throw new adnReportException(
-                        $GLOBALS['lng']->txt('adn_report_err_not_generated')
+                        $this->lng->txt('adn_report_err_not_generated')
                     );
                 }
             }
@@ -233,7 +233,7 @@ class adnReportAnswerSheet extends adnReport
 
                 if ($check_deprecated && $this->isSheetDeprecated($cand, $sheet_id)) {
                     throw new adnReportException(
-                        $GLOBALS['lng']->txt('adn_report_err_sheet_deprecated')
+                        $this->lng->txt('adn_report_err_sheet_deprecated')
                     );
                 }
                 
@@ -395,7 +395,7 @@ class adnReportAnswerSheet extends adnReport
                     );
                     $licenses['gas'][] = $new_path;
                 } else {
-                    $GLOBALS['ilLog']->write("Not found: " . $lic->getFilePath() . $lic->getId());
+                    $this->log->error("Not found: " . $lic->getFilePath() . $lic->getId());
                 }
             }
             return (array) $licenses['gas'];
@@ -505,7 +505,7 @@ class adnReportAnswerSheet extends adnReport
         include_once './Services/Xml/classes/class.ilXmlWriter.php';
         $xml = new ilXmlWriter();
         $xml->xmlStartTag('page');
-        $xml->xmlElement('paragraph', array('type' => 'header'), $GLOBALS['lng']->txt('adn_case'));
+        $xml->xmlElement('paragraph', array('type' => 'header'), $this->lng->txt('adn_case'));
         $xml->xmlStartTag('paragraph', array('type' => 'phrase'));
         $this->parseFormatting($xml, $txt);
         $xml->xmlEndTag('paragraph');
@@ -600,7 +600,6 @@ class adnReportAnswerSheet extends adnReport
      */
     protected function createSheetCover($writer, $sheet, $candidate)
     {
-        global $lng;
         
         // Create Cover
         switch ($sheet->getType()) {
@@ -630,9 +629,9 @@ class adnReportAnswerSheet extends adnReport
 
         $map = array();
         $map['wsd_name'] = $this->getWMO()->getName();
-        $map['sheet_number'] = $lng->txt('adn_report_exam_sheet') . ': ' . $sheet->getNumber();
-        $map['sheet_type'] = $lng->txt('adn_report_exam') . ': ' .
-            $lng->txt(
+        $map['sheet_number'] = $this->lng->txt('adn_report_exam_sheet') . ': ' . $sheet->getNumber();
+        $map['sheet_type'] = $this->lng->txt('adn_report_exam') . ': ' .
+            $this->lng->txt(
                 'adn_subject_area_' . $this->getEvent()->getType()
             );
         $map['c_name'] = $candidate->getLastName();
@@ -663,7 +662,6 @@ class adnReportAnswerSheet extends adnReport
      */
     protected function createAnswerSheet($writer, $sheet)
     {
-        global $lng;
         
         include_once './Services/ADN/ED/classes/class.adnCaseQuestion.php';
         include_once './Services/ADN/ED/classes/class.adnMCQuestion.php';
@@ -678,13 +676,13 @@ class adnReportAnswerSheet extends adnReport
         $xml->xmlElement(
             'solutionHeaderA',
             array(),
-            $lng->txt('adn_report_solution_sheet') . ' ' . $sheet->getNumber()
+            $this->lng->txt('adn_report_solution_sheet') . ' ' . $sheet->getNumber()
         );
         $xml->xmlElement(
             'solutionHeaderB',
             array(),
-            $lng->txt('adn_report_exam') . ' ' .
-            $lng->txt('adn_train_type_' . $this->getEvent()->getType())
+            $this->lng->txt('adn_report_exam') . ' ' .
+            $this->lng->txt('adn_train_type_' . $this->getEvent()->getType())
         );
         
         $xml->xmlStartTag(
@@ -748,14 +746,14 @@ class adnReportAnswerSheet extends adnReport
         $xml->xmlEndTag('questions');
         $xml->xmlEndTag('answerSheet');
         
-        $GLOBALS['ilLog']->write("Dumping XML " . $xml->xmlDumpMem(true));
+        $this->log->info("Dumping XML " . $xml->xmlDumpMem(true));
         
         // Dump to file
         $xml->xmlDumpFile(
             $this->getDataDir() . '/' . $this->getEvent()->getId() . '_' . $sheet->getId() . '_sheet.xml',
             false
         );
-        $GLOBALS['ilLog']->write('Wrote new sheet: ' . $this->getDataDir() . '/' .
+        $this->log->info('Wrote new sheet: ' . $this->getDataDir() . '/' .
         $this->getEvent()->getId() . '_' . $sheet->getId() . '_sheet.xml');
         //
         // Add "writeQuestionSheet" to scheduler
@@ -811,7 +809,6 @@ class adnReportAnswerSheet extends adnReport
      */
     public function create()
     {
-        global $ilUser,$lng;
         
 
         // Write on task (fillPdfTemplate for every candidate) and finally merge them in one PDF.

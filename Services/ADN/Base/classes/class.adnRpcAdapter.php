@@ -2,7 +2,7 @@
 /* Copyright (c) 2010 Leifos, GPL, see docs/LICENSE */
 
 include_once './Services/ADN/Report/exceptions/class.adnReportException.php';
-
+use ILIAS\DI\LoggingServices;
 /**
  * Adapter class for for rpc calls
  *
@@ -13,12 +13,14 @@ include_once './Services/ADN/Report/exceptions/class.adnReportException.php';
  */
 class adnRpcAdapter
 {
+    protected ilLogger $log;
     /**
      * Contructor
-     * @return
      */
     public function __construct()
     {
+        global $DIC;
+        $this->log = $DIC->logger()->lfadn();
     }
     
     /**
@@ -32,7 +34,6 @@ class adnRpcAdapter
      */
     public function fillPdfTemplate($a_infile, $a_outfile, $a_keyvalues)
     {
-        global $ilLog;
         
         try {
             include_once './Services/WebServices/RPC/classes/class.ilRpcClientFactory.php';
@@ -43,10 +44,10 @@ class adnRpcAdapter
             );
             return true;
         } catch (XML_RPC2_FaultException $e) {
-            $ilLog->write(__METHOD__ . ': ' . $e->getMessage());
+            $this->log->write(__METHOD__ . ': ' . $e->getMessage());
             throw new adnReportException($e->getMessage());
         } catch (Exception $e) {
-            $ilLog->write(__METHOD__ . ': ' . $e->getMessage());
+            $this->log->write(__METHOD__ . ': ' . $e->getMessage());
             throw new adnReportException($e->getMessage());
         }
         return false;
@@ -59,7 +60,6 @@ class adnRpcAdapter
      */
     public function transformationTaskScheduler($a_xmldef)
     {
-        global $ilLog;
         
         try {
             include_once './Services/WebServices/RPC/classes/class.ilRpcClientFactory.php';
@@ -68,10 +68,10 @@ class adnRpcAdapter
             );
             return true;
         } catch (XML_RPC2_FaultException $e) {
-            $ilLog->write(__METHOD__ . ': ' . $e->getMessage());
+            $this->log->write(__METHOD__ . ': ' . $e->getMessage());
             throw new adnReportException($e->getMessage());
         } catch (Exception $e) {
-            $ilLog->write(__METHOD__ . ': ' . $e->getMessage());
+            $this->log->write(__METHOD__ . ': ' . $e->getMessage());
             throw new adnReportException($e->getMessage());
         }
         return false;
@@ -85,7 +85,6 @@ class adnRpcAdapter
      */
     public function writeQuestionSheet($a_infile, $a_outfile)
     {
-        global $ilLog;
         
         try {
             include_once './Services/WebServices/RPC/classes/class.ilRpcClientFactory.php';
@@ -95,10 +94,10 @@ class adnRpcAdapter
             );
             return true;
         } catch (XML_RPC2_FaultException $e) {
-            $ilLog->write(__METHOD__ . ': ' . $e->getMessage());
+            $this->log->write(__METHOD__ . ': ' . $e->getMessage());
             throw new adnReportException($e->getMessage());
         } catch (Exception $e) {
-            $ilLog->write(__METHOD__ . ': ' . $e->getMessage());
+            $this->log->write(__METHOD__ . ': ' . $e->getMessage());
             throw new adnReportException($e->getMessage());
         }
         return false;

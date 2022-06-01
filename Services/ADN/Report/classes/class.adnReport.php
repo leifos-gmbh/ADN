@@ -27,6 +27,10 @@ abstract class adnReport
     
     private string $basedir = 'adn/report';
     private string $datadir = '';
+
+    protected ilLogger $log;
+    protected ilObjUser $user;
+    protected ilLanguage $lng;
     
     
     /**
@@ -35,10 +39,14 @@ abstract class adnReport
      */
     public function __construct()
     {
+        global $DIC;
+        $this->log = $DIC->logger()->lfadn();
+        $this->user = $DIC->user();
+        $this->lng = $DIC->language();
         ilUtil::makeDirParents(
             $this->datadir = ilUtil::getDataDir() . '/' . $this->basedir . '/' . $this->getRelativeDataDir()
         );
-        $GLOBALS['ilLog']->write(__METHOD__ . ': ' . $this->datadir);
+        $this->log->info(__METHOD__ . ': ' . $this->datadir);
     }
     
     /**
@@ -113,7 +121,6 @@ abstract class adnReport
      */
     public function addStandardRightColumn($map, $wsd)
     {
-        global $ilUser, $lng;
         
         include_once './Services/ADN/MD/classes/class.adnWMO.php';
         include_once './Services/Calendar/classes/class.ilCalendarUtil.php';
@@ -135,10 +142,10 @@ abstract class adnReport
         }
         
         // banking details
-        $info = $lng->txt('adn_banking_details') . ':';
+        $info = $this->lng->txt('adn_banking_details') . ':';
         $info .= ("\n" . $wmo->getBankInstitute());
-        $info .= ("\n" . $lng->txt('adn_bank_iban') . ': ' . $wmo->getBankIBAN());
-        $info .= ("\n" . $lng->txt('adn_bank_bic') . ': ' . $wmo->getBankBIC());
+        $info .= ("\n" . $this->lng->txt('adn_bank_iban') . ': ' . $wmo->getBankIBAN());
+        $info .= ("\n" . $this->lng->txt('adn_bank_bic') . ': ' . $wmo->getBankBIC());
         
         $map['rgt_bank_account_info'] = $info;
         
@@ -153,16 +160,16 @@ abstract class adnReport
         
         $map['rgt_date'] = date('d') . '. ' . ilCalendarUtil::_numericMonthToString(date('n')) . ' ' . date('Y');
         
-        $map['rgt_iss_identifier'] = $ilUser->getSign();
-        $map['rgt_iss_name'] = $ilUser->getFullname();
-        $map['rgt_iss_phone'] = $ilUser->getPhoneOffice();
-        $map['rgt_iss_fax'] = strlen($ilUser->getFax()) ? $ilUser->getFax() : '-';
+        $map['rgt_iss_identifier'] = $this->user->getSign();
+        $map['rgt_iss_name'] = $this->user->getFullname();
+        $map['rgt_iss_phone'] = $this->user->getPhoneOffice();
+        $map['rgt_iss_fax'] = strlen($this->user->getFax()) ? $this->user->getFax() : '-';
 
-        if (ilStr::strLen($ilUser->getEmail()) > self::MAX_RIGHT_COL_LENGTH) {
-            $parts = explode('@', $ilUser->getEmail());
+        if (ilStr::strLen($this->user->getEmail()) > self::MAX_RIGHT_COL_LENGTH) {
+            $parts = explode('@', $this->user->getEmail());
             $map['rgt_iss_mail'] = $parts[0] . "@\n" . $parts[1];
         } else {
-            $map['rgt_iss_mail'] = $ilUser->getEmail();
+            $map['rgt_iss_mail'] = $this->user->getEmail();
         }
 
         $map['rgt_wmo_web'] = $wmo->getURL();
@@ -179,7 +186,6 @@ abstract class adnReport
      */
     public function addStandardAddress($map, $wmo, $rcp)
     {
-        global $ilUser,$lng;
         
         include_once './Services/ADN/MD/classes/class.adnWMO.php';
         include_once './Services/Calendar/classes/class.ilCalendarUtil.php';
@@ -195,7 +201,7 @@ abstract class adnReport
         
         
         // Base fields
-        $sal = $lng->txt('salutation_' . $cand->getSalutation());
+        $sal = $this->lng->txt('salutation_' . $cand->getSalutation());
         $name = $cand->getFirstName() . ' ' . $cand->getLastName();
         $street = $cand->getPostalStreet() . ' ' . $cand->getPostalStreetNumber();
         
@@ -211,7 +217,7 @@ abstract class adnReport
         
         // Overwrite with shipping adress if available and enabled
         if ($cand->isShippingActive()) {
-            $sal = $lng->txt('salutation_' . $cand->getShippingSalutation());
+            $sal = $this->lng->txt('salutation_' . $cand->getShippingSalutation());
             $name = $cand->getShippingFirstName() . ' ' . $cand->getShippingLastName();
             $street = $cand->getShippingStreet() . ' ' . $cand->getShippingStreetNumber();
                                     
@@ -248,7 +254,7 @@ abstract class adnReport
     
         // do not parse text if if it does not contain formattings.
         if (!preg_match('/\[[fuht]\]/', $text)) {
-            $GLOBALS['ilLog']->write(__METHOD__ . ': not parsed ' . $text);
+            $this->log->info(__METHOD__ . ': not parsed ' . $text);
             $this->writePhrase($writer, $cFormattingStack, $text);
             return true;
         }
@@ -305,9 +311,9 @@ abstract class adnReport
             }
             if (strcmp($pend, "[/u]") === 0) {
                 $this->writePhrase($writer, $cFormattingStack, $currentText);
-                $GLOBALS['ilLog']->write('CURRENT STACK: ' . print_r($cFormattingStack, true));
+                $this->log->info('CURRENT STACK: ' . print_r($cFormattingStack, true));
                 @array_pop($cFormattingStack);
-                $GLOBALS['ilLog']->write('CURRENT STACK: ' . print_r($cFormattingStack, true));
+                $this->log->info('CURRENT STACK: ' . print_r($cFormattingStack, true));
                 $currentText = '';
                 $pos += 3;
                 continue;
@@ -381,12 +387,11 @@ abstract class adnReport
      */
     protected function getLegalRemedies(adnWMO $wmo)
     {
-        global $lng;
 
         $contact = $wmo->getName() . ', ' .
             $wmo->getPostalStreet() . ' ' . $wmo->getPostalStreetNumber() . ' in ' .
             $wmo->getPostalZip() . ' ' . $wmo->getPostalCity();
 
-        return sprintf($lng->txt('adn_report_legal_remedies'), $contact);
+        return sprintf($this->lng->txt('adn_report_legal_remedies'), $contact);
     }
 }

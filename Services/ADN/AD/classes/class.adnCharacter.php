@@ -15,6 +15,7 @@ class adnCharacter
     protected string $name;
     protected int $code;
 
+    protected ilDBInterface $db;
     /**
      * Constructor
      *
@@ -22,8 +23,10 @@ class adnCharacter
      */
     public function __construct($a_id = null)
     {
-        global $ilCtrl;
+        global $DIC;
 
+        $this->db = $DIC->database();
+        
         if ($a_id) {
             $this->setId($a_id);
             $this->read();
@@ -95,16 +98,15 @@ class adnCharacter
      */
     public function read()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if (!$id) {
             return;
         }
 
-        $res = $ilDB->query("SELECT charact FROM adn_ad_character" .
-            " WHERE id = " . $ilDB->quote($id, "integer"));
-        $set = $ilDB->fetchAssoc($res);
+        $res = $this->db->query("SELECT charact FROM adn_ad_character" .
+            " WHERE id = " . $this->db->quote($id, "integer"));
+        $set = $this->db->fetchAssoc($res);
         $this->setName($set["charact"]);
     }
 
@@ -135,17 +137,16 @@ class adnCharacter
      */
     public function save()
     {
-        global $ilDB;
 
         // sequence
-        $this->setId($ilDB->nextId("adn_ad_character"));
+        $this->setId($this->db->nextId("adn_ad_character"));
         $id = $this->getId();
 
         $fields = $this->propertiesToFields();
         if ($fields) {
             $fields["id"] = array("integer", $id);
 
-            $ilDB->insert("adn_ad_character", $fields);
+            $this->db->insert("adn_ad_character", $fields);
 
             return $id;
         }
@@ -158,7 +159,6 @@ class adnCharacter
      */
     public function update()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if (!$id) {
@@ -167,7 +167,7 @@ class adnCharacter
         
         $fields = $this->propertiesToFields();
         if ($fields) {
-            $ilDB->update("adn_ad_character", $fields, array("id" => array("integer", $id)));
+            $this->db->update("adn_ad_character", $fields, array("id" => array("integer", $id)));
 
             return true;
         }
@@ -180,13 +180,12 @@ class adnCharacter
      */
     public function delete()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if ($id) {
             // U.AD.2.3: no archive here
-            $ilDB->manipulate("DELETE FROM adn_ad_character" .
-                " WHERE id = " . $ilDB->quote($id, "integer"));
+            $this->db->manipulate("DELETE FROM adn_ad_character" .
+                " WHERE id = " . $this->db->quote($id, "integer"));
             $this->setId(null);
             return true;
         }
@@ -199,7 +198,9 @@ class adnCharacter
      */
     public static function getAllCharacters()
     {
-        global $ilDB;
+        global $DIC;
+
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id,charact AS name" .
             " FROM adn_ad_character";
@@ -220,7 +221,9 @@ class adnCharacter
      */
     protected static function lookupProperty($a_id, $a_prop)
     {
-        global $ilDB;
+        global $DIC;
+
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query("SELECT " . $a_prop .
             " FROM adn_ad_character" .

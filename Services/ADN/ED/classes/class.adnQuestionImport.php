@@ -50,6 +50,13 @@ class adnQuestionImport
      */
     protected array $log;
 
+    protected ilDBInterface $db;
+
+    public function __construct()
+    {
+        global $DIC;
+        $this->db = $DIC->database();
+    }
     /**
      * Import mc question data from zip file (or string)
      *
@@ -231,10 +238,9 @@ class adnQuestionImport
      */
     protected function deleteTargets()
     {
-        global $ilDB;
 
         // delete totals
-        $ilDB->manipulate("DELETE FROM adn_ed_question_total");
+        $this->db->manipulate("DELETE FROM adn_ed_question_total");
 
         foreach (adnQuestionTargetNumbers::getAllTargets() as $item) {
             $target = new adnQuestionTargetNumbers($item["id"]);

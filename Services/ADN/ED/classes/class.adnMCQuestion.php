@@ -168,18 +168,17 @@ class adnMCQuestion extends adnExaminationQuestion
      */
     public function read()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if (!$id) {
             return;
         }
 
-        $res = $ilDB->query("SELECT correct_answer,answer_1,answer_1_file,answer_2,answer_2_file," .
+        $res = $this->db->query("SELECT correct_answer,answer_1,answer_1_file,answer_2,answer_2_file," .
             "answer_3,answer_3_file,answer_4,answer_4_file" .
             " FROM adn_ed_question_mc" .
-            " WHERE ed_question_id = " . $ilDB->quote($this->getId(), "integer"));
-        $set = $ilDB->fetchAssoc($res);
+            " WHERE ed_question_id = " . $this->db->quote($this->getId(), "integer"));
+        $set = $this->db->fetchAssoc($res);
         $this->setCorrectAnswer($set["correct_answer"]);
         $this->setAnswerA($set["answer_1"]);
         $this->setAnswerB($set["answer_2"]);
@@ -227,7 +226,6 @@ class adnMCQuestion extends adnExaminationQuestion
      */
     public function save()
     {
-        global $ilDB;
 
         parent::save();
 
@@ -242,7 +240,7 @@ class adnMCQuestion extends adnExaminationQuestion
             }
         }
         
-        $ilDB->insert("adn_ed_question_mc", $fields);
+        $this->db->insert("adn_ed_question_mc", $fields);
 
         return $this->getId();
     }
@@ -254,7 +252,6 @@ class adnMCQuestion extends adnExaminationQuestion
      */
     public function update()
     {
-        global $ilDB;
         
         $id = $this->getId();
         if (!$id) {
@@ -271,7 +268,7 @@ class adnMCQuestion extends adnExaminationQuestion
             }
         }
 
-        $ilDB->update("adn_ed_question_mc", $fields, array("ed_question_id" => array("integer", $id)));
+        $this->db->update("adn_ed_question_mc", $fields, array("ed_question_id" => array("integer", $id)));
 
         parent::update();
 
@@ -286,7 +283,6 @@ class adnMCQuestion extends adnExaminationQuestion
      */
     public function delete($a_force = false)
     {
-        global $ilDB;
 
         $id = $this->getId();
         if ($id) {
@@ -300,8 +296,8 @@ class adnMCQuestion extends adnExaminationQuestion
                 $this->removeFile($id . "_4");
                 $this->removeFile($id . "_5");
 
-                $ilDB->manipulate("DELETE FROM adn_ed_question_mc" .
-                    " WHERE ed_question_id = " . $ilDB->quote($id, "integer"));
+                $this->db->manipulate("DELETE FROM adn_ed_question_mc" .
+                    " WHERE ed_question_id = " . $this->db->quote($id, "integer"));
                 
                 parent::delete();
             }
@@ -317,7 +313,8 @@ class adnMCQuestion extends adnExaminationQuestion
      */
     public static function lookupCorrectAnswer($a_q_id)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $res = $ilDB->query("SELECT correct_answer " .
             " FROM adn_ed_question_mc" .

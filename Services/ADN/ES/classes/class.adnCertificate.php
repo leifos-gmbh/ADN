@@ -88,7 +88,8 @@ class adnCertificate extends adnDBBase
      */
     public static function getProofTypes()
     {
-        global $lng;
+        global $DIC;
+        $lng = $DIC->language();
         
         return array(
             self::PROOF_TRAIN_DRY => $lng->txt("adn_proof_train_dm"),
@@ -108,7 +109,8 @@ class adnCertificate extends adnDBBase
      */
     public static function getCertificateTypes()
     {
-        global $lng;
+        global $DIC;
+        $lng = $DIC->language();
 
         return array(
             self::DRY_MATERIAL =>
@@ -421,12 +423,11 @@ class adnCertificate extends adnDBBase
      */
     public function read()
     {
-        global $ilDB;
 
-        $set = $ilDB->query("SELECT *" .
+        $set = $this->db->query("SELECT *" .
             " FROM adn_es_certificate" .
-            " WHERE id = " . $ilDB->quote($this->getId(), "integer"));
-        if ($rec = $ilDB->fetchAssoc($set)) {
+            " WHERE id = " . $this->db->quote($this->getId(), "integer"));
+        if ($rec = $this->db->fetchAssoc($set)) {
             $this->setNumber($rec["nr"]);
             $this->setCertifiedProfessionalId($rec["cp_professional_id"]);
             $this->setExaminationId($rec["ep_exam_id"]);
@@ -509,17 +510,16 @@ class adnCertificate extends adnDBBase
      */
     public function save($a_generate_number = true)
     {
-        global $ilDB, $ilUser;
 
         if ($a_generate_number) {
             // set the status of all other certificates of the user to invalid
-            $ilDB->manipulate("UPDATE adn_es_certificate" .
-                " SET status = " . $ilDB->quote(self::STATUS_INVALID, "integer") .
+            $this->db->manipulate("UPDATE adn_es_certificate" .
+                " SET status = " . $this->db->quote(self::STATUS_INVALID, "integer") .
                 " WHERE cp_professional_id = " .
-                    $ilDB->quote($this->getCertifiedProfessionalId(), "integer"));
+                    $this->db->quote($this->getCertifiedProfessionalId(), "integer"));
 
             // lock table to keep table numbering consistent
-            $ilDB->lockTables(array(
+            $this->db->lockTables(array(
                 0 => array('name' => 'adn_es_certificate','type' => ilDBConstants::LOCK_WRITE),
                 1 => array('name' => 'adn_es_certificate_seq', 'type' => ilDBConstants::LOCK_WRITE)
             ));
@@ -528,17 +528,17 @@ class adnCertificate extends adnDBBase
         }
 
         // save new certificate
-        $this->setId($ilDB->nextId("adn_es_certificate"));
+        $this->setId($this->db->nextId("adn_es_certificate"));
         $id = $this->getId();
 
         $fields = $this->propertiesToFields();
         $fields["id"] = array("integer", $id);
 
-        $ilDB->insert("adn_es_certificate", $fields);
+        $this->db->insert("adn_es_certificate", $fields);
 
         if ($a_generate_number) {
             // unlock table
-            $ilDB->unlockTables();
+            $this->db->unlockTables();
         }
 
         parent::_save($id, "adn_es_certificate");
@@ -553,7 +553,6 @@ class adnCertificate extends adnDBBase
      */
     public function update()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if (!$id) {
@@ -568,7 +567,7 @@ class adnCertificate extends adnDBBase
         unset($fields["issued_by_wmo"]);
         unset($fields["issued_on"]);
         
-        $ilDB->update("adn_es_certificate", $fields, array("id" => array("integer", $id)));
+        $this->db->update("adn_es_certificate", $fields, array("id" => array("integer", $id)));
 
         parent::_update($id, "adn_es_certificate");
 
@@ -580,7 +579,6 @@ class adnCertificate extends adnDBBase
      */
     public function delete()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if ($id) {
@@ -604,7 +602,8 @@ class adnCertificate extends adnDBBase
         $a_exclude_valids = false
     )
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT ct.*, cp.first_name, cp.last_name, cp.birthdate, wmo.code_nr wmo_code_nr " .
             " FROM adn_es_certificate ct " .
@@ -680,7 +679,8 @@ class adnCertificate extends adnDBBase
      */
     protected static function lookupProperty($a_id, $a_prop)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query(
             "SELECT " . $a_prop .
@@ -700,7 +700,8 @@ class adnCertificate extends adnDBBase
      */
     public static function getCertificateIdOfProfForEvent($a_cp_id, $a_event_id)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query("SELECT id" .
             " FROM adn_es_certificate" .
@@ -734,7 +735,8 @@ class adnCertificate extends adnDBBase
      */
     public static function _determineNextNumber($a_issued_by_wmo, $a_issued_on)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $year = substr($a_issued_on->get(IL_CAL_DATE), 0, 4);
         $from = $year . "-01-01 00:00:00";
@@ -772,7 +774,8 @@ class adnCertificate extends adnDBBase
      */
     public static function getAllProfessionalsWithValidCertificates()
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $date = new ilDate(time(), IL_CAL_UNIX);
         $date = $date->get(IL_CAL_DATE);
@@ -797,7 +800,8 @@ class adnCertificate extends adnDBBase
      */
     public static function countCertificatesForProfessional($a_cp_id)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query("SELECT count(id) as cnt" .
             " FROM adn_es_certificate" .
@@ -811,7 +815,6 @@ class adnCertificate extends adnDBBase
      */
     public function createExtension()
     {
-        global $ilDB, $ilUser;
         
         // set the status of all other certificates of the user to invalid
 
@@ -820,23 +823,23 @@ class adnCertificate extends adnDBBase
         $last_update = new ilDateTime(time(), IL_CAL_UNIX);
         $last_update = $last_update->get(IL_CAL_DATETIME, "", ilTimeZone::UTC);
             
-        $ilDB->manipulate("UPDATE adn_es_certificate" .
-            " SET status = " . $ilDB->quote(self::STATUS_INVALID, "integer") .
-            ", last_update = " . $ilDB->quote($last_update, "timestamp") .
-            ", last_update_user = " . $ilDB->quote($ilUser->getId(), "integer") .
+        $this->db->manipulate("UPDATE adn_es_certificate" .
+            " SET status = " . $this->db->quote(self::STATUS_INVALID, "integer") .
+            ", last_update = " . $this->db->quote($last_update, "timestamp") .
+            ", last_update_user = " . $this->db->quote($this->user->getId(), "integer") .
             " WHERE cp_professional_id = " .
-                $ilDB->quote($this->getCertifiedProfessionalId(), "integer") .
-            " AND status = " . $ilDB->quote(self::STATUS_VALID, "integer"));
+                $this->db->quote($this->getCertifiedProfessionalId(), "integer") .
+            " AND status = " . $this->db->quote(self::STATUS_VALID, "integer"));
         
 
         // save current certificate as extension
-        $this->setId($ilDB->nextId("adn_es_certificate"));
+        $this->setId($this->db->nextId("adn_es_certificate"));
         $id = $this->getId();
         $this->setExaminationId(null);
         $this->setIsExtension(true);
 
         // lock table to keep table numbering consistent
-        $ilDB->lockTables(array(0 => array('name' => 'adn_es_certificate',
+        $this->db->lockTables(array(0 => array('name' => 'adn_es_certificate',
             'type' => ilDBConstants::LOCK_WRITE)));
 
         $this->setNumber($this->determineNextNumber());
@@ -845,10 +848,10 @@ class adnCertificate extends adnDBBase
         $fields = $this->propertiesToFields();
         $fields["id"] = array("integer", $id);
 
-        $ilDB->insert("adn_es_certificate", $fields);
+        $this->db->insert("adn_es_certificate", $fields);
 
         // unlock table
-        $ilDB->unlockTables();
+        $this->db->unlockTables();
 
         parent::_save($id, "adn_es_certificate");
     }
@@ -869,7 +872,8 @@ class adnCertificate extends adnDBBase
         array $a_proofs = null
     )
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $types = array(self::PROOF_TRAIN_DRY, self::PROOF_TRAIN_TANK , self::PROOF_TRAIN_COMBINED,
             self::PROOF_TRAIN_GAS, self::PROOF_TRAIN_CHEMICALS, self::PROOF_EXP_GAS,
@@ -932,7 +936,8 @@ class adnCertificate extends adnDBBase
         array $a_types = null
     )
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $types = array(self::GAS, self::CHEMICALS, self::DRY_MATERIAL, self::TANK);
 
@@ -1004,7 +1009,8 @@ class adnCertificate extends adnDBBase
      */
     public static function getTotalStatistics(ilDateTime $a_from, ilDateTime $a_to, $a_wmo = null)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
         
         $sql = "SELECT id,issued_on" .
             " FROM adn_es_certificate";
@@ -1052,7 +1058,8 @@ class adnCertificate extends adnDBBase
         $a_tbl_prefix = ''
     )
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $a_tbl_prefix = ($a_tbl_prefix ? $a_tbl_prefix . '.' : '');
         
@@ -1088,12 +1095,11 @@ class adnCertificate extends adnDBBase
      */
     public function createDuplicate($a_date)
     {
-        global $ilDB, $ilUser;
 
-        $ilDB->manipulate("INSERT INTO adn_es_duplicate " .
+        $this->db->manipulate("INSERT INTO adn_es_duplicate " .
             "(es_certificate_id, duplicate_issued_on) VALUES (" .
-            $ilDB->quote($this->getId(), "integer") . "," .
-            $ilDB->quote($a_date->get(IL_CAL_DATE), "timestamp") . ")");
+            $this->db->quote($this->getId(), "integer") . "," .
+            $this->db->quote($a_date->get(IL_CAL_DATE), "timestamp") . ")");
 
         $this->update();
     }
@@ -1114,7 +1120,8 @@ class adnCertificate extends adnDBBase
         $a_return_resultset = false
     )
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id,duplicate_issued_on" .
             " FROM adn_es_certificate" .
@@ -1148,7 +1155,8 @@ class adnCertificate extends adnDBBase
      */
     public static function getProfessionalDirectory(ilDateTime $a_from, ilDateTime $a_to, $a_wmo)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
         
         $sql = "SELECT esc.id,esc.nr,cp_professional_id,signed_by,type_tank,type_gas,type_chem,type_dm," .
             "esc.issued_on,esc.valid_until,code_nr,wmo.id wmo_id " .
@@ -1198,7 +1206,8 @@ class adnCertificate extends adnDBBase
      */
     public static function isDuplicate($a_cert_id)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
         
         $query = "SELECT COUNT(*) num" .
             " FROM adn_es_duplicate" .
@@ -1231,14 +1240,13 @@ class adnCertificate extends adnDBBase
      */
     public function getDuplicateDates()
     {
-        global $ilDB;
 
-        $set = $ilDB->query("SELECT duplicate_issued_on" .
+        $set = $this->db->query("SELECT duplicate_issued_on" .
             " FROM  adn_es_duplicate" .
-            " WHERE es_certificate_id = " . $ilDB->quote($this->getId(), "integer") .
+            " WHERE es_certificate_id = " . $this->db->quote($this->getId(), "integer") .
             " ORDER BY duplicate_issued_on");
         $all = array();
-        while ($row = $ilDB->fetchAssoc($set)) {
+        while ($row = $this->db->fetchAssoc($set)) {
             $all[] = new ilDate($row["duplicate_issued_on"], IL_CAL_DATE);
         }
         return $all;

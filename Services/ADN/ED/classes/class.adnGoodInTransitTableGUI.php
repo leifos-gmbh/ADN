@@ -28,7 +28,6 @@ class adnGoodInTransitTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd, $a_type, $a_org_type)
     {
-        global $ilCtrl, $lng;
 
         $this->type = $a_type;
 
@@ -36,10 +35,10 @@ class adnGoodInTransitTableGUI extends ilTable2GUI
 
         parent::__construct($a_parent_obj, $a_parent_cmd);
         
-        $this->setTitle($lng->txt("adn_goods_in_transit"));
+        $this->setTitle($this->lng->txt("adn_goods_in_transit"));
 
         if (adnPerm::check(adnPerm::ED, adnPerm::WRITE)) {
-            $this->addMultiCommand("confirm" . $a_org_type . "GoodsDeletion", $lng->txt("delete"));
+            $this->addMultiCommand("confirm" . $a_org_type . "GoodsDeletion", $this->lng->txt("delete"));
             $this->addColumn("", "", "1");
         }
         
@@ -58,7 +57,7 @@ class adnGoodInTransitTableGUI extends ilTable2GUI
         $this->setDefaultOrderField("number");
         $this->setDefaultOrderDirection("asc");
         
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.goods_row.html", "Services/ADN/ED");
         
         $this->importData();
@@ -93,22 +92,21 @@ class adnGoodInTransitTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
         
         // actions...
 
-        $ilCtrl->setParameter($this->parent_obj, "gd_id", $a_set["id"]);
+        $this->ctrl->setParameter($this->parent_obj, "gd_id", $a_set["id"]);
         
         if (adnPerm::check(adnPerm::ED, adnPerm::WRITE)) {
             // ...edit
             $this->tpl->setCurrentBlock("action");
             $this->tpl->setVariable(
                 "TXT_CMD",
-                $lng->txt("edit")
+                $this->lng->txt("edit")
             );
             $this->tpl->setVariable(
                 "HREF_CMD",
-                $ilCtrl->getLinkTarget($this->parent_obj, "editGood")
+                $this->ctrl->getLinkTarget($this->parent_obj, "editGood")
             );
             $this->tpl->parseCurrentBlock();
 
@@ -124,17 +122,17 @@ class adnGoodInTransitTableGUI extends ilTable2GUI
                 $this->tpl->setCurrentBlock("action");
                 $this->tpl->setVariable(
                     "TXT_CMD",
-                    $lng->txt("download")
+                    $this->lng->txt("download")
                 );
                 $this->tpl->setVariable(
                     "HREF_CMD",
-                    $ilCtrl->getLinkTarget($this->parent_obj, "downloadFile")
+                    $this->ctrl->getLinkTarget($this->parent_obj, "downloadFile")
                 );
                 $this->tpl->parseCurrentBlock();
             }
         }
 
-        $ilCtrl->setParameter($this->parent_obj, "gd_id", "");
+        $this->ctrl->setParameter($this->parent_obj, "gd_id", "");
 
         // properties
         $this->tpl->setVariable("VAL_NUMBER", $a_set["un_nr"]);

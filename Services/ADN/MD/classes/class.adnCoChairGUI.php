@@ -20,19 +20,30 @@ class adnCoChairGUI
 
     // current cochair object
     protected ?adnCoChair $cochair = null;
+
+    protected ilCtrl $ctrl;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilToolbarGUI $toolbar;
+    protected ilLanguage $lng;
+    protected ilTabsGUI $tabs;
     
     /**
      * Constructor
      */
     public function __construct()
     {
-        global $ilCtrl;
+        global $DIC;
+        $this->ctrl = $DIC->ctrl();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->toolbar = $DIC->toolbar();
+        $this->lng = $DIC->language();
+        $this->tabs = $DIC->tabs();
 
         $this->wmo_id = (int) $_REQUEST["wmo_id"];
         
         // save office and cochair ID through requests
-        $ilCtrl->saveParameter($this, array("wmo_id"));
-        $ilCtrl->saveParameter($this, array("cch_id"));
+        $this->ctrl->saveParameter($this, array("wmo_id"));
+        $this->ctrl->saveParameter($this, array("cch_id"));
         
         $this->readCoChair();
     }
@@ -42,16 +53,15 @@ class adnCoChairGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl;
         
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
         
         // forward command to next gui class in control flow
         switch ($next_class) {
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("listCoChairs");
+                $cmd = $this->ctrl->getCmd("listCoChairs");
 
                 switch ($cmd) {
                     // commands that need read permission
@@ -94,14 +104,13 @@ class adnCoChairGUI
      */
     protected function listCoChairs()
     {
-        global $tpl, $ilCtrl, $ilToolbar, $lng, $ilTabs;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTargetByClass("adnWMOGUI", "listWMOs"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTargetByClass("adnWMOGUI", "listWMOs"));
 
         if (adnPerm::check(adnPerm::MD, adnPerm::WRITE)) {
-            $ilToolbar->addButton(
-                $lng->txt("adn_add_cochair"),
-                $ilCtrl->getLinkTarget($this, "addCoChair")
+            $this->toolbar->addButton(
+                $this->lng->txt("adn_add_cochair"),
+                $this->ctrl->getLinkTarget($this, "addCoChair")
             );
         }
 
@@ -110,7 +119,7 @@ class adnCoChairGUI
         $table = new adnCoChairTableGUI($this, "listCoChairs", $this->wmo_id);
         
         // output table
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -120,14 +129,13 @@ class adnCoChairGUI
      */
     protected function addCoChair(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $lng, $ilTabs, $ilCtrl;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listCoChairs"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listCoChairs"));
 
         if (!$a_form) {
             $a_form = $this->initCoChairForm(true);
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
 
     /**
@@ -135,7 +143,6 @@ class adnCoChairGUI
      */
     protected function saveCoChair()
     {
-        global $tpl, $lng, $ilCtrl;
 
         $form = $this->initCoChairForm(true);
         if ($form->checkInput()) {
@@ -145,8 +152,8 @@ class adnCoChairGUI
             $cochair->setSalutation($form->getInput("salutation"));
             $cochair->setName($form->getInput("name"));
             if ($cochair->save()) {
-                ilUtil::sendSuccess($lng->txt("adn_cochair_created"), true);
-                $ilCtrl->redirect($this, "listCoChairs");
+                ilUtil::sendSuccess($this->lng->txt("adn_cochair_created"), true);
+                $this->ctrl->redirect($this, "listCoChairs");
             }
         }
         
@@ -161,14 +168,13 @@ class adnCoChairGUI
      */
     protected function editCoChair(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $lng, $ilTabs, $ilCtrl;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listCoChairs"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listCoChairs"));
 
         if (!$a_form) {
             $a_form = $this->initCoChairForm();
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
 
     /**
@@ -176,15 +182,14 @@ class adnCoChairGUI
      */
     protected function updateCoChair()
     {
-        global $tpl, $lng, $ilCtrl;
 
         $form = $this->initCoChairForm();
         if ($form->checkInput()) {
             $this->cochair->setSalutation($form->getInput("salutation"));
             $this->cochair->setName($form->getInput("name"));
             if ($this->cochair->update()) {
-                ilUtil::sendSuccess($lng->txt("adn_cochair_updated"), true);
-                $ilCtrl->redirect($this, "listCoChairs");
+                ilUtil::sendSuccess($this->lng->txt("adn_cochair_updated"), true);
+                $this->ctrl->redirect($this, "listCoChairs");
             }
         }
 
@@ -198,36 +203,35 @@ class adnCoChairGUI
      */
     protected function initCoChairForm($a_create = false)
     {
-        global  $lng, $ilCtrl;
 
         include_once "Services/Form/classes/class.ilPropertyFormGUI.php";
         $form = new ilPropertyFormGUI();
-        $form->setFormAction($ilCtrl->getFormAction($this, "listCoChairs"));
+        $form->setFormAction($this->ctrl->getFormAction($this, "listCoChairs"));
 
         include_once "Services/ADN/MD/classes/class.adnWMO.php";
-        $form->setTitle($lng->txt("adn_cochair") . ": " . adnWMO::lookupName($this->wmo_id));
+        $form->setTitle($this->lng->txt("adn_cochair") . ": " . adnWMO::lookupName($this->wmo_id));
         
-        $salutation = new ilSelectInputGUI($lng->txt("adn_salutation"), "salutation");
-        $options = array("f" => $lng->txt("adn_salutation_f"),
-            "m" => $lng->txt("adn_salutation_m"));
+        $salutation = new ilSelectInputGUI($this->lng->txt("adn_salutation"), "salutation");
+        $options = array("f" => $this->lng->txt("adn_salutation_f"),
+            "m" => $this->lng->txt("adn_salutation_m"));
         $salutation->setOptions($options);
         $salutation->setRequired(true);
         $form->addItem($salutation);
 
-        $name = new ilTextInputGUI($lng->txt("adn_last_name"), "name");
+        $name = new ilTextInputGUI($this->lng->txt("adn_last_name"), "name");
         $name->setRequired(true);
         $name->setMaxLength(50);
         $form->addItem($name);
 
         if ($a_create) {
-            $form->addCommandButton("saveCoChair", $lng->txt("save"));
+            $form->addCommandButton("saveCoChair", $this->lng->txt("save"));
         } else {
             $salutation->setValue($this->cochair->getSalutation());
             $name->setValue($this->cochair->getName());
 
-            $form->addCommandButton("updateCoChair", $lng->txt("save"));
+            $form->addCommandButton("updateCoChair", $this->lng->txt("save"));
         }
-        $form->addCommandButton("listCoChairs", $lng->txt("cancel"));
+        $form->addCommandButton("listCoChairs", $this->lng->txt("cancel"));
 
         return $form;
     }
@@ -237,25 +241,24 @@ class adnCoChairGUI
      */
     public function confirmDeleteCoChairs()
     {
-        global $ilCtrl, $tpl, $lng, $ilTabs;
 
         // check whether at least one item has been seleced
         if (!is_array($_POST["cch_id"]) || count($_POST["cch_id"]) == 0) {
-            ilUtil::sendFailure($lng->txt("no_checkbox"), true);
-            $ilCtrl->redirect($this, "listCoChairs");
+            ilUtil::sendFailure($this->lng->txt("no_checkbox"), true);
+            $this->ctrl->redirect($this, "listCoChairs");
         } else {
-            $ilTabs->setBackTarget(
-                $lng->txt("back"),
-                $ilCtrl->getLinkTarget($this, "listCoChairs")
+            $this->tabs->setBackTarget(
+                $this->lng->txt("back"),
+                $this->ctrl->getLinkTarget($this, "listCoChairs")
             );
 
             // display confirmation message
             include_once("./Services/Utilities/classes/class.ilConfirmationGUI.php");
             $cgui = new ilConfirmationGUI();
-            $cgui->setFormAction($ilCtrl->getFormAction($this));
-            $cgui->setHeaderText($lng->txt("adn_sure_delete_cochairs"));
-            $cgui->setCancel($lng->txt("cancel"), "listCoChairs");
-            $cgui->setConfirm($lng->txt("delete"), "deleteCoChairs");
+            $cgui->setFormAction($this->ctrl->getFormAction($this));
+            $cgui->setHeaderText($this->lng->txt("adn_sure_delete_cochairs"));
+            $cgui->setCancel($this->lng->txt("cancel"), "listCoChairs");
+            $cgui->setConfirm($this->lng->txt("delete"), "deleteCoChairs");
 
             include_once("./Services/ADN/MD/classes/class.adnCoChair.php");
 
@@ -264,7 +267,7 @@ class adnCoChairGUI
                 $cgui->addItem("cch_id[]", $i, adnCoChair::lookupName($i));
             }
 
-            $tpl->setContent($cgui->getHTML());
+            $this->tpl->setContent($cgui->getHTML());
         }
     }
 
@@ -273,7 +276,6 @@ class adnCoChairGUI
      */
     protected function deleteCoChairs()
     {
-        global $ilCtrl, $lng;
 
         include_once("./Services/ADN/MD/classes/class.adnCoChair.php");
 
@@ -283,7 +285,7 @@ class adnCoChairGUI
                 $cochair->delete();
             }
         }
-        ilUtil::sendSuccess($lng->txt("adn_cochair_deleted"), true);
-        $ilCtrl->redirect($this, "listCoChairs");
+        ilUtil::sendSuccess($this->lng->txt("adn_cochair_deleted"), true);
+        $this->ctrl->redirect($this, "listCoChairs");
     }
 }

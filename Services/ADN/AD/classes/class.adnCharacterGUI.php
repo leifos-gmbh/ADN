@@ -15,16 +15,28 @@ class adnCharacterGUI
 {
     // current character object
     protected ?adnCharacter $character = null;
-    
+
+    protected ilCtrl $ctrl;
+    protected ilGlobalTemplate $tpl;
+    protected ilToolbarGUI $toolbar;
+    protected ilLanguage $lng;
+    protected ilTabsGUI $tabs;
+
     /**
      * Constructor
      */
     public function __construct()
     {
-        global $ilCtrl;
+        global $DIC;
+
+        $this->ctrl = $DIC->ctrl();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->toolbar = $DIC->toolbar();
+        $this->lng = $DIC->language();
+        $this->tabs = $DIC->tabs();
 
         // save character ID through requests
-        $ilCtrl->saveParameter($this, array("chr_id"));
+        $this->ctrl->saveParameter($this, array("chr_id"));
         
         $this->readCharacter();
     }
@@ -34,16 +46,15 @@ class adnCharacterGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl;
         
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
         
         // forward command to next gui class in control flow
         switch ($next_class) {
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("listCharacters");
+                $cmd = $this->ctrl->getCmd("listCharacters");
 
                 switch ($cmd) {
                     // commands that need read permission
@@ -86,13 +97,12 @@ class adnCharacterGUI
      */
     protected function listCharacters()
     {
-        global $tpl, $ilCtrl, $ilToolbar, $lng, $ilTabs;
 
         // add button
         if (adnPerm::check(adnPerm::AD, adnPerm::WRITE)) {
-            $ilToolbar->addButton(
-                $lng->txt("adn_add_character"),
-                $ilCtrl->getLinkTarget($this, "addCharacter")
+            $this->toolbar->addButton(
+                $this->lng->txt("adn_add_character"),
+                $this->ctrl->getLinkTarget($this, "addCharacter")
             );
         }
 
@@ -101,7 +111,7 @@ class adnCharacterGUI
         $table = new adnCharacterTableGUI($this, "listCharacters");
         
         // output table
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -111,14 +121,13 @@ class adnCharacterGUI
      */
     protected function addCharacter(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $lng, $ilTabs, $ilCtrl;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listCharacters"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listCharacters"));
 
         if (!$a_form) {
             $a_form = $this->initCharacterForm(true);
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
 
     /**
@@ -126,7 +135,6 @@ class adnCharacterGUI
      */
     protected function saveCharacter()
     {
-        global $tpl, $lng, $ilCtrl;
 
         $form = $this->initCharacterForm(true);
         if ($form->checkInput()) {
@@ -136,8 +144,8 @@ class adnCharacterGUI
             $character->setCode($form->getInput("code"));
             
             if ($character->save()) {
-                ilUtil::sendSuccess($lng->txt("adn_character_created"), true);
-                $ilCtrl->redirect($this, "listCharacters");
+                ilUtil::sendSuccess($this->lng->txt("adn_character_created"), true);
+                $this->ctrl->redirect($this, "listCharacters");
             }
         }
 
@@ -153,14 +161,13 @@ class adnCharacterGUI
      */
     protected function editCharacter(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $lng, $ilTabs, $ilCtrl;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listCharacters"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listCharacters"));
 
         if (!$a_form) {
             $a_form = $this->initCharacterForm();
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
 
     /**
@@ -168,7 +175,6 @@ class adnCharacterGUI
      */
     protected function updateCharacter()
     {
-        global $tpl, $lng, $ilCtrl;
 
         $form = $this->initCharacterForm();
         if ($form->checkInput()) {
@@ -176,8 +182,8 @@ class adnCharacterGUI
             $this->character->setCode($form->getInput("code"));
             
             if ($this->character->update()) {
-                ilUtil::sendSuccess($lng->txt("adn_character_updated"), true);
-                $ilCtrl->redirect($this, "listCharacters");
+                ilUtil::sendSuccess($this->lng->txt("adn_character_updated"), true);
+                $this->ctrl->redirect($this, "listCharacters");
             }
         }
 
@@ -193,32 +199,31 @@ class adnCharacterGUI
      */
     protected function initCharacterForm($a_create = false)
     {
-        global $lng, $ilCtrl;
 
         include_once "Services/Form/classes/class.ilPropertyFormGUI.php";
         $form = new ilPropertyFormGUI();
-        $form->setTitle($lng->txt("adn_character"));
-        $form->setFormAction($ilCtrl->getFormAction($this, "listCharacters"));
+        $form->setTitle($this->lng->txt("adn_character"));
+        $form->setFormAction($this->ctrl->getFormAction($this, "listCharacters"));
 
-        $name = new ilTextInputGUI($lng->txt("adn_char"), "name");
+        $name = new ilTextInputGUI($this->lng->txt("adn_char"), "name");
         $name->setSize(1);
         $name->setMaxLength(1);
         $form->addItem($name);
 
-        $code = new ilNumberInputGUI($lng->txt("adn_char_code"), "code");
+        $code = new ilNumberInputGUI($this->lng->txt("adn_char_code"), "code");
         $code->setSize(5);
         $code->setMaxLength(5);
         $form->addItem($code);
 
         if ($a_create) {
-            $form->addCommandButton("saveCharacter", $lng->txt("save"));
+            $form->addCommandButton("saveCharacter", $this->lng->txt("save"));
         } else {
             $name->setValue($this->character->getName());
             $code->setValue($this->character->getCode());
 
-            $form->addCommandButton("updateCharacter", $lng->txt("save"));
+            $form->addCommandButton("updateCharacter", $this->lng->txt("save"));
         }
-        $form->addCommandButton("listCharacters", $lng->txt("cancel"));
+        $form->addCommandButton("listCharacters", $this->lng->txt("cancel"));
 
         return $form;
     }
@@ -228,25 +233,24 @@ class adnCharacterGUI
      */
     public function confirmDeleteCharacters()
     {
-        global $ilCtrl, $tpl, $lng, $ilTabs;
 
         // check whether at least one item has been seleced
         if (!is_array($_POST["chr_id"]) || count($_POST["chr_id"]) == 0) {
-            ilUtil::sendFailure($lng->txt("no_checkbox"), true);
-            $ilCtrl->redirect($this, "listCharacters");
+            ilUtil::sendFailure($this->lng->txt("no_checkbox"), true);
+            $this->ctrl->redirect($this, "listCharacters");
         } else {
-            $ilTabs->setBackTarget(
-                $lng->txt("back"),
-                $ilCtrl->getLinkTarget($this, "listCharacters")
+            $this->tabs->setBackTarget(
+                $this->lng->txt("back"),
+                $this->ctrl->getLinkTarget($this, "listCharacters")
             );
 
             // display confirmation message
             include_once("./Services/Utilities/classes/class.ilConfirmationGUI.php");
             $cgui = new ilConfirmationGUI();
-            $cgui->setFormAction($ilCtrl->getFormAction($this));
-            $cgui->setHeaderText($lng->txt("adn_sure_delete_characters"));
-            $cgui->setCancel($lng->txt("cancel"), "listCharacters");
-            $cgui->setConfirm($lng->txt("delete"), "deleteCharacters");
+            $cgui->setFormAction($this->ctrl->getFormAction($this));
+            $cgui->setHeaderText($this->lng->txt("adn_sure_delete_characters"));
+            $cgui->setCancel($this->lng->txt("cancel"), "listCharacters");
+            $cgui->setConfirm($this->lng->txt("delete"), "deleteCharacters");
 
             include_once("./Services/ADN/AD/classes/class.adnCharacter.php");
 
@@ -255,7 +259,7 @@ class adnCharacterGUI
                 $cgui->addItem("chr_id[]", $i, adnCharacter::lookupName($i));
             }
 
-            $tpl->setContent($cgui->getHTML());
+            $this->tpl->setContent($cgui->getHTML());
         }
     }
 
@@ -264,7 +268,6 @@ class adnCharacterGUI
      */
     protected function deleteCharacters()
     {
-        global $ilCtrl, $lng;
 
         include_once("./Services/ADN/AD/classes/class.adnCharacter.php");
 
@@ -274,7 +277,7 @@ class adnCharacterGUI
                 $character->delete();
             }
         }
-        ilUtil::sendSuccess($lng->txt("adn_character_deleted"), true);
-        $ilCtrl->redirect($this, "listCharacters");
+        ilUtil::sendSuccess($this->lng->txt("adn_character_deleted"), true);
+        $this->ctrl->redirect($this, "listCharacters");
     }
 }

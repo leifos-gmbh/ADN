@@ -36,7 +36,6 @@ class adnOnlineAnswersTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd, $a_event_id, $a_candidate_id)
     {
-        global $ilCtrl, $lng;
 
         $this->cp_id = (int) $a_candidate_id;
         $this->event_id = (int) $a_event_id;
@@ -66,7 +65,7 @@ class adnOnlineAnswersTableGUI extends ilTable2GUI
         // set title and data
         $this->setLimit(100);
         $this->setData($this->questions);
-        $this->setTitle($lng->txt("adn_question_overview"));
+        $this->setTitle($this->lng->txt("adn_question_overview"));
 
         // column headers
         $this->addColumn($this->lng->txt("adn_nr"));
@@ -75,7 +74,7 @@ class adnOnlineAnswersTableGUI extends ilTable2GUI
         $this->addColumn($this->lng->txt("adn_given_answer"));
         $this->addColumn($this->lng->txt("adn_correct"));
 
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.given_answer_row.html", "Services/ADN/ES");
     }
 
@@ -102,7 +101,6 @@ class adnOnlineAnswersTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
 
         $markups = array("[u]", "[/u]", "[f]", "[/f]", "[h]", "[/h]", "[t]", "[/t]");
         $markups_html = array("<u>", "</u>", "<b>", "</b>", "<sup>", "</sup>", "<sub>", "</sub>");

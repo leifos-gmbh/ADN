@@ -14,15 +14,24 @@
  */
 class adnScoreNotificationGUI
 {
+
+    protected ilCtrl $ctrl;
+    protected ilLanguage $lng;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilTabsGUI $tabs;
     /**
      * Constructor
      */
     public function __construct()
     {
-        global $ilCtrl;
+        global $DIC;
+        $this->ctrl = $DIC->ctrl();
+        $this->lng = $DIC->language();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->tabs = $DIC->tabs();
 
         // keep event
-        $ilCtrl->saveParameter($this, "ev_id");
+        $this->ctrl->saveParameter($this, "ev_id");
     }
     
     /**
@@ -30,18 +39,17 @@ class adnScoreNotificationGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl, $lng, $tpl;
 
-        $tpl->setTitle($lng->txt("adn_es") . " - " . $lng->txt("adn_es_sns"));
+        $this->tpl->setTitle($this->lng->txt("adn_es") . " - " . $this->lng->txt("adn_es_sns"));
         
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
         
         // forward command to next gui class in control flow
         switch ($next_class) {
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("listEvents");
+                $cmd = $this->ctrl->getCmd("listEvents");
                 
                 switch ($cmd) {
                     // commands that need read permission
@@ -73,7 +81,6 @@ class adnScoreNotificationGUI
      */
     protected function listEvents()
     {
-        global $tpl;
 
         // table of examination events
         include_once("./Services/ADN/ES/classes/class.adnExaminationEventTableGUI.php");
@@ -85,7 +92,7 @@ class adnScoreNotificationGUI
         );
         
         // output table
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -129,9 +136,8 @@ class adnScoreNotificationGUI
      */
     protected function listParticipants()
     {
-        global $tpl, $ilCtrl, $ilTabs, $lng;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listEvents"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listEvents"));
 
         $event_id = (int) $_REQUEST["ev_id"];
         if (!$event_id) {
@@ -143,7 +149,7 @@ class adnScoreNotificationGUI
         $table = new adnCandidateTableGUI($this, "listParticipants", $event_id, true);
 
         // output table
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -151,13 +157,12 @@ class adnScoreNotificationGUI
      */
     protected function createLetters()
     {
-        global $lng,$ilCtrl;
         
         $event_id = $_REQUEST['ev_id'];
         $ass_ids = $_REQUEST['ass_id'];
         if (empty($ass_ids)) {
-            ilUtil::sendFailure($lng->txt('select_one'), true);
-            $ilCtrl->redirect($this, 'listParticipants');
+            ilUtil::sendFailure($this->lng->txt('select_one'), true);
+            $this->ctrl->redirect($this, 'listParticipants');
         }
         // create report
         include_once './Services/ADN/Report/exceptions/class.adnReportException.php';
@@ -168,14 +173,14 @@ class adnScoreNotificationGUI
             $report->setAssignments($ass_ids);
             $report->create();
         
-            ilUtil::sendSuccess($lng->txt('adn_report_created_score_notification'), true);
-            $ilCtrl->redirect($this, 'listParticipants');
+            ilUtil::sendSuccess($this->lng->txt('adn_report_created_score_notification'), true);
+            $this->ctrl->redirect($this, 'listParticipants');
         } catch (adnReportException $e) {
             ilUtil::sendFailure($e->getMessage(), true);
-            $ilCtrl->redirect($this, 'listParticipants');
+            $this->ctrl->redirect($this, 'listParticipants');
         } catch (InvalidArgumentException $e) {
-            ilUtil::sendFailure($lng->txt('adn_report_score_err_not_scored'), true);
-            $ilCtrl->redirect($this, 'listParticipants');
+            ilUtil::sendFailure($this->lng->txt('adn_report_score_err_not_scored'), true);
+            $this->ctrl->redirect($this, 'listParticipants');
         }
     }
     
@@ -184,13 +189,12 @@ class adnScoreNotificationGUI
      */
     protected function downloadLetter()
     {
-        global $lng,$ilCtrl;
         
         $event_id = $_REQUEST['ev_id'];
         $ass_id = $_REQUEST['ass_id'];
         if (!$ass_id or !$event_id) {
-            ilUtil::sendFailure($lng->txt('select_one'), true);
-            $ilCtrl->redirect($this, 'listParticipants');
+            ilUtil::sendFailure($this->lng->txt('select_one'), true);
+            $this->ctrl->redirect($this, 'listParticipants');
         }
         
         include_once("./Services/ADN/Report/classes/class.adnReportScoreNotificationLetter.php");

@@ -21,7 +21,6 @@ class adnExamInfoLetter extends adnDBBase
      */
     public function __construct($a_id = 0)
     {
-        global $ilCtrl;
 
         $this->setFileDirectory("ep_information_letter");
 
@@ -56,17 +55,16 @@ class adnExamInfoLetter extends adnDBBase
      */
     public function read()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if (!$id) {
             return;
         }
 
-        $res = $ilDB->query("SELECT ifile" .
+        $res = $this->db->query("SELECT ifile" .
             " FROM adn_ep_information" .
-            " WHERE id = " . $ilDB->quote($this->getId(), "integer"));
-        $set = $ilDB->fetchAssoc($res);
+            " WHERE id = " . $this->db->quote($this->getId(), "integer"));
+        $set = $this->db->fetchAssoc($res);
         $this->setFileName($set["ifile"]);
         
         parent::_read($id, "adn_ep_information");
@@ -91,10 +89,9 @@ class adnExamInfoLetter extends adnDBBase
      */
     public function save()
     {
-        global $ilDB;
 
         // sequence
-        $this->setId($ilDB->nextId("adn_ep_information"));
+        $this->setId($this->db->nextId("adn_ep_information"));
         $id = $this->getId();
 
         $fields = $this->propertiesToFields();
@@ -108,7 +105,7 @@ class adnExamInfoLetter extends adnDBBase
             $fields["ifile"] = array("text", $this->getFileName());
         }
             
-        $ilDB->insert("adn_ep_information", $fields);
+        $this->db->insert("adn_ep_information", $fields);
 
         parent::_save($id, "adn_ep_information");
         
@@ -122,7 +119,6 @@ class adnExamInfoLetter extends adnDBBase
      */
     public function update()
     {
-        global $ilDB;
         
         $id = $this->getId();
         if (!$id) {
@@ -139,7 +135,7 @@ class adnExamInfoLetter extends adnDBBase
             $fields["ifile"] = array("text", $this->getFileName());
         }
 
-        $ilDB->update("adn_ep_information", $fields, array("id" => array("integer", $id)));
+        $this->db->update("adn_ep_information", $fields, array("id" => array("integer", $id)));
 
         parent::_update($id, "adn_ep_information");
 
@@ -153,15 +149,14 @@ class adnExamInfoLetter extends adnDBBase
      */
     public function delete()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if ($id) {
             $this->removeFile($id);
 
             // U.PVB.1.4: archived flag is not used here!
-            $ilDB->manipulate("DELETE FROM adn_ep_information" .
-                " WHERE id = " . $ilDB->quote($id, "integer"));
+            $this->db->manipulate("DELETE FROM adn_ep_information" .
+                " WHERE id = " . $this->db->quote($id, "integer"));
             $this->setId(null);
             return true;
         }
@@ -174,7 +169,8 @@ class adnExamInfoLetter extends adnDBBase
      */
     public static function getAllLetters()
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id,ifile" .
             " FROM adn_ep_information";
@@ -199,7 +195,8 @@ class adnExamInfoLetter extends adnDBBase
      */
     public static function getLettersSelect()
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id,ifile" .
             " FROM adn_ep_information" .
@@ -223,7 +220,8 @@ class adnExamInfoLetter extends adnDBBase
      */
     protected static function lookupProperty($a_id, $a_prop)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query("SELECT " . $a_prop .
             " FROM adn_ep_information" .

@@ -17,16 +17,26 @@
 class adnTrainingProviderGUI
 {
     protected ?adnTrainingProvider $training_provider = null;
-    
+
+    protected ilCtrl $ctrl;
+    protected ilTabsGUI $tabs;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilLanguage $lng;
+    protected ilToolbarGUI $toolbar;
     /**
      * Constructor
      */
     public function __construct()
     {
-        global $ilCtrl;
+        global $DIC;
+        $this->ctrl = $DIC->ctrl();
+        $this->tabs = $DIC->tabs();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->lng = $DIC->language();
+        $this->toolbar = $DIC->toolbar();
         
         // save training provider ID through requests
-        $ilCtrl->saveParameter($this, array("tp_id"));
+        $this->ctrl->saveParameter($this, array("tp_id"));
         
         $this->readTrainingProvider();
     }
@@ -36,42 +46,41 @@ class adnTrainingProviderGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl, $ilTabs, $tpl, $lng;
 
-        $tpl->setTitle($lng->txt("adn_ta") . " - " . $lng->txt("adn_ta_tps"));
+        $this->tpl->setTitle($this->lng->txt("adn_ta") . " - " . $this->lng->txt("adn_ta_tps"));
 
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
         
         // forward command to next gui class in control flow
         switch ($next_class) {
             case "adntrainingfacilitygui":
                 $this->setTabs();
-                $ilTabs->activateTab("training_facilities");
+                $this->tabs->activateTab("training_facilities");
                 
                 include_once("./Services/ADN/TA/classes/class.adnTrainingFacilityGUI.php");
                 $tf_gui = new adnTrainingFacilityGUI();
-                $ilCtrl->forwardCommand($tf_gui);
+                $this->ctrl->forwardCommand($tf_gui);
                 break;
 
             case "adntrainingeventgui":
                 include_once("./Services/ADN/TA/classes/class.adnTrainingEventGUI.php");
                 $te_gui = new adnTrainingEventGUI();
-                $ilCtrl->forwardCommand($te_gui);
+                $this->ctrl->forwardCommand($te_gui);
                 break;
 
             case "adninstructorgui":
                 $this->setTabs();
-                $ilTabs->activateTab("instructors");
+                $this->tabs->activateTab("instructors");
 
                 include_once("./Services/ADN/TA/classes/class.adnInstructorGUI.php");
                 $is_gui = new adnInstructorGUI();
-                $ilCtrl->forwardCommand($is_gui);
+                $this->ctrl->forwardCommand($is_gui);
                 break;
             
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("listTrainingProviders");
+                $cmd = $this->ctrl->getCmd("listTrainingProviders");
                 
                 switch ($cmd) {
                     // commands that need read permission
@@ -118,12 +127,11 @@ class adnTrainingProviderGUI
      */
     protected function listTrainingProviders()
     {
-        global $tpl, $ilToolbar, $ilCtrl, $lng;
         
         if (adnPerm::check(adnPerm::TA, adnPerm::WRITE)) {
-            $ilToolbar->addButton(
-                $lng->txt("adn_add_training_provider"),
-                $ilCtrl->getLinkTarget($this, "addTrainingProvider")
+            $this->toolbar->addButton(
+                $this->lng->txt("adn_add_training_provider"),
+                $this->ctrl->getLinkTarget($this, "addTrainingProvider")
             );
         }
         
@@ -132,7 +140,7 @@ class adnTrainingProviderGUI
         $table = new adnTrainingProviderTableGUI($this, "listTrainingProviders");
         
         // output table
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
     
     /**
@@ -142,14 +150,13 @@ class adnTrainingProviderGUI
      */
     protected function addTrainingProvider(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $ilTabs, $ilCtrl, $lng;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listTrainingProviders"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listTrainingProviders"));
 
         if (!$a_form) {
             $a_form = $this->initTrainingProviderForm("create");
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
     
     /**
@@ -159,17 +166,16 @@ class adnTrainingProviderGUI
      */
     protected function editTrainingProvider(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $ilTabs, $ilCtrl, $lng;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listTrainingProviders"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listTrainingProviders"));
 
         $this->setTabs();
-        $ilTabs->activateTab("properties");
+        $this->tabs->activateTab("properties");
 
         if (!$a_form) {
             $a_form = $this->initTrainingProviderForm("edit");
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
 
     /**
@@ -177,9 +183,8 @@ class adnTrainingProviderGUI
      */
     protected function showTrainingProvider()
     {
-        global $tpl, $ilTabs, $ilCtrl, $lng;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listTrainingProviders"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listTrainingProviders"));
 
         $form = $this->initTrainingProviderForm("show");
         $form = $form->convertToReadonly();
@@ -192,7 +197,7 @@ class adnTrainingProviderGUI
                 $instructors[] = $name;
             }
 
-            $instructor = new ilNonEditableValueGUI($lng->txt("adn_instructors"));
+            $instructor = new ilNonEditableValueGUI($this->lng->txt("adn_instructors"));
             $instructor->setValue(implode("<br />", $instructors));
             $form->addItem($instructor);
         }
@@ -206,7 +211,7 @@ class adnTrainingProviderGUI
                 $facilities[] = $name;
             }
 
-            $facility = new ilNonEditableValueGUI($lng->txt("adn_training_facilities"));
+            $facility = new ilNonEditableValueGUI($this->lng->txt("adn_training_facilities"));
             $facility->setValue(implode("<br />", $facilities));
             $form->addItem($facility);
         }
@@ -215,7 +220,7 @@ class adnTrainingProviderGUI
         // types of training
 
         $sub = new ilFormSectionHeaderGUI();
-        $sub->setTitle($lng->txt("adn_approved_types_of_training"));
+        $sub->setTitle($this->lng->txt("adn_approved_types_of_training"));
         $form->addItem($sub);
 
         $ttform = $this->initTrainingTypeForm();
@@ -224,7 +229,7 @@ class adnTrainingProviderGUI
             $form->addItem($item);
         }
 
-        $tpl->setContent($form->getHTML());
+        $this->tpl->setContent($form->getHTML());
     }
     
     /**
@@ -235,49 +240,48 @@ class adnTrainingProviderGUI
      */
     protected function initTrainingProviderForm($a_mode = "edit")
     {
-        global $lng, $ilCtrl;
         
         // get form object and add input fields
         include_once("Services/Form/classes/class.ilPropertyFormGUI.php");
         $form = new ilPropertyFormGUI();
         
         // name
-        $name = new ilTextInputGUI($lng->txt("adn_company_name"), "name");
+        $name = new ilTextInputGUI($this->lng->txt("adn_company_name"), "name");
         $name->setMaxLength(100);
         $name->setRequired(true);
         $form->addItem($name);
 
         // contact person
-        $contact = new ilTextInputGUI($lng->txt("adn_contact_person"), "contact_person");
+        $contact = new ilTextInputGUI($this->lng->txt("adn_contact_person"), "contact_person");
         $contact->setMaxLength(100);
         $form->addItem($contact);
 
         // postal code
-        $zip = new ilTextInputGUI($lng->txt("adn_postal_code"), "postal_code");
+        $zip = new ilTextInputGUI($this->lng->txt("adn_postal_code"), "postal_code");
         $zip->setMaxLength(10);
         $zip->setSize(10);
         $zip->setRequired(true);
         $form->addItem($zip);
 
         // city
-        $city = new ilTextInputGUI($lng->txt("adn_city"), "city");
+        $city = new ilTextInputGUI($this->lng->txt("adn_city"), "city");
         $city->setMaxLength(50);
         $city->setRequired(true);
         $form->addItem($city);
 
         // street
-        $street = new ilTextInputGUI($lng->txt("adn_street"), "street");
+        $street = new ilTextInputGUI($this->lng->txt("adn_street"), "street");
         $street->setMaxLength(100);
         $form->addItem($street);
 
         // street number
-        $street_no = new ilTextInputGUI($lng->txt("adn_street_number"), "street_no");
+        $street_no = new ilTextInputGUI($this->lng->txt("adn_street_number"), "street_no");
         $street_no->setMaxLength(10);
         $street_no->setSize(10);
         $form->addItem($street_no);
 
         // po box
-        $po = new ilTextInputGUI($lng->txt("adn_po_box"), "po_box");
+        $po = new ilTextInputGUI($this->lng->txt("adn_po_box"), "po_box");
         $po->setMaxLength(20);
         $po->setSize(20);
         $form->addItem($po);
@@ -285,37 +289,37 @@ class adnTrainingProviderGUI
         
         // alternative address
 
-        $altaddr = new ilCheckboxInputGUI($lng->txt("adn_alternative_address"), "altaddr");
+        $altaddr = new ilCheckboxInputGUI($this->lng->txt("adn_alternative_address"), "altaddr");
         $form->addItem($altaddr);
 
         // postal code
-        $azip = new ilTextInputGUI($lng->txt("adn_postal_code"), "apostal_code");
+        $azip = new ilTextInputGUI($this->lng->txt("adn_postal_code"), "apostal_code");
         $azip->setMaxLength(10);
         $azip->setSize(10);
         $azip->setRequired(true);
         $altaddr->addSubItem($azip);
 
         // city
-        $acity = new ilTextInputGUI($lng->txt("adn_city"), "acity");
+        $acity = new ilTextInputGUI($this->lng->txt("adn_city"), "acity");
         $acity->setMaxLength(50);
         $acity->setRequired(true);
         $altaddr->addSubItem($acity);
 
         // street
-        $astreet = new ilTextInputGUI($lng->txt("adn_street"), "astreet");
+        $astreet = new ilTextInputGUI($this->lng->txt("adn_street"), "astreet");
         $astreet->setMaxLength(100);
         // $astreet->setRequired(true);
         $altaddr->addSubItem($astreet);
 
         // street number
-        $astreet_no = new ilTextInputGUI($lng->txt("adn_street_number"), "astreet_no");
+        $astreet_no = new ilTextInputGUI($this->lng->txt("adn_street_number"), "astreet_no");
         $astreet_no->setMaxLength(10);
         $astreet_no->setSize(10);
         // $astreet_no->setRequired(true);
         $altaddr->addSubItem($astreet_no);
 
         // po box
-        $apo = new ilTextInputGUI($lng->txt("adn_po_box"), "apo_box");
+        $apo = new ilTextInputGUI($this->lng->txt("adn_po_box"), "apo_box");
         $apo->setMaxLength(20);
         $apo->setSize(20);
         // $apo->setRequired(true);
@@ -323,27 +327,27 @@ class adnTrainingProviderGUI
 
 
         // phone
-        $fon = new ilTextInputGUI($lng->txt("adn_phone"), "phone");
+        $fon = new ilTextInputGUI($this->lng->txt("adn_phone"), "phone");
         $fon->setMaxLength(50);
         // $fon->setRequired(true);
         $form->addItem($fon);
 
         // fax
-        $fax = new ilTextInputGUI($lng->txt("adn_fax"), "fax");
+        $fax = new ilTextInputGUI($this->lng->txt("adn_fax"), "fax");
         // $fax->setMaxLength(50);
         $form->addItem($fax);
 
         // e-mail
-        $email = new ilTextInputGUI($lng->txt("adn_email"), "email");
+        $email = new ilTextInputGUI($this->lng->txt("adn_email"), "email");
         $email->setMaxLength(100);
         // $email->setRequired(true);
         $form->addItem($email);
 
         if ($a_mode == "create") {
             // creation: save/cancel buttons and title
-            $form->addCommandButton("saveTrainingProvider", $lng->txt("save"));
-            $form->addCommandButton("listTrainingProviders", $lng->txt("cancel"));
-            $form->setTitle($lng->txt("adn_add_training_provider"));
+            $form->addCommandButton("saveTrainingProvider", $this->lng->txt("save"));
+            $form->addCommandButton("listTrainingProviders", $this->lng->txt("cancel"));
+            $form->setTitle($this->lng->txt("adn_add_training_provider"));
         } else {
             $name->setValue($this->training_provider->getName());
             $contact->setValue($this->training_provider->getContact());
@@ -367,15 +371,15 @@ class adnTrainingProviderGUI
 
             if ($a_mode != "show") {
                 // editing: update/cancel buttons and title
-                $form->addCommandButton("updateTrainingProvider", $lng->txt("save"));
-                $form->addCommandButton("listTrainingProviders", $lng->txt("cancel"));
-                $form->setTitle($lng->txt("adn_edit_training_provider"));
+                $form->addCommandButton("updateTrainingProvider", $this->lng->txt("save"));
+                $form->addCommandButton("listTrainingProviders", $this->lng->txt("cancel"));
+                $form->setTitle($this->lng->txt("adn_edit_training_provider"));
             } else {
-                $form->setTitle($lng->txt("adn_training_provider"));
+                $form->setTitle($this->lng->txt("adn_training_provider"));
             }
         }
         
-        $form->setFormAction($ilCtrl->getFormAction($this));
+        $form->setFormAction($this->ctrl->getFormAction($this));
 
         return $form;
     }
@@ -385,7 +389,6 @@ class adnTrainingProviderGUI
      */
     protected function saveTrainingProvider()
     {
-        global $tpl, $lng, $ilCtrl;
         
         $form = $this->initTrainingProviderForm("create");
         
@@ -415,10 +418,10 @@ class adnTrainingProviderGUI
 
             if ($training_provider->save()) {
                 // show success message and return to list
-                ilUtil::sendSuccess($lng->txt("adn_training_provider_created"), true);
+                ilUtil::sendSuccess($this->lng->txt("adn_training_provider_created"), true);
 
-                $ilCtrl->setParameter($this, "tp_id", $training_provider->getId());
-                $ilCtrl->redirect($this, "listTrainingTypes");
+                $this->ctrl->setParameter($this, "tp_id", $training_provider->getId());
+                $this->ctrl->redirect($this, "listTrainingTypes");
             }
         }
 
@@ -432,7 +435,6 @@ class adnTrainingProviderGUI
      */
     protected function updateTrainingProvider()
     {
-        global $lng, $ilCtrl, $tpl;
         
         $form = $this->initTrainingProviderForm("edit");
         
@@ -466,8 +468,8 @@ class adnTrainingProviderGUI
 
             if ($this->training_provider->update()) {
                 // show success message and return to list
-                ilUtil::sendSuccess($lng->txt("adn_training_provider_updated"), true);
-                $ilCtrl->redirect($this, "listTrainingProviders");
+                ilUtil::sendSuccess($this->lng->txt("adn_training_provider_updated"), true);
+                $this->ctrl->redirect($this, "listTrainingProviders");
             }
         }
         
@@ -481,25 +483,24 @@ class adnTrainingProviderGUI
      */
     protected function confirmTrainingProviderDeletion()
     {
-        global $ilCtrl, $tpl, $lng, $ilTabs;
         
         // check whether at least one item has been seleced
         if (!is_array($_POST["training_provider_id"]) || count($_POST["training_provider_id"]) == 0) {
-            ilUtil::sendFailure($lng->txt("no_checkbox"), true);
-            $ilCtrl->redirect($this, "listTrainingProviders");
+            ilUtil::sendFailure($this->lng->txt("no_checkbox"), true);
+            $this->ctrl->redirect($this, "listTrainingProviders");
         } else {
-            $ilTabs->setBackTarget(
-                $lng->txt("back"),
-                $ilCtrl->getLinkTarget($this, "listTrainingProviders")
+            $this->tabs->setBackTarget(
+                $this->lng->txt("back"),
+                $this->ctrl->getLinkTarget($this, "listTrainingProviders")
             );
 
             // display confirmation message
             include_once("./Services/Utilities/classes/class.ilConfirmationGUI.php");
             $cgui = new ilConfirmationGUI();
-            $cgui->setFormAction($ilCtrl->getFormAction($this));
-            $cgui->setHeaderText($lng->txt("adn_sure_delete_training_provider"));
-            $cgui->setCancel($lng->txt("cancel"), "listTrainingProviders");
-            $cgui->setConfirm($lng->txt("delete"), "deleteTrainingProvider");
+            $cgui->setFormAction($this->ctrl->getFormAction($this));
+            $cgui->setHeaderText($this->lng->txt("adn_sure_delete_training_provider"));
+            $cgui->setCancel($this->lng->txt("cancel"), "listTrainingProviders");
+            $cgui->setConfirm($this->lng->txt("delete"), "deleteTrainingProvider");
 
             // list objects that should be deleted
             include_once("./Services/ADN/TA/classes/class.adnTrainingProvider.php");
@@ -507,7 +508,7 @@ class adnTrainingProviderGUI
                 $cgui->addItem("training_provider_id[]", $i, adnTrainingProvider::lookupName($i));
             }
             
-            $tpl->setContent($cgui->getHTML());
+            $this->tpl->setContent($cgui->getHTML());
         }
     }
     
@@ -516,7 +517,6 @@ class adnTrainingProviderGUI
      */
     protected function deleteTrainingProvider()
     {
-        global $ilCtrl, $lng;
         
         include_once("./Services/ADN/TA/classes/class.adnTrainingProvider.php");
         
@@ -526,8 +526,8 @@ class adnTrainingProviderGUI
                 $training_provider->delete();
             }
         }
-        ilUtil::sendSuccess($lng->txt("adn_training_provider_deleted"), true);
-        $ilCtrl->redirect($this, "listTrainingProviders");
+        ilUtil::sendSuccess($this->lng->txt("adn_training_provider_deleted"), true);
+        $this->ctrl->redirect($this, "listTrainingProviders");
     }
 
     /**
@@ -535,27 +535,26 @@ class adnTrainingProviderGUI
      */
     protected function setTabs()
     {
-        global $ilTabs, $lng, $ilCtrl;
         
-        $ilTabs->addTab(
+        $this->tabs->addTab(
             "properties",
-            $lng->txt("adn_contact_data"),
-            $ilCtrl->getLinkTarget($this, "editTrainingProvider")
+            $this->lng->txt("adn_contact_data"),
+            $this->ctrl->getLinkTarget($this, "editTrainingProvider")
         );
-        $ilTabs->addTab(
+        $this->tabs->addTab(
             "types",
-            $lng->txt("adn_approved_types_of_training"),
-            $ilCtrl->getLinkTarget($this, "listTrainingTypes")
+            $this->lng->txt("adn_approved_types_of_training"),
+            $this->ctrl->getLinkTarget($this, "listTrainingTypes")
         );
-        $ilTabs->addTab(
+        $this->tabs->addTab(
             "instructors",
-            $lng->txt("adn_instructors"),
-            $ilCtrl->getLinkTargetByClass("adninstructorgui", "listInstructors")
+            $this->lng->txt("adn_instructors"),
+            $this->ctrl->getLinkTargetByClass("adninstructorgui", "listInstructors")
         );
-        $ilTabs->addTab(
+        $this->tabs->addTab(
             "training_facilities",
-            $lng->txt("adn_training_facilities"),
-            $ilCtrl->getLinkTargetByClass("adntrainingfacilitygui", "listTrainingFacilities")
+            $this->lng->txt("adn_training_facilities"),
+            $this->ctrl->getLinkTargetByClass("adntrainingfacilitygui", "listTrainingFacilities")
         );
     }
 
@@ -569,17 +568,16 @@ class adnTrainingProviderGUI
      */
     public function listTrainingTypes(ilPropertyFormGUI $form = null)
     {
-        global $lng, $ilCtrl, $tpl, $ilTabs;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listTrainingProviders"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listTrainingProviders"));
 
         $this->setTabs();
-        $ilTabs->activateTab("types");
+        $this->tabs->activateTab("types");
 
         if (!$form instanceof ilPropertyFormGUI) {
             $form = $this->initTrainingTypeForm();
         }
-        $tpl->setContent($form->getHTML());
+        $this->tpl->setContent($form->getHTML());
     }
 
     /**
@@ -589,7 +587,6 @@ class adnTrainingProviderGUI
      */
     protected function initTrainingTypeForm()
     {
-        global $ilCtrl, $lng;
         
         // get form object and add input fields
         include_once("Services/Form/classes/class.ilPropertyFormGUI.php");
@@ -601,7 +598,7 @@ class adnTrainingProviderGUI
             $form->addItem($cb);
 
             $dt = new ilDateTimeInputGUI(
-                $lng->txt("adn_approved_on"),
+                $this->lng->txt("adn_approved_on"),
                 "approved_" . $type
             );
             $dt->setStartYear(1990);
@@ -615,12 +612,12 @@ class adnTrainingProviderGUI
         }
 
         // editing: update/cancel buttons and title
-        $form->addCommandButton("updateTrainingTypes", $lng->txt("save"));
-        $form->addCommandButton("listTrainingProviders", $lng->txt("cancel"));
-        $form->setTitle($lng->txt("adn_edit_training_provider") .
+        $form->addCommandButton("updateTrainingTypes", $this->lng->txt("save"));
+        $form->addCommandButton("listTrainingProviders", $this->lng->txt("cancel"));
+        $form->setTitle($this->lng->txt("adn_edit_training_provider") .
             ": " . $this->training_provider->getName());
 
-        $form->setFormAction($ilCtrl->getFormAction($this));
+        $form->setFormAction($this->ctrl->getFormAction($this));
 
         return $form;
     }
@@ -630,11 +627,10 @@ class adnTrainingProviderGUI
      */
     public function updateTrainingTypes()
     {
-        global $ilCtrl, $lng;
 
         $form = $this->initTrainingTypeForm();
         if (!$form->checkInput()) {
-            ilUtil::sendFailure($lng->txt('fill_out_all_required_fields'));
+            ilUtil::sendFailure($this->lng->txt('fill_out_all_required_fields'));
             $form->setValuesByPost();
             return $this->listTrainingTypes($form);
         }
@@ -650,7 +646,7 @@ class adnTrainingProviderGUI
         $this->training_provider->setTypesOfTraining($types);
         $this->training_provider->saveTrainingTypes();
 
-        ilUtil::sendSuccess($lng->txt("adn_training_types_updated"), true);
-        $ilCtrl->redirect($this, "listTrainingProviders");
+        ilUtil::sendSuccess($this->lng->txt("adn_training_types_updated"), true);
+        $this->ctrl->redirect($this, "listTrainingProviders");
     }
 }

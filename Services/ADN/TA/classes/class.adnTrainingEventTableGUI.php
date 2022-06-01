@@ -52,7 +52,6 @@ class adnTrainingEventTableGUI extends ilTable2GUI
         $a_restrict_type = ''
     )
     {
-        global $ilCtrl, $lng;
 
         $this->provider_id = (int) $a_provider_id;
         $this->current = (bool) $a_current;
@@ -67,7 +66,7 @@ class adnTrainingEventTableGUI extends ilTable2GUI
 
         parent::__construct($a_parent_obj, $a_parent_cmd);
 
-        $title = $lng->txt("adn_training_events");
+        $title = $this->lng->txt("adn_training_events");
         if ($this->provider_id) {
             include_once("./Services/ADN/TA/classes/class.adnTrainingProvider.php");
             $title .= ": " . adnTrainingProvider::lookupName($this->provider_id);
@@ -81,7 +80,7 @@ class adnTrainingEventTableGUI extends ilTable2GUI
 
         if (adnPerm::check(adnPerm::TA, adnPerm::WRITE) && $this->current && !$this->assignment &&
             !$this->overview) {
-            $this->addMultiCommand("confirmTrainingEventDeletion", $lng->txt("delete"));
+            $this->addMultiCommand("confirmTrainingEventDeletion", $this->lng->txt("delete"));
             $this->addColumn("", "", "1");
         }
         
@@ -104,7 +103,7 @@ class adnTrainingEventTableGUI extends ilTable2GUI
 
         $this->initFilter();
         
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.training_events_row.html", "Services/ADN/TA");
 
         $this->importData();
@@ -145,7 +144,6 @@ class adnTrainingEventTableGUI extends ilTable2GUI
      */
     public function initFilter()
     {
-        global $lng;
 
         include_once "Services/ADN/TA/classes/class.adnTrainingProvider.php";
         
@@ -165,8 +163,8 @@ class adnTrainingEventTableGUI extends ilTable2GUI
         if (!$this->restrict_type) {
             // type of training
             include_once("./Services/Form/classes/class.ilSelectInputGUI.php");
-            $options = array("" => $lng->txt("adn_filter_all")) + $types;
-            $si = new ilSelectInputGUI($lng->txt("adn_type_of_training"), "type_of_training");
+            $options = array("" => $this->lng->txt("adn_filter_all")) + $types;
+            $si = new ilSelectInputGUI($this->lng->txt("adn_type_of_training"), "type_of_training");
             $si->setOptions($options);
             $this->addFilterItem($si);
             $si->readFromSession();
@@ -180,16 +178,16 @@ class adnTrainingEventTableGUI extends ilTable2GUI
             "date",
             self::FILTER_DATE_RANGE,
             false,
-            $lng->txt("adn_date")
+            $this->lng->txt("adn_date")
         );
         $si->readFromSession();
         $this->filter["date"] = $si->getDate();
 
         // training facilities
         include_once("./Services/Form/classes/class.ilSelectInputGUI.php");
-        $options = array("" => $lng->txt("adn_filter_all")) +
+        $options = array("" => $this->lng->txt("adn_filter_all")) +
             adnTrainingFacility::getTrainingFacilitiesSelect($this->provider_id);
-        $si = new ilSelectInputGUI($lng->txt("adn_training_facility"), "training_facility");
+        $si = new ilSelectInputGUI($this->lng->txt("adn_training_facility"), "training_facility");
         $si->setOptions($options);
         $this->addFilterItem($si);
         $si->readFromSession();
@@ -200,9 +198,9 @@ class adnTrainingEventTableGUI extends ilTable2GUI
                 "provider",
                 self::FILTER_SELECT,
                 false,
-                $lng->txt("adn_training_provider")
+                $this->lng->txt("adn_training_provider")
             );
-            $si->setOptions(array("" => $lng->txt("adn_filter_all")) +
+            $si->setOptions(array("" => $this->lng->txt("adn_filter_all")) +
                 adnTrainingProvider::getTrainingProvidersSelect());
             $si->readFromSession();
             $this->filter["provider"] = $si->getValue();
@@ -216,11 +214,10 @@ class adnTrainingEventTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
         
         // actions...
 
-        $ilCtrl->setParameter($this->parent_obj, "te_id", $a_set["id"]);
+        $this->ctrl->setParameter($this->parent_obj, "te_id", $a_set["id"]);
 
         if (!$this->assignment) {
             if (adnPerm::check(adnPerm::TA, adnPerm::WRITE)) {
@@ -229,11 +226,11 @@ class adnTrainingEventTableGUI extends ilTable2GUI
                     $this->tpl->setCurrentBlock("action");
                     $this->tpl->setVariable(
                         "TXT_CMD",
-                        $lng->txt("adn_edit")
+                        $this->lng->txt("adn_edit")
                     );
                     $this->tpl->setVariable(
                         "HREF_CMD",
-                        $ilCtrl->getLinkTarget($this->parent_obj, "editTrainingEvent")
+                        $this->ctrl->getLinkTarget($this->parent_obj, "editTrainingEvent")
                     );
                     $this->tpl->parseCurrentBlock();
 
@@ -249,11 +246,11 @@ class adnTrainingEventTableGUI extends ilTable2GUI
                 $this->tpl->setCurrentBlock("action");
                 $this->tpl->setVariable(
                     "TXT_CMD",
-                    $lng->txt("adn_show_details")
+                    $this->lng->txt("adn_show_details")
                 );
                 $this->tpl->setVariable(
                     "HREF_CMD",
-                    $ilCtrl->getLinkTarget($this->parent_obj, "showTrainingEvent")
+                    $this->ctrl->getLinkTarget($this->parent_obj, "showTrainingEvent")
                 );
                 $this->tpl->parseCurrentBlock();
             }
@@ -262,16 +259,16 @@ class adnTrainingEventTableGUI extends ilTable2GUI
             $this->tpl->setCurrentBlock("action");
             $this->tpl->setVariable(
                 "TXT_CMD",
-                $lng->txt("adn_set_last_training")
+                $this->lng->txt("adn_set_last_training")
             );
             $this->tpl->setVariable(
                 "HREF_CMD",
-                $ilCtrl->getLinkTarget($this->parent_obj, "saveLastTraining")
+                $this->ctrl->getLinkTarget($this->parent_obj, "saveLastTraining")
             );
             $this->tpl->parseCurrentBlock();
         }
 
-        $ilCtrl->setParameter($this->parent_obj, "te_id", "");
+        $this->ctrl->setParameter($this->parent_obj, "te_id", "");
 
         // properties
         $this->tpl->setVariable(

@@ -31,13 +31,12 @@ class adnStatisticsExamsTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd)
     {
-        global $ilCtrl, $lng;
 
         parent::__construct($a_parent_obj, $a_parent_cmd);
 
         $this->setId("adn_st_exs");
         
-        $this->setTitle($lng->txt("adn_st_exs"));
+        $this->setTitle($this->lng->txt("adn_st_exs"));
         
         $this->addColumn($this->lng->txt("adn_type_of_exam"), "type");
         $this->addColumn($this->lng->txt("adn_number_of_examination_events"), "events");
@@ -53,7 +52,7 @@ class adnStatisticsExamsTableGUI extends ilTable2GUI
         $this->setResetCommand("resetExamsFilter");
         $this->setFilterCommand("applyExamsFilter");
         
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.exams_row.html", "Services/ADN/ST");
 
         include_once "Services/ADN/MD/classes/class.adnWMO.php";
@@ -69,15 +68,14 @@ class adnStatisticsExamsTableGUI extends ilTable2GUI
      */
     public function initFilter()
     {
-        global $lng;
 
         $wsd = $this->addFilterItemByMetaType(
             "wmo",
             self::FILTER_SELECT,
             false,
-            $lng->txt("adn_wmo")
+            $this->lng->txt("adn_wmo")
         );
-        $wsd->setOptions(array(0 => $lng->txt("adn_filter_all")) + $this->map["wmo"]);
+        $wsd->setOptions(array(0 => $this->lng->txt("adn_filter_all")) + $this->map["wmo"]);
         $wsd->readFromSession();
         $this->filter["wmo"] = $wsd->getValue();
 
@@ -85,7 +83,7 @@ class adnStatisticsExamsTableGUI extends ilTable2GUI
             "date",
             self::FILTER_DATE_RANGE,
             false,
-            $lng->txt("adn_timeframe")
+            $this->lng->txt("adn_timeframe")
         );
         $date->readFromSession();
         $this->filter["date"] = $date->getDate();
@@ -102,7 +100,6 @@ class adnStatisticsExamsTableGUI extends ilTable2GUI
      */
     protected function importData()
     {
-        global $lng;
 
         include_once "Services/ADN/ST/classes/class.adnStatistics.php";
         $tmp = adnStatistics::getExams($this->filter);
@@ -130,7 +127,7 @@ class adnStatisticsExamsTableGUI extends ilTable2GUI
                 $sum['success'] += (string) $item['successful'];
             }
 
-            $sum['type'] = $lng->txt('adn_total');
+            $sum['type'] = $this->lng->txt('adn_total');
             $sum['quota'] = '0';
             if ((int) $sum['participants']) {
                 $sum['quota'] = round((int) $sum['success'] / (int) $sum['participants'] * 100, 2);

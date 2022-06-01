@@ -39,7 +39,6 @@ class adnAnswerSheet extends adnDBBase
      */
     public function __construct($a_id = 0)
     {
-        global $ilCtrl;
 
         if ($a_id !== 0) {
             $this->setId($a_id);
@@ -300,18 +299,17 @@ class adnAnswerSheet extends adnDBBase
      */
     public function read()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if (!$id) {
             return;
         }
 
-        $res = $ilDB->query("SELECT ep_exam_event_id,nr,type,butan,ed_license_id,prev_ed_good_id," .
+        $res = $this->db->query("SELECT ep_exam_event_id,nr,type,butan,ed_license_id,prev_ed_good_id," .
             "new_ed_good_id,generated_on" .
             " FROM adn_ep_answer_sheet" .
-            " WHERE id = " . $ilDB->quote($this->getId(), "integer"));
-        $set = $ilDB->fetchAssoc($res);
+            " WHERE id = " . $this->db->quote($this->getId(), "integer"));
+        $set = $this->db->fetchAssoc($res);
         $this->setEvent($set["ep_exam_event_id"]);
         $this->setNumber($set["nr"]);
         $this->setType($set["type"]);
@@ -324,13 +322,13 @@ class adnAnswerSheet extends adnDBBase
         parent::_read($id, "adn_ep_answer_sheet");
 
         // get questions
-        $res = $ilDB->query("SELECT ed_question_id,ed_objective_id" .
+        $res = $this->db->query("SELECT ed_question_id,ed_objective_id" .
             " FROM adn_ep_sheet_question" .
-            " WHERE ep_answer_sheet_id = " . $ilDB->quote($id, "integer") .
+            " WHERE ep_answer_sheet_id = " . $this->db->quote($id, "integer") .
             // #2605 - question order should be determined
             " ORDER BY ed_question_id");
         $questions = $map = array();
-        while ($row = $ilDB->fetchAssoc($res)) {
+        while ($row = $this->db->fetchAssoc($res)) {
             $questions[] = $row["ed_question_id"];
 
             if ($row["ed_objective_id"]) {
@@ -372,10 +370,9 @@ class adnAnswerSheet extends adnDBBase
      */
     public function save()
     {
-        global $ilDB;
 
         // sequence
-        $this->setId($ilDB->nextId("adn_ep_answer_sheet"));
+        $this->setId($this->db->nextId("adn_ep_answer_sheet"));
         $id = $this->getId();
 
         $fields = $this->propertiesToFields();
@@ -383,7 +380,7 @@ class adnAnswerSheet extends adnDBBase
 
         $fields["nr"] = array("integer", $this->getNextNumber());
 
-        $ilDB->insert("adn_ep_answer_sheet", $fields);
+        $this->db->insert("adn_ep_answer_sheet", $fields);
 
         parent::_save($id, "adn_ep_answer_sheet");
 
@@ -399,14 +396,13 @@ class adnAnswerSheet extends adnDBBase
      */
     protected function getNextNumber()
     {
-        global $ilDB;
 
         $event = $this->getEvent();
         if ($event) {
-            $set = $ilDB->query("SELECT MAX(nr) AS nr" .
+            $set = $this->db->query("SELECT MAX(nr) AS nr" .
                 " FROM adn_ep_answer_sheet" .
-                " WHERE ep_exam_event_id = " . $ilDB->quote($this->getEvent(), "integer"));
-            $row = $ilDB->fetchAssoc($set);
+                " WHERE ep_exam_event_id = " . $this->db->quote($this->getEvent(), "integer"));
+            $row = $this->db->fetchAssoc($set);
             return $row["nr"] + 1;
         }
     }
@@ -418,7 +414,6 @@ class adnAnswerSheet extends adnDBBase
      */
     public function update()
     {
-        global $ilDB;
         
         $id = $this->getId();
         if (!$id) {
@@ -427,7 +422,7 @@ class adnAnswerSheet extends adnDBBase
 
         $fields = $this->propertiesToFields();
 
-        $ilDB->update("adn_ep_answer_sheet", $fields, array("id" => array("integer", $id)));
+        $this->db->update("adn_ep_answer_sheet", $fields, array("id" => array("integer", $id)));
 
         parent::_update($id, "adn_ep_answer_sheet");
 
@@ -441,12 +436,11 @@ class adnAnswerSheet extends adnDBBase
      */
     protected function saveQuestions()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if ($id) {
-            $ilDB->manipulate("DELETE FROM adn_ep_sheet_question" .
-                " WHERE ep_answer_sheet_id = " . $ilDB->quote($id, "integer"));
+            $this->db->manipulate("DELETE FROM adn_ep_sheet_question" .
+                " WHERE ep_answer_sheet_id = " . $this->db->quote($id, "integer"));
 
             if (!empty($this->questions)) {
                 $map = $this->getQuestionMap();
@@ -461,7 +455,7 @@ class adnAnswerSheet extends adnDBBase
                         "ed_question_id" => array("integer", $question_id),
                         "ed_objective_id" => array("integer", $obj));
 
-                    $ilDB->insert("adn_ep_sheet_question", $fields);
+                    $this->db->insert("adn_ep_sheet_question", $fields);
                 }
             }
         }
@@ -474,17 +468,16 @@ class adnAnswerSheet extends adnDBBase
      */
     public function delete()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if ($id) {
             // U.PVB.7.6: archived flag is not used here!
-            $ilDB->manipulate("DELETE FROM adn_ep_cand_sheet" .
-                " WHERE ep_answer_sheet_id = " . $ilDB->quote($id, "integer"));
-            $ilDB->manipulate("DELETE FROM adn_ep_sheet_question" .
-                " WHERE ep_answer_sheet_id = " . $ilDB->quote($id, "integer"));
-            $ilDB->manipulate("DELETE FROM adn_ep_answer_sheet" .
-                " WHERE id = " . $ilDB->quote($id, "integer"));
+            $this->db->manipulate("DELETE FROM adn_ep_cand_sheet" .
+                " WHERE ep_answer_sheet_id = " . $this->db->quote($id, "integer"));
+            $this->db->manipulate("DELETE FROM adn_ep_sheet_question" .
+                " WHERE ep_answer_sheet_id = " . $this->db->quote($id, "integer"));
+            $this->db->manipulate("DELETE FROM adn_ep_answer_sheet" .
+                " WHERE id = " . $this->db->quote($id, "integer"));
             $this->setId(null);
             return true;
         }
@@ -498,7 +491,8 @@ class adnAnswerSheet extends adnDBBase
      */
     public static function getAllSheets($a_event_id)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id,nr,type,generated_on" .
             " FROM adn_ep_answer_sheet" .
@@ -525,7 +519,9 @@ class adnAnswerSheet extends adnDBBase
      */
     public static function getSheetsSelect($a_event_id, $a_divide_by_type = false)
     {
-        global $ilDB, $lng;
+        global $DIC;
+        $ilDB = $DIC->database();
+        $lng = $DIC->language();
 
         $sql = "SELECT id,nr,type" .
             " FROM adn_ep_answer_sheet" .
@@ -561,7 +557,8 @@ class adnAnswerSheet extends adnDBBase
      */
     protected static function lookupProperty($a_id, $a_prop)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query("SELECT " . $a_prop .
             " FROM adn_ep_answer_sheet" .

@@ -26,19 +26,18 @@ class adnLicenseTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd, $a_type)
     {
-        global $ilCtrl, $lng;
 
         $this->type = (int) $a_type;
 
         parent::__construct($a_parent_obj, $a_parent_cmd);
 
         $this->setId("adn_ed_lic");
-        $this->setTitle($lng->txt("adn_licenses"));
+        $this->setTitle($this->lng->txt("adn_licenses"));
 
         $this->importData();
 
         if (adnPerm::check(adnPerm::ED, adnPerm::WRITE) && $this->type == adnLicense::TYPE_CHEMICALS) {
-            $this->addMultiCommand("confirmLicensesChemDeletion", $lng->txt("delete"));
+            $this->addMultiCommand("confirmLicensesChemDeletion", $this->lng->txt("delete"));
             $this->addColumn("", "", "1");
         }
 
@@ -48,7 +47,7 @@ class adnLicenseTableGUI extends ilTable2GUI
         $this->setDefaultOrderField("name");
         $this->setDefaultOrderDirection("asc");
         
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.licenses_row.html", "Services/ADN/ED");
     }
 
@@ -71,10 +70,9 @@ class adnLicenseTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
         
         // actions...
-        $ilCtrl->setParameter($this->parent_obj, "lcs_id", $a_set["id"]);
+        $this->ctrl->setParameter($this->parent_obj, "lcs_id", $a_set["id"]);
 
         if (adnPerm::check(adnPerm::ED, adnPerm::WRITE)) {
             // ...edit
@@ -86,11 +84,11 @@ class adnLicenseTableGUI extends ilTable2GUI
             $this->tpl->setCurrentBlock("action");
             $this->tpl->setVariable(
                 "TXT_CMD",
-                $lng->txt("edit")
+                $this->lng->txt("edit")
             );
             $this->tpl->setVariable(
                 "HREF_CMD",
-                $ilCtrl->getLinkTarget($this->parent_obj, $cmd)
+                $this->ctrl->getLinkTarget($this->parent_obj, $cmd)
             );
             $this->tpl->parseCurrentBlock();
 
@@ -108,17 +106,17 @@ class adnLicenseTableGUI extends ilTable2GUI
                 $this->tpl->setCurrentBlock("action");
                 $this->tpl->setVariable(
                     "TXT_CMD",
-                    $lng->txt("download")
+                    $this->lng->txt("download")
                 );
                 $this->tpl->setVariable(
                     "HREF_CMD",
-                    $ilCtrl->getLinkTarget($this->parent_obj, "downloadFile")
+                    $this->ctrl->getLinkTarget($this->parent_obj, "downloadFile")
                 );
                 $this->tpl->parseCurrentBlock();
             }
         }
         
-        $ilCtrl->setParameter($this->parent_obj, "lcs_id", "");
+        $this->ctrl->setParameter($this->parent_obj, "lcs_id", "");
     
         // properties
         $this->tpl->setVariable("VAL_NAME", $a_set["name"]);

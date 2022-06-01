@@ -21,7 +21,6 @@ class adnInformationLetter extends adnDBBase
      */
     public function __construct($a_id = null)
     {
-        global $ilCtrl;
 
         $this->setFileDirectory("ta_information");
 
@@ -76,17 +75,16 @@ class adnInformationLetter extends adnDBBase
      */
     public function read()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if (!$id) {
             return;
         }
 
-        $res = $ilDB->query("SELECT name,ifile" .
+        $res = $this->db->query("SELECT name,ifile" .
             " FROM adn_ta_information" .
-            " WHERE id = " . $ilDB->quote($this->getId(), "integer"));
-        $set = $ilDB->fetchAssoc($res);
+            " WHERE id = " . $this->db->quote($this->getId(), "integer"));
+        $set = $this->db->fetchAssoc($res);
         $this->setName($set["name"]);
         $this->setFileName($set["ifile"]);
 
@@ -113,9 +111,8 @@ class adnInformationLetter extends adnDBBase
      */
     public function save()
     {
-        global $ilDB;
 
-        $this->setId($ilDB->nextId("adn_ta_information"));
+        $this->setId($this->db->nextId("adn_ta_information"));
         $id = $this->getId();
 
         $this->saveFile($this->getUploadedFile(), $id);
@@ -123,7 +120,7 @@ class adnInformationLetter extends adnDBBase
         $fields = $this->propertiesToFields();
         $fields["id"] = array("integer", $id);
             
-        $ilDB->insert("adn_ta_information", $fields);
+        $this->db->insert("adn_ta_information", $fields);
 
         parent::_save($id, "adn_ta_information");
         
@@ -137,7 +134,6 @@ class adnInformationLetter extends adnDBBase
      */
     public function update()
     {
-        global $ilDB;
         
         $id = $this->getId();
         if (!$id) {
@@ -146,7 +142,7 @@ class adnInformationLetter extends adnDBBase
 
         $fields = $this->propertiesToFields();
         
-        $ilDB->update("adn_ta_information", $fields, array("id" => array("integer", $id)));
+        $this->db->update("adn_ta_information", $fields, array("id" => array("integer", $id)));
 
         parent::_update($id, "adn_ta_information");
 
@@ -160,15 +156,14 @@ class adnInformationLetter extends adnDBBase
      */
     public function delete()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if ($id) {
             $this->removeFile($id);
 
             // U.SV.6.4: archived flag is not used here!
-            $ilDB->manipulate("DELETE FROM adn_ta_information" .
-                " WHERE id = " . $ilDB->quote($id, "integer"));
+            $this->db->manipulate("DELETE FROM adn_ta_information" .
+                " WHERE id = " . $this->db->quote($id, "integer"));
             $this->setId(null);
             return true;
         }
@@ -181,7 +176,8 @@ class adnInformationLetter extends adnDBBase
      */
     public static function getAllInformationLetters()
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id,name" .
             " FROM adn_ta_information";
@@ -202,7 +198,8 @@ class adnInformationLetter extends adnDBBase
      */
     public static function getInformationLettersSelect()
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id,name" .
             " FROM adn_ta_information";
@@ -226,7 +223,8 @@ class adnInformationLetter extends adnDBBase
      */
     protected static function lookupProperty($a_id, $a_prop)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query("SELECT " . $a_prop .
             " FROM adn_ta_information" .

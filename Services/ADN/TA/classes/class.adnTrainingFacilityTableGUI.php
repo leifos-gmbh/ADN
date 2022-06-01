@@ -26,7 +26,6 @@ class adnTrainingFacilityTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd, $a_provider_id)
     {
-        global $ilCtrl, $lng;
 
         $this->provider_id = (int) $a_provider_id;
 
@@ -35,7 +34,7 @@ class adnTrainingFacilityTableGUI extends ilTable2GUI
         parent::__construct($a_parent_obj, $a_parent_cmd);
 
         include_once "Services/ADN/TA/classes/class.adnTrainingProvider.php";
-        $this->setTitle($lng->txt("adn_training_facilities") . ": " .
+        $this->setTitle($this->lng->txt("adn_training_facilities") . ": " .
             adnTrainingProvider::lookupName($this->provider_id));
         
         $this->addColumn("", "", "1");
@@ -45,10 +44,10 @@ class adnTrainingFacilityTableGUI extends ilTable2GUI
         $this->setDefaultOrderField("name");
         $this->setDefaultOrderDirection("asc");
         
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.facilities_row.html", "Services/ADN/TA");
         
-        $this->addMultiCommand("confirmTrainingFacilitiesDeletion", $lng->txt("delete"));
+        $this->addMultiCommand("confirmTrainingFacilitiesDeletion", $this->lng->txt("delete"));
 
         $this->importData();
     }
@@ -72,24 +71,23 @@ class adnTrainingFacilityTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
         
         // actions...
-        $ilCtrl->setParameter($this->parent_obj, "tf_id", $a_set["id"]);
+        $this->ctrl->setParameter($this->parent_obj, "tf_id", $a_set["id"]);
         
         // ...edit
         $this->tpl->setCurrentBlock("action");
         $this->tpl->setVariable(
             "TXT_CMD",
-            $lng->txt("edit")
+            $this->lng->txt("edit")
         );
         $this->tpl->setVariable(
             "HREF_CMD",
-            $ilCtrl->getLinkTarget($this->parent_obj, "editTrainingFacility")
+            $this->ctrl->getLinkTarget($this->parent_obj, "editTrainingFacility")
         );
         $this->tpl->parseCurrentBlock();
         
-        $ilCtrl->setParameter($this->parent_obj, "tf_id", "");
+        $this->ctrl->setParameter($this->parent_obj, "tf_id", "");
 
         
         // properties

@@ -25,16 +25,25 @@ class adnCaseGUI
 
     // current case object
     protected ?adnCase $case = null;
+
+    protected ilCtrl $ctrl;
+    protected ilLanguage $lng;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilTabsGUI $tabs;
     
     /**
      * Constructor
      */
     public function __construct()
     {
-        global $ilCtrl;
+        global $DIC;
+        $this->ctrl = $DIC->ctrl();
+        $this->lng = $DIC->language();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->tabs = $DIC->tabs();
 
         // save case ID through requests
-        $ilCtrl->saveParameter($this, array("cs_id"));
+        $this->ctrl->saveParameter($this, array("cs_id"));
     }
     
     /**
@@ -42,18 +51,17 @@ class adnCaseGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl, $lng, $tpl;
 
-        $tpl->setTitle($lng->txt("adn_ed") . " - " . $lng->txt("adn_ed_cas"));
+        $this->tpl->setTitle($this->lng->txt("adn_ed") . " - " . $this->lng->txt("adn_ed_cas"));
         
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
         
         // forward command to next gui class in control flow
         switch ($next_class) {
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("editCase");
+                $cmd = $this->ctrl->getCmd("editCase");
                 
                 // determine type from cmd (gas|chem)
                 $cmd = explode("Case", $cmd);
@@ -125,12 +133,11 @@ class adnCaseGUI
      */
     protected function editCase(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl;
 
         if (!$a_form) {
             $a_form = $this->initCaseForm("edit");
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
     
     /**
@@ -140,7 +147,6 @@ class adnCaseGUI
      */
     protected function initCaseForm()
     {
-        global $lng, $ilCtrl;
         
         // get form object and add input fields
         include_once("Services/Form/classes/class.ilPropertyFormGUI.php");
@@ -148,16 +154,16 @@ class adnCaseGUI
 
         // text
         if (adnPerm::check(adnPerm::ED, adnPerm::WRITE)) {
-            $text = new ilTextAreaInputGUI($lng->txt("adn_text"), "text");
+            $text = new ilTextAreaInputGUI($this->lng->txt("adn_text"), "text");
             $text->setRequired(true);
             $text->setCols(80);
             $text->setRows(20);
             $text->setSpecialCharacters(true, true);
             $text->setFormId($form->getId());
         } else {
-            $text = new ilNonEditableValueGUI($lng->txt("adn_text"));
+            $text = new ilNonEditableValueGUI($this->lng->txt("adn_text"));
         }
-        $text->setInfo(wordwrap($lng->txt("adn_case_placeholder_" . $this->type), 90, "<br />"));
+        $text->setInfo(wordwrap($this->lng->txt("adn_case_placeholder_" . $this->type), 90, "<br />"));
         $form->addItem($text);
 
         if ($this->case) {
@@ -171,12 +177,12 @@ class adnCaseGUI
                 $cmd .= "Butan";
                 $cmd2 .= "Butan";
             }
-            $form->addCommandButton($cmd, $lng->txt("save"));
-            $form->addCommandButton($cmd2, $lng->txt("cancel"));
-            $form->setTitle($lng->txt("adn_case"));
+            $form->addCommandButton($cmd, $this->lng->txt("save"));
+            $form->addCommandButton($cmd2, $this->lng->txt("cancel"));
+            $form->setTitle($this->lng->txt("adn_case"));
         }
         
-        $form->setFormAction($ilCtrl->getFormAction($this));
+        $form->setFormAction($this->ctrl->getFormAction($this));
 
         return $form;
     }
@@ -186,7 +192,6 @@ class adnCaseGUI
      */
     protected function updateCase()
     {
-        global $lng, $ilCtrl, $tpl;
         
         $form = $this->initCaseForm();
 
@@ -205,15 +210,15 @@ class adnCaseGUI
                 $case->setButan($this->butan);
                 $case->setText($form->getInput("text"));
                 if ($case->save()) {
-                    ilUtil::sendSuccess($lng->txt("adn_case_created"), true);
-                    $ilCtrl->redirect($this, $cmd);
+                    ilUtil::sendSuccess($this->lng->txt("adn_case_created"), true);
+                    $this->ctrl->redirect($this, $cmd);
                 }
             } else {
                 $this->case->setText($form->getInput("text"));
                 if ($this->case->update()) {
                     // show success message and return to list
-                    ilUtil::sendSuccess($lng->txt("adn_case_updated"), true);
-                    $ilCtrl->redirect($this, $cmd);
+                    ilUtil::sendSuccess($this->lng->txt("adn_case_updated"), true);
+                    $this->ctrl->redirect($this, $cmd);
                 }
             }
         }
@@ -228,26 +233,25 @@ class adnCaseGUI
      */
     public function setTabs()
     {
-        global $ilTabs, $lng, $txt, $ilCtrl;
 
-        $ilTabs->addTab(
+        $this->tabs->addTab(
             adnSubjectArea::GAS . "_0",
-            $lng->txt("adn_case_gas_empty"),
-            $ilCtrl->getLinkTarget($this, "editCaseGas")
+            $this->lng->txt("adn_case_gas_empty"),
+            $this->ctrl->getLinkTarget($this, "editCaseGas")
         );
 
-        $ilTabs->addTab(
+        $this->tabs->addTab(
             adnSubjectArea::GAS . "_1",
-            $lng->txt("adn_case_gas_butan"),
-            $ilCtrl->getLinkTarget($this, "editCaseGasButan")
+            $this->lng->txt("adn_case_gas_butan"),
+            $this->ctrl->getLinkTarget($this, "editCaseGasButan")
         );
 
-        $ilTabs->addTab(
+        $this->tabs->addTab(
             adnSubjectArea::CHEMICAL . "_0",
-            $lng->txt("adn_case_chem"),
-            $ilCtrl->getLinkTarget($this, "editCaseChemicals")
+            $this->lng->txt("adn_case_chem"),
+            $this->ctrl->getLinkTarget($this, "editCaseChemicals")
         );
 
-        $ilTabs->activateTab($this->type . "_" . (int) $this->butan);
+        $this->tabs->activateTab($this->type . "_" . (int) $this->butan);
     }
 }

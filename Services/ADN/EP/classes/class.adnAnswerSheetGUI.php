@@ -19,17 +19,28 @@ class adnAnswerSheetGUI
 {
     // current sheet object
     protected ?adnAnswerSheet $sheet = null;
+
+    protected ilCtrl $ctrl;
+    protected ilLanguage $lng;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilTabsGUI $tabs;
+    protected ilToolbarGUI $toolbar;
     
     /**
      * Constructor
      */
     public function __construct()
     {
-        global $ilCtrl;
+        global $DIC;
+        $this->ctrl = $DIC->ctrl();
+        $this->lng = $DIC->language();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->tabs = $DIC->tabs();
+        $this->toolbar = $DIC->toolbar();
         
         // save sheet ID through requests
-        $ilCtrl->saveParameter($this, array("sh_id"));
-        $ilCtrl->saveParameter($this, array("arc"));
+        $this->ctrl->saveParameter($this, array("sh_id"));
+        $this->ctrl->saveParameter($this, array("arc"));
 
         $this->archived = (bool) $_REQUEST["arc"];
         
@@ -41,18 +52,17 @@ class adnAnswerSheetGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl, $lng, $tpl;
 
-        $tpl->setTitle($lng->txt("adn_ep") . " - " . $lng->txt("adn_ep_ass"));
+        $this->tpl->setTitle($this->lng->txt("adn_ep") . " - " . $this->lng->txt("adn_ep_ass"));
         
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
         
         // forward command to next gui class in control flow
         switch ($next_class) {
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("listEvents");
+                $cmd = $this->ctrl->getCmd("listEvents");
                 
                 switch ($cmd) {
                     // commands that need read permission
@@ -107,7 +117,6 @@ class adnAnswerSheetGUI
      */
     protected function listEvents()
     {
-        global $tpl;
 
         $this->setEventTabs();
 
@@ -121,7 +130,7 @@ class adnAnswerSheetGUI
         );
         
         // output table
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -165,30 +174,29 @@ class adnAnswerSheetGUI
      */
     public function setEventTabs()
     {
-        global $ilTabs, $lng, $txt, $ilCtrl;
 
-        $ilCtrl->setParameter($this, "arc", "");
+        $this->ctrl->setParameter($this, "arc", "");
 
-        $ilTabs->addTab(
+        $this->tabs->addTab(
             "current",
-            $lng->txt("adn_current_examination_events"),
-            $ilCtrl->getLinkTarget($this, "listEvents")
+            $this->lng->txt("adn_current_examination_events"),
+            $this->ctrl->getLinkTarget($this, "listEvents")
         );
 
-        $ilCtrl->setParameter($this, "arc", "1");
+        $this->ctrl->setParameter($this, "arc", "1");
 
-        $ilTabs->addTab(
+        $this->tabs->addTab(
             "archived",
-            $lng->txt("adn_archived_examination_events"),
-            $ilCtrl->getLinkTarget($this, "listEvents")
+            $this->lng->txt("adn_archived_examination_events"),
+            $this->ctrl->getLinkTarget($this, "listEvents")
         );
 
-        $ilCtrl->setParameter($this, "arc", $this->archived);
+        $this->ctrl->setParameter($this, "arc", $this->archived);
 
         if ($this->archived) {
-            $ilTabs->activateTab("archived");
+            $this->tabs->activateTab("archived");
         } else {
-            $ilTabs->activateTab("current");
+            $this->tabs->activateTab("current");
         }
     }
 
@@ -197,44 +205,43 @@ class adnAnswerSheetGUI
      */
     protected function listSheets()
     {
-        global $tpl, $lng, $ilTabs, $ilCtrl, $ilToolbar;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listEvents"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listEvents"));
 
         $event_id = (int) $_REQUEST["ev_id"];
         if (!$event_id) {
             return;
         }
 
-        $ilCtrl->setParameter($this, "ev_id", $event_id);
+        $this->ctrl->setParameter($this, "ev_id", $event_id);
 
-        $ilTabs->addTab(
+        $this->tabs->addTab(
             "sht",
-            $lng->txt("adn_answer_sheets"),
-            $ilCtrl->getLinkTarget($this, "listSheets")
+            $this->lng->txt("adn_answer_sheets"),
+            $this->ctrl->getLinkTarget($this, "listSheets")
         );
-        $ilTabs->addTab(
+        $this->tabs->addTab(
             "ass",
-            $lng->txt("adn_assignment_generating"),
-            $ilCtrl->getLinkTarget($this, "listAssignment")
+            $this->lng->txt("adn_assignment_generating"),
+            $this->ctrl->getLinkTarget($this, "listAssignment")
         );
 
-        $ilTabs->setTabActive("sht");
+        $this->tabs->setTabActive("sht");
 
         // creation buttons (depend on archival status)
         if (!$this->archived && adnPerm::check(adnPerm::EP, adnPerm::WRITE)) {
-            $ilToolbar->addButton(
-                $lng->txt("adn_add_mc_answer_sheet"),
-                $ilCtrl->getLinkTarget($this, "addMCSheet")
+            $this->toolbar->addButton(
+                $this->lng->txt("adn_add_mc_answer_sheet"),
+                $this->ctrl->getLinkTarget($this, "addMCSheet")
             );
 
             include_once "Services/ADN/EP/classes/class.adnExaminationEvent.php";
             include_once "Services/ADN/ED/classes/class.adnSubjectArea.php";
             $event = new adnExaminationEvent($event_id);
             if (adnSubjectArea::hasCasePart($event->getType())) {
-                $ilToolbar->addButton(
-                    $lng->txt("adn_add_case_answer_sheet"),
-                    $ilCtrl->getLinkTarget($this, "addCaseSheet")
+                $this->toolbar->addButton(
+                    $this->lng->txt("adn_add_case_answer_sheet"),
+                    $this->ctrl->getLinkTarget($this, "addCaseSheet")
                 );
             }
         }
@@ -244,7 +251,7 @@ class adnAnswerSheetGUI
         $table = new adnAnswerSheetTableGUI($this, "listSheets", $event_id, $this->archived);
 
         // output table
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -254,7 +261,6 @@ class adnAnswerSheetGUI
      */
     protected function addMCSheet()
     {
-        global $ilCtrl, $lng;
         
         $event_id = (int) $_GET["ev_id"];
         if (!$event_id) {
@@ -275,9 +281,9 @@ class adnAnswerSheetGUI
         $sheet->setQuestions($sheet_questions);
         $sheet->save();
 
-        ilUtil::sendSuccess($lng->txt("adn_answer_sheet_created"), true);
-        $ilCtrl->setParameter($this, "sh_id", $sheet->getId());
-        $ilCtrl->redirect($this, "listQuestionsForSheet");
+        ilUtil::sendSuccess($this->lng->txt("adn_answer_sheet_created"), true);
+        $this->ctrl->setParameter($this, "sh_id", $sheet->getId());
+        $this->ctrl->redirect($this, "listQuestionsForSheet");
     }
 
     /**
@@ -285,18 +291,17 @@ class adnAnswerSheetGUI
      */
     protected function addCaseSheet()
     {
-        global $ilCtrl, $ilTabs, $lng;
 
         $event_id = (int) $_GET["ev_id"];
         if (!$event_id) {
             return;
         }
 
-        $ilCtrl->setParameter($this, "ev_id", $event_id);
+        $this->ctrl->setParameter($this, "ev_id", $event_id);
 
-        $ilTabs->setBackTarget(
-            $lng->txt("back"),
-            $ilCtrl->getLinkTarget($this, "listSheets")
+        $this->tabs->setBackTarget(
+            $this->lng->txt("back"),
+            $this->ctrl->getLinkTarget($this, "listSheets")
         );
 
         include_once "Services/ADN/EP/classes/class.adnExaminationEvent.php";
@@ -317,13 +322,12 @@ class adnAnswerSheetGUI
      */
     protected function showCaseGasForm($a_event_id, ilPropertyFormGUI $a_form = null)
     {
-        global $tpl;
 
         if (!$a_form) {
             $a_form = $this->initCaseGasForm($a_event_id);
         }
 
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
 
     /**
@@ -334,25 +338,24 @@ class adnAnswerSheetGUI
      */
     protected function initCaseGasForm($a_event_id)
     {
-        global $lng, $ilCtrl;
         
         include_once("Services/Form/classes/class.ilPropertyFormGUI.php");
         $form = new ilPropertyFormGUI();
-        $form->setTitle($lng->txt("adn_add_case_answer_sheet"));
-        $form->setFormAction($ilCtrl->getFormAction($this));
+        $form->setTitle($this->lng->txt("adn_add_case_answer_sheet"));
+        $form->setFormAction($this->ctrl->getFormAction($this));
 
         $event = new ilHiddenInputGUI("ev_id");
         $event->setValue($a_event_id);
         $form->addItem($event);
 
-        $case = new ilSelectInputGUI($lng->txt("adn_case"), "case");
+        $case = new ilSelectInputGUI($this->lng->txt("adn_case"), "case");
         $case->setRequired(true);
-        $case->setOptions(array(0 => $lng->txt("adn_empty"),
-            1 => $lng->txt("adn_butan")));
+        $case->setOptions(array(0 => $this->lng->txt("adn_empty"),
+            1 => $this->lng->txt("adn_butan")));
         $form->addItem($case);
 
         include_once "Services/ADN/ED/classes/class.adnGoodInTransit.php";
-        $good = new ilRadioGroupInputGUI($lng->txt("adn_good_in_transit_select"), "good");
+        $good = new ilRadioGroupInputGUI($this->lng->txt("adn_good_in_transit_select"), "good");
         $good->setRequired(true);
         foreach (adnGoodInTransit::getGoodsSelect(adnGoodInTransit::TYPE_GAS) as
             $good_id => $good_caption) {
@@ -360,8 +363,8 @@ class adnAnswerSheetGUI
         }
         $form->addItem($good);
 
-        $form->addCommandButton("saveCaseGasSheet", $lng->txt("save"));
-        $form->addCommandButton("listSheets", $lng->txt("cancel"));
+        $form->addCommandButton("saveCaseGasSheet", $this->lng->txt("save"));
+        $form->addCommandButton("listSheets", $this->lng->txt("cancel"));
 
         return $form;
     }
@@ -373,7 +376,6 @@ class adnAnswerSheetGUI
      */
     protected function saveCaseGasSheet()
     {
-        global $ilCtrl, $lng;
 
         $event_id = (int) $_REQUEST["ev_id"];
         if (!$event_id) {
@@ -391,9 +393,9 @@ class adnAnswerSheetGUI
             $sheet->setGeneratedOn(new ilDate(time(), IL_CAL_UNIX));
             $sheet->save();
 
-            ilUtil::sendSuccess($lng->txt("adn_answer_sheet_created"), true);
-            $ilCtrl->setParameter($this, "sh_id", $sheet->getId());
-            $ilCtrl->redirect($this, "listQuestionsForSheet");
+            ilUtil::sendSuccess($this->lng->txt("adn_answer_sheet_created"), true);
+            $this->ctrl->setParameter($this, "sh_id", $sheet->getId());
+            $this->ctrl->redirect($this, "listQuestionsForSheet");
         }
 
         $form->setValuesByPost();
@@ -408,12 +410,11 @@ class adnAnswerSheetGUI
      */
     protected function showCaseChemLicenseForm(adnExaminationEvent $a_event, $a_invalid = false)
     {
-        global $lng, $ilCtrl, $tpl;
 
         include_once("Services/Form/classes/class.ilPropertyFormGUI.php");
         $form = new ilPropertyFormGUI();
-        $form->setTitle($lng->txt("adn_add_case_answer_sheet"));
-        $form->setFormAction($ilCtrl->getFormAction($this));
+        $form->setTitle($this->lng->txt("adn_add_case_answer_sheet"));
+        $form->setFormAction($this->ctrl->getFormAction($this));
 
         $event = new ilHiddenInputGUI("ev_id");
         $event->setValue($a_event->getId());
@@ -421,7 +422,7 @@ class adnAnswerSheetGUI
 
         include_once "Services/ADN/ED/classes/class.adnLicense.php";
         include_once "Services/ADN/ED/classes/class.adnSubjectArea.php";
-        $lic = new ilRadioGroupInputGUI($lng->txt("adn_license"), "license");
+        $lic = new ilRadioGroupInputGUI($this->lng->txt("adn_license"), "license");
         $lic->setRequired(true);
         foreach (adnLicense::getLicensesSelect(adnLicense::TYPE_CHEMICALS) as $lic_id => $lic_caption) {
             $lic->addOption(new ilRadioOption($lic_caption, $lic_id));
@@ -429,14 +430,14 @@ class adnAnswerSheetGUI
         $form->addItem($lic);
 
         if ($a_invalid) {
-            ilUtil::sendFailure($lng->txt("form_input_not_valid"));
-            $lic->setAlert($lng->txt("msg_input_is_required"));
+            ilUtil::sendFailure($this->lng->txt("form_input_not_valid"));
+            $lic->setAlert($this->lng->txt("msg_input_is_required"));
         }
 
-        $form->addCommandButton("showCaseChemGoodsForm", $lng->txt("btn_next"));
-        $form->addCommandButton("listSheets", $lng->txt("cancel"));
+        $form->addCommandButton("showCaseChemGoodsForm", $this->lng->txt("btn_next"));
+        $form->addCommandButton("listSheets", $this->lng->txt("cancel"));
 
-        $tpl->setContent($form->getHTML());
+        $this->tpl->setContent($form->getHTML());
     }
 
     /**
@@ -446,17 +447,16 @@ class adnAnswerSheetGUI
      */
     protected function showCaseChemGoodsForm($a_invalid = false)
     {
-        global $lng, $ilCtrl, $tpl, $ilTabs;
 
         $event_id = (int) $_REQUEST["ev_id"];
         if (!$event_id) {
             return;
         }
 
-        $ilCtrl->setParameter($this, "ev_id", $event_id);
-        $ilTabs->setBackTarget(
-            $lng->txt("back"),
-            $ilCtrl->getLinkTarget($this, "listSheets")
+        $this->ctrl->setParameter($this, "ev_id", $event_id);
+        $this->tabs->setBackTarget(
+            $this->lng->txt("back"),
+            $this->ctrl->getLinkTarget($this, "listSheets")
         );
 
         include_once "Services/ADN/EP/classes/class.adnExaminationEvent.php";
@@ -470,8 +470,8 @@ class adnAnswerSheetGUI
         
         include_once("Services/Form/classes/class.ilPropertyFormGUI.php");
         $form = new ilPropertyFormGUI();
-        $form->setTitle($lng->txt("adn_add_case_answer_sheet"));
-        $form->setFormAction($ilCtrl->getFormAction($this));
+        $form->setTitle($this->lng->txt("adn_add_case_answer_sheet"));
+        $form->setFormAction($this->ctrl->getFormAction($this));
 
         $evt = new ilHiddenInputGUI("ev_id");
         $evt->setValue($event->getId());
@@ -496,12 +496,12 @@ class adnAnswerSheetGUI
             }
         }
 
-        $prev_good = new ilSelectInputGUI($lng->txt("adn_good_in_transit_previous"), "prev_good");
+        $prev_good = new ilSelectInputGUI($this->lng->txt("adn_good_in_transit_previous"), "prev_good");
         $prev_good->setRequired(true);
-        $prev_good->setOptions(array("" => $lng->txt("adn_no_previous_good")) + $goods);
+        $prev_good->setOptions(array("" => $this->lng->txt("adn_no_previous_good")) + $goods);
         $form->addItem($prev_good);
 
-        $new_good = new ilSelectInputGUI($lng->txt("adn_good_in_transit_select"), "new_good");
+        $new_good = new ilSelectInputGUI($this->lng->txt("adn_good_in_transit_select"), "new_good");
         $new_good->setRequired(true);
         $new_good->setOptions($goods);
         if (!sizeof($goods)) {
@@ -510,14 +510,14 @@ class adnAnswerSheetGUI
         $form->addItem($new_good);
 
         if ($a_invalid) {
-            ilUtil::sendFailure($lng->txt("form_input_not_valid"));
-            $new_good->setAlert($lng->txt("msg_input_is_required"));
+            ilUtil::sendFailure($this->lng->txt("form_input_not_valid"));
+            $new_good->setAlert($this->lng->txt("msg_input_is_required"));
         }
 
-        $form->addCommandButton("saveCaseChemSheet", $lng->txt("save"));
-        $form->addCommandButton("listSheets", $lng->txt("cancel"));
+        $form->addCommandButton("saveCaseChemSheet", $this->lng->txt("save"));
+        $form->addCommandButton("listSheets", $this->lng->txt("cancel"));
 
-        $tpl->setContent($form->getHTML());
+        $this->tpl->setContent($form->getHTML());
     }
 
     /**
@@ -527,7 +527,6 @@ class adnAnswerSheetGUI
      */
     protected function saveCaseChemSheet()
     {
-        global $ilCtrl, $lng;
 
         $event_id = (int) $_REQUEST["ev_id"];
         $license_id = (int) $_REQUEST["lic_id"];
@@ -551,9 +550,9 @@ class adnAnswerSheetGUI
         $sheet->setGeneratedOn(new ilDate(time(), IL_CAL_UNIX));
         $sheet->save();
 
-        ilUtil::sendSuccess($lng->txt("adn_answer_sheet_created"), true);
-        $ilCtrl->setParameter($this, "sh_id", $sheet->getId());
-        $ilCtrl->redirect($this, "listQuestionsForSheet");
+        ilUtil::sendSuccess($this->lng->txt("adn_answer_sheet_created"), true);
+        $this->ctrl->setParameter($this, "sh_id", $sheet->getId());
+        $this->ctrl->redirect($this, "listQuestionsForSheet");
     }
 
     /**
@@ -568,10 +567,9 @@ class adnAnswerSheetGUI
      */
     public function getFullSheetTitle()
     {
-        global $lng;
         
         include_once "Services/ADN/EP/classes/class.adnExaminationEvent.php";
-        $title = $lng->txt("adn_answer_sheet") . " " .
+        $title = $this->lng->txt("adn_answer_sheet") . " " .
             $this->sheet->getNumber() . ": " . adnExaminationEvent::lookupName($this->sheet->getEvent());
 
         $description = "";
@@ -579,7 +577,7 @@ class adnAnswerSheetGUI
             $attributes = array();
 
             include_once "Services/ADN/ED/classes/class.adnGoodInTransit.php";
-            $attributes[] = $lng->txt("adn_good_in_transit_select") . ": " .
+            $attributes[] = $this->lng->txt("adn_good_in_transit_select") . ": " .
                 adnGoodInTransit::lookupName($this->sheet->getNewGood());
 
             include_once "Services/ADN/ED/classes/class.adnLicense.php";
@@ -590,21 +588,21 @@ class adnAnswerSheetGUI
             } else {
                 $license_name = adnLicense::lookupName($license_id);
             }
-            $attributes[] = $lng->txt("adn_license") . ": " . $license_name;
+            $attributes[] = $this->lng->txt("adn_license") . ": " . $license_name;
 
             include_once "Services/ADN/ED/classes/class.adnSubjectArea.php";
             include_once "Services/ADN/ED/classes/class.adnCase.php";
             $event = new adnExaminationEvent($this->sheet->getEvent());
             if ($event->getType() == adnSubjectArea::CHEMICAL) {
-                $case = $lng->txt("adn_case_chem");
+                $case = $this->lng->txt("adn_case_chem");
             } elseif ($this->sheet->getButan()) {
-                $case = $lng->txt("adn_case_gas_butan");
+                $case = $this->lng->txt("adn_case_gas_butan");
             } else {
-                $case = $lng->txt("adn_case_gas_empty");
+                $case = $this->lng->txt("adn_case_gas_empty");
             }
-            $attributes[] = $lng->txt("adn_case") . ": " . $case .
+            $attributes[] = $this->lng->txt("adn_case") . ": " . $case .
                 " (<a href=\"#\" onClick=\"JavaScript:document.getElementById('adn_case_text')." .
-                "style.display = 'block';\">" . $lng->txt("show") . "<a>)";
+                "style.display = 'block';\">" . $this->lng->txt("show") . "<a>)";
 
             $description = implode(", ", $attributes);
 
@@ -626,15 +624,14 @@ class adnAnswerSheetGUI
      */
     protected function listQuestionsForSheet()
     {
-        global $tpl, $lng, $ilTabs, $ilCtrl;
 
         if (!$this->sheet) {
             return;
         }
 
-        $ilCtrl->setParameter($this, "ev_id", $this->sheet->getEvent());
+        $this->ctrl->setParameter($this, "ev_id", $this->sheet->getEvent());
         
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listSheets"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listSheets"));
 
         $mytpl = new ilTemplate("tpl.questions_group.html", true, true, "Services/ADN/EP");
 
@@ -651,15 +648,15 @@ class adnAnswerSheetGUI
         // top/bottom buttons
         if (!$read_only) {
             $mytpl->setCurrentBlock("remove1");
-            $mytpl->setVariable("VAL_REMOVE_QUESTIONS", $lng->txt("adn_remove_questions"));
+            $mytpl->setVariable("VAL_REMOVE_QUESTIONS", $this->lng->txt("adn_remove_questions"));
             $mytpl->parseCurrentBlock();
             
             $mytpl->setCurrentBlock("remove2");
-            $mytpl->setVariable("VAL_REMOVE_QUESTIONS", $lng->txt("adn_remove_questions"));
+            $mytpl->setVariable("VAL_REMOVE_QUESTIONS", $this->lng->txt("adn_remove_questions"));
             $mytpl->parseCurrentBlock();
         }
 
-        $mytpl->setVariable("FORM_ACTION", $ilCtrl->getFormAction($this));
+        $mytpl->setVariable("FORM_ACTION", $this->ctrl->getFormAction($this));
         
         $sheet_data = $this->sheet->getQuestionsInObjectiveOrder();
         $rows = $invalid_questions = 0;
@@ -679,13 +676,13 @@ class adnAnswerSheetGUI
             // add questions link
             if (!$read_only && $objective["addable"]) {
                 $mytpl->setCurrentBlock("objective_add");
-                $ilCtrl->setParameter($this, "obj_id", $id);
-                $mytpl->setVariable("VAL_OBJECTIVE_URL", $ilCtrl->getLinkTarget(
+                $this->ctrl->setParameter($this, "obj_id", $id);
+                $mytpl->setVariable("VAL_OBJECTIVE_URL", $this->ctrl->getLinkTarget(
                     $this,
                     "addQuestionToSheet"
                 ));
-                $ilCtrl->setParameter($this, "obj_id", "");
-                $mytpl->setVariable("VAL_OBJECTIVE_ACTION", $lng->txt("adn_add_questions"));
+                $this->ctrl->setParameter($this, "obj_id", "");
+                $mytpl->setVariable("VAL_OBJECTIVE_ACTION", $this->lng->txt("adn_add_questions"));
                 $mytpl->parseCurrentBlock();
             }
             
@@ -762,15 +759,15 @@ class adnAnswerSheetGUI
                     // add questions link
                     if (!$read_only && $subobjective["addable"]) {
                         $mytpl->setCurrentBlock("subobjective_add");
-                        $ilCtrl->setParameter($this, "sobj_id", $subobjective_id);
+                        $this->ctrl->setParameter($this, "sobj_id", $subobjective_id);
                         $mytpl->setVariable(
                             "VAL_SUBOBJECTIVE_URL",
-                            $ilCtrl->getLinkTarget($this, "addQuestionToSheet")
+                            $this->ctrl->getLinkTarget($this, "addQuestionToSheet")
                         );
-                        $ilCtrl->setParameter($this, "sobj_id", "");
+                        $this->ctrl->setParameter($this, "sobj_id", "");
                         $mytpl->setVariable(
                             "VAL_SUBOBJECTIVE_ACTION",
-                            $lng->txt("adn_add_questions")
+                            $this->lng->txt("adn_add_questions")
                         );
                         $mytpl->parseCurrentBlock();
                     }
@@ -831,7 +828,7 @@ class adnAnswerSheetGUI
 
         // overall info
         $info = sprintf(
-            $lng->txt("adn_sheet_question_status"),
+            $this->lng->txt("adn_sheet_question_status"),
             sizeof($sheet_data["questions"]),
             $sheet_data["target"]
         );
@@ -840,7 +837,7 @@ class adnAnswerSheetGUI
 
         if ($invalid_questions) {
             $info .= ", " . sprintf(
-                $lng->txt("adn_sheet_question_status_invalid"),
+                $this->lng->txt("adn_sheet_question_status_invalid"),
                 $invalid_questions
             );
         }
@@ -852,12 +849,12 @@ class adnAnswerSheetGUI
                 ilUtil::sendFailure($info);
             }
         } elseif ($sheet_data["target"] < sizeof($sheet_data["questions"])) {
-            ilUtil::sendFailure($info . " - " . $lng->txt("adn_sheet_too_many"));
+            ilUtil::sendFailure($info . " - " . $this->lng->txt("adn_sheet_too_many"));
         } else {
-            ilUtil::sendFailure($info . " - " . $lng->txt("adn_sheet_too_few"));
+            ilUtil::sendFailure($info . " - " . $this->lng->txt("adn_sheet_too_few"));
         }
 
-        $tpl->setContent($mytpl->get());
+        $this->tpl->setContent($mytpl->get());
     }
 
     /**
@@ -865,7 +862,6 @@ class adnAnswerSheetGUI
      */
     protected function removeQuestionsFromSheet()
     {
-        global $tpl, $lng, $ilTabs, $ilCtrl;
 
         if (!$this->sheet) {
             return;
@@ -873,8 +869,8 @@ class adnAnswerSheetGUI
 
         // check whether at least one item has been seleced
         if (!is_array($_POST["question_id"]) || count($_POST["question_id"]) == 0) {
-            ilUtil::sendFailure($lng->txt("no_checkbox"), true);
-            $ilCtrl->redirect($this, "listQuestionsForSheet");
+            ilUtil::sendFailure($this->lng->txt("no_checkbox"), true);
+            $this->ctrl->redirect($this, "listQuestionsForSheet");
         } else {
             $questions = $this->sheet->getQuestions();
             foreach ($questions as $idx => $question_id) {
@@ -885,8 +881,8 @@ class adnAnswerSheetGUI
             $this->sheet->setQuestions($questions);
             $this->sheet->update();
             
-            ilUtil::sendSuccess($lng->txt("adn_sheet_questions_removed"), true);
-            $ilCtrl->redirect($this, "listQuestionsForSheet");
+            ilUtil::sendSuccess($this->lng->txt("adn_sheet_questions_removed"), true);
+            $this->ctrl->redirect($this, "listQuestionsForSheet");
         }
     }
 
@@ -895,16 +891,15 @@ class adnAnswerSheetGUI
      */
     protected function addQuestionToSheet()
     {
-        global $tpl, $lng, $ilTabs, $ilCtrl;
 
         if (!$this->sheet) {
             return;
         }
 
-        $ilCtrl->setParameter($this, "obj_id", $_REQUEST["obj_id"]);
-        $ilCtrl->setParameter($this, "sobj_id", $_REQUEST["sobj_id"]);
+        $this->ctrl->setParameter($this, "obj_id", $_REQUEST["obj_id"]);
+        $this->ctrl->setParameter($this, "sobj_id", $_REQUEST["sobj_id"]);
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget(
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget(
             $this,
             "listQuestionsForSheet"
         ));
@@ -920,7 +915,7 @@ class adnAnswerSheetGUI
         );
 
         // output table
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -928,7 +923,6 @@ class adnAnswerSheetGUI
      */
     protected function saveAddQuestions()
     {
-        global $tpl, $lng, $ilCtrl;
 
         if (!$this->sheet) {
             return;
@@ -936,11 +930,11 @@ class adnAnswerSheetGUI
 
         // check whether at least one item has been seleced
         if (!is_array($_POST["question_id"]) || count($_POST["question_id"]) == 0) {
-            $ilCtrl->setParameter($this, "obj_id", $_REQUEST["obj_id"]);
-            $ilCtrl->setParameter($this, "sobj_id", $_REQUEST["sobj_id"]);
+            $this->ctrl->setParameter($this, "obj_id", $_REQUEST["obj_id"]);
+            $this->ctrl->setParameter($this, "sobj_id", $_REQUEST["sobj_id"]);
 
-            ilUtil::sendFailure($lng->txt("no_checkbox"), true);
-            $ilCtrl->redirect($this, "addQuestionToSheet");
+            ilUtil::sendFailure($this->lng->txt("no_checkbox"), true);
+            $this->ctrl->redirect($this, "addQuestionToSheet");
         } else {
             // check for sheet subjected mode (in this case target has to be selected)
             if ($_REQUEST["sobj_id"]) {
@@ -972,8 +966,8 @@ class adnAnswerSheetGUI
             $this->sheet->setQuestions(array_unique($questions));
             $this->sheet->update();
 
-            ilUtil::sendSuccess($lng->txt("adn_sheet_questions_added"), true);
-            $ilCtrl->redirect($this, "listQuestionsForSheet");
+            ilUtil::sendSuccess($this->lng->txt("adn_sheet_questions_added"), true);
+            $this->ctrl->redirect($this, "listQuestionsForSheet");
         }
     }
 
@@ -982,32 +976,31 @@ class adnAnswerSheetGUI
      */
     protected function confirmSheetsDeletion()
     {
-        global $ilCtrl, $tpl, $lng, $ilTabs;
 
         $event_id = (int) $_GET["ev_id"];
         if (!$event_id) {
             return;
         }
 
-        $ilCtrl->setParameter($this, "ev_id", $event_id);
+        $this->ctrl->setParameter($this, "ev_id", $event_id);
 
         // check whether at least one item has been seleced
         if (!is_array($_POST["sheet_id"]) || count($_POST["sheet_id"]) == 0) {
-            ilUtil::sendFailure($lng->txt("no_checkbox"), true);
-            $ilCtrl->redirect($this, "listSheets");
+            ilUtil::sendFailure($this->lng->txt("no_checkbox"), true);
+            $this->ctrl->redirect($this, "listSheets");
         } else {
-            $ilTabs->setBackTarget(
-                $lng->txt("back"),
-                $ilCtrl->getLinkTarget($this, "listSheets")
+            $this->tabs->setBackTarget(
+                $this->lng->txt("back"),
+                $this->ctrl->getLinkTarget($this, "listSheets")
             );
             
             // display confirmation message
             include_once("./Services/Utilities/classes/class.ilConfirmationGUI.php");
             $cgui = new ilConfirmationGUI();
-            $cgui->setFormAction($ilCtrl->getFormAction($this));
-            $cgui->setHeaderText($lng->txt("adn_sure_delete_answer_sheets"));
-            $cgui->setCancel($lng->txt("cancel"), "listSheets");
-            $cgui->setConfirm($lng->txt("delete"), "deleteSheets");
+            $cgui->setFormAction($this->ctrl->getFormAction($this));
+            $cgui->setHeaderText($this->lng->txt("adn_sure_delete_answer_sheets"));
+            $cgui->setCancel($this->lng->txt("cancel"), "listSheets");
+            $cgui->setConfirm($this->lng->txt("delete"), "deleteSheets");
 
             // list objects that should be deleted
             include_once("./Services/ADN/EP/classes/class.adnAnswerSheet.php");
@@ -1015,7 +1008,7 @@ class adnAnswerSheetGUI
                 $cgui->addItem("sheet_id[]", $i, adnAnswerSheet::lookupName($i));
             }
 
-            $tpl->setContent($cgui->getHTML());
+            $this->tpl->setContent($cgui->getHTML());
         }
     }
 
@@ -1024,14 +1017,13 @@ class adnAnswerSheetGUI
      */
     protected function deleteSheets()
     {
-        global $ilCtrl, $lng;
 
         $event_id = (int) $_REQUEST["ev_id"];
         if (!$event_id) {
             return;
         }
 
-        $ilCtrl->setParameter($this, "ev_id", $event_id);
+        $this->ctrl->setParameter($this, "ev_id", $event_id);
 
         include_once("./Services/ADN/EP/classes/class.adnAnswerSheet.php");
 
@@ -1041,8 +1033,8 @@ class adnAnswerSheetGUI
                 $sheet->delete();
             }
         }
-        ilUtil::sendSuccess($lng->txt("adn_answer_sheet_deleted"), true);
-        $ilCtrl->redirect($this, "listSheets");
+        ilUtil::sendSuccess($this->lng->txt("adn_answer_sheet_deleted"), true);
+        $this->ctrl->redirect($this, "listSheets");
     }
 
     /**
@@ -1050,29 +1042,28 @@ class adnAnswerSheetGUI
      */
     protected function listAssignment()
     {
-        global $tpl, $lng, $ilTabs, $ilCtrl, $ilToolbar;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listEvents"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listEvents"));
 
         $event_id = (int) $_GET["ev_id"];
         if (!$event_id) {
             return;
         }
 
-        $ilCtrl->setParameter($this, "ev_id", $event_id);
+        $this->ctrl->setParameter($this, "ev_id", $event_id);
 
-        $ilTabs->addTab(
+        $this->tabs->addTab(
             "sht",
-            $lng->txt("adn_answer_sheets"),
-            $ilCtrl->getLinkTarget($this, "listSheets")
+            $this->lng->txt("adn_answer_sheets"),
+            $this->ctrl->getLinkTarget($this, "listSheets")
         );
-        $ilTabs->addTab(
+        $this->tabs->addTab(
             "ass",
-            $lng->txt("adn_assignment_generating"),
-            $ilCtrl->getLinkTarget($this, "listAssignment")
+            $this->lng->txt("adn_assignment_generating"),
+            $this->ctrl->getLinkTarget($this, "listAssignment")
         );
 
-        $ilTabs->setTabActive("ass");
+        $this->tabs->setTabActive("ass");
 
         // table of questions
         include_once("./Services/ADN/EP/classes/class.adnAnswerSheetAssignmentTableGUI.php");
@@ -1084,7 +1075,7 @@ class adnAnswerSheetGUI
         );
 
         // output table
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -1092,14 +1083,13 @@ class adnAnswerSheetGUI
      */
     protected function saveSheetAssignment($a_redirect = true)
     {
-        global $lng, $ilCtrl;
 
         $event_id = (int) $_GET["ev_id"];
         if (!$event_id) {
             return;
         }
 
-        $ilCtrl->setParameter($this, "ev_id", $event_id);
+        $this->ctrl->setParameter($this, "ev_id", $event_id);
 
         include_once "Services/ADN/EP/classes/class.adnAnswerSheetAssignment.php";
         include_once "Services/ADN/EC/classes/class.adnTest.php";
@@ -1152,17 +1142,17 @@ class adnAnswerSheetGUI
                 }
             }
         } else {
-            ilUtil::sendFailure($lng->txt("adn_assignment_save_fail_answered"), true);
-            $ilCtrl->redirect($this, "listAssignment");
+            ilUtil::sendFailure($this->lng->txt("adn_assignment_save_fail_answered"), true);
+            $this->ctrl->redirect($this, "listAssignment");
         }
 
         if ($delete_failed) {
-            ilUtil::sendFailure($lng->txt("adn_assignment_delete_fail_answered"), true);
+            ilUtil::sendFailure($this->lng->txt("adn_assignment_delete_fail_answered"), true);
         }
         
         if ($a_redirect) {
-            ilUtil::sendSuccess($lng->txt("adn_sheet_assignment_saved"), true);
-            $ilCtrl->redirect($this, "listAssignment");
+            ilUtil::sendSuccess($this->lng->txt("adn_sheet_assignment_saved"), true);
+            $this->ctrl->redirect($this, "listAssignment");
         }
         return true;
     }
@@ -1174,16 +1164,15 @@ class adnAnswerSheetGUI
      */
     protected function showSheetSubjectedList(array $a_question_ids)
     {
-        global $tpl, $ilCtrl, $lng, $tpl, $ilTabs;
         
         if (!$this->sheet) {
             return;
         }
 
-        $ilCtrl->setParameter($this, "obj_id", $_REQUEST["obj_id"]);
-        $ilCtrl->setParameter($this, "sobj_id", $_REQUEST["sobj_id"]);
+        $this->ctrl->setParameter($this, "obj_id", $_REQUEST["obj_id"]);
+        $this->ctrl->setParameter($this, "sobj_id", $_REQUEST["sobj_id"]);
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget(
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget(
             $this,
             "addQuestionToSheet"
         ));
@@ -1200,7 +1189,7 @@ class adnAnswerSheetGUI
         );
 
         // output table
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
     
     /**
@@ -1209,9 +1198,8 @@ class adnAnswerSheetGUI
      */
     protected function generateSheets()
     {
-        global $ilCtrl;
 
-        $ilCtrl->saveParameter($this, 'ev_id');
+        $this->ctrl->saveParameter($this, 'ev_id');
         
         $this->saveSheetAssignment(false);
         
@@ -1224,11 +1212,11 @@ class adnAnswerSheetGUI
             $report->create();
         
             ilUtil::sendSuccess('Prüfbögen generiert', true);
-            $ilCtrl->redirect($this, 'listAssignment');
+            $this->ctrl->redirect($this, 'listAssignment');
             return true;
         } catch (adnReportException $e) {
             ilUtil::sendFailure($e->getMessage(), true);
-            $ilCtrl->redirect($this, 'listAssignment');
+            $this->ctrl->redirect($this, 'listAssignment');
         }
     }
     
@@ -1238,12 +1226,11 @@ class adnAnswerSheetGUI
      */
     protected function downloadExaminationDocuments()
     {
-        global $ilCtrl,$lng;
         
         if (!count((array) $_POST['candidate_id'])) {
-            ilUtil::sendFailure($lng->txt("no_checkbox"), true);
-            $ilCtrl->setParameter($this, "ev_id", (int) $_REQUEST['ev_id']);
-            $ilCtrl->redirect($this, "listAssignment");
+            ilUtil::sendFailure($this->lng->txt("no_checkbox"), true);
+            $this->ctrl->setParameter($this, "ev_id", (int) $_REQUEST['ev_id']);
+            $this->ctrl->redirect($this, "listAssignment");
         }
         // create report
         include_once './Services/ADN/Report/exceptions/class.adnReportException.php';
@@ -1258,8 +1245,8 @@ class adnAnswerSheetGUI
             return true;
         } catch (adnReportException $e) {
             ilUtil::sendFailure($e->getMessage(), true);
-            $ilCtrl->saveParameter($this, 'ev_id');
-            $ilCtrl->redirect($this, 'listAssignment');
+            $this->ctrl->saveParameter($this, 'ev_id');
+            $this->ctrl->redirect($this, 'listAssignment');
         }
     }
 }

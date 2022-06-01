@@ -18,19 +18,29 @@ class adnTrainingFacilityGUI
     protected int $provider_id = 0;
 
     protected ?adnTrainingFacility $facility = null;
-    
+
+    protected ilCtrl $ctrl;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilLanguage $lng;
+    protected ilTabsGUI $tabs;
+    protected ilToolbarGUI $toolbar;
     /**
      * Constructor
      */
     public function __construct()
     {
-        global $ilCtrl;
+        global $DIC;
+        $this->ctrl = $DIC->ctrl();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->lng = $DIC->language();
+        $this->tabs = $DIC->tabs();
+        $this->toolbar = $DIC->toolbar();
 
         $this->provider_id = (int) $_REQUEST["tp_id"];
         
         // save provider and facility ID through requests
-        $ilCtrl->saveParameter($this, array("tp_id"));
-        $ilCtrl->saveParameter($this, array("tf_id"));
+        $this->ctrl->saveParameter($this, array("tp_id"));
+        $this->ctrl->saveParameter($this, array("tf_id"));
         
         $this->readTrainingFacility();
     }
@@ -40,16 +50,15 @@ class adnTrainingFacilityGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl;
         
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
         
         // forward command to next gui class in control flow
         switch ($next_class) {
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("listTrainingFacilities");
+                $cmd = $this->ctrl->getCmd("listTrainingFacilities");
                 
                 switch ($cmd) {
                     // commands that need read permission
@@ -92,17 +101,16 @@ class adnTrainingFacilityGUI
      */
     public function listTrainingFacilities()
     {
-        global $tpl, $lng, $ilTabs, $ilCtrl, $ilToolbar;
 
-        $ilTabs->setBackTarget(
-            $lng->txt("back"),
-            $ilCtrl->getLinkTargetByClass("adnTrainingProviderGUI", "listTrainingProviders")
+        $this->tabs->setBackTarget(
+            $this->lng->txt("back"),
+            $this->ctrl->getLinkTargetByClass("adnTrainingProviderGUI", "listTrainingProviders")
         );
 
         // add facility
-        $ilToolbar->addButton(
-            $lng->txt("adn_add_training_facility"),
-            $ilCtrl->getLinkTarget($this, "addTrainingFacility")
+        $this->toolbar->addButton(
+            $this->lng->txt("adn_add_training_facility"),
+            $this->ctrl->getLinkTarget($this, "addTrainingFacility")
         );
 
         include_once("./Services/ADN/TA/classes/class.adnTrainingFacilityTableGUI.php");
@@ -112,7 +120,7 @@ class adnTrainingFacilityGUI
             $this->provider_id
         );
 
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
     
     /**
@@ -122,9 +130,8 @@ class adnTrainingFacilityGUI
      */
     protected function addTrainingFacility(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $ilTabs, $ilCtrl, $lng;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget(
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget(
             $this,
             "listTrainingFacilities"
         ));
@@ -132,7 +139,7 @@ class adnTrainingFacilityGUI
         if (!$a_form) {
             $a_form = $this->initTrainingFacilityForm("create");
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
     
     /**
@@ -142,9 +149,8 @@ class adnTrainingFacilityGUI
      */
     protected function editTrainingFacility(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $ilTabs, $ilCtrl, $lng;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget(
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget(
             $this,
             "listTrainingFacilities"
         ));
@@ -152,7 +158,7 @@ class adnTrainingFacilityGUI
         if (!$a_form) {
             $a_form = $this->initTrainingFacilityForm("edit");
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
     
     /**
@@ -163,7 +169,6 @@ class adnTrainingFacilityGUI
      */
     protected function initTrainingFacilityForm($a_mode = "edit")
     {
-        global $lng, $ilCtrl;
 
         include_once "Services/ADN/TA/classes/class.adnTrainingProvider.php";
         $provider = new adnTrainingProvider($this->provider_id);
@@ -173,7 +178,7 @@ class adnTrainingFacilityGUI
         $form = new ilPropertyFormGUI();
         
         // name
-        $name = new ilTextAreaInputGUI($lng->txt("adn_city"), "name");
+        $name = new ilTextAreaInputGUI($this->lng->txt("adn_city"), "name");
         $name->setCols(80);
         $name->setRows(5);
         $name->setRequired(true);
@@ -181,19 +186,19 @@ class adnTrainingFacilityGUI
 
         if ($a_mode == "create") {
             // creation: save/cancel buttons and title
-            $form->addCommandButton("saveTrainingFacility", $lng->txt("save"));
-            $form->addCommandButton("listTrainingFacilities", $lng->txt("cancel"));
-            $form->setTitle($lng->txt("adn_add_training_facility") . ": " . $provider->getName());
+            $form->addCommandButton("saveTrainingFacility", $this->lng->txt("save"));
+            $form->addCommandButton("listTrainingFacilities", $this->lng->txt("cancel"));
+            $form->setTitle($this->lng->txt("adn_add_training_facility") . ": " . $provider->getName());
         } else {
             $name->setValue($this->facility->getName());
             
             // editing: update/cancel buttons and title
-            $form->addCommandButton("updateTrainingFacility", $lng->txt("save"));
-            $form->addCommandButton("listTrainingFacilities", $lng->txt("cancel"));
-            $form->setTitle($lng->txt("adn_edit_training_facility") . ": " . $provider->getName());
+            $form->addCommandButton("updateTrainingFacility", $this->lng->txt("save"));
+            $form->addCommandButton("listTrainingFacilities", $this->lng->txt("cancel"));
+            $form->setTitle($this->lng->txt("adn_edit_training_facility") . ": " . $provider->getName());
         }
         
-        $form->setFormAction($ilCtrl->getFormAction($this));
+        $form->setFormAction($this->ctrl->getFormAction($this));
 
         return $form;
     }
@@ -203,7 +208,6 @@ class adnTrainingFacilityGUI
      */
     protected function saveTrainingFacility()
     {
-        global $tpl, $lng, $ilCtrl;
         
         $form = $this->initTrainingFacilityForm("create");
         
@@ -217,8 +221,8 @@ class adnTrainingFacilityGUI
             
             if ($facility->save()) {
                 // show success message and return to list
-                ilUtil::sendSuccess($lng->txt("adn_training_facility_created"), true);
-                $ilCtrl->redirect($this, "listTrainingFacilities");
+                ilUtil::sendSuccess($this->lng->txt("adn_training_facility_created"), true);
+                $this->ctrl->redirect($this, "listTrainingFacilities");
             }
         }
 
@@ -232,7 +236,6 @@ class adnTrainingFacilityGUI
      */
     protected function updateTrainingFacility()
     {
-        global $lng, $ilCtrl, $tpl;
         
         $form = $this->initTrainingFacilityForm("edit");
         
@@ -243,8 +246,8 @@ class adnTrainingFacilityGUI
             
             if ($this->facility->update()) {
                 // show success message and return to list
-                ilUtil::sendSuccess($lng->txt("adn_training_facility_updated"), true);
-                $ilCtrl->redirect($this, "listTrainingFacilities");
+                ilUtil::sendSuccess($this->lng->txt("adn_training_facility_updated"), true);
+                $this->ctrl->redirect($this, "listTrainingFacilities");
             }
         }
         
@@ -258,25 +261,24 @@ class adnTrainingFacilityGUI
      */
     protected function confirmTrainingFacilitiesDeletion()
     {
-        global $ilCtrl, $tpl, $lng, $ilTabs;
         
         // check whether at least one item has been seleced
         if (!is_array($_POST["facility_id"]) || count($_POST["facility_id"]) == 0) {
-            ilUtil::sendFailure($lng->txt("no_checkbox"), true);
-            $ilCtrl->redirect($this, "listTrainingFacilities");
+            ilUtil::sendFailure($this->lng->txt("no_checkbox"), true);
+            $this->ctrl->redirect($this, "listTrainingFacilities");
         } else {
-            $ilTabs->setBackTarget(
-                $lng->txt("back"),
-                $ilCtrl->getLinkTarget($this, "listTrainingFacilities")
+            $this->tabs->setBackTarget(
+                $this->lng->txt("back"),
+                $this->ctrl->getLinkTarget($this, "listTrainingFacilities")
             );
             
             // display confirmation message
             include_once("./Services/Utilities/classes/class.ilConfirmationGUI.php");
             $cgui = new ilConfirmationGUI();
-            $cgui->setFormAction($ilCtrl->getFormAction($this));
-            $cgui->setHeaderText($lng->txt("adn_sure_delete_training_facilities"));
-            $cgui->setCancel($lng->txt("cancel"), "listTrainingFacilities");
-            $cgui->setConfirm($lng->txt("delete"), "deleteTrainingFacilities");
+            $cgui->setFormAction($this->ctrl->getFormAction($this));
+            $cgui->setHeaderText($this->lng->txt("adn_sure_delete_training_facilities"));
+            $cgui->setCancel($this->lng->txt("cancel"), "listTrainingFacilities");
+            $cgui->setConfirm($this->lng->txt("delete"), "deleteTrainingFacilities");
 
             // list objects that should be deleted
             include_once("./Services/ADN/TA/classes/class.adnTrainingFacility.php");
@@ -284,7 +286,7 @@ class adnTrainingFacilityGUI
                 $cgui->addItem("facility_id[]", $i, adnTrainingFacility::lookupName($i));
             }
             
-            $tpl->setContent($cgui->getHTML());
+            $this->tpl->setContent($cgui->getHTML());
         }
     }
     
@@ -293,7 +295,6 @@ class adnTrainingFacilityGUI
      */
     protected function deleteTrainingFacilities()
     {
-        global $ilCtrl, $lng;
         
         include_once("./Services/ADN/TA/classes/class.adnTrainingFacility.php");
         
@@ -303,7 +304,7 @@ class adnTrainingFacilityGUI
                 $facility->delete();
             }
         }
-        ilUtil::sendSuccess($lng->txt("adn_training_facility_deleted"), true);
-        $ilCtrl->redirect($this, "listTrainingFacilities");
+        ilUtil::sendSuccess($this->lng->txt("adn_training_facility_deleted"), true);
+        $this->ctrl->redirect($this, "listTrainingFacilities");
     }
 }

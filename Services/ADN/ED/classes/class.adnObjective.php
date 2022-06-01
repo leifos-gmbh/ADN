@@ -32,7 +32,6 @@ class adnObjective extends adnDBBase
      */
     public function __construct($a_id = 0)
     {
-        global $ilCtrl;
 
         if ($a_id !== 0) {
             $this->setId($a_id);
@@ -205,17 +204,16 @@ class adnObjective extends adnDBBase
      */
     public function read()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if (!$id) {
             return;
         }
 
-        $res = $ilDB->query("SELECT title,type,nr,topic,catalog_area,sheet_subjected" .
+        $res = $this->db->query("SELECT title,type,nr,topic,catalog_area,sheet_subjected" .
             " FROM adn_ed_objective" .
-            " WHERE id = " . $ilDB->quote($this->getId(), "integer"));
-        $set = $ilDB->fetchAssoc($res);
+            " WHERE id = " . $this->db->quote($this->getId(), "integer"));
+        $set = $this->db->fetchAssoc($res);
         $this->setName($set["title"]);
         $this->setTopic($set["topic"]);
         $this->setCatalogArea($set["catalog_area"]);
@@ -250,15 +248,14 @@ class adnObjective extends adnDBBase
      */
     public function save()
     {
-        global $ilDB;
 
-        $this->setId($ilDB->nextId("adn_ed_objective"));
+        $this->setId($this->db->nextId("adn_ed_objective"));
         $id = $this->getId();
 
         $fields = $this->propertiesToFields();
         $fields["id"] = array("integer", $id);
             
-        $ilDB->insert("adn_ed_objective", $fields);
+        $this->db->insert("adn_ed_objective", $fields);
 
         parent::_save($id, "adn_ed_objective");
         
@@ -272,7 +269,6 @@ class adnObjective extends adnDBBase
      */
     public function update()
     {
-        global $ilDB;
         
         $id = $this->getId();
         if (!$id) {
@@ -281,7 +277,7 @@ class adnObjective extends adnDBBase
 
         $fields = $this->propertiesToFields();
         
-        $ilDB->update("adn_ed_objective", $fields, array("id" => array("integer", $id)));
+        $this->db->update("adn_ed_objective", $fields, array("id" => array("integer", $id)));
 
         parent::_update($id, "adn_ed_objective");
 
@@ -295,7 +291,6 @@ class adnObjective extends adnDBBase
      */
     public function delete()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if ($id) {
@@ -343,16 +338,16 @@ class adnObjective extends adnDBBase
                 }
                 
                 ilLoggerFactory::getLogger('adn')->info('-- deleting objectives for' . $id);
-                $ilDB->manipulate("UPDATE adn_ep_sheet_question" .
+                $this->db->manipulate("UPDATE adn_ep_sheet_question" .
                     " SET ed_objective_id = NULL" .
-                    " WHERE ed_objective_id = " . $ilDB->quote($id, "integer"));
-                $ilDB->manipulate("DELETE FROM adn_ed_target_nr_obj" .
-                    " WHERE ed_objective_id = " . $ilDB->quote($id, "integer"));
-                $ilDB->manipulate("DELETE FROM adn_ed_subobjective" .
-                    " WHERE ed_objective_id = " . $ilDB->quote($id, "integer") . ' ' .
+                    " WHERE ed_objective_id = " . $this->db->quote($id, "integer"));
+                $this->db->manipulate("DELETE FROM adn_ed_target_nr_obj" .
+                    " WHERE ed_objective_id = " . $this->db->quote($id, "integer"));
+                $this->db->manipulate("DELETE FROM adn_ed_subobjective" .
+                    " WHERE ed_objective_id = " . $this->db->quote($id, "integer") . ' ' .
                     ' AND archived < 1 ');
-                $ilDB->manipulate("DELETE FROM adn_ed_objective" .
-                    " WHERE id = " . $ilDB->quote($id, "integer") . ' ' .
+                $this->db->manipulate("DELETE FROM adn_ed_objective" .
+                    " WHERE id = " . $this->db->quote($id, "integer") . ' ' .
                     ' AND archived < 1 ');
                 $this->setId(null);
             }
@@ -369,7 +364,8 @@ class adnObjective extends adnDBBase
      */
     public static function getAllObjectives(array $a_filter = null, $a_with_archived = false)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id,title AS name,catalog_area,type,nr,topic" .
             " FROM adn_ed_objective";
@@ -437,7 +433,8 @@ class adnObjective extends adnDBBase
         $a_old_value = null
     )
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id,nr,title" .
             " FROM adn_ed_objective";
@@ -489,7 +486,8 @@ class adnObjective extends adnDBBase
      */
     protected static function lookupProperty($a_id, $a_prop)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query("SELECT " . $a_prop .
             " FROM adn_ed_objective" .
@@ -517,7 +515,8 @@ class adnObjective extends adnDBBase
      */
     public static function getTypeTextualRepresentation($a_type)
     {
-        global $lng;
+        global $DIC;
+        $lng = $DIC->language();
         
         if (self::isValidType($a_type)) {
             if ($a_type == self::TYPE_MC) {
@@ -557,7 +556,8 @@ class adnObjective extends adnDBBase
      */
     protected static function getAllCatalogAreas($a_type, $a_with_captions = true)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query("SELECT DISTINCT(catalog_area)" .
             " FROM adn_ed_objective" .
@@ -589,23 +589,22 @@ class adnObjective extends adnDBBase
      */
     public function isUniqueNumber()
     {
-        global $ilDB;
 
         $id = $this->getId();
         $area = $this->getCatalogArea();
 
         $sql = "SELECT id" .
             " FROM adn_ed_objective" .
-            " WHERE catalog_area = " . $ilDB->quote($area, "integer") .
-            " AND nr = " . $ilDB->quote($this->getNumber(), "text");
-        " AND archived < " . $ilDB->quote(1, "integer");
+            " WHERE catalog_area = " . $this->db->quote($area, "integer") .
+            " AND nr = " . $this->db->quote($this->getNumber(), "text");
+        " AND archived < " . $this->db->quote(1, "integer");
 
         if ($id) {
-            $sql .= " AND id <> " . $ilDB->quote($id, "integer");
+            $sql .= " AND id <> " . $this->db->quote($id, "integer");
         }
 
-        $set = $ilDB->query($sql);
-        return !(bool) $ilDB->numRows($set);
+        $set = $this->db->query($sql);
+        return !(bool) $this->db->numRows($set);
     }
 
     /**

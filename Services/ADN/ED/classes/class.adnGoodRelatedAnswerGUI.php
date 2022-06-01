@@ -23,13 +23,24 @@ class adnGoodRelatedAnswerGUI
 
     // gas/chem
     protected bool $show_butan_or_empty = false;
+
+    protected ilCtrl $ctrl;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilLanguage $lng;
+    protected ilToolbarGUI $toolbar;
+    protected ilTabsGUI $tabs;
     
     /**
      * Constructor
      */
     public function __construct()
     {
-        global $ilCtrl;
+        global $DIC;
+        $this->ctrl = $DIC->ctrl();
+        $this->lng = $DIC->language();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->toolbar = $DIC->toolbar();
+        $this->tabs = $DIC->tabs();
 
         $this->question_id = (int) $_REQUEST["eq_id"];
 
@@ -41,8 +52,8 @@ class adnGoodRelatedAnswerGUI
         }
 
         // save question and asnwer ID through requests
-        $ilCtrl->saveParameter($this, array("eq_id"));
-        $ilCtrl->saveParameter($this, array("cqa_id"));
+        $this->ctrl->saveParameter($this, array("eq_id"));
+        $this->ctrl->saveParameter($this, array("cqa_id"));
         
         $this->readAnswer();
     }
@@ -52,16 +63,15 @@ class adnGoodRelatedAnswerGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl;
         
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
         
         // forward command to next gui class in control flow
         switch ($next_class) {
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("listAnswers");
+                $cmd = $this->ctrl->getCmd("listAnswers");
                 
                 switch ($cmd) {
                     // commands that need read permission
@@ -104,19 +114,18 @@ class adnGoodRelatedAnswerGUI
      */
     public function listAnswers()
     {
-        global $tpl, $lng, $ilCtrl, $ilToolbar;
 
         if (adnPerm::check(adnPerm::ED, adnPerm::WRITE)) {
-            $ilToolbar->addButton(
-                $lng->txt("adn_add_good_related_answer"),
-                $ilCtrl->getLinkTarget($this, "addAnswer")
+            $this->toolbar->addButton(
+                $this->lng->txt("adn_add_good_related_answer"),
+                $this->ctrl->getLinkTarget($this, "addAnswer")
             );
         }
 
         include_once("./Services/ADN/ED/classes/class.adnGoodRelatedAnswerTableGUI.php");
         $table = new adnGoodRelatedAnswerTableGUI($this, "listAnswers", $this->question_id);
 
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
     
     /**
@@ -126,14 +135,13 @@ class adnGoodRelatedAnswerGUI
      */
     protected function addAnswer(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $ilTabs, $ilCtrl, $lng;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listAnswers"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listAnswers"));
 
         if (!$a_form) {
             $a_form = $this->initAnswerForm("create");
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
     
     /**
@@ -143,14 +151,13 @@ class adnGoodRelatedAnswerGUI
      */
     protected function editAnswer(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $ilTabs, $ilCtrl, $lng;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listAnswers"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listAnswers"));
 
         if (!$a_form) {
             $a_form = $this->initAnswerForm("edit");
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
     
     /**
@@ -161,14 +168,13 @@ class adnGoodRelatedAnswerGUI
      */
     protected function initAnswerForm($a_mode = "edit")
     {
-        global $lng, $ilCtrl;
         
         // get form object and add input fields
         include_once("Services/Form/classes/class.ilPropertyFormGUI.php");
         $form = new ilPropertyFormGUI();
         
         // name
-        $answer = new ilTextAreaInputGUI($lng->txt("adn_answer"), "answer");
+        $answer = new ilTextAreaInputGUI($this->lng->txt("adn_answer"), "answer");
         $answer->setCols(80);
         $answer->setRows(20);
         $answer->setRequired(true);
@@ -180,10 +186,10 @@ class adnGoodRelatedAnswerGUI
         if ($this->show_butan_or_empty) {
             // butan
             include_once "Services/ADN/ED/classes/class.adnGoodRelatedAnswer.php";
-            $butan = new ilSelectInputGUI($lng->txt("adn_butan_or_empty"), "empty");
-            $options = array(adnGoodRelatedAnswer::TYPE_EMPTY => $lng->txt("adn_empty"),
-                adnGoodRelatedAnswer::TYPE_BUTAN => $lng->txt("adn_butan"),
-                adnGoodRelatedAnswer::TYPE_BUTAN_OR_EMPTY => $lng->txt("adn_butan_or_empty"));
+            $butan = new ilSelectInputGUI($this->lng->txt("adn_butan_or_empty"), "empty");
+            $options = array(adnGoodRelatedAnswer::TYPE_EMPTY => $this->lng->txt("adn_empty"),
+                adnGoodRelatedAnswer::TYPE_BUTAN => $this->lng->txt("adn_butan"),
+                adnGoodRelatedAnswer::TYPE_BUTAN_OR_EMPTY => $this->lng->txt("adn_butan_or_empty"));
             $butan->setOptions($options);
             $form->addItem($butan);
         }
@@ -204,7 +210,7 @@ class adnGoodRelatedAnswerGUI
             $goods = adnGoodInTransit::getGoodsSelect(adnGoodInTransit::TYPE_CHEMICALS, null, $goods);
         }
         if ($goods) {
-            $specific = new ilCheckboxGroupInputGUI($lng->txt("adn_goods_in_transit"), "goods");
+            $specific = new ilCheckboxGroupInputGUI($this->lng->txt("adn_goods_in_transit"), "goods");
             $specific->setRequired(true);
             $form->addItem($specific);
             foreach ($goods as $good_id => $good_name) {
@@ -215,9 +221,9 @@ class adnGoodRelatedAnswerGUI
 
         if ($a_mode == "create") {
             // creation: save/cancel buttons and title
-            $form->addCommandButton("saveAnswer", $lng->txt("save"));
-            $form->addCommandButton("listAnswers", $lng->txt("cancel"));
-            $form->setTitle($lng->txt("adn_add_good_related_answer"));
+            $form->addCommandButton("saveAnswer", $this->lng->txt("save"));
+            $form->addCommandButton("listAnswers", $this->lng->txt("cancel"));
+            $form->setTitle($this->lng->txt("adn_add_good_related_answer"));
         } else {
             $answer->setValue($this->answer->getAnswer());
             if ($this->show_butan_or_empty) {
@@ -228,12 +234,12 @@ class adnGoodRelatedAnswerGUI
             }
             
             // editing: update/cancel buttons and title
-            $form->addCommandButton("updateAnswer", $lng->txt("save"));
-            $form->addCommandButton("listAnswers", $lng->txt("cancel"));
-            $form->setTitle($lng->txt("adn_good_related_answer"));
+            $form->addCommandButton("updateAnswer", $this->lng->txt("save"));
+            $form->addCommandButton("listAnswers", $this->lng->txt("cancel"));
+            $form->setTitle($this->lng->txt("adn_good_related_answer"));
         }
         
-        $form->setFormAction($ilCtrl->getFormAction($this));
+        $form->setFormAction($this->ctrl->getFormAction($this));
 
         return $form;
     }
@@ -243,7 +249,6 @@ class adnGoodRelatedAnswerGUI
      */
     protected function saveAnswer()
     {
-        global $tpl, $lng, $ilCtrl;
         
         $form = $this->initAnswerForm("create");
         
@@ -263,8 +268,8 @@ class adnGoodRelatedAnswerGUI
             
             if ($answer->save()) {
                 // show success message and return to list
-                ilUtil::sendSuccess($lng->txt("adn_good_related_answer_created"), true);
-                $ilCtrl->redirect($this, "listAnswers");
+                ilUtil::sendSuccess($this->lng->txt("adn_good_related_answer_created"), true);
+                $this->ctrl->redirect($this, "listAnswers");
             }
         }
 
@@ -278,7 +283,6 @@ class adnGoodRelatedAnswerGUI
      */
     protected function updateAnswer()
     {
-        global $lng, $ilCtrl, $tpl;
         
         $form = $this->initAnswerForm("edit");
         
@@ -295,8 +299,8 @@ class adnGoodRelatedAnswerGUI
             
             if ($this->answer->update()) {
                 // show success message and return to list
-                ilUtil::sendSuccess($lng->txt("adn_good_related_answer_updated"), true);
-                $ilCtrl->redirect($this, "listAnswers");
+                ilUtil::sendSuccess($this->lng->txt("adn_good_related_answer_updated"), true);
+                $this->ctrl->redirect($this, "listAnswers");
             }
         }
         
@@ -310,20 +314,19 @@ class adnGoodRelatedAnswerGUI
      */
     protected function confirmAnswersDeletion()
     {
-        global $ilCtrl, $tpl, $lng;
         
         // check whether at least one item has been seleced
         if (!is_array($_POST["answer_id"]) || count($_POST["answer_id"]) == 0) {
-            ilUtil::sendFailure($lng->txt("no_checkbox"), true);
-            $ilCtrl->redirect($this, "listAnswers");
+            ilUtil::sendFailure($this->lng->txt("no_checkbox"), true);
+            $this->ctrl->redirect($this, "listAnswers");
         } else {
             // display confirmation message
             include_once("./Services/Utilities/classes/class.ilConfirmationGUI.php");
             $cgui = new ilConfirmationGUI();
-            $cgui->setFormAction($ilCtrl->getFormAction($this));
-            $cgui->setHeaderText($lng->txt("adn_sure_delete_good_related_answers"));
-            $cgui->setCancel($lng->txt("cancel"), "listAnswers");
-            $cgui->setConfirm($lng->txt("delete"), "deleteAnswers");
+            $cgui->setFormAction($this->ctrl->getFormAction($this));
+            $cgui->setHeaderText($this->lng->txt("adn_sure_delete_good_related_answers"));
+            $cgui->setCancel($this->lng->txt("cancel"), "listAnswers");
+            $cgui->setConfirm($this->lng->txt("delete"), "deleteAnswers");
 
             // list objects that should be deleted
             include_once("./Services/ADN/ED/classes/class.adnGoodRelatedAnswer.php");
@@ -331,7 +334,7 @@ class adnGoodRelatedAnswerGUI
                 $cgui->addItem("answer_id[]", $i, adnGoodRelatedAnswer::lookupName($i));
             }
             
-            $tpl->setContent($cgui->getHTML());
+            $this->tpl->setContent($cgui->getHTML());
         }
     }
     
@@ -340,7 +343,6 @@ class adnGoodRelatedAnswerGUI
      */
     protected function deleteAnswers()
     {
-        global $ilCtrl, $lng;
         
         include_once("./Services/ADN/ED/classes/class.adnGoodRelatedAnswer.php");
         
@@ -350,8 +352,8 @@ class adnGoodRelatedAnswerGUI
                 $answer->delete();
             }
         }
-        ilUtil::sendSuccess($lng->txt("adn_good_related_answer_deleted"), true);
-        ilUtil::sendSuccess($lng->txt("adn_good_related_answer_deleted"), true);
-        $ilCtrl->redirect($this, "listAnswers");
+        ilUtil::sendSuccess($this->lng->txt("adn_good_related_answer_deleted"), true);
+        ilUtil::sendSuccess($this->lng->txt("adn_good_related_answer_deleted"), true);
+        $this->ctrl->redirect($this, "listAnswers");
     }
 }

@@ -18,15 +18,25 @@ class adnObjectiveGUI
     // current objective object
     protected ?adnObjective $objective = null;
 
+    protected ilCtrl $ctrl;
+    protected ilLanguage $lng;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilToolbarGUI $toolbar;
+    protected ilTabsGUI $tabs;
     /**
      * Constructor
      */
     public function __construct()
     {
-        global $ilCtrl;
+        global $DIC;
+        $this->ctrl = $DIC->ctrl();
+        $this->lng = $DIC->language();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->toolbar = $DIC->toolbar();
+        $this->tabs = $DIC->tabs();
 
         // save objective ID through requests
-        $ilCtrl->saveParameter($this, array("ob_id"));
+        $this->ctrl->saveParameter($this, array("ob_id"));
         
         $this->readObjective();
     }
@@ -36,24 +46,23 @@ class adnObjectiveGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl, $lng, $tpl;
 
-        $tpl->setTitle($lng->txt("adn_ed") . " - " . $lng->txt("adn_ed_obs"));
+        $this->tpl->setTitle($this->lng->txt("adn_ed") . " - " . $this->lng->txt("adn_ed_obs"));
 
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
 
         // forward command to next gui class in control flow
         switch ($next_class) {
             case "adnsubobjectivegui":
                 include_once("./Services/ADN/ED/classes/class.adnSubobjectiveGUI.php");
                 $sob_gui = new adnSubobjectiveGUI();
-                $ilCtrl->forwardCommand($sob_gui);
+                $this->ctrl->forwardCommand($sob_gui);
                 break;
 
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("listMCObjectives");
+                $cmd = $this->ctrl->getCmd("listMCObjectives");
 
                 switch ($cmd) {
                     // commands that need read permission
@@ -117,14 +126,13 @@ class adnObjectiveGUI
      */
     protected function listMCObjectives()
     {
-        global $tpl, $ilToolbar, $ilCtrl, $lng;
 
         $this->setTabs("mc");
 
         if (adnPerm::check(adnPerm::ED, adnPerm::WRITE)) {
-            $ilToolbar->addButton(
-                $lng->txt("adn_add_objective"),
-                $ilCtrl->getLinkTarget($this, "addMCObjective")
+            $this->toolbar->addButton(
+                $this->lng->txt("adn_add_objective"),
+                $this->ctrl->getLinkTarget($this, "addMCObjective")
             );
         }
 
@@ -133,7 +141,7 @@ class adnObjectiveGUI
         $table = new adnObjectiveTableGUI($this, "listMCObjectives", adnObjective::TYPE_MC);
 
         // output table
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -141,14 +149,13 @@ class adnObjectiveGUI
      */
     protected function listCaseObjectives()
     {
-        global $tpl, $ilToolbar, $ilCtrl, $lng;
 
         $this->setTabs("case");
 
         if (adnPerm::check(adnPerm::ED, adnPerm::WRITE)) {
-            $ilToolbar->addButton(
-                $lng->txt("adn_add_objective"),
-                $ilCtrl->getLinkTarget($this, "addCaseObjective")
+            $this->toolbar->addButton(
+                $this->lng->txt("adn_add_objective"),
+                $this->ctrl->getLinkTarget($this, "addCaseObjective")
             );
         }
 
@@ -157,7 +164,7 @@ class adnObjectiveGUI
         $table = new adnObjectiveTableGUI($this, "listCaseObjectives", adnObjective::TYPE_CASE);
 
         // output table
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -226,12 +233,11 @@ class adnObjectiveGUI
      */
     protected function addObjective($a_type, ilPropertyFormGUI $a_form = null)
     {
-        global $tpl;
 
         if (!$a_form) {
             $a_form = $this->initObjectiveForm("create", $a_type);
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
 
     /**
@@ -241,12 +247,11 @@ class adnObjectiveGUI
      */
     protected function editObjective(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl;
 
         if (!$a_form) {
             $a_form = $this->initObjectiveForm("edit");
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
 
     /**
@@ -258,7 +263,6 @@ class adnObjectiveGUI
      */
     protected function initObjectiveForm($a_mode = "edit", $a_type = null)
     {
-        global $lng, $ilCtrl, $ilTabs;
 
         if (!$a_type) {
             $a_type = $this->objective->getType();
@@ -273,11 +277,11 @@ class adnObjectiveGUI
         include_once "Services/ADN/ED/classes/class.adnObjective.php";
         if ($a_type == adnObjective::TYPE_MC) {
             $cmd_type = "MC";
-            $area = new ilSelectInputGUI($lng->txt("adn_catalog_area"), "catalog_area");
+            $area = new ilSelectInputGUI($this->lng->txt("adn_catalog_area"), "catalog_area");
             $area->setOptions(adnCatalogNumbering::getMCAreas());
         } else {
             $cmd_type = "Case";
-            $area = new ilSelectInputGUI($lng->txt("adn_subject_area"), "catalog_area");
+            $area = new ilSelectInputGUI($this->lng->txt("adn_subject_area"), "catalog_area");
             $area->setOptions(adnCatalogNumbering::getCaseAreas());
         }
         $area->setRequired(true);
@@ -285,7 +289,7 @@ class adnObjectiveGUI
 
         // number
         if ($a_type == adnObjective::TYPE_MC) {
-            $number = new ilNumberInputGUI($lng->txt("adn_number"), "number");
+            $number = new ilNumberInputGUI($this->lng->txt("adn_number"), "number");
             $number->setRequired(true);
             $number->setSize(10);
             $number->setMaxLength(50);
@@ -293,33 +297,33 @@ class adnObjectiveGUI
         }
         // alpha-numeric
         else {
-            $number = new ilTextInputGUI($lng->txt("adn_number"), "number");
+            $number = new ilTextInputGUI($this->lng->txt("adn_number"), "number");
             $number->setRequired(true);
             $number->setSize(5);
             $number->setMaxLength(5);
             $form->addItem($number);
         }
 
-        $name = new ilTextInputGUI($lng->txt("adn_title"), "name");
+        $name = new ilTextInputGUI($this->lng->txt("adn_title"), "name");
         $name->setRequired(true);
         $name->setMaxLength(100);
         $form->addItem($name);
 
-        $topic = new ilTextInputGUI($lng->txt("adn_topic"), "topic");
+        $topic = new ilTextInputGUI($this->lng->txt("adn_topic"), "topic");
         $topic->setMaxLength(200);
         $form->addItem($topic);
 
         // special case: link questions to different parent objective
         if ($a_type == adnObjective::TYPE_CASE) {
-            $sheet = new ilSelectInputGUI($lng->txt("adn_objective_case_sheet_hierarchy"), "sheet");
-            $sheet->setOptions(array(0 => $lng->txt("no"),
-                1 => $lng->txt("yes")));
+            $sheet = new ilSelectInputGUI($this->lng->txt("adn_objective_case_sheet_hierarchy"), "sheet");
+            $sheet->setOptions(array(0 => $this->lng->txt("no"),
+                1 => $this->lng->txt("yes")));
             $form->addItem($sheet);
         }
 
-        $ilTabs->setBackTarget(
-            $lng->txt("back"),
-            $ilCtrl->getLinkTarget($this, "list" . $cmd_type . "Objectives")
+        $this->tabs->setBackTarget(
+            $this->lng->txt("back"),
+            $this->ctrl->getLinkTarget($this, "list" . $cmd_type . "Objectives")
         );
 
         if ($a_mode == "create") {
@@ -328,13 +332,13 @@ class adnObjectiveGUI
             $form->addItem($type);
             
             // creation: save/cancel buttons and title
-            $form->addCommandButton("saveObjective", $lng->txt("save"));
-            $form->addCommandButton("list" . $cmd_type . "Objectives", $lng->txt("cancel"));
+            $form->addCommandButton("saveObjective", $this->lng->txt("save"));
+            $form->addCommandButton("list" . $cmd_type . "Objectives", $this->lng->txt("cancel"));
 
             if ($a_type == adnObjective::TYPE_MC) {
-                $form->setTitle($lng->txt("adn_add_mc_objective"));
+                $form->setTitle($this->lng->txt("adn_add_mc_objective"));
             } else {
-                $form->setTitle($lng->txt("adn_add_case_objective"));
+                $form->setTitle($this->lng->txt("adn_add_case_objective"));
             }
         } else {
             $area->setValue($this->objective->getCatalogArea());
@@ -347,12 +351,12 @@ class adnObjectiveGUI
             }
             
             // editing: update/cancel buttons and title
-            $form->addCommandButton("updateObjective", $lng->txt("save"));
-            $form->addCommandButton("list" . $cmd_type . "Objectives", $lng->txt("cancel"));
-            $form->setTitle($lng->txt("adn_edit_objective"));
+            $form->addCommandButton("updateObjective", $this->lng->txt("save"));
+            $form->addCommandButton("list" . $cmd_type . "Objectives", $this->lng->txt("cancel"));
+            $form->setTitle($this->lng->txt("adn_edit_objective"));
         }
 
-        $form->setFormAction($ilCtrl->getFormAction($this));
+        $form->setFormAction($this->ctrl->getFormAction($this));
 
         return $form;
     }
@@ -362,7 +366,6 @@ class adnObjectiveGUI
      */
     protected function saveObjective()
     {
-        global $tpl, $lng, $ilCtrl;
 
         $form = $this->initObjectiveForm("create", $_POST["type"]);
 
@@ -390,14 +393,14 @@ class adnObjectiveGUI
                         }
 
                         // show success message and return to list
-                        ilUtil::sendSuccess($lng->txt("adn_objective_created"), true);
-                        $ilCtrl->redirect($this, "list" . $cmd_type . "Objectives");
+                        ilUtil::sendSuccess($this->lng->txt("adn_objective_created"), true);
+                        $this->ctrl->redirect($this, "list" . $cmd_type . "Objectives");
                     }
                 } else {
-                    $form->getItemByPostVar("number")->setAlert($lng->txt("adn_unique_number"));
+                    $form->getItemByPostVar("number")->setAlert($this->lng->txt("adn_unique_number"));
                 }
             } else {
-                ilUtil::sendFailure($lng->txt("adn_area_base_no_case"));
+                ilUtil::sendFailure($this->lng->txt("adn_area_base_no_case"));
             }
         }
 
@@ -411,7 +414,6 @@ class adnObjectiveGUI
      */
     protected function updateObjective()
     {
-        global $lng, $ilCtrl, $tpl;
 
         $form = $this->initObjectiveForm("edit");
 
@@ -428,11 +430,11 @@ class adnObjectiveGUI
             if ($this->objective->isUniqueNumber()) {
                 if ($this->objective->update()) {
                     // show success message and return to list
-                    ilUtil::sendSuccess($lng->txt("adn_objective_updated"), true);
-                    $ilCtrl->redirect($this, "listObjectives");
+                    ilUtil::sendSuccess($this->lng->txt("adn_objective_updated"), true);
+                    $this->ctrl->redirect($this, "listObjectives");
                 }
             } else {
-                $form->getItemByPostVar("number")->setAlert($lng->txt("adn_unique_number"));
+                $form->getItemByPostVar("number")->setAlert($this->lng->txt("adn_unique_number"));
             }
         }
 
@@ -464,25 +466,24 @@ class adnObjectiveGUI
      */
     protected function confirmObjectiveDeletion($a_type)
     {
-        global $ilCtrl, $tpl, $lng, $ilTabs;
 
         // check whether at least one item has been seleced
         if (!is_array($_POST["objective_id"]) || count($_POST["objective_id"]) == 0) {
-            ilUtil::sendFailure($lng->txt("no_checkbox"), true);
-            $ilCtrl->redirect($this, "list" . $a_type . "Objectives");
+            ilUtil::sendFailure($this->lng->txt("no_checkbox"), true);
+            $this->ctrl->redirect($this, "list" . $a_type . "Objectives");
         } else {
-            $ilTabs->setBackTarget(
-                $lng->txt("back"),
-                $ilCtrl->getLinkTarget($this, "list" . $a_type . "Objectives")
+            $this->tabs->setBackTarget(
+                $this->lng->txt("back"),
+                $this->ctrl->getLinkTarget($this, "list" . $a_type . "Objectives")
             );
 
             // display confirmation message
             include_once("./Services/Utilities/classes/class.ilConfirmationGUI.php");
             $cgui = new ilConfirmationGUI();
-            $cgui->setFormAction($ilCtrl->getFormAction($this));
-            $cgui->setHeaderText($lng->txt("adn_sure_delete_objectives"));
-            $cgui->setCancel($lng->txt("cancel"), "list" . $a_type . "Objectives");
-            $cgui->setConfirm($lng->txt("delete"), "deleteObjective");
+            $cgui->setFormAction($this->ctrl->getFormAction($this));
+            $cgui->setHeaderText($this->lng->txt("adn_sure_delete_objectives"));
+            $cgui->setCancel($this->lng->txt("cancel"), "list" . $a_type . "Objectives");
+            $cgui->setConfirm($this->lng->txt("delete"), "deleteObjective");
 
             // list objects that should be deleted
             foreach ($_POST["objective_id"] as $i) {
@@ -490,7 +491,7 @@ class adnObjectiveGUI
                 $cgui->addItem("objective_id[]", $i, adnObjective::lookupName($i));
             }
 
-            $tpl->setContent($cgui->getHTML());
+            $this->tpl->setContent($cgui->getHTML());
         }
     }
 
@@ -499,7 +500,6 @@ class adnObjectiveGUI
      */
     protected function deleteObjective()
     {
-        global $ilCtrl, $lng;
 
         include_once("./Services/ADN/ED/classes/class.adnObjective.php");
 
@@ -516,14 +516,14 @@ class adnObjectiveGUI
             }
         }
         if (!$has_failed) {
-            ilUtil::sendSuccess($lng->txt("adn_objective_deleted"), true);
+            ilUtil::sendSuccess($this->lng->txt("adn_objective_deleted"), true);
         } else {
-            ilUtil::sendFailure($lng->txt("adn_objective_not_deleted"), true);
+            ilUtil::sendFailure($this->lng->txt("adn_objective_not_deleted"), true);
         }
         if ($type == adnObjective::TYPE_MC) {
-            $ilCtrl->redirect($this, "listMCObjectives");
+            $this->ctrl->redirect($this, "listMCObjectives");
         } else {
-            $ilCtrl->redirect($this, "listCaseObjectives");
+            $this->ctrl->redirect($this, "listCaseObjectives");
         }
     }
 
@@ -534,20 +534,19 @@ class adnObjectiveGUI
      */
     public function setTabs($a_activate)
     {
-        global $ilTabs, $lng, $txt, $ilCtrl;
 
-        $ilTabs->addTab(
+        $this->tabs->addTab(
             "mc",
-            $lng->txt("adn_mc_part"),
-            $ilCtrl->getLinkTarget($this, "listMCObjectives")
+            $this->lng->txt("adn_mc_part"),
+            $this->ctrl->getLinkTarget($this, "listMCObjectives")
         );
 
-        $ilTabs->addTab(
+        $this->tabs->addTab(
             "case",
-            $lng->txt("adn_case_part"),
-            $ilCtrl->getLinkTarget($this, "listCaseObjectives")
+            $this->lng->txt("adn_case_part"),
+            $this->ctrl->getLinkTarget($this, "listCaseObjectives")
         );
 
-        $ilTabs->activateTab($a_activate);
+        $this->tabs->activateTab($a_activate);
     }
 }

@@ -32,14 +32,13 @@ class adnObjectiveTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd, $a_type)
     {
-        global $ilCtrl, $lng;
 
         $this->type = (string) $a_type;
         $this->setId("adn_ed_obj" . $this->type);
 
         parent::__construct($a_parent_obj, $a_parent_cmd);
         
-        $this->setTitle($lng->txt("adn_objectives"));
+        $this->setTitle($this->lng->txt("adn_objectives"));
 
         if (adnPerm::check(adnPerm::ED, adnPerm::WRITE)) {
             if ($this->type == adnObjective::TYPE_MC) {
@@ -48,7 +47,7 @@ class adnObjectiveTableGUI extends ilTable2GUI
                 $cmd_type = "Case";
             }
             $this->addColumn("", "", "1");
-            $this->addMultiCommand("confirm" . $cmd_type . "ObjectiveDeletion", $lng->txt("delete"));
+            $this->addMultiCommand("confirm" . $cmd_type . "ObjectiveDeletion", $this->lng->txt("delete"));
         }
 
         if ($this->type == adnObjective::TYPE_MC) {
@@ -69,7 +68,7 @@ class adnObjectiveTableGUI extends ilTable2GUI
         
         $this->addHiddenInput("type", $this->type);
 
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.objective_row.html", "Services/ADN/ED");
 
         $this->importData();
@@ -102,7 +101,6 @@ class adnObjectiveTableGUI extends ilTable2GUI
      */
     public function initFilter()
     {
-        global $lng;
 
         // catalog area
         include_once "Services/ADN/ED/classes/class.adnCatalogNumbering.php";
@@ -111,17 +109,17 @@ class adnObjectiveTableGUI extends ilTable2GUI
                 "catalog_area",
                 self::FILTER_SELECT,
                 false,
-                $lng->txt("adn_catalog_area")
+                $this->lng->txt("adn_catalog_area")
             );
-            $options = array("" => $lng->txt("adn_filter_all")) + adnCatalogNumbering::getMCAreas();
+            $options = array("" => $this->lng->txt("adn_filter_all")) + adnCatalogNumbering::getMCAreas();
         } else {
             $f = $this->addFilterItemByMetaType(
                 "catalog_area",
                 self::FILTER_SELECT,
                 false,
-                $lng->txt("adn_subject_area")
+                $this->lng->txt("adn_subject_area")
             );
-            $options = array("" => $lng->txt("adn_filter_all")) + adnCatalogNumbering::getCaseAreas();
+            $options = array("" => $this->lng->txt("adn_filter_all")) + adnCatalogNumbering::getCaseAreas();
         }
         $f->setOptions($options);
         $f->readFromSession();
@@ -132,7 +130,7 @@ class adnObjectiveTableGUI extends ilTable2GUI
             "nr",
             self::FILTER_TEXT_RANGE,
             false,
-            $lng->txt("adn_nr")
+            $this->lng->txt("adn_nr")
         );
         $f->readFromSession();
         $this->filter["nr"] = $f->getValue();
@@ -142,7 +140,7 @@ class adnObjectiveTableGUI extends ilTable2GUI
             "title",
             self::FILTER_TEXT,
             false,
-            $lng->txt("adn_title")
+            $this->lng->txt("adn_title")
         );
         $f->readFromSession();
         $this->filter["title"] = $f->getValue();
@@ -155,19 +153,18 @@ class adnObjectiveTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
 
         // actions...
 
-        $ilCtrl->setParameter($this->parent_obj, "ob_id", $a_set["id"]);
+        $this->ctrl->setParameter($this->parent_obj, "ob_id", $a_set["id"]);
 
         if (adnPerm::check(adnPerm::ED, adnPerm::WRITE)) {
             // ...edit
             $this->tpl->setCurrentBlock("action");
-            $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_edit_objective"));
+            $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_edit_objective"));
             $this->tpl->setVariable(
                 "HREF_CMD",
-                $ilCtrl->getLinkTarget($this->parent_obj, "editObjective")
+                $this->ctrl->getLinkTarget($this->parent_obj, "editObjective")
             );
             $this->tpl->parseCurrentBlock();
 
@@ -180,15 +177,15 @@ class adnObjectiveTableGUI extends ilTable2GUI
         if (adnPerm::check(adnPerm::ED, adnPerm::READ) && $this->type == adnObjective::TYPE_MC) {
             // ...subobjectives
             $this->tpl->setCurrentBlock("action");
-            $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_subobjectives"));
+            $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_subobjectives"));
             $this->tpl->setVariable(
                 "HREF_CMD",
-                $ilCtrl->getLinkTargetByClass("adnsubobjectivegui", "listSubobjectives")
+                $this->ctrl->getLinkTargetByClass("adnsubobjectivegui", "listSubobjectives")
             );
             $this->tpl->parseCurrentBlock();
         }
 
-        $ilCtrl->setParameter($this->parent_obj, "ob_id", "");
+        $this->ctrl->setParameter($this->parent_obj, "ob_id", "");
 
         
         // properties

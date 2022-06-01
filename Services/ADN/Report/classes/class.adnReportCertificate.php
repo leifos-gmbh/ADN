@@ -252,7 +252,6 @@ class adnReportCertificate extends adnReport
      */
     protected function fillMap($cert_id)
     {
-        global $lng;
 
         include_once './Services/ADN/ES/classes/class.adnCertificate.php';
         $cert = new adnCertificate($cert_id);
@@ -264,7 +263,7 @@ class adnReportCertificate extends adnReport
         $map['lastname'] = (string) $pro->getLastName();
         $map['firstname'] = (string) $pro->getFirstName();
         $map['birthday'] = (string) $pro->getBirthdate()->get(IL_CAL_FKT_DATE, 'd') . '. ' .
-            $lng->txt('month_' . $pro->getBirthdate()->get(IL_CAL_FKT_DATE, 'm') . '_long') . ' ' .
+            $this->lng->txt('month_' . $pro->getBirthdate()->get(IL_CAL_FKT_DATE, 'm') . '_long') . ' ' .
             $pro->getBirthdate()->get(IL_CAL_FKT_DATE, 'Y');
 
         include_once "Services/ADN/MD/classes/class.adnCountry.php";
@@ -283,7 +282,7 @@ class adnReportCertificate extends adnReport
         $map['chem_no'] = (string) $cert->getType(adnCertificate::CHEMICALS) ? '' : 'XXXXXXX';
         
         $map['valid_until'] = (string) $cert->getValidUntil()->get(IL_CAL_FKT_DATE, 'd') . '. ' .
-            $lng->txt('month_' . $cert->getValidUntil()->get(IL_CAL_FKT_DATE, 'm') . '_long') . ' ' .
+            $this->lng->txt('month_' . $cert->getValidUntil()->get(IL_CAL_FKT_DATE, 'm') . '_long') . ' ' .
             $cert->getValidUntil()->get(IL_CAL_FKT_DATE, 'Y');
         
         include_once './Services/ADN/MD/classes/class.adnWMO.php';
@@ -291,7 +290,7 @@ class adnReportCertificate extends adnReport
         $map['issued_by'] = (string) $wmo->getName();
 
         $map['issued_on'] = (string) $cert->getLatestIssuedOn()->get(IL_CAL_FKT_DATE, 'd') . '. ' .
-            $lng->txt('month_' . $cert->getLatestIssuedOn()->get(IL_CAL_FKT_DATE, 'm') . '_long') . ' ' .
+            $this->lng->txt('month_' . $cert->getLatestIssuedOn()->get(IL_CAL_FKT_DATE, 'm') . '_long') . ' ' .
             $cert->getLatestIssuedOn()->get(IL_CAL_FKT_DATE, 'Y');
         $map['ia'] = "i.A. " . $cert->getSignedBy();
         #$map['signed_by'] = $cert->getSignedBy();

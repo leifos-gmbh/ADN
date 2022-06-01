@@ -30,8 +30,6 @@ class adnGoodInTransit extends adnDBBase
      */
     public function __construct($a_id = null)
     {
-        global $ilCtrl;
-
         $this->setFileDirectory("ed_goods");
 
         if ($a_id) {
@@ -225,18 +223,17 @@ class adnGoodInTransit extends adnDBBase
      */
     public function read()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if (!$id) {
             return;
         }
 
-        $res = $ilDB->query("SELECT name,type,un_nr,class,class_code,packing_group," .
+        $res = $this->db->query("SELECT name,type,un_nr,class,class_code,packing_group," .
             "ed_good_category_id,material_file,upload_date" .
             " FROM adn_ed_good" .
-            " WHERE id = " . $ilDB->quote($this->getId(), "integer"));
-        $set = $ilDB->fetchAssoc($res);
+            " WHERE id = " . $this->db->quote($this->getId(), "integer"));
+        $set = $this->db->fetchAssoc($res);
         $this->setName($set["name"]);
         $this->setType($set["type"]);
         $this->setNumber($set["un_nr"]);
@@ -276,9 +273,8 @@ class adnGoodInTransit extends adnDBBase
      */
     public function save()
     {
-        global $ilDB;
 
-        $this->setId($ilDB->nextId("adn_ed_good"));
+        $this->setId($this->db->nextId("adn_ed_good"));
         $id = $this->getId();
 
         $fields = $this->propertiesToFields();
@@ -295,7 +291,7 @@ class adnGoodInTransit extends adnDBBase
                 $file_date->get(IL_CAL_DATETIME, "", ilTimeZone::UTC));
         }
             
-        $ilDB->insert("adn_ed_good", $fields);
+        $this->db->insert("adn_ed_good", $fields);
 
         parent::_save($id, "adn_ed_good");
         
@@ -309,7 +305,6 @@ class adnGoodInTransit extends adnDBBase
      */
     public function update()
     {
-        global $ilDB;
         
         $id = $this->getId();
         if (!$id) {
@@ -329,7 +324,7 @@ class adnGoodInTransit extends adnDBBase
                 $file_date->get(IL_CAL_DATETIME, "", ilTimeZone::UTC));
         }
 
-        $ilDB->update("adn_ed_good", $fields, array("id" => array("integer", $id)));
+        $this->db->update("adn_ed_good", $fields, array("id" => array("integer", $id)));
 
         parent::_update($id, "adn_ed_good");
 
@@ -344,7 +339,6 @@ class adnGoodInTransit extends adnDBBase
      */
     public function delete($a_force = false)
     {
-        global $ilDB;
 
         $id = $this->getId();
         if ($id) {
@@ -378,20 +372,20 @@ class adnGoodInTransit extends adnDBBase
                 $this->removeFile($id);
                 
                 // answer sheets
-                $ilDB->manipulate("UPDATE adn_ep_answer_sheet" .
+                $this->db->manipulate("UPDATE adn_ep_answer_sheet" .
                     " SET prev_ed_good_id = NULL" .
-                    " WHERE prev_ed_good_id = " . $ilDB->quote($id, "integer"));
-                $ilDB->manipulate("UPDATE adn_ep_answer_sheet" .
+                    " WHERE prev_ed_good_id = " . $this->db->quote($id, "integer"));
+                $this->db->manipulate("UPDATE adn_ep_answer_sheet" .
                     " SET new_ed_good_id = NULL" .
-                    " WHERE new_ed_good_id = " . $ilDB->quote($id, "integer"));
+                    " WHERE new_ed_good_id = " . $this->db->quote($id, "integer"));
                 
                 // license
-                $ilDB->manipulate("DELETE FROM adn_ed_license_good" .
-                " WHERE ed_good_id = " . $ilDB->quote($id, "integer"));
+                $this->db->manipulate("DELETE FROM adn_ed_license_good" .
+                " WHERE ed_good_id = " . $this->db->quote($id, "integer"));
                 
                 // archived flag is not used here!
-                $ilDB->manipulate("DELETE FROM adn_ed_good" .
-                    " WHERE id = " . $ilDB->quote($id, "integer"));
+                $this->db->manipulate("DELETE FROM adn_ed_good" .
+                    " WHERE id = " . $this->db->quote($id, "integer"));
                 $this->setId(null);
             }
             return true;
@@ -407,7 +401,8 @@ class adnGoodInTransit extends adnDBBase
      */
     public static function getAllGoods($a_type = null, $a_with_archived = false)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id,name,un_nr,class,class_code,packing_group,ed_good_category_id," .
             "material_file,type" .
@@ -450,7 +445,8 @@ class adnGoodInTransit extends adnDBBase
         $a_force_all = false
     )
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id,name,un_nr,archived" .
             " FROM adn_ed_good";
@@ -497,7 +493,8 @@ class adnGoodInTransit extends adnDBBase
      */
     protected static function lookupProperty($a_id, $a_prop)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query("SELECT " . $a_prop .
             " FROM adn_ed_good" .

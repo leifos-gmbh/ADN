@@ -16,16 +16,19 @@ class adnCase extends adnDBBase
     protected bool $butan;
     protected string $text;
 
+    protected ilLanguage $lng;
+
     /**
      * Constructor
      *
      * @param int $a_id instance id
      */
-    public function __construct($a_id = null)
+    public function __construct($a_id = 0)
     {
-        global $ilCtrl;
+        global $DIC;
+        $this->lng = $DIC->language();
 
-        if ($a_id) {
+        if ($a_id !== 0) {
             $this->setId($a_id);
             $this->read();
         }
@@ -116,17 +119,16 @@ class adnCase extends adnDBBase
      */
     public function read()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if (!$id) {
             return;
         }
 
-        $res = $ilDB->query("SELECT subject_area,butan,text" .
+        $res = $this->db->query("SELECT subject_area,butan,text" .
             " FROM adn_ed_case" .
-            " WHERE id = " . $ilDB->quote($this->getId(), "integer"));
-        $set = $ilDB->fetchAssoc($res);
+            " WHERE id = " . $this->db->quote($this->getId(), "integer"));
+        $set = $this->db->fetchAssoc($res);
         $this->setArea($set["subject_area"]);
         $this->setButan($set["butan"]);
         $this->setText($set["text"]);
@@ -155,16 +157,15 @@ class adnCase extends adnDBBase
      */
     public function save()
     {
-        global $ilDB;
 
         // sequence
-        $this->setId($ilDB->nextId("adn_ed_case"));
+        $this->setId($this->db->nextId("adn_ed_case"));
         $id = $this->getId();
 
         $fields = $this->propertiesToFields();
         $fields["id"] = array("integer", $id);
-            
-        $ilDB->insert("adn_ed_case", $fields);
+
+        $this->db->insert("adn_ed_case", $fields);
 
         parent::_save($id, "adn_ed_case");
         
@@ -178,7 +179,6 @@ class adnCase extends adnDBBase
      */
     public function update()
     {
-        global $ilDB;
         
         $id = $this->getId();
         if (!$id) {
@@ -186,8 +186,8 @@ class adnCase extends adnDBBase
         }
 
         $fields = $this->propertiesToFields();
-        
-        $ilDB->update("adn_ed_case", $fields, array("id" => array("integer", $id)));
+
+        $this->db->update("adn_ed_case", $fields, array("id" => array("integer", $id)));
 
         parent::_update($id, "adn_ed_case");
 
@@ -203,7 +203,9 @@ class adnCase extends adnDBBase
      */
     public static function getIdByArea($a_area, $a_butan = false)
     {
-        global $ilDB;
+        global $DIC;
+
+        $ilDB = $DIC->database();
         
         $res = $ilDB->query("SELECT id" .
             " FROM adn_ed_case" .
@@ -222,7 +224,6 @@ class adnCase extends adnDBBase
      */
     public function getTranslatedText(adnAnswerSheet $a_sheet, adnExaminationEvent $a_event = null)
     {
-        global $lng;
         
         $text = $this->getText();
 
@@ -265,7 +266,7 @@ class adnCase extends adnDBBase
                 else {
                     // german only for now
                     $text = str_replace("[UN-Nr" . $idx . "]", "", $text);
-                    $text = str_replace("[Bezeichnung" . $idx . "]", $lng->txt("adn_no_previous_good"), $text);
+                    $text = str_replace("[Bezeichnung" . $idx . "]", $this->lng->txt("adn_no_previous_good"), $text);
                     $text = str_replace("[Klasse" . $idx . "]", "", $text);
                     $text = str_replace("[Klassifizierungscode" . $idx . "]", "", $text);
                     $text = str_replace("[Verpackungsgruppe" . $idx . "]", "", $text);

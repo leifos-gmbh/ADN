@@ -16,15 +16,25 @@
 class adnAssignmentGUI
 {
     protected bool $archived = false;
-    
+
+    protected ilCtrl $ctrl;
+    protected ilLanguage $lng;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilToolbarGUI $toolbar;
+    protected ilTabsGUI $tabs;
     /**
      * Constructor
      */
     public function __construct()
     {
-        global $ilCtrl;
+        global $DIC;
+        $this->ctrl = $DIC->ctrl();
+        $this->lng = $DIC->language();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->toolbar = $DIC->toolbar();
+        $this->tabs = $DIC->tabs();
 
-        $ilCtrl->saveParameter($this, array("arc"));
+        $this->ctrl->saveParameter($this, array("arc"));
 
         $this->archived = (bool) $_REQUEST["arc"];
     }
@@ -34,18 +44,17 @@ class adnAssignmentGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl, $lng, $tpl;
 
-        $tpl->setTitle($lng->txt("adn_ep") . " - " . $lng->txt("adn_ep_ces"));
+        $this->tpl->setTitle($this->lng->txt("adn_ep") . " - " . $this->lng->txt("adn_ep_ces"));
         
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
         
         // forward command to next gui class in control flow
         switch ($next_class) {
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("listEvents");
+                $cmd = $this->ctrl->getCmd("listEvents");
                 
                 switch ($cmd) {
                     // commands that need read permission
@@ -79,7 +88,6 @@ class adnAssignmentGUI
      */
     protected function listEvents()
     {
-        global $tpl, $ilToolbar, $lng, $ilCtrl;
 
         // table of examination events
         include_once("./Services/ADN/ES/classes/class.adnExaminationEventTableGUI.php");
@@ -91,7 +99,7 @@ class adnAssignmentGUI
         );
 
         // output table
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -135,16 +143,15 @@ class adnAssignmentGUI
      */
     protected function assignCandidates()
     {
-        global $tpl, $ilCtrl, $ilTabs, $lng;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listEvents"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listEvents"));
 
         $event_id = (int) $_REQUEST["ev_id"];
         if (!$event_id) {
             return;
         }
 
-        $ilCtrl->setParameter($this, "ev_id", $event_id);
+        $this->ctrl->setParameter($this, "ev_id", $event_id);
 
         // table of candidates
         include_once("./Services/ADN/EP/classes/class.adnAssignmentTableGUI.php");
@@ -165,7 +172,7 @@ class adnAssignmentGUI
         $html = str_replace("~~phadncdids~~", implode(";", $ids), $html);
                 
         // output table
-        $tpl->setContent($html);
+        $this->tpl->setContent($html);
     }
 
     /**
@@ -215,13 +222,12 @@ class adnAssignmentGUI
      */
     protected function saveAssignment()
     {
-        global $ilCtrl, $lng, $tpl;
 
         $confirmed = (bool) $_REQUEST["confirmed"];
         $ids = explode(";", $_POST["all_cand_ids"]);
         $assignments = (array) $_POST["cand_id"];
         $event_id = (int) $_REQUEST["ev_id"];
-        $ilCtrl->setParameter($this, "ev_id", $event_id);
+        $this->ctrl->setParameter($this, "ev_id", $event_id);
 
         if (sizeof($ids) && $event_id) {
             include_once "Services/ADN/EP/classes/class.adnExaminationEvent.php";
@@ -300,27 +306,27 @@ class adnAssignmentGUI
                 foreach ($to_save as $assignment) {
                     $assignment->save();
                 }
-                ilUtil::sendSuccess($lng->txt("adn_assignment_saved"), true);
+                ilUtil::sendSuccess($this->lng->txt("adn_assignment_saved"), true);
                 if ($delete_failed) {
-                    ilUtil::sendFailure($lng->txt("adn_assignment_delete_fail_answered"), true);
+                    ilUtil::sendFailure($this->lng->txt("adn_assignment_delete_fail_answered"), true);
                 }
             } else {
                 if ($delete_failed) {
-                    ilUtil::sendFailure($lng->txt("adn_assignment_delete_fail_answered"));
+                    ilUtil::sendFailure($this->lng->txt("adn_assignment_delete_fail_answered"));
                 }
 
                 // display confirmation message
                 include_once("./Services/Utilities/classes/class.ilConfirmationGUI.php");
                 $cgui = new ilConfirmationGUI();
-                $cgui->setFormAction($ilCtrl->getFormAction($this));
-                $cgui->setHeaderText($lng->txt("adn_sure_save_invalid_assignments"));
-                $cgui->setCancel($lng->txt("cancel"), "assignCandidates");
-                $cgui->setConfirm($lng->txt("adn_sure_save_assignments"), "saveAssignment");
+                $cgui->setFormAction($this->ctrl->getFormAction($this));
+                $cgui->setHeaderText($this->lng->txt("adn_sure_save_invalid_assignments"));
+                $cgui->setCancel($this->lng->txt("cancel"), "assignCandidates");
+                $cgui->setConfirm($this->lng->txt("adn_sure_save_assignments"), "saveAssignment");
                 $cgui->addHiddenItem("confirmed", 1);
 
-                $captions = array("age" => $lng->txt("adn_assignment_invalid_age"),
-                    "certificate" => $lng->txt("adn_assignment_invalid_certificate"),
-                    "last_training" => $lng->txt("adn_assignment_invalid_last_training"));
+                $captions = array("age" => $this->lng->txt("adn_assignment_invalid_age"),
+                    "certificate" => $this->lng->txt("adn_assignment_invalid_certificate"),
+                    "last_training" => $this->lng->txt("adn_assignment_invalid_last_training"));
 
                 // keep values
                 $cgui->addHiddenItem("all_cand_ids", implode(";", $ids));
@@ -338,12 +344,12 @@ class adnAssignmentGUI
                     $cgui->addItem("cand_id[]", $id, $caption);
                 }
 
-                $tpl->setContent($cgui->getHTML());
+                $this->tpl->setContent($cgui->getHTML());
                 return;
             }
         }
 
-        $ilCtrl->redirect($this, "assignCandidates");
+        $this->ctrl->redirect($this, "assignCandidates");
     }
 
     /**
@@ -351,31 +357,30 @@ class adnAssignmentGUI
      */
     public function setTabs()
     {
-        global $ilTabs, $lng, $txt, $ilCtrl;
 
-        $ilCtrl->setParameter($this, "arc", "");
+        $this->ctrl->setParameter($this, "arc", "");
 
-        $ilTabs->addTab(
+        $this->tabs->addTab(
             "current",
-            $lng->txt("adn_current_examination_events"),
-            $ilCtrl->getLinkTarget($this, "listEvents")
+            $this->lng->txt("adn_current_examination_events"),
+            $this->ctrl->getLinkTarget($this, "listEvents")
         );
 
 
-        $ilCtrl->setParameter($this, "arc", "1");
+        $this->ctrl->setParameter($this, "arc", "1");
 
-        $ilTabs->addTab(
+        $this->tabs->addTab(
             "archived",
-            $lng->txt("adn_archived_examination_events"),
-            $ilCtrl->getLinkTarget($this, "listEvents")
+            $this->lng->txt("adn_archived_examination_events"),
+            $this->ctrl->getLinkTarget($this, "listEvents")
         );
 
-        $ilCtrl->setParameter($this, "arc", $this->archived);
+        $this->ctrl->setParameter($this, "arc", $this->archived);
 
         if ($this->archived) {
-            $ilTabs->activateTab("archived");
+            $this->tabs->activateTab("archived");
         } else {
-            $ilTabs->activateTab("current");
+            $this->tabs->activateTab("current");
         }
     }
 }

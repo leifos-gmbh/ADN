@@ -20,18 +20,29 @@
  */
 class adnCertifiedProfessionalGUI
 {
+    protected ilCtrl $ctrl;
+    protected ilLanguage $lng;
+    protected ilTemplate $tpl;
+
+    public function __construct()
+    {
+        global $DIC;
+
+        $this->ctrl = $DIC->ctrl();
+        $this->lng = $DIC->language();
+        $this->tpl = $DIC->ui()->mainTemplate();
+    }
     /**
      * Execute command
      */
     public function executeCommand()
     {
-        global $ilCtrl, $lng, $tpl;
 
         // set page title
-        $tpl->setTitle($lng->txt("adn_cp"));
+        $this->tpl->setTitle($this->lng->txt("adn_cp"));
 
-        $next_class = $ilCtrl->getNextClass();
-        $cmd = $ilCtrl->getCmd();
+        $next_class = $this->ctrl->getNextClass();
+        $cmd = $this->ctrl->getCmd();
 
         if ($cmd == "processMenuItem") {	// menu item triggered
             // determine cmd and cmdClass from menu item
@@ -39,40 +50,40 @@ class adnCertifiedProfessionalGUI
             switch ($_GET["menu_item"]) {
                 // list adn certificates
                 case adnMainMenuGUI::CP_CTS:
-                    $ilCtrl->setCmdClass("adncertificategui");
-                    $ilCtrl->setCmd("listCertificates");
+                    $this->ctrl->setCmdClass("adncertificategui");
+                    $this->ctrl->setCmd("listCertificates");
                     break;
 
                 // create directory
                 case adnMainMenuGUI::CP_DIR:
-                    $ilCtrl->setCmdClass("adncertifiedprofessionaldirectorygui");
-                    $ilCtrl->setCmd("createDirectoryForm");
+                    $this->ctrl->setCmdClass("adncertifiedprofessionaldirectorygui");
+                    $this->ctrl->setCmd("createDirectoryForm");
                     break;
 
                 // professionals
                 case adnMainMenuGUI::CP_CPR:
-                    $ilCtrl->setCmdClass("adncertifiedprofessionaldatagui");
-                    $ilCtrl->setCmd("listProfessionals");
+                    $this->ctrl->setCmdClass("adncertifiedprofessionaldatagui");
+                    $this->ctrl->setCmd("listProfessionals");
                     break;
 
                 // cr-008 start
                 case adnMainMenuGUI::CP_PDM:
-                    $ilCtrl->setCmdClass("adnpersonaldatamaintenancegui");
-                    $ilCtrl->setCmd("listPersonalData");
+                    $this->ctrl->setCmdClass("adnpersonaldatamaintenancegui");
+                    $this->ctrl->setCmd("listPersonalData");
                     break;
                 // cr-008 end
 
             }
-            $next_class = $ilCtrl->getNextClass();
+            $next_class = $this->ctrl->getNextClass();
         }
 
         // If no next class is responsible for handling the
         // command, set the default class
         if ($next_class == "") {
             // default: certificates overview
-            $ilCtrl->setCmd("");
-            $ilCtrl->setCmdClass("adncertificategui");
-            $next_class = $ilCtrl->getNextClass();
+            $this->ctrl->setCmd("");
+            $this->ctrl->setCmdClass("adncertificategui");
+            $next_class = $this->ctrl->getNextClass();
         }
 
         // forward command to next gui class in control flow
@@ -80,31 +91,31 @@ class adnCertifiedProfessionalGUI
             case "adncertificategui":
                 include_once("./Services/ADN/CP/classes/class.adnCertificateGUI.php");
                 $ct_gui = new adnCertificateGUI();
-                $ilCtrl->forwardCommand($ct_gui);
+                $this->ctrl->forwardCommand($ct_gui);
                 break;
 
             case "adncertifiedprofessionaldirectorygui":
                 include_once("./Services/ADN/CP/classes/class.adnCertifiedProfessionalDirectoryGUI.php");
                 $dir_gui = new adnCertifiedProfessionalDirectoryGUI();
-                $ilCtrl->forwardCommand($dir_gui);
+                $this->ctrl->forwardCommand($dir_gui);
                 break;
 
             case "adncertifiedprofessionaldatagui":
                 include_once("./Services/ADN/CP/classes/class.adnCertifiedProfessionalDataGUI.php");
                 $dir_gui = new adnCertifiedProfessionalDataGUI();
-                $ilCtrl->forwardCommand($dir_gui);
+                $this->ctrl->forwardCommand($dir_gui);
                 break;
 
             // cr-008 start
             case "adnpersonaldatamaintenancegui":
                 include_once("./Services/ADN/AD/classes/class.adnPersonalDataMaintenanceGUI.php");
                 $pdm_gui = new adnPersonalDataMaintenanceGUI();
-                $ilCtrl->forwardCommand($pdm_gui);
+                $this->ctrl->forwardCommand($pdm_gui);
                 break;
             // cr-008 end
 
         }
 
-        adnBaseGUI::setHelpButton($ilCtrl->getCmdClass());
+        adnBaseGUI::setHelpButton($this->ctrl->getCmdClass());
     }
 }

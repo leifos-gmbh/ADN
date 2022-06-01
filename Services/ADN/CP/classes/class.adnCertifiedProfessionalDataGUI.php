@@ -16,16 +16,28 @@
 class adnCertifiedProfessionalDataGUI
 {
     protected ?adnCertifiedProfessional $professional = null;
+
+    protected ilCtrl $ctrl;
+    protected ilLanguage $lng;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilToolbarGUI $toolbar;
+    protected ilTabsGUI $tabs;
     
     /**
      * Constructor
      */
     public function __construct()
     {
-        global $ilCtrl;
+        global $DIC;
+
+        $this->ctrl = $DIC->ctrl();
+        $this->lng = $DIC->language();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->toolbar = $DIC->toolbar();
+        $this->tabs = $DIC->tabs();
         
         // save professional ID through requests
-        $ilCtrl->saveParameter($this, array("ct_cpr"));
+        $this->ctrl->saveParameter($this, array("ct_cpr"));
         
         $this->readProfessional();
     }
@@ -35,18 +47,17 @@ class adnCertifiedProfessionalDataGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl, $lng, $tpl;
 
-        $tpl->setTitle($lng->txt("adn_cp") . " - " . $lng->txt("adn_cp_cpr"));
+        $this->tpl->setTitle($this->lng->txt("adn_cp") . " - " . $this->lng->txt("adn_cp_cpr"));
         
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
         
         // forward command to next gui class in control flow
         switch ($next_class) {
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("listProfessionals");
+                $cmd = $this->ctrl->getCmd("listProfessionals");
                 
                 switch ($cmd) {
                     // commands that need read permission
@@ -87,14 +98,13 @@ class adnCertifiedProfessionalDataGUI
      */
     protected function listProfessionals()
     {
-        global $tpl, $ilToolbar, $ilCtrl, $lng;
 
         // cr-008 start
         include_once("./Services/ADN/EP/classes/class.adnPreparationCandidateGUI.php");
-        $ilCtrl->setParameterByClass("adnpreparationcandidategui", "mode", adnPreparationCandidateGUI::MODE_GENERAL);
-        $ilToolbar->addButton(
-            $lng->txt("adn_ad_add_person"),
-            $ilCtrl->getLinkTargetByClass(array("adnbasegui", "adnexaminationpreparationgui", "adnpreparationcandidategui"), "createCandidate")
+        $this->ctrl->setParameterByClass("adnpreparationcandidategui", "mode", adnPreparationCandidateGUI::MODE_GENERAL);
+        $this->toolbar->addButton(
+            $this->lng->txt("adn_ad_add_person"),
+            $this->ctrl->getLinkTargetByClass(array("adnbasegui", "adnexaminationpreparationgui", "adnpreparationcandidategui"), "createCandidate")
         );
         // cr-008 end
 
@@ -104,7 +114,7 @@ class adnCertifiedProfessionalDataGUI
         $table = new adnCertifiedProfessionalDataTableGUI($this, "listProfessionals");
         
         // output table
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -140,14 +150,13 @@ class adnCertifiedProfessionalDataGUI
      */
     protected function editProfessional(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $lng, $ilTabs, $ilCtrl;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listProfessionals"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listProfessionals"));
 
         if (!$a_form) {
             $a_form = $this->initProfessionalForm();
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
 
     /**
@@ -157,29 +166,28 @@ class adnCertifiedProfessionalDataGUI
      */
     protected function initProfessionalForm()
     {
-        global  $lng, $ilCtrl;
 
         include_once "Services/Form/classes/class.ilPropertyFormGUI.php";
         $form = new ilPropertyFormGUI();
-        $form->setFormAction($ilCtrl->getFormAction($this, "listProfessionals"));
+        $form->setFormAction($this->ctrl->getFormAction($this, "listProfessionals"));
 
-        $salutation = new ilSelectInputGUI($lng->txt("adn_salutation"), "salutation");
-        $salutation->setOptions(array("m" => $lng->txt("salutation_m"),
-                "f" => $lng->txt("salutation_f")));
+        $salutation = new ilSelectInputGUI($this->lng->txt("adn_salutation"), "salutation");
+        $salutation->setOptions(array("m" => $this->lng->txt("salutation_m"),
+                "f" => $this->lng->txt("salutation_f")));
         $salutation->setRequired(true);
         $form->addItem($salutation);
 
-        $name = new ilTextInputGUI($lng->txt("adn_last_name"), "last_name");
+        $name = new ilTextInputGUI($this->lng->txt("adn_last_name"), "last_name");
         $name->setMaxLength(50);
         $name->setRequired(true);
         $form->addItem($name);
 
-        $first_name = new ilTextInputGUI($lng->txt("adn_first_name"), "first_name");
+        $first_name = new ilTextInputGUI($this->lng->txt("adn_first_name"), "first_name");
         $first_name->setMaxLength(50);
         $first_name->setRequired(true);
         $form->addItem($first_name);
 
-        $birthdate = new ilDateTimeInputGUI($lng->txt("adn_birthdate"), "birthdate");
+        $birthdate = new ilDateTimeInputGUI($this->lng->txt("adn_birthdate"), "birthdate");
         $birthdate->setRequired(true);
         $birthdate->setStartYear(date("Y") - 100);
         $form->addItem($birthdate);
@@ -196,23 +204,23 @@ class adnCertifiedProfessionalDataGUI
         }
         $countries = adnCountry::getCountriesSelect($countries);
 
-        $citizenship = new ilSelectInputGUI($lng->txt("adn_citizenship"), "citizenship");
+        $citizenship = new ilSelectInputGUI($this->lng->txt("adn_citizenship"), "citizenship");
         $citizenship->setOptions($countries);
         $citizenship->setRequired(true);
         $form->addItem($citizenship);
 
-        $foreign = new ilCheckboxInputGUI($lng->txt("adn_foreign_certificate"), "foreign");
+        $foreign = new ilCheckboxInputGUI($this->lng->txt("adn_foreign_certificate"), "foreign");
         $form->addItem($foreign);
 
-        $foreign_cert_handed_id = new ilCheckboxInputGUI($lng->txt("adn_foreign_cert_handed_in"), "foreign_cert_handed_in");
+        $foreign_cert_handed_id = new ilCheckboxInputGUI($this->lng->txt("adn_foreign_cert_handed_in"), "foreign_cert_handed_in");
         $form->addItem($foreign_cert_handed_id);
 
-        $phone = new ilTextInputGUI($lng->txt("adn_phone"), "phone");
+        $phone = new ilTextInputGUI($this->lng->txt("adn_phone"), "phone");
         $phone->setMaxLength(30);
         $phone->setSize(30);
         $form->addItem($phone);
 
-        $email = new ilEmailInputGUI($lng->txt("adn_email"), "email");
+        $email = new ilEmailInputGUI($this->lng->txt("adn_email"), "email");
         $form->addItem($email);
 
         // foreign key
@@ -224,20 +232,20 @@ class adnCertifiedProfessionalDataGUI
         }
         $wmos = adnWMO::getWMOsSelect($wmos);
 
-        $registered_by = new ilSelectInputGUI($lng->txt("adn_registered_by"), "registered_by");
+        $registered_by = new ilSelectInputGUI($this->lng->txt("adn_registered_by"), "registered_by");
         $registered_by->setOptions($wmos);
         $registered_by->setRequired(true);
         $form->addItem($registered_by);
 
-        $comment = new ilTextAreaInputGUI($lng->txt("adn_comment"), "comment");
+        $comment = new ilTextAreaInputGUI($this->lng->txt("adn_comment"), "comment");
         $comment->setCols(80);
         $comment->setRows(5);
         $form->addItem($comment);
 
-        $holdback = new ilCheckboxInputGUI($lng->txt("adn_holdback"), "holdback");
+        $holdback = new ilCheckboxInputGUI($this->lng->txt("adn_holdback"), "holdback");
         $form->addItem($holdback);
 
-        $holdback_by = new ilSelectInputGUI($lng->txt("adn_holdback_by"), "holdback_by");
+        $holdback_by = new ilSelectInputGUI($this->lng->txt("adn_holdback_by"), "holdback_by");
         $holdback_by->setOptions($wmos);
         $holdback->addSubItem($holdback_by);
 
@@ -245,37 +253,37 @@ class adnCertifiedProfessionalDataGUI
         $current_wmo = adnUser::lookupWmoId();
         $holdback_by->setValue($current_wmo);
         
-        $holdback_until = new ilDateTimeInputGUI($lng->txt("adn_holdback_until"), "holdback_until");
+        $holdback_until = new ilDateTimeInputGUI($this->lng->txt("adn_holdback_until"), "holdback_until");
         $holdback->addSubItem($holdback_until);
 
 
 
         $header = new ilFormSectionHeaderGUI();
-        $header->setTitle($lng->txt("adn_permanent_address"));
+        $header->setTitle($this->lng->txt("adn_permanent_address"));
         $form->addItem($header);
 
-        $country = new ilSelectInputGUI($lng->txt("adn_country"), "country");
+        $country = new ilSelectInputGUI($this->lng->txt("adn_country"), "country");
         $country->setOptions($countries);
         $country->setRequired(true);
         $form->addItem($country);
 
-        $zip = new ilTextInputGUI($lng->txt("adn_zip"), "zip");
+        $zip = new ilTextInputGUI($this->lng->txt("adn_zip"), "zip");
         $zip->setMaxLength(10);
         $zip->setSize(10);
         $zip->setRequired(true);
         $form->addItem($zip);
 
-        $city = new ilTextInputGUI($lng->txt("adn_city"), "city");
+        $city = new ilTextInputGUI($this->lng->txt("adn_city"), "city");
         $city->setMaxLength(50);
         $city->setRequired(true);
         $form->addItem($city);
 
-        $street = new ilTextInputGUI($lng->txt("adn_street"), "street");
+        $street = new ilTextInputGUI($this->lng->txt("adn_street"), "street");
         $street->setMaxLength(50);
         $street->setRequired(true);
         $form->addItem($street);
 
-        $hno = new ilTextInputGUI($lng->txt("adn_house_number"), "hno");
+        $hno = new ilTextInputGUI($this->lng->txt("adn_house_number"), "hno");
         $hno->setMaxLength(10);
         $hno->setSize(10);
         $hno->setRequired(true);
@@ -284,46 +292,46 @@ class adnCertifiedProfessionalDataGUI
 
 
         $header = new ilFormSectionHeaderGUI();
-        $header->setTitle($lng->txt("adn_shipping_address"));
+        $header->setTitle($this->lng->txt("adn_shipping_address"));
         $form->addItem($header);
 
-        $ssalutation = new ilSelectInputGUI($lng->txt("adn_salutation"), "ssalutation");
-        $ssalutation->setOptions(array("m" => $lng->txt("salutation_m"),
-            "f" => $lng->txt("salutation_f")));
+        $ssalutation = new ilSelectInputGUI($this->lng->txt("adn_salutation"), "ssalutation");
+        $ssalutation->setOptions(array("m" => $this->lng->txt("salutation_m"),
+            "f" => $this->lng->txt("salutation_f")));
         $form->addItem($ssalutation);
 
-        $sname = new ilTextInputGUI($lng->txt("adn_last_name"), "slast_name");
+        $sname = new ilTextInputGUI($this->lng->txt("adn_last_name"), "slast_name");
         $sname->setMaxLength(50);
         $form->addItem($sname);
 
-        $sfirst_name = new ilTextInputGUI($lng->txt("adn_first_name"), "sfirst_name");
+        $sfirst_name = new ilTextInputGUI($this->lng->txt("adn_first_name"), "sfirst_name");
         $sfirst_name->setMaxLength(50);
         $form->addItem($sfirst_name);
 
-        $scountry = new ilSelectInputGUI($lng->txt("adn_country"), "scountry");
+        $scountry = new ilSelectInputGUI($this->lng->txt("adn_country"), "scountry");
         $scountry->setOptions($countries);
         $form->addItem($scountry);
 
-        $szip = new ilTextInputGUI($lng->txt("adn_zip"), "szip");
+        $szip = new ilTextInputGUI($this->lng->txt("adn_zip"), "szip");
         $szip->setMaxLength(10);
         $szip->setSize(10);
         $form->addItem($szip);
 
-        $scity = new ilTextInputGUI($lng->txt("adn_city"), "scity");
+        $scity = new ilTextInputGUI($this->lng->txt("adn_city"), "scity");
         $scity->setMaxLength(50);
         $form->addItem($scity);
 
-        $sstreet = new ilTextInputGUI($lng->txt("adn_street"), "sstreet");
+        $sstreet = new ilTextInputGUI($this->lng->txt("adn_street"), "sstreet");
         $sstreet->setMaxLength(50);
         $form->addItem($sstreet);
 
-        $shno = new ilTextInputGUI($lng->txt("adn_house_number"), "shno");
+        $shno = new ilTextInputGUI($this->lng->txt("adn_house_number"), "shno");
         $shno->setMaxLength(10);
         $shno->setSize(10);
         $form->addItem($shno);
 
         $cb = new ilCheckboxInputGUI(
-            $lng->txt("adn_shipping_address_activated"),
+            $this->lng->txt("adn_shipping_address_activated"),
             "shipping_address_activated"
         );
         $form->addItem($cb);
@@ -364,9 +372,9 @@ class adnCertifiedProfessionalDataGUI
             $holdback_until->setDate($this->professional->getBlockedUntil());
         }
 
-        $form->addCommandButton("updateProfessional", $lng->txt("save"));
-        $form->addCommandButton("listProfessionals", $lng->txt("cancel"));
-        $form->setTitle($lng->txt("adn_edit_professional"));
+        $form->addCommandButton("updateProfessional", $this->lng->txt("save"));
+        $form->addCommandButton("listProfessionals", $this->lng->txt("cancel"));
+        $form->setTitle($this->lng->txt("adn_edit_professional"));
 
         return $form;
     }
@@ -376,7 +384,6 @@ class adnCertifiedProfessionalDataGUI
      */
     protected function updateProfessional()
     {
-        global $tpl, $lng, $ilCtrl;
 
         $form = $this->initProfessionalForm();
 
@@ -420,8 +427,8 @@ class adnCertifiedProfessionalDataGUI
 
             if ($this->professional->update()) {
                 // show success message and return to list
-                ilUtil::sendSuccess($lng->txt("adn_certified_professional_updated"), true);
-                $ilCtrl->redirect($this, "listProfessionals");
+                ilUtil::sendSuccess($this->lng->txt("adn_certified_professional_updated"), true);
+                $this->ctrl->redirect($this, "listProfessionals");
             }
         }
 

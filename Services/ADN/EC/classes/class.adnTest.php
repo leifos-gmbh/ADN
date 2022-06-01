@@ -21,7 +21,9 @@ class adnTest
      */
     public static function saveAnswer($a_cand_sheet_id, $a_q_id, $a_answer)
     {
-        global $ilDB;
+        global $DIC;
+
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query("SELECT *" .
             " FROM adn_ec_given_answer" .
@@ -53,7 +55,9 @@ class adnTest
      */
     public static function lookupAnswer($a_cand_sheet_id, $a_q_id)
     {
-        global $ilDB;
+        global $DIC;
+
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query("SELECT answer" .
             " FROM adn_ec_given_answer" .
@@ -72,7 +76,9 @@ class adnTest
      */
     public static function lookupAnswers($a_cand_sheet_id)
     {
-        global $ilDB;
+        global $DIC;
+
+        $ilDB = $DIC->database();
         
         $query = 'SELECT ed_question_id, answer FROM adn_ec_given_answer ' .
             'WHERE ep_cand_sheet_id  = ' . $ilDB->quote($a_cand_sheet_id, 'integer');
@@ -92,7 +98,9 @@ class adnTest
      */
     public static function lookupMCResult($a_event_id, $a_candidate_id)
     {
-        global $ilDB;
+        global $DIC;
+
+        $ilDB = $DIC->database();
 
         $cand_sheet_id = 0;
         
@@ -141,7 +149,9 @@ class adnTest
      */
     public static function lookupResults($a_event_id, $a_candidate_id)
     {
-        global $ilDB;
+        global $DIC;
+
+        $ilDB = $DIC->database();
 
         $cand_sheet_id = 0;
 
@@ -181,7 +191,9 @@ class adnTest
      */
     public static function hasAnswered($a_cand_sheet_id)
     {
-        global $ilDB;
+        global $DIC;
+
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query("SELECT answer" .
             " FROM adn_ec_given_answer" .

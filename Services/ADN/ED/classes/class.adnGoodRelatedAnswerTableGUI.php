@@ -27,7 +27,6 @@ class adnGoodRelatedAnswerTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd, $a_question_id)
     {
-        global $ilCtrl, $lng;
 
         $this->question_id = (int) $a_question_id;
 
@@ -43,7 +42,7 @@ class adnGoodRelatedAnswerTableGUI extends ilTable2GUI
         
         parent::__construct($a_parent_obj, $a_parent_cmd);
 
-        $this->setTitle($lng->txt("adn_good_related_answers") . ": " .
+        $this->setTitle($this->lng->txt("adn_good_related_answers") . ": " .
             adnCaseQuestion::lookupName($this->question_id));
         
         $this->addColumn("", "", "1");
@@ -60,10 +59,10 @@ class adnGoodRelatedAnswerTableGUI extends ilTable2GUI
         $this->setDefaultOrderField("answer");
         $this->setDefaultOrderDirection("asc");
         
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.answer_good_row.html", "Services/ADN/ED");
         
-        $this->addMultiCommand("confirmAnswersDeletion", $lng->txt("delete"));
+        $this->addMultiCommand("confirmAnswersDeletion", $this->lng->txt("delete"));
 
         $this->importData();
     }
@@ -73,7 +72,6 @@ class adnGoodRelatedAnswerTableGUI extends ilTable2GUI
      */
     protected function importData()
     {
-        global $lng;
         
         include_once "Services/ADN/ED/classes/class.adnGoodRelatedAnswer.php";
         $answers = adnGoodRelatedAnswer::getAllAnswers($this->question_id);
@@ -87,15 +85,15 @@ class adnGoodRelatedAnswerTableGUI extends ilTable2GUI
                 if ($this->show_butan_or_empty) {
                     switch ($item["butan_or_empty"]) {
                         case adnGoodRelatedAnswer::TYPE_EMPTY:
-                            $type = $lng->txt("adn_empty");
+                            $type = $this->lng->txt("adn_empty");
                             break;
 
                         case adnGoodRelatedAnswer::TYPE_BUTAN:
-                            $type = $lng->txt("adn_butan");
+                            $type = $this->lng->txt("adn_butan");
                             break;
 
                         case adnGoodRelatedAnswer::TYPE_BUTAN_OR_EMPTY:
-                            $type = $lng->txt("adn_butan_or_empty");
+                            $type = $this->lng->txt("adn_butan_or_empty");
                             break;
                     }
                     $answers[$idx]["butan_or_empty"] = $type;
@@ -124,26 +122,25 @@ class adnGoodRelatedAnswerTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
 
         // actions...
 
         if (adnPerm::check(adnPerm::ED, adnPerm::WRITE)) {
-            $ilCtrl->setParameter($this->parent_obj, "cqa_id", $a_set["id"]);
+            $this->ctrl->setParameter($this->parent_obj, "cqa_id", $a_set["id"]);
 
             // ...edit
             $this->tpl->setCurrentBlock("action");
             $this->tpl->setVariable(
                 "TXT_CMD",
-                $lng->txt("edit")
+                $this->lng->txt("edit")
             );
             $this->tpl->setVariable(
                 "HREF_CMD",
-                $ilCtrl->getLinkTarget($this->parent_obj, "editAnswer")
+                $this->ctrl->getLinkTarget($this->parent_obj, "editAnswer")
             );
             $this->tpl->parseCurrentBlock();
 
-            $ilCtrl->setParameter($this->parent_obj, "cqa_id", "");
+            $this->ctrl->setParameter($this->parent_obj, "cqa_id", "");
         }
 
         // properties

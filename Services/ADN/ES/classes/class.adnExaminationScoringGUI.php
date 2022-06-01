@@ -15,18 +15,26 @@
  */
 class adnExaminationScoringGUI
 {
-    /**
-     * Execute command
-     */
+    protected ilLanguage $lng;
+    protected ilCtrl $ctrl;
+    protected ilGlobalTemplateInterface $tpl;
+
+    public function __construct()
+    {
+        global $DIC;
+        $this->lng = $DIC->language();
+        $this->ctrl = $DIC->ctrl();
+        $this->tpl = $DIC->ui()->mainTemplate();
+    }
+
     public function executeCommand()
     {
-        global $ilCtrl, $lng, $tpl;
 
         // set page title
-        $tpl->setTitle($lng->txt("adn_es"));
+        $this->tpl->setTitle($this->lng->txt("adn_es"));
 
-        $next_class = $ilCtrl->getNextClass();
-        $cmd = $ilCtrl->getCmd();
+        $next_class = $this->ctrl->getNextClass();
+        $cmd = $this->ctrl->getCmd();
 
         if ($cmd == "processMenuItem") {	// menu item triggered
             // determine cmd and cmdClass from menu item
@@ -34,38 +42,38 @@ class adnExaminationScoringGUI
             switch ($_GET["menu_item"]) {
                 // edit scoring
                 case adnMainMenuGUI::ES_SCS:
-                    $ilCtrl->setCmdClass("adnscoringgui");
-                    $ilCtrl->setCmd("listEvents");
+                    $this->ctrl->setCmdClass("adnscoringgui");
+                    $this->ctrl->setCmd("listEvents");
                     break;
 
                 // edit certificates
                 case adnMainMenuGUI::ES_CTS:
-                    $ilCtrl->setCmdClass("adncertificatescoringgui");
-                    $ilCtrl->setCmd("listEvents");
+                    $this->ctrl->setCmdClass("adncertificatescoringgui");
+                    $this->ctrl->setCmd("listEvents");
                     break;
 
                 // score notification
                 case adnMainMenuGUI::ES_SNS:
-                    $ilCtrl->setCmdClass("adnscorenotificationgui");
-                    $ilCtrl->setCmd("listEvents");
+                    $this->ctrl->setCmdClass("adnscorenotificationgui");
+                    $this->ctrl->setCmd("listEvents");
                     break;
 
                 // online answer sheets
                 case adnMainMenuGUI::ES_OAS:
-                    $ilCtrl->setCmdClass("adnonlineanswersheetgui");
-                    $ilCtrl->setCmd("listEvents");
+                    $this->ctrl->setCmdClass("adnonlineanswersheetgui");
+                    $this->ctrl->setCmd("listEvents");
                     break;
             }
-            $next_class = $ilCtrl->getNextClass();
+            $next_class = $this->ctrl->getNextClass();
         }
 
         // If no next class is responsible for handling the
         // command, set the default class
         if ($next_class == "") {
             // default: scoring
-            $ilCtrl->setCmd("");
-            $ilCtrl->setCmdClass("adnscoringgui");
-            $next_class = $ilCtrl->getNextClass();
+            $this->ctrl->setCmd("");
+            $this->ctrl->setCmdClass("adnscoringgui");
+            $next_class = $this->ctrl->getNextClass();
         }
 
         // forward command to next gui class in control flow
@@ -73,28 +81,28 @@ class adnExaminationScoringGUI
             case "adnscoringgui":
                 include_once("./Services/ADN/ES/classes/class.adnScoringGUI.php");
                 $ct_gui = new adnScoringGUI();
-                $ilCtrl->forwardCommand($ct_gui);
+                $this->ctrl->forwardCommand($ct_gui);
                 break;
 
             case "adncertificatescoringgui":
                 include_once("./Services/ADN/ES/classes/class.adnCertificateScoringGUI.php");
                 $ct_gui = new adnCertificateScoringGUI();
-                $ilCtrl->forwardCommand($ct_gui);
+                $this->ctrl->forwardCommand($ct_gui);
                 break;
 
             case "adnscorenotificationgui":
                 include_once("./Services/ADN/ES/classes/class.adnScoreNotificationGUI.php");
                 $sn_gui = new adnScoreNotificationGUI();
-                $ilCtrl->forwardCommand($sn_gui);
+                $this->ctrl->forwardCommand($sn_gui);
                 break;
 
             case "adnonlineanswersheetgui":
                 include_once("./Services/ADN/ES/classes/class.adnOnlineAnswerSheetGUI.php");
                 $as_gui = new adnOnlineAnswerSheetGUI();
-                $ilCtrl->forwardCommand($as_gui);
+                $this->ctrl->forwardCommand($as_gui);
                 break;
         }
 
-        adnBaseGUI::setHelpButton($ilCtrl->getCmdClass());
+        adnBaseGUI::setHelpButton($this->ctrl->getCmdClass());
     }
 }

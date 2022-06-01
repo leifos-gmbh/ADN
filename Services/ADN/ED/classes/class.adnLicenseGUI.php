@@ -22,16 +22,26 @@ class adnLicenseGUI
 
     // current license object
     protected ?adnLicense $license = null;
-    
+
+    protected ilCtrl $ctrl;
+    protected ilLanguage $lng;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilToolbarGUI $toolbar;
+    protected ilTabsGUI $tabs;
     /**
      * Constructor
      */
     public function __construct()
     {
-        global $ilCtrl;
+        global $DIC;
+        $this->ctrl = $DIC->ctrl();
+        $this->lng = $DIC->language();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->toolbar = $DIC->toolbar();
+        $this->tabs = $DIC->tabs();
 
         // save license ID through requests
-        $ilCtrl->saveParameter($this, array("lcs_id"));
+        $this->ctrl->saveParameter($this, array("lcs_id"));
         
         $this->readLicense();
     }
@@ -41,18 +51,17 @@ class adnLicenseGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl, $lng, $tpl;
 
-        $tpl->setTitle($lng->txt("adn_ed") . " - " . $lng->txt("adn_ed_lic"));
+        $this->tpl->setTitle($this->lng->txt("adn_ed") . " - " . $this->lng->txt("adn_ed_lic"));
         
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
         
         // forward command to next gui class in control flow
         switch ($next_class) {
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("listLicenses");
+                $cmd = $this->ctrl->getCmd("listLicenses");
 
                 // determine type from cmd (1|2)
                 if (!stristr($cmd, "Gas")) {
@@ -108,26 +117,25 @@ class adnLicenseGUI
      */
     protected function listLicenses()
     {
-        global $tpl, $lng, $ilCtrl, $ilToolbar;
 
         include_once("./Services/ADN/ED/classes/class.adnLicenseTableGUI.php");
         $table = new adnLicenseTableGUI($this, $this->getLink("listLicenses"), $this->type);
 
         if (adnPerm::check(adnPerm::ED, adnPerm::WRITE)) {
             if ($this->type == adnLicense::TYPE_CHEMICALS) {
-                $ilToolbar->addButton(
-                    $lng->txt("adn_add_license"),
-                    $ilCtrl->getLinkTarget($this, $this->getLink("addLicense"))
+                $this->toolbar->addButton(
+                    $this->lng->txt("adn_add_license"),
+                    $this->ctrl->getLinkTarget($this, $this->getLink("addLicense"))
                 );
             } elseif (!$table->getData()) {
-                $ilToolbar->addButton(
-                    $lng->txt("adn_add_gas_license"),
-                    $ilCtrl->getLinkTarget($this, $this->getLink("addLicense"))
+                $this->toolbar->addButton(
+                    $this->lng->txt("adn_add_gas_license"),
+                    $this->ctrl->getLinkTarget($this, $this->getLink("addLicense"))
                 );
             }
         }
 
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
     
     /**
@@ -137,9 +145,8 @@ class adnLicenseGUI
      */
     protected function addLicense(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $ilTabs, $ilCtrl, $lng;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget(
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget(
             $this,
             $this->getLink("listLicenses")
         ));
@@ -147,7 +154,7 @@ class adnLicenseGUI
         if (!$a_form) {
             $a_form = $this->initLicenseForm("create");
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
     
     /**
@@ -157,9 +164,8 @@ class adnLicenseGUI
      */
     protected function editLicense(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $ilTabs, $ilCtrl, $lng;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget(
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget(
             $this,
             $this->getLink("listLicenses")
         ));
@@ -167,7 +173,7 @@ class adnLicenseGUI
         if (!$a_form) {
             $a_form = $this->initLicenseForm("edit");
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
     
     /**
@@ -178,14 +184,13 @@ class adnLicenseGUI
      */
     protected function initLicenseForm($a_mode = "edit")
     {
-        global $lng, $ilCtrl;
         
         // get form object and add input fields
         include_once("Services/Form/classes/class.ilPropertyFormGUI.php");
         $form = new ilPropertyFormGUI();
         
         // name
-        $name = new ilTextInputGUI($lng->txt("adn_title"), "name");
+        $name = new ilTextInputGUI($this->lng->txt("adn_title"), "name");
         $name->setRequired(true);
         $name->setMaxLength(200);
         $form->addItem($name);
@@ -204,7 +209,7 @@ class adnLicenseGUI
             );
             if ($goods) {
                 $specific = new ilCheckboxGroupInputGUI(
-                    $lng->txt("adn_goods_in_transit"),
+                    $this->lng->txt("adn_goods_in_transit"),
                     "goods"
                 );
                 $specific->setRequired(true);
@@ -217,16 +222,16 @@ class adnLicenseGUI
         }
 
         // file
-        $file = new ilFileInputGUI($lng->txt("file"), "file");
+        $file = new ilFileInputGUI($this->lng->txt("file"), "file");
         $file->setSuffixes(array("pdf"));
         $file->setALlowDeletion(true);
         $form->addItem($file);
 
         if ($a_mode == "create") {
             // creation: save/cancel buttons and title
-            $form->addCommandButton($this->getLink("saveLicense"), $lng->txt("save"));
-            $form->addCommandButton($this->getLink("listLicenses"), $lng->txt("cancel"));
-            $form->setTitle($lng->txt("adn_add_license"));
+            $form->addCommandButton($this->getLink("saveLicense"), $this->lng->txt("save"));
+            $form->addCommandButton($this->getLink("listLicenses"), $this->lng->txt("cancel"));
+            $form->setTitle($this->lng->txt("adn_add_license"));
         } else {
             $name->setValue($this->license->getName());
             $file->setValue($this->license->getFileName());
@@ -236,12 +241,12 @@ class adnLicenseGUI
             }
             
             // editing: update/cancel buttons and title
-            $form->addCommandButton($this->getLink("updateLicense"), $lng->txt("save"));
-            $form->addCommandButton($this->getLink("listLicenses"), $lng->txt("cancel"));
-            $form->setTitle($lng->txt("adn_edit_license"));
+            $form->addCommandButton($this->getLink("updateLicense"), $this->lng->txt("save"));
+            $form->addCommandButton($this->getLink("listLicenses"), $this->lng->txt("cancel"));
+            $form->setTitle($this->lng->txt("adn_edit_license"));
         }
         
-        $form->setFormAction($ilCtrl->getFormAction($this));
+        $form->setFormAction($this->ctrl->getFormAction($this));
 
         return $form;
     }
@@ -251,7 +256,6 @@ class adnLicenseGUI
      */
     protected function saveLicense()
     {
-        global $tpl, $lng, $ilCtrl;
         
         $form = $this->initLicenseForm("create");
         
@@ -273,8 +277,8 @@ class adnLicenseGUI
             
             if ($license->save()) {
                 // show success message and return to list
-                ilUtil::sendSuccess($lng->txt("adn_license_created"), true);
-                $ilCtrl->redirect($this, $this->getLink("listLicenses"));
+                ilUtil::sendSuccess($this->lng->txt("adn_license_created"), true);
+                $this->ctrl->redirect($this, $this->getLink("listLicenses"));
             }
         }
 
@@ -288,7 +292,6 @@ class adnLicenseGUI
      */
     protected function updateLicense()
     {
-        global $lng, $ilCtrl, $tpl;
         
         $form = $this->initLicenseForm("edit");
         
@@ -313,8 +316,8 @@ class adnLicenseGUI
             
             if ($this->license->update()) {
                 // show success message and return to list
-                ilUtil::sendSuccess($lng->txt("adn_license_updated"), true);
-                $ilCtrl->redirect($this, $this->getLink("listLicenses"));
+                ilUtil::sendSuccess($this->lng->txt("adn_license_updated"), true);
+                $this->ctrl->redirect($this, $this->getLink("listLicenses"));
             }
         }
         
@@ -328,25 +331,24 @@ class adnLicenseGUI
      */
     protected function confirmLicensesDeletion()
     {
-        global $ilCtrl, $tpl, $lng, $ilTabs;
         
         // check whether at least one item has been seleced
         if (!is_array($_POST["license_id"]) || count($_POST["license_id"]) == 0) {
-            ilUtil::sendFailure($lng->txt("no_checkbox"), true);
-            $ilCtrl->redirect($this, $this->getLink("listLicenses"));
+            ilUtil::sendFailure($this->lng->txt("no_checkbox"), true);
+            $this->ctrl->redirect($this, $this->getLink("listLicenses"));
         } else {
-            $ilTabs->setBackTarget(
-                $lng->txt("back"),
-                $ilCtrl->getLinkTarget($this, "listLicenses")
+            $this->tabs->setBackTarget(
+                $this->lng->txt("back"),
+                $this->ctrl->getLinkTarget($this, "listLicenses")
             );
 
             // display confirmation message
             include_once("./Services/Utilities/classes/class.ilConfirmationGUI.php");
             $cgui = new ilConfirmationGUI();
-            $cgui->setFormAction($ilCtrl->getFormAction($this));
-            $cgui->setHeaderText($lng->txt("adn_sure_delete_licenses"));
-            $cgui->setCancel($lng->txt("cancel"), $this->getLink("listLicenses"));
-            $cgui->setConfirm($lng->txt("delete"), $this->getLink("deleteLicenses"));
+            $cgui->setFormAction($this->ctrl->getFormAction($this));
+            $cgui->setHeaderText($this->lng->txt("adn_sure_delete_licenses"));
+            $cgui->setCancel($this->lng->txt("cancel"), $this->getLink("listLicenses"));
+            $cgui->setConfirm($this->lng->txt("delete"), $this->getLink("deleteLicenses"));
 
             // list objects that should be deleted
             include_once("./Services/ADN/ED/classes/class.adnLicense.php");
@@ -354,7 +356,7 @@ class adnLicenseGUI
                 $cgui->addItem("license_id[]", $i, adnLicense::lookupName($i));
             }
             
-            $tpl->setContent($cgui->getHTML());
+            $this->tpl->setContent($cgui->getHTML());
         }
     }
     
@@ -363,7 +365,6 @@ class adnLicenseGUI
      */
     protected function deleteLicenses()
     {
-        global $ilCtrl, $lng;
         
         include_once("./Services/ADN/ED/classes/class.adnLicense.php");
         
@@ -373,8 +374,8 @@ class adnLicenseGUI
                 $license->delete();
             }
         }
-        ilUtil::sendSuccess($lng->txt("adn_license_deleted"), true);
-        $ilCtrl->redirect($this, $this->getLink("listLicenses"));
+        ilUtil::sendSuccess($this->lng->txt("adn_license_deleted"), true);
+        $this->ctrl->redirect($this, $this->getLink("listLicenses"));
     }
 
     /**
@@ -382,14 +383,13 @@ class adnLicenseGUI
      */
     protected function downloadFile()
     {
-        global $ilCtrl, $lng;
 
         $file = $this->license->getFilePath() . $this->license->getId();
         if (file_exists($file)) {
             ilUtil::deliverFile($file, $this->license->getFileName());
         } else {
-            ilUtil::sendFailure($lng->txt("adn_file_corrupt"), true);
-            $ilCtrl->redirect($this, $this->getLink("listLicenses"));
+            ilUtil::sendFailure($this->lng->txt("adn_file_corrupt"), true);
+            $this->ctrl->redirect($this, $this->getLink("listLicenses"));
         }
     }
 
@@ -398,21 +398,20 @@ class adnLicenseGUI
      */
     public function setTabs()
     {
-        global $ilTabs, $lng, $txt, $ilCtrl;
 
-        $ilTabs->addTab(
+        $this->tabs->addTab(
             adnLicense::TYPE_CHEMICALS,
-            $lng->txt("adn_licenses_chem"),
-            $ilCtrl->getLinkTarget($this, "listLicensesChem")
+            $this->lng->txt("adn_licenses_chem"),
+            $this->ctrl->getLinkTarget($this, "listLicensesChem")
         );
 
-        $ilTabs->addTab(
+        $this->tabs->addTab(
             adnLicense::TYPE_GAS,
-            $lng->txt("adn_licenses_gas"),
-            $ilCtrl->getLinkTarget($this, "listLicensesGas")
+            $this->lng->txt("adn_licenses_gas"),
+            $this->ctrl->getLinkTarget($this, "listLicensesGas")
         );
 
-        $ilTabs->activateTab($this->type);
+        $this->tabs->activateTab($this->type);
     }
 
     /**

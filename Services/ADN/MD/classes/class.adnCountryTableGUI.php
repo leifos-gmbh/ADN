@@ -23,16 +23,15 @@ class adnCountryTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd)
     {
-        global $ilCtrl, $lng;
 
         parent::__construct($a_parent_obj, $a_parent_cmd);
 
         $this->setId("adn_tbl_mdcnt");
 
-        $this->setTitle($lng->txt("adn_countries"));
+        $this->setTitle($this->lng->txt("adn_countries"));
 
         if (adnPerm::check(adnPerm::MD, adnPerm::WRITE)) {
-            $this->addMultiCommand("confirmDeleteCountries", $lng->txt("delete"));
+            $this->addMultiCommand("confirmDeleteCountries", $this->lng->txt("delete"));
             $this->addColumn("", "");
         }
 
@@ -43,7 +42,7 @@ class adnCountryTableGUI extends ilTable2GUI
         $this->setDefaultOrderField("code");
         $this->setDefaultOrderDirection("asc");
 
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.country_row.html", "Services/ADN/MD");
 
         $this->importData();
@@ -68,23 +67,22 @@ class adnCountryTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
 
         // actions...
 
         if (adnPerm::check(adnPerm::MD, adnPerm::WRITE)) {
-            $ilCtrl->setParameter($this->parent_obj, "cnt_id", $a_set["id"]);
+            $this->ctrl->setParameter($this->parent_obj, "cnt_id", $a_set["id"]);
 
             // edit
             $this->tpl->setCurrentBlock("action");
-            $this->tpl->setVariable("TXT_CMD", $lng->txt("edit"));
+            $this->tpl->setVariable("TXT_CMD", $this->lng->txt("edit"));
             $this->tpl->setVariable(
                 "HREF_CMD",
-                $ilCtrl->getLinkTarget($this->parent_obj, "editCountry")
+                $this->ctrl->getLinkTarget($this->parent_obj, "editCountry")
             );
             $this->tpl->parseCurrentBlock();
 
-            $ilCtrl->setParameter($this->parent_obj, "cnt_id", "");
+            $this->ctrl->setParameter($this->parent_obj, "cnt_id", "");
 
             // checkbox for deletion
             $this->tpl->setCurrentBlock("cbox");

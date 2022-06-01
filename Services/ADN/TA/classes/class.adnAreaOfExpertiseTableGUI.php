@@ -23,16 +23,15 @@ class adnAreaOfExpertiseTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd)
     {
-        global $ilCtrl, $lng;
 
         parent::__construct($a_parent_obj, $a_parent_cmd);
 
         $this->setId("adn_ta_aoe");
         
-        $this->setTitle($lng->txt("adn_areas_of_expertise"));
+        $this->setTitle($this->lng->txt("adn_areas_of_expertise"));
 
         if (adnPerm::check(adnPerm::TA, adnPerm::WRITE)) {
-            $this->addMultiCommand("confirmAreasOfExpertiseDeletion", $lng->txt("delete"));
+            $this->addMultiCommand("confirmAreasOfExpertiseDeletion", $this->lng->txt("delete"));
             $this->addColumn("", "", "1");
         }
         
@@ -42,7 +41,7 @@ class adnAreaOfExpertiseTableGUI extends ilTable2GUI
         $this->setDefaultOrderField("name");
         $this->setDefaultOrderDirection("asc");
         
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.areas_row.html", "Services/ADN/TA");
         
         $this->importData();
@@ -67,26 +66,25 @@ class adnAreaOfExpertiseTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
         
         // actions...
 
         if (adnPerm::check(adnPerm::TA, adnPerm::WRITE)) {
-            $ilCtrl->setParameter($this->parent_obj, "ae_id", $a_set["id"]);
+            $this->ctrl->setParameter($this->parent_obj, "ae_id", $a_set["id"]);
 
             // ...edit
             $this->tpl->setCurrentBlock("action");
             $this->tpl->setVariable(
                 "TXT_CMD",
-                $lng->txt("edit")
+                $this->lng->txt("edit")
             );
             $this->tpl->setVariable(
                 "HREF_CMD",
-                $ilCtrl->getLinkTarget($this->parent_obj, "editAreaOfExpertise")
+                $this->ctrl->getLinkTarget($this->parent_obj, "editAreaOfExpertise")
             );
             $this->tpl->parseCurrentBlock();
 
-            $ilCtrl->setParameter($this->parent_obj, "ae_id", "");
+            $this->ctrl->setParameter($this->parent_obj, "ae_id", "");
 
             // checkbox for deletion
             $this->tpl->setCurrentBlock("cbox");

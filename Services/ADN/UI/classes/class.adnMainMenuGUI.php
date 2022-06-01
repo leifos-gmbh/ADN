@@ -82,6 +82,13 @@ class adnMainMenuGUI
 
 
     protected ilGlobalTemplate $tpl;
+    protected ilLanguage $lng;
+    protected ilCtrl $ctrl;
+    protected ilObjUser $user;
+    protected ilRbacSystem $rbacSystem;
+    protected ilRbacReview $rbacReview;
+    protected ilTree $tree;
+    protected ilSetting $setting;
 
     protected ?ilMainMenuGUI $mm_gui = null;
 
@@ -90,15 +97,23 @@ class adnMainMenuGUI
      */
     public function __construct($a_mm_gui)
     {
-        global $lng, $tpl;
+        global $DIC;
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->lng = $DIC->language();
+        $this->ctrl = $DIC->ctrl();
+        $this->user = $DIC->user();
+        $this->rbacSystem = $DIC->rbac()->system();
+        $this->rbacReview = $DIC->rbac()->review();
+        $this->tree = $DIC->repositoryTree();
+        $this->setting = $DIC->settings();
 
         $this->mm_gui = $a_mm_gui;
 
 
         if ($a_mm_gui != null) {
             $this->tpl = $this->mm_gui->tpl;
-            $lng->loadLanguageModule("adn");
-            $tpl->addCss("./Services/ADN/UI/css/adn.css");
+            $this->lng->loadLanguageModule("adn");
+            $this->tpl->addCss("./Services/ADN/UI/css/adn.css");
         }
     }
 
@@ -207,7 +222,6 @@ class adnMainMenuGUI
      */
     public function getSubmenuItems($a_submenu)
     {
-        global $lng, $ilCtrl;
 
         $all = $this->getAllMenuItems();
 
@@ -232,7 +246,6 @@ class adnMainMenuGUI
      */
     public function getHTML()
     {
-        global $lng, $ilias;
 
 
 
@@ -260,29 +273,29 @@ class adnMainMenuGUI
         if ($GLOBALS["help_link"] != "") {
             if ($this->tpl->blockExists("adn_help")) {
                 $this->tpl->setCurrentBlock("adn_help");
-                $this->tpl->setVariable("ADN_TXT_HELP", $lng->txt("help"));
+                $this->tpl->setVariable("ADN_TXT_HELP", $this->lng->txt("help"));
                 $this->tpl->setVariable("ADN_LINK_HELP", $GLOBALS["help_link"]);
                 $this->tpl->parseCurrentBlock();
             }
         }
 
         $this->tpl->setCurrentBlock("userisloggedin");
-        $this->tpl->setVariable("TXT_LOGIN_AS", $lng->txt("login_as"));
-        $user_img_src = $ilias->account->getPersonalPicturePath("small", true);
-        $user_img_alt = $ilias->account->getFullname();
+        $this->tpl->setVariable("TXT_LOGIN_AS", $this->lng->txt("login_as"));
+        $user_img_src = $this->user->getPersonalPicturePath("small", true);
+        $user_img_alt = $this->user->getFullname();
         $this->tpl->setVariable("USER_IMG", ilUtil::img($user_img_src, $user_img_alt));
         #$this->tpl->setVariable("USR_LINK_PROFILE", "ilias.php?baseClass=ilPersonalDesktopGUI&cmd=jumpToProfile");
         #$this->tpl->setVariable("USR_TXT_PROFILE", $lng->txt("personal_profile"));
         #$this->tpl->setVariable("USR_LINK_SETTINGS", "ilias.php?baseClass=ilPersonalDesktopGUI&cmd=jumpToSettings");
         #$this->tpl->setVariable("USR_TXT_SETTINGS", $lng->txt("personal_settings"));
-        $this->tpl->setVariable("TXT_LOGOUT2", $lng->txt("logout"));
-        $this->tpl->setVariable("LINK_LOGOUT2", $link_dir . "logout.php?lang=" . $ilias->account->getCurrentLanguage());
-        $this->tpl->setVariable("USERNAME", $ilias->account->getFullname());
+        $this->tpl->setVariable("TXT_LOGOUT2", $this->lng->txt("logout"));
+        $this->tpl->setVariable("LINK_LOGOUT2", $link_dir . "logout.php?lang=" . $this->user->getCurrentLanguage());
+        $this->tpl->setVariable("USERNAME", $this->user->getFullname());
         
-        foreach ($GLOBALS['rbacreview']->getGlobalRoles() as $gr) {
+        foreach ($this->rbacReview->getGlobalRoles() as $gr) {
             if (
-                $GLOBALS['rbacreview']->isAssigned(
-                    $GLOBALS['ilUser']->getId(),
+                $this->rbacReview->isAssigned(
+                    $this->user->getId(),
                     $gr
                 )) {
                 $this->tpl->setVariable('USER_ROLE', ilObject::_lookupTitle($gr));
@@ -290,15 +303,15 @@ class adnMainMenuGUI
             }
         }
         
-        $this->tpl->setVariable("LOGIN", $ilias->account->getLogin());
-        $this->tpl->setVariable("MATRICULATION", $ilias->account->getMatriculation());
-        $this->tpl->setVariable("EMAIL", $ilias->account->getEmail());
+        $this->tpl->setVariable("LOGIN", $this->user->getLogin());
+        $this->tpl->setVariable("MATRICULATION", $this->user->getMatriculation());
+        $this->tpl->setVariable("EMAIL", $this->user->getEmail());
         $this->tpl->parseCurrentBlock();
 
         $this->tpl->setVariable("LOCATION_STYLESHEET", ilUtil::getStyleSheetLocation());
 
 
-        $this->tpl->setVariable("TXT_MAIN_MENU", $lng->txt("main_menu"));
+        $this->tpl->setVariable("TXT_MAIN_MENU", $this->lng->txt("main_menu"));
 
         $this->tpl->parseCurrentBlock();
 
@@ -313,7 +326,6 @@ class adnMainMenuGUI
      */
     public function getMenuEntries()
     {
-        global $rbacsystem, $lng, $tree, $ilUser, $ilSetting;
 
         // no menu during online tests
         if ($_SESSION["adn_online_test"]) {
@@ -329,23 +341,23 @@ class adnMainMenuGUI
 
 
 
-        $tpl->setCurrentBlock("cust_menu");
-        $tpl->setVariable(
+        $this->tpl->setCurrentBlock("cust_menu");
+        $this->tpl->setVariable(
             "TXT_CUSTOM",
             lfCustomMenu::lookupTitle("it", $menu["id"], $ilUser->getLanguage(), true)
         );
-        $tpl->setVariable("MM_CLASS", "MMInactive");
+        $this->tpl->setVariable("MM_CLASS", "MMInactive");
 
         if (is_file("./templates/default/images/mm_down_arrow.png")) {
-            $tpl->setVariable("ARROW_IMG", ilUtil::getImagePath("mm_down_arrow.png"));
+            $this->tpl->setVariable("ARROW_IMG", ilUtil::getImagePath("mm_down_arrow.png"));
         } else {
-            $tpl->setVariable("ARROW_IMG", ilUtil::getImagePath("mm_down_arrow.gif"));
+            $this->tpl->setVariable("ARROW_IMG", ilUtil::getImagePath("mm_down_arrow.gif"));
         }
-        $tpl->setVariable("CUSTOM_CONT_OV", $gl->getHTML());
-        $tpl->setVariable("MM_ID", $menu["id"]);
-        $tpl->parseCurrentBlock();
-        $tpl->setCurrentBlock("c_item");
-        $tpl->parseCurrentBlock();
+        $this->tpl->setVariable("CUSTOM_CONT_OV", $gl->getHTML());
+        $this->tpl->setVariable("MM_ID", $menu["id"]);
+        $this->tpl->parseCurrentBlock();
+        $this->tpl->setCurrentBlock("c_item");
+        $this->tpl->parseCurrentBlock();
     }
 
     /**
@@ -356,7 +368,6 @@ class adnMainMenuGUI
      */
     public function renderSubMenu($a_mm_tpl, $a_menu)
     {
-        global $lng, $rbacsystem, $ilSetting;
 
         $a_mm_tpl->setCurrentBlock("submenu");
 
@@ -365,14 +376,14 @@ class adnMainMenuGUI
         $gl->setAsDropDown(true);
 
         if ($a_menu != "md") {
-            $caption = $lng->txt("adn_" . $a_menu);
+            $caption = $this->lng->txt("adn_" . $a_menu);
         } else {
-            $caption = $lng->txt("adn_ad");
+            $caption = $this->lng->txt("adn_ad");
         }
         $a_mm_tpl->setVariable("TXT_SUBMENU", $caption);
         $a_mm_tpl->setVariable("SUBMENU_ID", "menu_" . $a_menu);
 
-        $maintenance = $ilSetting->get("adn_maintenance");
+        $maintenance = $this->setting->get("adn_maintenance");
 
         $sub_menu = $this->getSubMenuItems($a_menu);
         foreach ($sub_menu as $item) {
@@ -382,20 +393,19 @@ class adnMainMenuGUI
             }
 
             $gl->addEntry(
-                $lng->txt("adn_" . $item),
+                $this->lng->txt("adn_" . $item),
                 "ilias.php?baseClass=adnBaseGUI&amp;cmd=processMenuItem&amp;" .
                 "menu_item=" . $item
             );
         }
 
         // add ILIAS administration to administration submenu
-        if ($a_menu == "md" && $rbacsystem->checkAccess("visible,read", SYSTEM_FOLDER_ID)) {
-            global $tree;
+        if ($a_menu == "md" && $this->rbacSystem->checkAccess("visible,read", SYSTEM_FOLDER_ID)) {
 
             //$adm_nodes = $tree->getChilds(SYSTEM_FOLDER_ID);
             //var_dump($adm_nodes); exit;
             $gl->addEntry(
-                "ILIAS " . $lng->txt("administration"),
+                "ILIAS " . $this->lng->txt("administration"),
                 "ilias.php?baseClass=ilAdministrationGUI&cmd=jump&ref_id=" . SYSTEM_FOLDER_ID
             );
         }
@@ -411,45 +421,44 @@ class adnMainMenuGUI
      */
     public function addAdminMenu()
     {
-        global $tpl, $tree, $rbacsystem, $lng;
 
         include_once("./Services/UIComponent/GroupedList/classes/class.ilGroupedListGUI.php");
         $gl = new ilGroupedListGUI();
 
-        $objects = $tree->getChilds(SYSTEM_FOLDER_ID);
+        $objects = $this->tree->getChilds(SYSTEM_FOLDER_ID);
         foreach ($objects as $object) {
             $new_objects[$object["title"] . ":" . $object["child"]]
                 = $object;
             //have to set it manually as translation type of main node cannot be "sys" as this type is a orgu itself.
             if ($object["type"] == "orgu") {
-                $new_objects[$object["title"] . ":" . $object["child"]]["title"] = $lng->txt("obj_orgu");
+                $new_objects[$object["title"] . ":" . $object["child"]]["title"] = $this->lng->txt("obj_orgu");
             }
         }
 
         // add entry for switching to repository admin
         // note: please see showChilds methods which prevents infinite look
-        $new_objects[$lng->txt("repository_admin") . ":" . ROOT_FOLDER_ID] =
+        $new_objects[$this->lng->txt("repository_admin") . ":" . ROOT_FOLDER_ID] =
             array(
                 "tree" => 1,
                 "child" => ROOT_FOLDER_ID,
                 "ref_id" => ROOT_FOLDER_ID,
                 "depth" => 3,
                 "type" => "root",
-                "title" => $lng->txt("repository_admin"),
-                "description" => $lng->txt("repository_admin_desc"),
-                "desc" => $lng->txt("repository_admin_desc"),
+                "title" => $this->lng->txt("repository_admin"),
+                "description" => $this->lng->txt("repository_admin_desc"),
+                "desc" => $this->lng->txt("repository_admin_desc"),
             );
 
         //$nd = $tree->getNodeData(SYSTEM_FOLDER_ID);
         //var_dump($nd);
-        $new_objects[$lng->txt("general_settings") . ":" . SYSTEM_FOLDER_ID] =
+        $new_objects[$this->lng->txt("general_settings") . ":" . SYSTEM_FOLDER_ID] =
             array(
                 "tree" => 1,
                 "child" => SYSTEM_FOLDER_ID,
                 "ref_id" => SYSTEM_FOLDER_ID,
                 "depth" => 2,
                 "type" => "adm",
-                "title" => $lng->txt("general_settings"),
+                "title" => $this->lng->txt("general_settings"),
             );
         ksort($new_objects);
 
@@ -457,7 +466,7 @@ class adnMainMenuGUI
         $items = array();
         foreach ($new_objects as $c) {
             // check visibility
-            if ($tree->getParentId($c["ref_id"]) == ROOT_FOLDER_ID && $c["type"] != "adm" &&
+            if ($this->tree->getParentId($c["ref_id"]) == ROOT_FOLDER_ID && $c["type"] != "adm" &&
                 $_GET["admin_mode"] != "repository") {
                 continue;
             }
@@ -467,12 +476,12 @@ class adnMainMenuGUI
                 $c["type"] == "xxx") {
                 continue;
             }
-            $accessible = $rbacsystem->checkAccess('visible,read', $c["ref_id"]);
+            $accessible = $this->rbacSystem->checkAccess('visible,read', $c["ref_id"]);
             if (!$accessible) {
                 continue;
             }
             if ($c["ref_id"] == ROOT_FOLDER_ID &&
-                !$rbacsystem->checkAccess('write', $c["ref_id"])) {
+                !$this->rbacSystem->checkAccess('write', $c["ref_id"])) {
                 continue;
             }
             if ($c["type"] == "rolf" && $c["ref_id"] != ROLE_FOLDER_ID) {
@@ -544,7 +553,7 @@ class adnMainMenuGUI
             }
             foreach ($groups[$i] as $group => $entries) {
                 if (count($entries) > 0) {
-                    $gl->addGroupHeader($lng->txt("adm_" . $group));
+                    $gl->addGroupHeader($this->lng->txt("adm_" . $group));
 
                     foreach ($entries as $e) {
                         if ($e == "---") {
@@ -592,6 +601,6 @@ class adnMainMenuGUI
 
         //$gl->addSeparator();
 
-        $tpl->setLeftNavContent("<div id='adn_adm_side_menu'>" . $gl->getHTML() . "</div>");
+        $this->tpl->setLeftNavContent("<div id='adn_adm_side_menu'>" . $gl->getHTML() . "</div>");
     }
 }

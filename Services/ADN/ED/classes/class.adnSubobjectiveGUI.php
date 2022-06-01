@@ -16,17 +16,27 @@ class adnSubobjectiveGUI
     // current subobjective object
     protected ?adnSubobjective $subobjective = null;
 
+    protected ilCtrl $ctrl;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilToolbarGUI $toolbar;
+    protected ilLanguage $lng;
+    protected ilTabsGUI $tabs;
     /**
      * Constructor
      */
     public function __construct()
     {
-        global $ilCtrl;
+        global $DIC;
+        $this->ctrl = $DIC->ctrl();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->toolbar = $DIC->toolbar();
+        $this->lng = $DIC->language();
+        $this->tabs = $DIC->tabs();
 
         $this->objective_id = (int) $_REQUEST["ob_id"];
 
         // save subobjective ID through requests
-        $ilCtrl->saveParameter($this, array("sob_id"));
+        $this->ctrl->saveParameter($this, array("sob_id"));
         
         $this->readSubobjective();
     }
@@ -36,16 +46,15 @@ class adnSubobjectiveGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl;
 
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
 
         // forward command to next gui class in control flow
         switch ($next_class) {
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("listSubobjectives");
+                $cmd = $this->ctrl->getCmd("listSubobjectives");
 
                 switch ($cmd) {
                     // commands that need read permission
@@ -88,17 +97,16 @@ class adnSubobjectiveGUI
      */
     protected function listSubobjectives()
     {
-        global $tpl, $ilToolbar, $ilCtrl, $lng, $ilTabs;
 
-        $ilTabs->setBackTarget(
-            $lng->txt("back"),
-            $ilCtrl->getLinkTargetByClass("adnObjectiveGUI", "listObjectives")
+        $this->tabs->setBackTarget(
+            $this->lng->txt("back"),
+            $this->ctrl->getLinkTargetByClass("adnObjectiveGUI", "listObjectives")
         );
 
         if (adnPerm::check(adnPerm::ED, adnPerm::WRITE)) {
-            $ilToolbar->addButton(
-                $lng->txt("adn_add_subobjective"),
-                $ilCtrl->getLinkTarget($this, "addSubobjective")
+            $this->toolbar->addButton(
+                $this->lng->txt("adn_add_subobjective"),
+                $this->ctrl->getLinkTarget($this, "addSubobjective")
             );
         }
 
@@ -107,7 +115,7 @@ class adnSubobjectiveGUI
         $table = new adnSubobjectiveTableGUI($this, "listSubobjectives", $this->objective_id);
 
         // output table
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -117,12 +125,11 @@ class adnSubobjectiveGUI
      */
     protected function addSubobjective(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl;
 
         if (!$a_form) {
             $a_form = $this->initSubobjectiveForm("create");
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
 
     /**
@@ -132,12 +139,11 @@ class adnSubobjectiveGUI
      */
     protected function editSubobjective(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl;
 
         if (!$a_form) {
             $a_form = $this->initSubobjectiveForm("edit");
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
 
     /**
@@ -148,11 +154,10 @@ class adnSubobjectiveGUI
      */
     protected function initSubobjectiveForm($a_mode = "edit")
     {
-        global $lng, $ilCtrl, $ilTabs;
 
-        $ilTabs->setBackTarget(
-            $lng->txt("back"),
-            $ilCtrl->getLinkTarget($this, "listSubobjectives")
+        $this->tabs->setBackTarget(
+            $this->lng->txt("back"),
+            $this->ctrl->getLinkTarget($this, "listSubobjectives")
         );
 
         // get form object and add input fields
@@ -162,25 +167,25 @@ class adnSubobjectiveGUI
         include_once "Services/ADN/ED/classes/class.adnObjective.php";
         $obj = new adnObjective($this->objective_id);
         if ($obj->getType() != adnObjective::TYPE_CASE) {
-            $number = new ilNumberInputGUI($lng->txt("adn_number"), "number");
+            $number = new ilNumberInputGUI($this->lng->txt("adn_number"), "number");
             $number->setRequired(true);
             $number->setSize(10);
             $number->setMaxLength(50);
             $form->addItem($number);
         } else {
-            $number = new ilTextInputGUI($lng->txt("adn_number"), "number");
+            $number = new ilTextInputGUI($this->lng->txt("adn_number"), "number");
             $number->setRequired(true);
             $number->setSize(5);
             $number->setMaxLength(5);
             $form->addItem($number);
         }
 
-        $name = new ilTextInputGUI($lng->txt("adn_title"), "name");
+        $name = new ilTextInputGUI($this->lng->txt("adn_title"), "name");
         $name->setRequired(true);
         $name->setMaxLength(100);
         $form->addItem($name);
 
-        $topic = new ilTextInputGUI($lng->txt("adn_topic"), "topic");
+        $topic = new ilTextInputGUI($this->lng->txt("adn_topic"), "topic");
         $topic->setMaxLength(200);
         $form->addItem($topic);
 
@@ -190,21 +195,21 @@ class adnSubobjectiveGUI
 
         if ($a_mode == "create") {
             // creation: save/cancel buttons and title
-            $form->addCommandButton("saveSubobjective", $lng->txt("save"));
-            $form->addCommandButton("listSubobjectives", $lng->txt("cancel"));
-            $form->setTitle($lng->txt("adn_add_subobjective") . ": " . $objective);
+            $form->addCommandButton("saveSubobjective", $this->lng->txt("save"));
+            $form->addCommandButton("listSubobjectives", $this->lng->txt("cancel"));
+            $form->setTitle($this->lng->txt("adn_add_subobjective") . ": " . $objective);
         } else {
             $name->setValue($this->subobjective->getName());
             $topic->setValue($this->subobjective->getTopic());
             $number->setValue($this->subobjective->getNumber());
 
             // editing: update/cancel buttons and title
-            $form->addCommandButton("updateSubobjective", $lng->txt("save"));
-            $form->addCommandButton("listSubobjectives", $lng->txt("cancel"));
-            $form->setTitle($lng->txt("adn_edit_subobjective") . ": " . $objective);
+            $form->addCommandButton("updateSubobjective", $this->lng->txt("save"));
+            $form->addCommandButton("listSubobjectives", $this->lng->txt("cancel"));
+            $form->setTitle($this->lng->txt("adn_edit_subobjective") . ": " . $objective);
         }
 
-        $form->setFormAction($ilCtrl->getFormAction($this));
+        $form->setFormAction($this->ctrl->getFormAction($this));
 
         return $form;
     }
@@ -214,7 +219,6 @@ class adnSubobjectiveGUI
      */
     protected function saveSubobjective()
     {
-        global $tpl, $lng, $ilCtrl;
 
         $form = $this->initSubobjectiveForm("create");
 
@@ -231,11 +235,11 @@ class adnSubobjectiveGUI
             if ($subobjective->isUniqueNumber()) {
                 if ($subobjective->save()) {
                     // show success message and return to list
-                    ilUtil::sendSuccess($lng->txt("adn_subobjective_created"), true);
-                    $ilCtrl->redirect($this, "listSubobjectives");
+                    ilUtil::sendSuccess($this->lng->txt("adn_subobjective_created"), true);
+                    $this->ctrl->redirect($this, "listSubobjectives");
                 }
             } else {
-                $form->getItemByPostVar("number")->setAlert($lng->txt("adn_unique_number"));
+                $form->getItemByPostVar("number")->setAlert($this->lng->txt("adn_unique_number"));
             }
         }
 
@@ -249,7 +253,6 @@ class adnSubobjectiveGUI
      */
     protected function updateSubobjective()
     {
-        global $lng, $ilCtrl, $tpl;
 
         $form = $this->initSubobjectiveForm("edit");
 
@@ -263,11 +266,11 @@ class adnSubobjectiveGUI
             if ($this->subobjective->isUniqueNumber()) {
                 if ($this->subobjective->update()) {
                     // show success message and return to list
-                    ilUtil::sendSuccess($lng->txt("adn_subobjective_updated"), true);
-                    $ilCtrl->redirect($this, "listSubobjectives");
+                    ilUtil::sendSuccess($this->lng->txt("adn_subobjective_updated"), true);
+                    $this->ctrl->redirect($this, "listSubobjectives");
                 }
             } else {
-                $form->getItemByPostVar("number")->setAlert($lng->txt("adn_unique_number"));
+                $form->getItemByPostVar("number")->setAlert($this->lng->txt("adn_unique_number"));
             }
         }
 
@@ -281,25 +284,24 @@ class adnSubobjectiveGUI
      */
     protected function confirmSubobjectiveDeletion()
     {
-        global $ilCtrl, $tpl, $lng, $ilTabs;
 
         // check whether at least one item has been seleced
         if (!is_array($_POST["subobjective_id"]) || count($_POST["subobjective_id"]) == 0) {
-            ilUtil::sendFailure($lng->txt("no_checkbox"), true);
-            $ilCtrl->redirect($this, "listSubobjectives");
+            ilUtil::sendFailure($this->lng->txt("no_checkbox"), true);
+            $this->ctrl->redirect($this, "listSubobjectives");
         } else {
-            $ilTabs->setBackTarget(
-                $lng->txt("back"),
-                $ilCtrl->getLinkTarget($this, "listSubobjectives")
+            $this->tabs->setBackTarget(
+                $this->lng->txt("back"),
+                $this->ctrl->getLinkTarget($this, "listSubobjectives")
             );
 
             // display confirmation message
             include_once("./Services/Utilities/classes/class.ilConfirmationGUI.php");
             $cgui = new ilConfirmationGUI();
-            $cgui->setFormAction($ilCtrl->getFormAction($this));
-            $cgui->setHeaderText($lng->txt("adn_sure_delete_subobjectives"));
-            $cgui->setCancel($lng->txt("cancel"), "listSubobjectives");
-            $cgui->setConfirm($lng->txt("delete"), "deleteSubobjective");
+            $cgui->setFormAction($this->ctrl->getFormAction($this));
+            $cgui->setHeaderText($this->lng->txt("adn_sure_delete_subobjectives"));
+            $cgui->setCancel($this->lng->txt("cancel"), "listSubobjectives");
+            $cgui->setConfirm($this->lng->txt("delete"), "deleteSubobjective");
 
             // list objects that should be deleted
             foreach ($_POST["subobjective_id"] as $i) {
@@ -307,7 +309,7 @@ class adnSubobjectiveGUI
                 $cgui->addItem("subobjective_id[]", $i, adnSubobjective::lookupName($i));
             }
 
-            $tpl->setContent($cgui->getHTML());
+            $this->tpl->setContent($cgui->getHTML());
         }
     }
 
@@ -316,7 +318,6 @@ class adnSubobjectiveGUI
      */
     protected function deleteSubobjective()
     {
-        global $ilCtrl, $lng;
 
         include_once("./Services/ADN/ED/classes/class.adnSubobjective.php");
 
@@ -330,10 +331,10 @@ class adnSubobjectiveGUI
             }
         }
         if (!$has_failed) {
-            ilUtil::sendSuccess($lng->txt("adn_subobjective_deleted"), true);
+            ilUtil::sendSuccess($this->lng->txt("adn_subobjective_deleted"), true);
         } else {
-            ilUtil::sendFailure($lng->txt("adn_subobjective_not_deleted"), true);
+            ilUtil::sendFailure($this->lng->txt("adn_subobjective_not_deleted"), true);
         }
-        $ilCtrl->redirect($this, "listSubobjectives");
+        $this->ctrl->redirect($this, "listSubobjectives");
     }
 }

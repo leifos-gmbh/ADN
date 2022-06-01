@@ -15,23 +15,35 @@
  */
 class adnTestPreparationGUI
 {
-    /**
-     * Execute command
-     */
+    protected ilCtrl $ctrl;
+    protected ilLanguage $lng;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilToolbarGUI $toolbar;
+    protected ilTabsGUI $tabs;
+
+    public function __construct()
+    {
+        global $DIC;
+        $this->ctrl = $DIC->ctrl();
+        $this->lng = $DIC->language();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->toolbar = $DIC->toolbar();
+        $this->tabs = $DIC->tabs();
+    }
+
     public function executeCommand()
     {
-        global $ilCtrl, $lng, $tpl;
 
-        $tpl->setTitle($lng->txt("adn_ep") . " - " . $lng->txt("adn_ep_acs"));
+        $this->tpl->setTitle($this->lng->txt("adn_ep") . " - " . $this->lng->txt("adn_ep_acs"));
         
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
 
         // forward command to next gui class in control flow
         switch ($next_class) {
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("listEvents");
+                $cmd = $this->ctrl->getCmd("listEvents");
                 
                 switch ($cmd) {
                     // commands that need read permission
@@ -54,7 +66,6 @@ class adnTestPreparationGUI
      */
     protected function listEvents()
     {
-        global $tpl;
 
         // table of examination events
         include_once("./Services/ADN/ES/classes/class.adnExaminationEventTableGUI.php");
@@ -66,7 +77,7 @@ class adnTestPreparationGUI
         );
         
         // output table
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -110,18 +121,17 @@ class adnTestPreparationGUI
      */
     public function listAccessCodes()
     {
-        global $tpl, $ilCtrl, $ilTabs, $lng, $ilToolbar;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listEvents"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listEvents"));
 
         $event_id = (int) $_GET["ev_id"];
 
-        $ilCtrl->setParameter($this, "ev_id", $event_id);
+        $this->ctrl->setParameter($this, "ev_id", $event_id);
 
         // download button
-        $ilToolbar->addButton(
-            $lng->txt("adn_download_access_codes"),
-            $ilCtrl->getLinkTarget($this, "downloadAccessCodes")
+        $this->toolbar->addButton(
+            $this->lng->txt("adn_download_access_codes"),
+            $this->ctrl->getLinkTarget($this, "downloadAccessCodes")
         );
 
         // ensure that all participants have login and password
@@ -133,7 +143,7 @@ class adnTestPreparationGUI
         $table = new adnAccessCodesTableGUI($this, "listAccessCodes", $event_id);
 
         // output table
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -141,7 +151,6 @@ class adnTestPreparationGUI
      */
     public function downloadAccessCodes()
     {
-        global $ilCtrl;
         
         $event_id = (int) $_REQUEST['ev_id'];
         
@@ -159,7 +168,7 @@ class adnTestPreparationGUI
             );
         } catch (adnReportException $e) {
             ilUtil::sendFailure($e->getMessage(), true);
-            $ilCtrl->redirect($this, 'listCertificates');
+            $this->ctrl->redirect($this, 'listCertificates');
         }
     }
 }

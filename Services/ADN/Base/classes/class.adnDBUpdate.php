@@ -126,8 +126,6 @@ class adnDBUpdate extends ilDBUpdate
      */
     public function applyUpdate($a_break = 0)
     {
-        global $ilCtrlStructureReader;
-        
         
         $f = $this->fileVersion;
         $c = $this->currentVersion;

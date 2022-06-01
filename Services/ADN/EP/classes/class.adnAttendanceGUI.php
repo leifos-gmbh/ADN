@@ -15,23 +15,33 @@
  */
 class adnAttendanceGUI
 {
+    protected ilCtrl $ctrl;
+    protected ilLanguage $lng;
+    protected ilGlobalTemplateInterface $tpl;
+
+    public function __construct()
+    {
+        global $DIC;
+        $this->ctrl = $DIC->ctrl();
+        $this->lng = $DIC->language();
+        $this->tpl = $DIC->ui()->mainTemplate();
+    }
     /**
      * Execute command
      */
     public function executeCommand()
     {
-        global $ilCtrl, $lng, $tpl;
 
-        $tpl->setTitle($lng->txt("adn_ep") . " - " . $lng->txt("adn_ep_als"));
+        $this->tpl->setTitle($this->lng->txt("adn_ep") . " - " . $this->lng->txt("adn_ep_als"));
         
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
         
         // forward command to next gui class in control flow
         switch ($next_class) {
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("listEvents");
+                $cmd = $this->ctrl->getCmd("listEvents");
                 
                 switch ($cmd) {
                     // commands that need read permission
@@ -61,7 +71,6 @@ class adnAttendanceGUI
      */
     protected function listEvents()
     {
-        global $tpl;
 
         // table of examination events
         include_once("./Services/ADN/ES/classes/class.adnExaminationEventTableGUI.php");
@@ -73,7 +82,7 @@ class adnAttendanceGUI
         );
         
         // output table
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -117,7 +126,6 @@ class adnAttendanceGUI
      */
     protected function createList()
     {
-        global $ilCtrl,$lng;
         
         $event_id = (int) $_REQUEST['ev_id'];
 
@@ -131,11 +139,11 @@ class adnAttendanceGUI
         
             // @todo: set creation date of report
 
-            ilUtil::sendSuccess($lng->txt('adn_report_created_attendance_list'), true);
-            $ilCtrl->redirect($this, 'listEvents');
+            ilUtil::sendSuccess($this->lng->txt('adn_report_created_attendance_list'), true);
+            $this->ctrl->redirect($this, 'listEvents');
         } catch (adnReportException $e) {
             ilUtil::sendFailure($e->getMessage(), true);
-            $ilCtrl->redirect($this, 'listEvents');
+            $this->ctrl->redirect($this, 'listEvents');
         }
     }
     

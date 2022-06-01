@@ -151,7 +151,6 @@ class adnReportAttendanceList extends adnReport
      */
     public function create()
     {
-        global $ilUser;
         
         include_once './Services/ADN/Report/classes/class.adnReportFileUtils.php';
         
@@ -218,7 +217,7 @@ class adnReportAttendanceList extends adnReport
             $num_candidates -= self::LIMIT_ENTRIES;
         } while ($num_candidates >= 0);
         
-        $GLOBALS['ilLog']->write(__METHOD__ . ': outfiles ' . print_r($outfiles, true));
+        $this->log->info(__METHOD__ . ': outfiles ' . print_r($outfiles, true));
         
         
         $writer->xmlStartTag(
@@ -235,7 +234,7 @@ class adnReportAttendanceList extends adnReport
         
         $writer->xmlEndTag('tasks');
 
-        $GLOBALS['ilLog']->write($writer->xmlDumpMem(true));
+        $this->log->info($writer->xmlDumpMem(true));
         
         try {
             $adapter = new adnRpcAdapter();
@@ -253,28 +252,27 @@ class adnReportAttendanceList extends adnReport
      */
     protected function getBaseMap($map)
     {
-        global $lng;
         
         $map['wsd_name'] = $this->getWMO()->getName();
 
         switch ($this->getEvent()->getType()) {
             case 'gas':
-                $map['exam_title'] = $lng->txt('adn_report_attendance_header_gas');
+                $map['exam_title'] = $this->lng->txt('adn_report_attendance_header_gas');
                 break;
 
             case 'chem':
-                $map['exam_title'] = $lng->txt('adn_report_attendance_header_gas');
+                $map['exam_title'] = $this->lng->txt('adn_report_attendance_header_gas');
                 break;
 
             default:
-                $map['exam_title'] = $lng->txt('adn_report_attendance_header_def');
+                $map['exam_title'] = $this->lng->txt('adn_report_attendance_header_def');
                 break;
         }
 
         include_once './Services/ADN/MD/classes/class.adnExamFacility.php';
         $header = sprintf(
-            $lng->txt('adn_report_exam_list_header'),
-            $lng->txt('adn_subject_area_' . $this->getEvent()->getType()),
+            $this->lng->txt('adn_report_exam_list_header'),
+            $this->lng->txt('adn_subject_area_' . $this->getEvent()->getType()),
             $this->getEvent()->getDateFrom()->get(IL_CAL_FKT_DATE, 'd.m.Y'),
             $this->getEvent()->getDateFrom()->get(IL_CAL_FKT_DATE, 'H:i'),
             '________',
@@ -297,7 +295,7 @@ class adnReportAttendanceList extends adnReport
             $this->getWMO()->getPostalStreet() . ' ' . $this->getWMO()->getPostalStreetNumber() . ' in ' .
             $this->getWMO()->getPostalZip() . ' ' . $this->getWMO()->getPostalCity();
         
-        $map['wsd_contact'] = sprintf($lng->txt('adn_report_legal_remedies'), $contact);
+        $map['wsd_contact'] = sprintf($this->lng->txt('adn_report_legal_remedies'), $contact);
         
         return $map;
     }
@@ -309,12 +307,11 @@ class adnReportAttendanceList extends adnReport
      */
     protected function getCoChairName($a_id)
     {
-        global $lng;
         
         include_once './Services/ADN/MD/classes/class.adnCoChair.php';
         $co = new adnCoChair($a_id);
         
-        return $lng->txt('salutation_' . $co->getSalutation()) . ' ' . $co->getName();
+        return $this->lng->txt('salutation_' . $co->getSalutation()) . ' ' . $co->getName();
     }
     
     /**

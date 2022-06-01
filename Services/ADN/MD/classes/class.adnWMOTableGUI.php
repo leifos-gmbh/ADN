@@ -23,17 +23,16 @@ class adnWMOTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd)
     {
-        global $ilCtrl, $lng;
 
         parent::__construct($a_parent_obj, $a_parent_cmd);
 
         $this->setId("adn_tbl_mdwmo");
 
-        $this->setTitle($lng->txt("adn_wmos"));
+        $this->setTitle($this->lng->txt("adn_wmos"));
         
         if (adnPerm::check(adnPerm::MD, adnPerm::WRITE)) {
             $this->addColumn("", "");
-            $this->addMultiCommand("confirmDeleteWMOs", $lng->txt("delete"));
+            $this->addMultiCommand("confirmDeleteWMOs", $this->lng->txt("delete"));
         }
 
         $this->addColumn($this->lng->txt("adn_name"), "name");
@@ -43,7 +42,7 @@ class adnWMOTableGUI extends ilTable2GUI
         $this->setDefaultOrderField("name");
         $this->setDefaultOrderDirection("asc");
 
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.wmo_row.html", "Services/ADN/MD");
 
         $this->importData();
@@ -68,19 +67,18 @@ class adnWMOTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
 
         // actions...
 
-        $ilCtrl->setParameter($this->parent_obj, "wmo_id", $a_set["id"]);
+        $this->ctrl->setParameter($this->parent_obj, "wmo_id", $a_set["id"]);
 
         if (adnPerm::check(adnPerm::MD, adnPerm::WRITE)) {
             // edit
             $this->tpl->setCurrentBlock("action");
-            $this->tpl->setVariable("TXT_CMD", $lng->txt("edit"));
+            $this->tpl->setVariable("TXT_CMD", $this->lng->txt("edit"));
             $this->tpl->setVariable(
                 "HREF_CMD",
-                $ilCtrl->getLinkTarget($this->parent_obj, "editWMO")
+                $this->ctrl->getLinkTarget($this->parent_obj, "editWMO")
             );
             $this->tpl->parseCurrentBlock();
 
@@ -93,24 +91,24 @@ class adnWMOTableGUI extends ilTable2GUI
         if (adnPerm::check(adnPerm::MD, adnPerm::READ)) {
             // co chairs
             $this->tpl->setCurrentBlock("action");
-            $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_cochairs"));
+            $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_cochairs"));
             $this->tpl->setVariable(
                 "HREF_CMD",
-                $ilCtrl->getLinkTargetByClass("adnCoChairGUI", "listCoChairs")
+                $this->ctrl->getLinkTargetByClass("adnCoChairGUI", "listCoChairs")
             );
             $this->tpl->parseCurrentBlock();
 
             // exam facilities
             $this->tpl->setCurrentBlock("action");
-            $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_exam_facilities"));
+            $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_exam_facilities"));
             $this->tpl->setVariable(
                 "HREF_CMD",
-                $ilCtrl->getLinkTargetByClass("adnExamFacilityGUI", "listExamFacilities")
+                $this->ctrl->getLinkTargetByClass("adnExamFacilityGUI", "listExamFacilities")
             );
             $this->tpl->parseCurrentBlock();
         }
 
-        $ilCtrl->setParameter($this->parent_obj, "cnt_id", "");
+        $this->ctrl->setParameter($this->parent_obj, "cnt_id", "");
         
         // properties
         $this->tpl->setVariable("VAL_CODE", $a_set["code_nr"]);

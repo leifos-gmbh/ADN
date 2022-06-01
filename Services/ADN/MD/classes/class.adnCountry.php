@@ -22,7 +22,6 @@ class adnCountry extends adnDBBase
      */
     public function __construct($a_id = 0)
     {
-        global $ilCtrl;
 
         if ($a_id !== 0) {
             $this->setId($a_id);
@@ -95,17 +94,16 @@ class adnCountry extends adnDBBase
      */
     public function read()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if (!$id) {
             return;
         }
 
-        $res = $ilDB->query("SELECT code,name" .
+        $res = $this->db->query("SELECT code,name" .
             " FROM adn_md_country" .
-            " WHERE id = " . $ilDB->quote($id, "integer"));
-        $set = $ilDB->fetchAssoc($res);
+            " WHERE id = " . $this->db->quote($id, "integer"));
+        $set = $this->db->fetchAssoc($res);
         $this->setCode($set["code"]);
         $this->setName($set["name"]);
 
@@ -132,16 +130,15 @@ class adnCountry extends adnDBBase
      */
     public function save()
     {
-        global $ilDB;
 
         // sequence
-        $this->setId($ilDB->nextId("adn_md_country"));
+        $this->setId($this->db->nextId("adn_md_country"));
         $id = $this->getId();
 
         $fields = $this->propertiesToFields();
         $fields["id"] = array("integer", $id);
             
-        $ilDB->insert("adn_md_country", $fields);
+        $this->db->insert("adn_md_country", $fields);
 
         parent::_save($id, "adn_md_country");
         
@@ -155,7 +152,6 @@ class adnCountry extends adnDBBase
      */
     public function update()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if (!$id) {
@@ -164,7 +160,7 @@ class adnCountry extends adnDBBase
         
         $fields = $this->propertiesToFields();
 
-        $ilDB->update("adn_md_country", $fields, array("id" => array("integer", $id)));
+        $this->db->update("adn_md_country", $fields, array("id" => array("integer", $id)));
 
         parent::_update($id, "adn_md_country");
 
@@ -178,7 +174,6 @@ class adnCountry extends adnDBBase
      */
     public function delete()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if ($id) {
@@ -188,8 +183,8 @@ class adnCountry extends adnDBBase
                 $this->setArchived(true);
                 return $this->update();
             } else {
-                $ilDB->manipulate("DELETE FROM adn_md_country" .
-                    " WHERE id = " . $ilDB->quote($id, "integer"));
+                $this->db->manipulate("DELETE FROM adn_md_country" .
+                    " WHERE id = " . $this->db->quote($id, "integer"));
                 $this->setId(null);
                 return true;
             }
@@ -204,7 +199,8 @@ class adnCountry extends adnDBBase
      */
     public static function getAllCountries($a_with_archived = false)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id,code,name" .
             " FROM adn_md_country";
@@ -227,7 +223,8 @@ class adnCountry extends adnDBBase
      */
     public static function getCountriesSelect(array $a_old_values = null)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id,name,code,archived" .
             " FROM adn_md_country";
@@ -266,7 +263,8 @@ class adnCountry extends adnDBBase
      */
     protected static function lookupProperty($a_id, $a_prop)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query("SELECT " . $a_prop .
             " FROM adn_md_country" .

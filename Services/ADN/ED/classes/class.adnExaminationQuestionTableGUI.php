@@ -24,7 +24,10 @@ class adnExaminationQuestionTableGUI extends ilTable2GUI
      * @var array<string, mixed>
      */
     protected array $filter = [];
+    protected string $last_objective_nr = '';
+    protected string $legend = '';
 
+    protected ilDBInterface $db;
     /**
      * Constructor
      *
@@ -34,17 +37,17 @@ class adnExaminationQuestionTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd, $a_case_questions = false)
     {
-        global $ilCtrl, $lng;
-
+        global $DIC;
+        $this->db = $DIC->database();
         $this->case_questions = (bool) $a_case_questions;
         $this->setId("adn_ed_quest" . (int) $this->case_questions);
 
         parent::__construct($a_parent_obj, $a_parent_cmd);
 
         if (adnPerm::check(adnPerm::ED, adnPerm::WRITE)) {
-            $this->addMultiCommand("activateQuestion", $lng->txt("adn_activate"));
-            $this->addMultiCommand("deactivateQuestion", $lng->txt("adn_deactivate"));
-            $this->addMultiCommand("confirmQuestionDeletion", $lng->txt("delete"));
+            $this->addMultiCommand("activateQuestion", $this->lng->txt("adn_activate"));
+            $this->addMultiCommand("deactivateQuestion", $this->lng->txt("adn_deactivate"));
+            $this->addMultiCommand("confirmQuestionDeletion", $this->lng->txt("delete"));
             $this->addColumn("", "", "1");
         }
 
@@ -67,17 +70,17 @@ class adnExaminationQuestionTableGUI extends ilTable2GUI
 
         $this->initFilter();
         
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.examination_questions_row.html", "Services/ADN/ED");
 
         $size = $this->importData();
 
         if ($this->case_questions) {
-            $this->setTitle($lng->txt("adn_case_questions") . ", " .
-                $lng->txt("adn_total_active_questions") . ": " . $size);
+            $this->setTitle($this->lng->txt("adn_case_questions") . ", " .
+                $this->lng->txt("adn_total_active_questions") . ": " . $size);
         } else {
-            $this->setTitle($lng->txt("adn_mc_questions") . ", " .
-                $lng->txt("adn_total_active_questions") . ": " . $size);
+            $this->setTitle($this->lng->txt("adn_mc_questions") . ", " .
+                $this->lng->txt("adn_total_active_questions") . ": " . $size);
         }
     }
 
@@ -88,7 +91,6 @@ class adnExaminationQuestionTableGUI extends ilTable2GUI
      */
     protected function importData()
     {
-        global $lng, $ilDB, $ilCtrl;
 
         $this->determineOffsetAndOrder();
         
@@ -122,12 +124,12 @@ class adnExaminationQuestionTableGUI extends ilTable2GUI
                 foreach ($questions as $item) {
                     $q_ids[] = $item["id"];
                 }
-                $set = $ilDB->query("SELECT mc.*,q.qfile" .
+                $set = $this->db->query("SELECT mc.*,q.qfile" .
                     " FROM adn_ed_question_mc mc" .
                     " JOIN adn_ed_question q ON (mc.ed_question_id = q.id)" .
-                    " WHERE " . $ilDB->in("q.id", $q_ids, false, "integer"));
+                    " WHERE " . $this->db->in("q.id", $q_ids, false, "integer"));
                 $mc = array();
-                while ($row = $ilDB->fetchAssoc($set)) {
+                while ($row = $this->db->fetchAssoc($set)) {
                     $mc[$row["ed_question_id"]] = $row;
                 }
             }
@@ -138,7 +140,7 @@ class adnExaminationQuestionTableGUI extends ilTable2GUI
                 $questions[$idx]["color"] =
                     adnCatalogNumbering::getColorForArea($item["catalog_area"]);
                 $questions[$idx]["status_caption"] = ($item["status"] == 0 ?
-                    $lng->txt("adn_inactive") : $lng->txt("adn_active"));
+                    $this->lng->txt("adn_inactive") : $this->lng->txt("adn_active"));
                 $questions[$idx]["nr"] = $item["adn_number"];
 
                 // catalog area and (sub-)objective to text
@@ -157,7 +159,7 @@ class adnExaminationQuestionTableGUI extends ilTable2GUI
 
                 // :TEMP: add mc answers
                 if (!$this->case_questions) {
-                    $ilCtrl->setParameterByClass("adnmcquestiongui", "eq_id", $item["id"]);
+                    $this->ctrl->setParameterByClass("adnmcquestiongui", "eq_id", $item["id"]);
 
                     $mc_data = $mc[$item["id"]];
                     $style_a = $style_b = $style_c = $style_d = "";
@@ -170,10 +172,10 @@ class adnExaminationQuestionTableGUI extends ilTable2GUI
                     for ($loop = 1; $loop < 5; $loop++) {
                         if ($mc_data["answer_" . $loop . "_file"]) {
                             $sizes = adnBaseGUI::resizeImage($img_path . $item["id"] . "_" . ($loop + 1));
-                            $ilCtrl->setParameterByClass("adnmcquestiongui", "img", $loop + 1);
+                            $this->ctrl->setParameterByClass("adnmcquestiongui", "img", $loop + 1);
                             ${"img_" . $loop} = "<img class=\"adnQuestImage\" width=\"" . $sizes["width"] .
                                 "\" height=\"" . $sizes["height"] .
-                                "\" src=\"" . $ilCtrl->getLinkTargetByClass(
+                                "\" src=\"" . $this->ctrl->getLinkTargetByClass(
                                     "adnmcquestiongui",
                                     "showImage"
                                 ) . "\" />";
@@ -192,10 +194,10 @@ class adnExaminationQuestionTableGUI extends ilTable2GUI
                     // question image
                     if ($mc_data["qfile"]) {
                         $sizes = adnBaseGUI::resizeImage($img_path . $item["id"] . "_1");
-                        $ilCtrl->setParameterByClass("adnmcquestiongui", "img", 1);
+                        $this->ctrl->setParameterByClass("adnmcquestiongui", "img", 1);
                         $questions[$idx]["question"] = "<img width=\"" . $sizes["width"] .
                             "\" height=\"" . $sizes["height"] .
-                            "\" src=\"" . $ilCtrl->getLinkTargetByClass(
+                            "\" src=\"" . $this->ctrl->getLinkTargetByClass(
                                 "adnmcquestiongui",
                                 "showImage"
                             ) . "\" />" .
@@ -229,7 +231,6 @@ class adnExaminationQuestionTableGUI extends ilTable2GUI
      */
     public function initFilter()
     {
-        global $lng;
 
         // catalog area
         include_once "Services/ADN/ED/classes/class.adnCatalogNumbering.php";
@@ -238,17 +239,17 @@ class adnExaminationQuestionTableGUI extends ilTable2GUI
                 "catalog_area",
                 self::FILTER_SELECT,
                 false,
-                $lng->txt("adn_catalog_area")
+                $this->lng->txt("adn_catalog_area")
             );
-            $options = array("" => $lng->txt("adn_filter_all")) + adnCatalogNumbering::getMCAreas();
+            $options = array("" => $this->lng->txt("adn_filter_all")) + adnCatalogNumbering::getMCAreas();
         } else {
             $f = $this->addFilterItemByMetaType(
                 "catalog_area",
                 self::FILTER_SELECT,
                 false,
-                $lng->txt("adn_subject_area")
+                $this->lng->txt("adn_subject_area")
             );
-            $options = array("" => $lng->txt("adn_filter_all")) + adnCatalogNumbering::getCaseAreas();
+            $options = array("" => $this->lng->txt("adn_filter_all")) + adnCatalogNumbering::getCaseAreas();
         }
         $f->setOptions($options);
         $f->readFromSession();
@@ -264,7 +265,7 @@ class adnExaminationQuestionTableGUI extends ilTable2GUI
                 "objective_nr",
                 self::FILTER_TEXT_RANGE,
                 false,
-                $lng->txt("adn_objective_nr")
+                $this->lng->txt("adn_objective_nr")
             );
             $f->readFromSession();
             $this->filter["objective_nr"] = $f->getValue();
@@ -274,7 +275,7 @@ class adnExaminationQuestionTableGUI extends ilTable2GUI
                 "subobjective_nr",
                 self::FILTER_TEXT_RANGE,
                 false,
-                $lng->txt("adn_subobjective_nr")
+                $this->lng->txt("adn_subobjective_nr")
             );
             $f->readFromSession();
             $this->filter["subobjective_nr"] = $f->getValue();
@@ -284,7 +285,7 @@ class adnExaminationQuestionTableGUI extends ilTable2GUI
                 "objective_nr",
                 self::FILTER_TEXT,
                 false,
-                $lng->txt("adn_objective_nr")
+                $this->lng->txt("adn_objective_nr")
             );
             $f->readFromSession();
             $this->filter["objective_nr"] = $f->getValue();
@@ -295,7 +296,7 @@ class adnExaminationQuestionTableGUI extends ilTable2GUI
             "objective_title",
             self::FILTER_TEXT,
             false,
-            $lng->txt("adn_objective_title")
+            $this->lng->txt("adn_objective_title")
         );
         $f->readFromSession();
         $this->filter["objective_title"] = $f->getValue();
@@ -305,7 +306,7 @@ class adnExaminationQuestionTableGUI extends ilTable2GUI
             "subobjective_title",
             self::FILTER_TEXT,
             false,
-            $lng->txt("adn_subobjective_title")
+            $this->lng->txt("adn_subobjective_title")
         );
         $f->readFromSession();
         $this->filter["subobjective_title"] = $f->getValue();
@@ -316,7 +317,7 @@ class adnExaminationQuestionTableGUI extends ilTable2GUI
                 "question_nr",
                 self::FILTER_TEXT_RANGE,
                 false,
-                $lng->txt("adn_question_nr")
+                $this->lng->txt("adn_question_nr")
             );
             $f->readFromSession();
             $this->filter["question_nr"] = $f->getValue();
@@ -326,7 +327,7 @@ class adnExaminationQuestionTableGUI extends ilTable2GUI
                 "question_nr",
                 self::FILTER_TEXT,
                 false,
-                $lng->txt("adn_question_nr")
+                $this->lng->txt("adn_question_nr")
             );
             $f->readFromSession();
             $this->filter["question_nr"] = $f->getValue();
@@ -337,7 +338,7 @@ class adnExaminationQuestionTableGUI extends ilTable2GUI
             "question_title",
             self::FILTER_TEXT,
             false,
-            $lng->txt("adn_question_title")
+            $this->lng->txt("adn_question_title")
         );
         $f->readFromSession();
         $this->filter["question_title"] = $f->getValue();
@@ -347,12 +348,12 @@ class adnExaminationQuestionTableGUI extends ilTable2GUI
             "status",
             self::FILTER_SELECT,
             false,
-            $lng->txt("adn_status")
+            $this->lng->txt("adn_status")
         );
         $options = array(
-            "2" => $lng->txt("adn_active"),
-            "1" => $lng->txt("adn_inactive"),
-            "" => $lng->txt("adn_filter_all")
+            "2" => $this->lng->txt("adn_active"),
+            "1" => $this->lng->txt("adn_inactive"),
+            "" => $this->lng->txt("adn_filter_all")
             );
         $f->setOptions($options);
         $f->readFromSession();
@@ -366,21 +367,20 @@ class adnExaminationQuestionTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
         
         // actions...
 
-        $ilCtrl->setParameter($this->parent_obj, "eq_id", $a_set["id"]);
+        $this->ctrl->setParameter($this->parent_obj, "eq_id", $a_set["id"]);
 
         if (adnPerm::check(adnPerm::ED, adnPerm::WRITE)) {
             if (!$a_set["status"]) {
                 // ...edit
                 $this->tpl->setCurrentBlock("action");
-                $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_edit_examination_question"));
+                $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_edit_examination_question"));
                 if ($this->case_questions) {
-                    $link = $ilCtrl->getLinkTarget($this->parent_obj, "editCaseQuestion");
+                    $link = $this->ctrl->getLinkTarget($this->parent_obj, "editCaseQuestion");
                 } else {
-                    $link = $ilCtrl->getLinkTarget($this->parent_obj, "editMCQuestion");
+                    $link = $this->ctrl->getLinkTarget($this->parent_obj, "editMCQuestion");
                 }
                 $this->tpl->setVariable("HREF_CMD", $link);
                 $this->tpl->parseCurrentBlock();
@@ -397,11 +397,11 @@ class adnExaminationQuestionTableGUI extends ilTable2GUI
             if (!adnPerm::check(adnPerm::ED, adnPerm::WRITE) || $a_set["status"]) {
                 // ... show
                 $this->tpl->setCurrentBlock("action");
-                $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_show_details"));
+                $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_show_details"));
                 if ($this->case_questions) {
-                    $link = $ilCtrl->getLinkTarget($this->parent_obj, "showCaseQuestion");
+                    $link = $this->ctrl->getLinkTarget($this->parent_obj, "showCaseQuestion");
                 } else {
-                    $link = $ilCtrl->getLinkTarget($this->parent_obj, "showMCQuestion");
+                    $link = $this->ctrl->getLinkTarget($this->parent_obj, "showMCQuestion");
                 }
                 $this->tpl->setVariable("HREF_CMD", $link);
                 $this->tpl->parseCurrentBlock();
@@ -410,18 +410,18 @@ class adnExaminationQuestionTableGUI extends ilTable2GUI
             // ... backup
             if (in_array($a_set["id"], $this->backups)) {
                 $this->tpl->setCurrentBlock("action");
-                $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_show_backup"));
+                $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_show_backup"));
                 if ($this->case_questions) {
-                    $link = $ilCtrl->getLinkTarget($this->parent_obj, "showCaseBackup");
+                    $link = $this->ctrl->getLinkTarget($this->parent_obj, "showCaseBackup");
                 } else {
-                    $link = $ilCtrl->getLinkTarget($this->parent_obj, "showMCBackup");
+                    $link = $this->ctrl->getLinkTarget($this->parent_obj, "showMCBackup");
                 }
                 $this->tpl->setVariable("HREF_CMD", $link);
                 $this->tpl->parseCurrentBlock();
             }
         }
 
-        $ilCtrl->setParameter($this->parent_obj, "eq_id", "");
+        $this->ctrl->setParameter($this->parent_obj, "eq_id", "");
 
         // properties
         $this->tpl->setVariable("VAL_TITLE", $a_set["name_rendered"]);

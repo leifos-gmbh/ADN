@@ -15,12 +15,24 @@
  */
 class adnCertifiedProfessionalDirectoryGUI
 {
+
+    protected ilCtrl $ctrl;
+    protected ilLanguage $lng;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilToolbarGUI $toolbar;
+    protected ilTabsGUI $tabs;
     /**
      * Constructor
      */
     public function __construct()
     {
-        global $ilCtrl;
+        global $DIC;
+
+        $this->ctrl = $DIC->ctrl();
+        $this->lng = $DIC->language();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->toolbar = $DIC->toolbar();
+        $this->tabs = $DIC->tabs();
     }
     
     /**
@@ -28,18 +40,17 @@ class adnCertifiedProfessionalDirectoryGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl, $lng, $tpl;
 
-        $tpl->setTitle($lng->txt("adn_cp") . " - " . $lng->txt("adn_cp_dir"));
+        $this->tpl->setTitle($this->lng->txt("adn_cp") . " - " . $this->lng->txt("adn_cp_dir"));
         
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
         
         // forward command to next gui class in control flow
         switch ($next_class) {
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("createDirectoryForm");
+                $cmd = $this->ctrl->getCmd("createDirectoryForm");
                 
                 switch ($cmd) {
                     // commands that need read permission
@@ -60,31 +71,30 @@ class adnCertifiedProfessionalDirectoryGUI
      */
     protected function createDirectoryForm()
     {
-        global $tpl, $lng, $ilCtrl;
 
         include_once "Services/Form/classes/class.ilPropertyFormGUI.php";
         $form = new ilPropertyFormGUI();
-        $form->setFormAction($ilCtrl->getFormAction($this, "displayDirectoryList"));
-        $form->setTitle($lng->txt("adn_create_certificate_professional_directory"));
-        $form->setDescription($lng->txt("adn_professional_directory_help"));
+        $form->setFormAction($this->ctrl->getFormAction($this, "displayDirectoryList"));
+        $form->setTitle($this->lng->txt("adn_create_certificate_professional_directory"));
+        $form->setDescription($this->lng->txt("adn_professional_directory_help"));
 
         // default: first day of current year
-        $from = new ilDateTimeInputGUI($lng->txt("adn_date_from"), "date_from");
+        $from = new ilDateTimeInputGUI($this->lng->txt("adn_date_from"), "date_from");
         $date = new ilDateTime(date("Y") . "-01-01 00:00:00", IL_CAL_DATETIME);
         $from->setDate($date);
         $from->setRequired(true);
         $form->addItem($from);
 
         // default: today
-        $to = new ilDateTimeInputGUI($lng->txt("adn_date_to"), "date_to");
+        $to = new ilDateTimeInputGUI($this->lng->txt("adn_date_to"), "date_to");
         $date = new ilDateTime(time(), IL_CAL_UNIX);
         $to->setDate($date);
         $to->setRequired(true);
         $form->addItem($to);
 
         include_once "Services/ADN/MD/classes/class.adnWMO.php";
-        $wsd = new ilSelectInputGUI($lng->txt("adn_issued_by"), "issued_by");
-        $options = array(0 => $lng->txt("adn_filter_all")) + adnWMO::getWMOsSelect();
+        $wsd = new ilSelectInputGUI($this->lng->txt("adn_issued_by"), "issued_by");
+        $options = array(0 => $this->lng->txt("adn_filter_all")) + adnWMO::getWMOsSelect();
         $wsd->setOptions($options);
         $wsd->setRequired(true);
         $form->addItem($wsd);
@@ -96,9 +106,9 @@ class adnCertifiedProfessionalDirectoryGUI
             $wsd->setValue((int) $_REQUEST["issued_by"]);
         }
 
-        $form->addCommandButton("displayDirectoryList", $lng->txt("adn_display_directory"));
+        $form->addCommandButton("displayDirectoryList", $this->lng->txt("adn_display_directory"));
 
-        $tpl->setContent($form->getHTML());
+        $this->tpl->setContent($form->getHTML());
     }
 
     /**
@@ -106,7 +116,6 @@ class adnCertifiedProfessionalDirectoryGUI
      */
     protected function displayDirectoryList()
     {
-        global $tpl, $lng, $ilCtrl, $ilToolbar, $ilTabs;
 
         // 1st call
         if (isset($_POST["issued_by"])) {
@@ -123,19 +132,19 @@ class adnCertifiedProfessionalDirectoryGUI
             $date_to = new ilDate($_REQUEST["date_to"], IL_CAL_DATE);
         }
 
-        $ilCtrl->setParameter($this, "issued_by", $wmo);
-        $ilCtrl->setParameter($this, "date_from", $date_from->get(IL_CAL_DATE));
-        $ilCtrl->setParameter($this, "date_to", $date_to->get(IL_CAL_DATE));
+        $this->ctrl->setParameter($this, "issued_by", $wmo);
+        $this->ctrl->setParameter($this, "date_from", $date_from->get(IL_CAL_DATE));
+        $this->ctrl->setParameter($this, "date_to", $date_to->get(IL_CAL_DATE));
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget(
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget(
             $this,
             "createDirectoryForm"
         ));
 
         if (adnPerm::check(adnPerm::ST, adnPerm::READ)) {
-            $ilToolbar->addButton(
-                $lng->txt("adn_download_directory"),
-                $ilCtrl->getLinkTarget($this, "downloadDirectory")
+            $this->toolbar->addButton(
+                $this->lng->txt("adn_download_directory"),
+                $this->ctrl->getLinkTarget($this, "downloadDirectory")
             );
         }
         
@@ -148,7 +157,7 @@ class adnCertifiedProfessionalDirectoryGUI
             $wmo
         );
 
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
     
     /**
@@ -156,15 +165,14 @@ class adnCertifiedProfessionalDirectoryGUI
      */
     protected function downloadDirectory()
     {
-        global $ilCtrl;
         
         $wmo = (int) $_REQUEST["issued_by"];
         $date_from = new ilDate($_REQUEST["date_from"], IL_CAL_DATE);
         $date_to = new ilDate($_REQUEST["date_to"], IL_CAL_DATE);
 
-        $ilCtrl->setParameter($this, "issued_by", $wmo);
-        $ilCtrl->setParameter($this, "date_from", $date_from->get(IL_CAL_DATE));
-        $ilCtrl->setParameter($this, "date_to", $date_to->get(IL_CAL_DATE));
+        $this->ctrl->setParameter($this, "issued_by", $wmo);
+        $this->ctrl->setParameter($this, "date_from", $date_from->get(IL_CAL_DATE));
+        $this->ctrl->setParameter($this, "date_to", $date_to->get(IL_CAL_DATE));
 
         include_once("Services/ADN/CP/classes/class.adnCertifiedProfessionalDirectoryTableGUI.php");
         $table = new adnCertifiedProfessionalDirectoryTableGUI(
@@ -180,7 +188,7 @@ class adnCertifiedProfessionalDirectoryGUI
         $data = $table->getData();
 
         if (!$data) {
-            $ilCtrl->redirect($this, "displayDirectoryList");
+            $this->ctrl->redirect($this, "displayDirectoryList");
         }
 
         $data = ilUtil::sortArray($data, $table->getOrderField(), $table->getOrderDirection());
@@ -201,7 +209,7 @@ class adnCertifiedProfessionalDirectoryGUI
             );
         } catch (adnReportException $e) {
             ilUtil::sendFailure($e->getMessage(), true);
-            $ilCtrl->redirect($this, 'displayDirectoryList');
+            $this->ctrl->redirect($this, 'displayDirectoryList');
         }
     }
 }

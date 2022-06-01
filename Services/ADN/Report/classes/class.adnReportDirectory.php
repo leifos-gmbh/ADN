@@ -196,7 +196,7 @@ class adnReportDirectory extends adnReport
         }
         $writer->xmlEndTag('tasks');
         
-        $GLOBALS['ilLog']->write($writer->xmlDumpMem(true));
+        $this->log->info($writer->xmlDumpMem(true));
 
         try {
             // Start tranformation
@@ -254,12 +254,11 @@ class adnReportDirectory extends adnReport
      */
     protected function buildHeader($map)
     {
-        global $lng;
         
         return true;
         
         $map['date_period'] = sprintf(
-            $lng->txt('adn_report_stat_header'),
+            $this->lng->txt('adn_report_stat_header'),
             $this->getDurationFrom()->get(IL_CAL_FKT_DATE, 'd.m.Y'),
             $this->getDurationTo()->get(IL_CAL_FKT_DATE, 'd.m.Y')
         );

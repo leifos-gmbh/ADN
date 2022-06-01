@@ -13,21 +13,36 @@
  */
 class adnMaintenanceGUI
 {
+    protected ilCtrl $ctrl;
+    protected ilLanguage $lng;
+    protected ilTabsGUI $tabs;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilSetting $setting;
+
+    public function __construct()
+    {
+        global $DIC;
+
+        $this->ctrl = $DIC->ctrl();
+        $this->lng = $DIC->language();
+        $this->tabs = $DIC->tabs();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->setting = $DIC->settings();
+    }
     /**
      * Execute command
      */
     public function executeCommand()
     {
-        global $ilCtrl;
         
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
         
         // forward command to next gui class in control flow
         switch ($next_class) {
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("editMode");
+                $cmd = $this->ctrl->getCmd("editMode");
 
                 switch ($cmd) {
                     // commands that need write permission
@@ -50,12 +65,11 @@ class adnMaintenanceGUI
      */
     protected function editMode(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $lng, $ilTabs, $ilCtrl;
 
         if (!$a_form) {
             $a_form = $this->initMaintenanceForm();
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
 
     /**
@@ -63,15 +77,14 @@ class adnMaintenanceGUI
      */
     protected function updateMode()
     {
-        global $tpl, $lng, $ilCtrl, $ilSetting;
 
         $form = $this->initMaintenanceForm();
         if ($form->checkInput()) {
             // save into global settings
-            $ilSetting->set("adn_maintenance", (bool) $form->getInput("mode"));
+            $this->setting->set("adn_maintenance", (bool) $form->getInput("mode"));
             
-            ilUtil::sendSuccess($lng->txt("settings_saved"), true);
-            $ilCtrl->redirect($this, "editMode");
+            ilUtil::sendSuccess($this->lng->txt("settings_saved"), true);
+            $this->ctrl->redirect($this, "editMode");
         }
 
         $form->setValuesByPost();
@@ -85,18 +98,17 @@ class adnMaintenanceGUI
      */
     protected function initMaintenanceForm()
     {
-        global  $lng, $ilCtrl, $ilSetting;
 
         include_once "Services/Form/classes/class.ilPropertyFormGUI.php";
         $form = new ilPropertyFormGUI();
-        $form->setTitle($lng->txt("adn_maintenance_mode"));
-        $form->setFormAction($ilCtrl->getFormAction($this, "editMode"));
+        $form->setTitle($this->lng->txt("adn_maintenance_mode"));
+        $form->setFormAction($this->ctrl->getFormAction($this, "editMode"));
 
-        $mode = new ilCheckboxInputGUI($lng->txt("adn_maintenance_toggle"), "mode");
-        $mode->setChecked($ilSetting->get("adn_maintenance"));
+        $mode = new ilCheckboxInputGUI($this->lng->txt("adn_maintenance_toggle"), "mode");
+        $mode->setChecked($this->setting->get("adn_maintenance"));
         $form->addItem($mode);
 
-        $form->addCommandButton("updateMode", $lng->txt("save"));
+        $form->addCommandButton("updateMode", $this->lng->txt("save"));
         
         return $form;
     }

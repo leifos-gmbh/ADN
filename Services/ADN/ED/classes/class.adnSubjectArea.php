@@ -26,7 +26,8 @@ class adnSubjectArea
      */
     public static function getAllAreas()
     {
-        global $lng;
+        global $DIC;
+        $lng = $DIC->language();
 
         return array(
             self::DRY_MATERIAL => $lng->txt("adn_subject_area_" . self::DRY_MATERIAL),
@@ -44,7 +45,8 @@ class adnSubjectArea
      */
     public static function getAreasWithCasePart()
     {
-        global $lng;
+        global $DIC;
+        $lng = $DIC->language();
 
         return array(
             self::GAS => $lng->txt("adn_subject_area_" . self::GAS),
@@ -72,7 +74,8 @@ class adnSubjectArea
      */
     public static function getTextRepresentation($a_subject_area)
     {
-        global $lng;
+        global $DIC;
+        $lng = $DIC->language();
         
         return $lng->txt("adn_subject_area_" . $a_subject_area);
     }

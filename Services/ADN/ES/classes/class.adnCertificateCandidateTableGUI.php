@@ -29,7 +29,6 @@ class adnCertificateCandidateTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd, $a_event_id)
     {
-        global $ilCtrl, $lng;
 
         $this->event_id = (int) $a_event_id;
         
@@ -38,7 +37,7 @@ class adnCertificateCandidateTableGUI extends ilTable2GUI
         $this->id = "adn_tbl_ccd";
 
         include_once("./Services/ADN/EP/classes/class.adnExaminationEvent.php");
-        $this->setTitle($lng->txt("adn_candidates") . ": " .
+        $this->setTitle($this->lng->txt("adn_candidates") . ": " .
             adnExaminationEvent::lookupName($this->event_id));
 
         // column headers
@@ -61,9 +60,9 @@ class adnCertificateCandidateTableGUI extends ilTable2GUI
         );
         $this->setData($assignments);
 
-        $this->addMultiCommand("downloadCertificates", $lng->txt("adn_download_certificates"));
+        $this->addMultiCommand("downloadCertificates", $this->lng->txt("adn_download_certificates"));
 
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.candidates_certificate_row.html", "Services/ADN/ES");
     }
     
@@ -74,10 +73,9 @@ class adnCertificateCandidateTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
 
         // actions...
-        $ilCtrl->setParameter($this->parent_obj, "ass_id", $a_set["id"]);
+        $this->ctrl->setParameter($this->parent_obj, "ass_id", $a_set["id"]);
 
         include_once("./Services/ADN/ES/classes/class.adnCertificate.php");
         if ($ct_id = adnCertificate::getCertificateIdOfProfForEvent(
@@ -86,15 +84,15 @@ class adnCertificateCandidateTableGUI extends ilTable2GUI
         )) {
             // edit link
             if (adnPerm::check(adnPerm::ES, adnPerm::WRITE)) {
-                $ilCtrl->setParameter($this->parent_obj, "ct_id", $ct_id);
+                $this->ctrl->setParameter($this->parent_obj, "ct_id", $ct_id);
                 $this->tpl->setCurrentBlock("action");
-                $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_edit_certificate"));
+                $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_edit_certificate"));
                 $this->tpl->setVariable(
                     "HREF_CMD",
-                    $ilCtrl->getLinkTarget($this->parent_obj, "editCertificate")
+                    $this->ctrl->getLinkTarget($this->parent_obj, "editCertificate")
                 );
                 $this->tpl->parseCurrentBlock();
-                $ilCtrl->setParameter($this->parent_obj, "ct_id", "");
+                $this->ctrl->setParameter($this->parent_obj, "ct_id", "");
             }
 
             // checkbox
@@ -113,17 +111,17 @@ class adnCertificateCandidateTableGUI extends ilTable2GUI
         } else {
             // create link
             if (adnPerm::check(adnPerm::ES, adnPerm::WRITE)) {
-                $ilCtrl->setParameter($this->parent_obj, "ct_id", "");
+                $this->ctrl->setParameter($this->parent_obj, "ct_id", "");
                 $this->tpl->setCurrentBlock("action");
-                $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_create_certificate"));
+                $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_create_certificate"));
                 $this->tpl->setVariable(
                     "HREF_CMD",
-                    $ilCtrl->getLinkTarget($this->parent_obj, "createCertificate")
+                    $this->ctrl->getLinkTarget($this->parent_obj, "createCertificate")
                 );
                 $this->tpl->parseCurrentBlock();
             }
         }
-        $ilCtrl->setParameter($this->parent_obj, "ass_id", "");
+        $this->ctrl->setParameter($this->parent_obj, "ass_id", "");
                 
         // properties
         $this->tpl->setVariable("VAL_LAST_NAME", $a_set["last_name"]);

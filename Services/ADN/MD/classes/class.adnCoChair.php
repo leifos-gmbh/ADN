@@ -23,7 +23,6 @@ class adnCoChair extends adnDBBase
      */
     public function __construct($a_id = 0)
     {
-        global $ilCtrl;
 
         if ($a_id !== 0) {
             $this->setId($a_id);
@@ -120,17 +119,16 @@ class adnCoChair extends adnDBBase
      */
     public function read()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if (!$id) {
             return;
         }
 
-        $res = $ilDB->query("SELECT salutation,name,md_wmo_id" .
+        $res = $this->db->query("SELECT salutation,name,md_wmo_id" .
             " FROM adn_md_cochair" .
-            " WHERE id = " . $ilDB->quote($this->getId(), "integer"));
-        $set = $ilDB->fetchAssoc($res);
+            " WHERE id = " . $this->db->quote($this->getId(), "integer"));
+        $set = $this->db->fetchAssoc($res);
         $this->setWMO($set["md_wmo_id"]);
         $this->setSalutation($set["salutation"]);
         $this->setName($set["name"]);
@@ -159,16 +157,15 @@ class adnCoChair extends adnDBBase
      */
     public function save()
     {
-        global $ilDB;
 
         // sequence
-        $this->setId($ilDB->nextId("adn_md_cochair"));
+        $this->setId($this->db->nextId("adn_md_cochair"));
         $id = $this->getId();
 
         $fields = $this->propertiesToFields();
         $fields["id"] = array("integer", $id);
             
-        $ilDB->insert("adn_md_cochair", $fields);
+        $this->db->insert("adn_md_cochair", $fields);
 
         parent::_save($id, "adn_md_cochair");
         
@@ -182,7 +179,6 @@ class adnCoChair extends adnDBBase
      */
     public function update()
     {
-        global $ilDB;
         
         $id = $this->getId();
         if (!$id) {
@@ -191,7 +187,7 @@ class adnCoChair extends adnDBBase
 
         $fields = $this->propertiesToFields();
         
-        $ilDB->update("adn_md_cochair", $fields, array("id" => array("integer", $id)));
+        $this->db->update("adn_md_cochair", $fields, array("id" => array("integer", $id)));
 
         parent::_update($id, "adn_md_cochair");
 
@@ -205,7 +201,6 @@ class adnCoChair extends adnDBBase
      */
     public function delete()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if ($id) {
@@ -219,8 +214,8 @@ class adnCoChair extends adnDBBase
                 $this->setArchived(true);
                 return $this->update();
             } else {
-                $ilDB->manipulate("DELETE FROM adn_md_cochair" .
-                    " WHERE id = " . $ilDB->quote($id, "integer"));
+                $this->db->manipulate("DELETE FROM adn_md_cochair" .
+                    " WHERE id = " . $this->db->quote($id, "integer"));
                 $this->setId(null);
                 return true;
             }
@@ -236,7 +231,8 @@ class adnCoChair extends adnDBBase
      */
     public static function getAllCoChairs($a_wmo_id, $a_with_archived = false)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id,salutation,name" .
             " FROM adn_md_cochair" .
@@ -261,7 +257,9 @@ class adnCoChair extends adnDBBase
      */
     public static function getCoChairsSelect($a_wmo_id = null, array $a_old_values = null)
     {
-        global $ilDB, $lng;
+        global $DIC;
+        $ilDB = $DIC->database();
+        $lng = $DIC->language();
 
         $sql = "SELECT id,salutation,name,archived" .
             " FROM adn_md_cochair";
@@ -302,7 +300,8 @@ class adnCoChair extends adnDBBase
      */
     protected static function lookupProperty($a_id, $a_prop)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query("SELECT " . $a_prop .
             " FROM adn_md_cochair" .

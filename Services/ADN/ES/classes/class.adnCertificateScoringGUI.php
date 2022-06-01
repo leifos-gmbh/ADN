@@ -14,15 +14,25 @@
  */
 class adnCertificateScoringGUI
 {
+    protected ilCtrl $ctrl;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilLanguage $lng;
+    protected ilTabsGUI $tabs;
+    protected ilObjUser $user;
     /**
      * Constructor
      */
     public function __construct()
     {
-        global $ilCtrl;
+        global $DIC;
+        $this->ctrl = $DIC->ctrl();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->lng = $DIC->language();
+        $this->tabs = $DIC->tabs();
+        $this->user = $DIC->user();
         
         // save certificate ID through requests cr-008 added cd_id
-        $ilCtrl->saveParameter($this, array("ct_id", "ev_id", "ass_id", "cd_id"));
+        $this->ctrl->saveParameter($this, array("ct_id", "ev_id", "ass_id", "cd_id"));
 
     }
     
@@ -31,19 +41,18 @@ class adnCertificateScoringGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl, $tpl, $lng;
 
-        $tpl->setTitle($lng->txt("adn_es") . " - " .
-            $lng->txt("adn_es_cts"));
+        $this->tpl->setTitle($this->lng->txt("adn_es") . " - " .
+            $this->lng->txt("adn_es_cts"));
 
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
         
         // forward command to next gui class in control flow
         switch ($next_class) {
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("listEvents");
+                $cmd = $this->ctrl->getCmd("listEvents");
                 
                 switch ($cmd) {
                     // commands that need read permission
@@ -79,7 +88,6 @@ class adnCertificateScoringGUI
      */
     protected function listEvents()
     {
-        global $tpl;
 
         // table of examination events
         include_once("./Services/ADN/ES/classes/class.adnExaminationEventTableGUI.php");
@@ -91,7 +99,7 @@ class adnCertificateScoringGUI
         );
         
         // output table
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -135,26 +143,25 @@ class adnCertificateScoringGUI
      */
     protected function listCandidates()
     {
-        global $tpl, $ilCtrl, $ilTabs, $lng;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listEvents"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listEvents"));
 
         $event_id = (int) $_GET["ev_id"];
 
         // cr-008 start
         if ($event_id == 0) {
-            $ilCtrl->redirectByClass(array("adnBaseGUI", "adncertifiedprofessionalgui", "adnPersonalDataMaintenanceGUI"), "listPersonalData");
+            $this->ctrl->redirectByClass(array("adnBaseGUI", "adncertifiedprofessionalgui", "adnPersonalDataMaintenanceGUI"), "listPersonalData");
         }
         // cr-008 end
 
-        $ilCtrl->setParameter($this, "ev_id", $event_id);
+        $this->ctrl->setParameter($this, "ev_id", $event_id);
 
         // table of candidates
         include_once("./Services/ADN/ES/classes/class.adnCertificateCandidateTableGUI.php");
         $table = new adnCertificateCandidateTableGUI($this, "listCandidates", $event_id);
 
         // output table
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -164,21 +171,20 @@ class adnCertificateScoringGUI
      */
     protected function createCertificate(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $lng, $ilTabs, $ilCtrl;
 
         $event_id = (int) $_GET["ev_id"];
         $candidate_id = (int) $_GET["cd_id"];
 
-        $ilCtrl->setParameter($this, "ev_id", $event_id);
+        $this->ctrl->setParameter($this, "ev_id", $event_id);
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listCandidates"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listCandidates"));
 
-        $ilCtrl->setParameter($this, "cd_id", $candidate_id);
+        $this->ctrl->setParameter($this, "cd_id", $candidate_id);
 
         if (!$a_form) {
             $a_form = $this->initCertificateForm();
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
 
     /**
@@ -188,21 +194,20 @@ class adnCertificateScoringGUI
      */
     protected function editCertificate(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $lng, $ilTabs, $ilCtrl;
 
         $event_id = (int) $_GET["ev_id"];
         $candidate_id = (int) $_GET["cd_id"];
 
-        $ilCtrl->setParameter($this, "ev_id", $event_id);
+        $this->ctrl->setParameter($this, "ev_id", $event_id);
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listCandidates"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listCandidates"));
 
-        $ilCtrl->setParameter($this, "cd_id", $candidate_id);
+        $this->ctrl->setParameter($this, "cd_id", $candidate_id);
 
         if (!$a_form) {
             $a_form = $this->initCertificateForm("edit");
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
 
     /**
@@ -214,7 +219,6 @@ class adnCertificateScoringGUI
      */
     protected function initCertificateForm($a_mode = "create", $a_final_confirmation = false)
     {
-        global  $lng, $ilCtrl, $ilUser;
 
         // assignment
         $assignment_id = (int) $_GET["ass_id"];
@@ -222,7 +226,7 @@ class adnCertificateScoringGUI
         if ($assignment_id > 0) {
             include_once("./Services/ADN/EP/classes/class.adnAssignment.php");
             $assignment = new adnAssignment($assignment_id);
-            $ilCtrl->setParameter($this, "ass_id", $assignment_id);
+            $this->ctrl->setParameter($this, "ass_id", $assignment_id);
 
             // candidate
             $candidate_id = $assignment->getUser();
@@ -243,7 +247,7 @@ class adnCertificateScoringGUI
 
         include_once "Services/Form/classes/class.ilPropertyFormGUI.php";
         $form = new ilPropertyFormGUI();
-        $form->setFormAction($ilCtrl->getFormAction($this, "listCandidates"));
+        $form->setFormAction($this->ctrl->getFormAction($this, "listCandidates"));
 
         // title
         // cr-008 start
@@ -255,21 +259,21 @@ class adnCertificateScoringGUI
         // cr-008 end
 
         if ($a_mode == "create") {
-            $title .= $lng->txt("adn_create_certificate");
+            $title .= $this->lng->txt("adn_create_certificate");
         } else {
-            $title .= $lng->txt("adn_edit_certificate");
+            $title .= $this->lng->txt("adn_edit_certificate");
         }
         $title .= ": " . $candidate->getLastname() . ", " . $candidate->getFirstname();
         $form->setTitle($title);
 
         // certificate number
         if ($a_mode == "edit") {
-            $ne = new ilNonEditableValueGUI($lng->txt("adn_number"), "");
+            $ne = new ilNonEditableValueGUI($this->lng->txt("adn_number"), "");
             $ne->setValue($certificate->getFullCertificateNumber());
             $form->addItem($ne);
         } else {
             include_once("./Services/ADN/AD/classes/class.adnUser.php");
-            $ne = new ilNonEditableValueGUI($lng->txt("adn_number"), "cert_nr");
+            $ne = new ilNonEditableValueGUI($this->lng->txt("adn_number"), "cert_nr");
             include_once("./Services/ADN/ES/classes/class.adnCertificate.php");
             $ne->setValue(
                 adnCertificate::_getFullCertificateNumber(
@@ -286,7 +290,7 @@ class adnCertificateScoringGUI
 
         // certificate type
         $type = new ilCheckboxGroupInputGUI(
-            $lng->txt("adn_type_of_cert"),
+            $this->lng->txt("adn_type_of_cert"),
             "cert_type"
         );
         include_once "Services/ADN/ES/classes/class.adnCertificate.php";
@@ -313,7 +317,7 @@ class adnCertificateScoringGUI
         foreach ($wmos as $wmo) {
             $options[$wmo["id"]] = $wmo["name"];
         }
-        $wmo = new ilSelectInputGUI($lng->txt("adn_issued_by"), "issued_by_wmo");
+        $wmo = new ilSelectInputGUI($this->lng->txt("adn_issued_by"), "issued_by_wmo");
         $wmo->setOptions($options);
         include_once("./Services/ADN/AD/classes/class.adnUser.php");
         if ($a_mode == "edit") {
@@ -327,7 +331,7 @@ class adnCertificateScoringGUI
 
         // issued on
         if ($a_mode == "edit") {
-            $ne = new ilNonEditableValueGUI($lng->txt("adn_issued_on"), "");
+            $ne = new ilNonEditableValueGUI($this->lng->txt("adn_issued_on"), "");
             $c = $certificate->getIssuedOn();
             $ne->setValue(ilDatePresentation::formatDate(
                 $certificate->getIssuedOn(),
@@ -335,13 +339,13 @@ class adnCertificateScoringGUI
             ));
             $form->addItem($ne);
         } else {
-            $issued_on = new ilDateTimeInputGUI($lng->txt("adn_issued_on"), "issued_on");
+            $issued_on = new ilDateTimeInputGUI($this->lng->txt("adn_issued_on"), "issued_on");
             $issued_on->setRequired(true);
             $form->addItem($issued_on);
         }
 
         // valid until
-        $valid_until = new ilDateTimeInputGUI($lng->txt("adn_valid_until"), "valid_until");
+        $valid_until = new ilDateTimeInputGUI($this->lng->txt("adn_valid_until"), "valid_until");
         $valid_until->setRequired(true);
         if ($a_mode == "create") {
             $vu_date = new ilDateTime(time(), IL_CAL_UNIX);
@@ -352,7 +356,7 @@ class adnCertificateScoringGUI
         $form->addItem($valid_until);
 
         // signed by
-        $signed_by = new ilTextInputGUI($lng->txt("adn_signed_by"), "signed_by");
+        $signed_by = new ilTextInputGUI($this->lng->txt("adn_signed_by"), "signed_by");
         $signed_by->setRequired(true);
         $form->addItem($signed_by);
 
@@ -361,24 +365,24 @@ class adnCertificateScoringGUI
             $valid_until->setDate($certificate->getValidUntil());
             $signed_by->setValue($certificate->getSignedBy());
         } else {
-            $signed_by->setValue($ilUser->getLastname() . ", " . $ilUser->getFirstname());
+            $signed_by->setValue($this->user->getLastname() . ", " . $this->user->getFirstname());
         }
 
         // status
         if ($a_mode == "edit") {
             // status
-            $status = new ilNonEditableValueGUI($lng->txt("adn_status"), "");
+            $status = new ilNonEditableValueGUI($this->lng->txt("adn_status"), "");
             $form->addItem($status);
 
             // if certificate is not valid anymore, overwrite status
             $today = new ilDate(time(), IL_CAL_UNIX);
             $today = $today->get(IL_CAL_DATE);
             if ($certificate->getValidUntil()->get(IL_CAL_DATE) < $today) {
-                $status->setValue($lng->txt("adn_invalid"));
+                $status->setValue($this->lng->txt("adn_invalid"));
             } elseif ($certificate->getStatus() == adnCertificate::STATUS_INVALID) {
-                $status->setValue($lng->txt("adn_invalid"));
+                $status->setValue($this->lng->txt("adn_invalid"));
             } else {
-                $status->setValue($lng->txt("adn_valid"));
+                $status->setValue($this->lng->txt("adn_valid"));
             }
         }
 
@@ -386,14 +390,14 @@ class adnCertificateScoringGUI
         // form buttons
         if ($a_mode == "create") {
             if ((bool) $a_final_confirmation) {
-                $form->addCommandButton("saveCertificate", $lng->txt("save"));
+                $form->addCommandButton("saveCertificate", $this->lng->txt("save"));
             } else {
-                $form->addCommandButton("confirmSaveCertificate", $lng->txt("save"));
+                $form->addCommandButton("confirmSaveCertificate", $this->lng->txt("save"));
             }
         } else {
-            $form->addCommandButton("updateCertificate", $lng->txt("save"));
+            $form->addCommandButton("updateCertificate", $this->lng->txt("save"));
         }
-        $form->addCommandButton("listCandidates", $lng->txt("cancel"));
+        $form->addCommandButton("listCandidates", $this->lng->txt("cancel"));
 
         return $form;
     }
@@ -403,21 +407,10 @@ class adnCertificateScoringGUI
      */
     protected function confirmSaveCertificate()
     {
-        global $tpl, $lng, $ilCtrl;
 
         $form = $this->initCertificateForm("create", true);
 
         include_once("./Services/ADN/ED/classes/class.adnSubjectArea.php");
-
-        // get assignment
-        //$assignment_id = (int)$_GET["ass_id"];
-        //include_once("./Services/ADN/EP/classes/class.adnAssignment.php");
-        //$assignment = new adnAssignment($assignment_id);
-
-        // get candidate
-        //$candidate_id = $assignment->getUser();
-        //include_once("./Services/ADN/ES/classes/class.adnCertifiedProfessional.php");
-        //$candidate = new adnCertifiedProfessional($candidate_id);
 
         // check input
         if ($form->checkInput()) {
@@ -426,10 +419,10 @@ class adnCertificateScoringGUI
             $year = (int) date("Y");
 
             if ($issued_on != $year) {
-                ilUtil::sendFailure($lng->txt("adn_certificate_issued_on_warning"));
+                ilUtil::sendFailure($this->lng->txt("adn_certificate_issued_on_warning"));
             }
             // output confirmation form
-            ilUtil::sendInfo($lng->txt("adn_please_check_certificate"));
+            ilUtil::sendInfo($this->lng->txt("adn_please_check_certificate"));
             $form->setValuesByPost();
             
             // insert correct number
@@ -447,14 +440,14 @@ class adnCertificateScoringGUI
                 )
             );
 
-            $tpl->setContent($form->getHTML());
+            $this->tpl->setContent($form->getHTML());
         } else {
             // input not valid: show form again
 
             // fix command buttons
             $form->clearCommandButtons();
-            $form->addCommandButton("confirmSaveCertificate", $lng->txt("save"));
-            $form->addCommandButton("listCandidates", $lng->txt("cancel"));
+            $form->addCommandButton("confirmSaveCertificate", $this->lng->txt("save"));
+            $form->addCommandButton("listCandidates", $this->lng->txt("cancel"));
 
             $form->setValuesByPost();
 
@@ -483,7 +476,6 @@ class adnCertificateScoringGUI
      */
     protected function saveCertificate()
     {
-        global $tpl, $lng, $ilCtrl;
 
         $form = $this->initCertificateForm();
 
@@ -548,12 +540,12 @@ class adnCertificateScoringGUI
             $cert->save();
 
             // show success message and return to list
-            ilUtil::sendSuccess($lng->txt("adn_certificate_saved"), true);
+            ilUtil::sendSuccess($this->lng->txt("adn_certificate_saved"), true);
             // cr-008 start
             if ($_GET["ass_id"] > 0) {
-                $ilCtrl->redirect($this, "listCandidates");
+                $this->ctrl->redirect($this, "listCandidates");
             } else {
-                $ilCtrl->redirectByClass(array("adnBaseGUI", "adncertifiedprofessionalgui", "adnCertifiedProfessionalDataGUI"), "listProfessionals");
+                $this->ctrl->redirectByClass(array("adnBaseGUI", "adncertifiedprofessionalgui", "adnCertifiedProfessionalDataGUI"), "listProfessionals");
             }
             // cr-008 end
         }
@@ -584,7 +576,6 @@ class adnCertificateScoringGUI
      */
     protected function updateCertificate()
     {
-        global $tpl, $lng, $ilCtrl;
 
         $form = $this->initCertificateForm("edit");
 
@@ -631,8 +622,8 @@ class adnCertificateScoringGUI
             $cert->update();
 
             // show success message and return to list
-            ilUtil::sendSuccess($lng->txt("adn_certificate_updated"), true);
-            $ilCtrl->redirect($this, "listCandidates");
+            ilUtil::sendSuccess($this->lng->txt("adn_certificate_updated"), true);
+            $this->ctrl->redirect($this, "listCandidates");
         }
 
         // input not valid: show form again
@@ -650,11 +641,10 @@ class adnCertificateScoringGUI
      */
     public function downloadCertificates()
     {
-        global $ilCtrl, $lng;
 
         if (!is_array($_POST["cid"]) || count($_POST["cid"]) == 0) {
-            ilUtil::sendFailure($lng->txt("no_checkbox"), true);
-            $ilCtrl->redirect($this, "listCandidates");
+            ilUtil::sendFailure($this->lng->txt("no_checkbox"), true);
+            $this->ctrl->redirect($this, "listCandidates");
         }
 
         $cids = array();
@@ -662,9 +652,9 @@ class adnCertificateScoringGUI
             $cids[] = (int) $c;
         }
         
-        $ilCtrl->saveParameter($this, 'ct_id');
-        $ilCtrl->saveParameter($this, 'ev_id');
-        $ilCtrl->saveParameter($this, 'ass_id');
+        $this->ctrl->saveParameter($this, 'ct_id');
+        $this->ctrl->saveParameter($this, 'ev_id');
+        $this->ctrl->saveParameter($this, 'ass_id');
 
         include_once './Services/ADN/Report/exceptions/class.adnReportException.php';
         try {
@@ -680,7 +670,7 @@ class adnCertificateScoringGUI
             );
         } catch (adnReportException $e) {
             ilUtil::sendFailure($e->getMessage(), true);
-            $ilCtrl->redirect($this, 'listCandidates');
+            $this->ctrl->redirect($this, 'listCandidates');
         }
     }
 }

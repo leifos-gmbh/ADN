@@ -13,21 +13,36 @@
  */
 class adnMCQuestionExportGUI
 {
+    protected ilCtrl $ctrl;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilToolbarGUI $toolbar;
+    protected ilLanguage $lng;
+    protected ilTabsGUI $tabs;
+
+    public function __construct()
+    {
+        global $DIC;
+
+        $this->ctrl = $DIC->ctrl();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->toolbar = $DIC->toolbar();
+        $this->lng = $DIC->language();
+        $this->tabs = $DIC->tabs();
+    }
     /**
      * Execute command
      */
     public function executeCommand()
     {
-        global $ilCtrl;
         
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
         
         // forward command to next gui class in control flow
         switch ($next_class) {
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("listFiles");
+                $cmd = $this->ctrl->getCmd("listFiles");
 
                 switch ($cmd) {
                     // commands that need write permission
@@ -54,17 +69,16 @@ class adnMCQuestionExportGUI
      */
     protected function listFiles()
     {
-        global $tpl, $ilCtrl, $ilToolbar, $lng, $ilTabs;
 
         // create export / import file
         if (adnPerm::check(adnPerm::AD, adnPerm::WRITE)) {
-            $ilToolbar->addButton(
-                $lng->txt("adn_create_mc_export"),
-                $ilCtrl->getLinkTarget($this, "exportFile")
+            $this->toolbar->addButton(
+                $this->lng->txt("adn_create_mc_export"),
+                $this->ctrl->getLinkTarget($this, "exportFile")
             );
-            $ilToolbar->addButton(
-                $lng->txt("adn_import_mc_questions"),
-                $ilCtrl->getLinkTarget($this, "importFile")
+            $this->toolbar->addButton(
+                $this->lng->txt("adn_import_mc_questions"),
+                $this->ctrl->getLinkTarget($this, "importFile")
             );
         }
 
@@ -73,7 +87,7 @@ class adnMCQuestionExportGUI
         $table = new adnMCQuestionExportTableGUI($this, "listFiles");
         
         // output table
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -81,14 +95,13 @@ class adnMCQuestionExportGUI
      */
     protected function exportFile()
     {
-        global $ilCtrl, $lng;
 
         include_once "Services/ADN/ED/classes/class.adnQuestionExport.php";
         $export = new adnQuestionExport();
         $export->buildExport();
 
-        ilUtil::sendSuccess($lng->txt("adn_mc_export_success"), true);
-        $ilCtrl->redirect($this, "listFiles");
+        ilUtil::sendSuccess($this->lng->txt("adn_mc_export_success"), true);
+        $this->ctrl->redirect($this, "listFiles");
     }
 
     /**
@@ -98,7 +111,6 @@ class adnMCQuestionExportGUI
      */
     protected function importFile(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $lng, $ilTabs, $ilCtrl;
 
         // remove "old" tmp files
         include_once "Services/ADN/ED/classes/class.adnQuestionExport.php";
@@ -106,12 +118,12 @@ class adnMCQuestionExportGUI
             @unlink($file);
         }
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listFiles"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listFiles"));
 
         if (!$a_form) {
             $a_form = $this->initUploadForm();
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
 
     /**
@@ -120,45 +132,44 @@ class adnMCQuestionExportGUI
      */
     protected function initUploadForm()
     {
-        global  $lng, $ilCtrl;
 
         include_once "Services/Form/classes/class.ilPropertyFormGUI.php";
         $form = new ilPropertyFormGUI();
-        $form->setTitle($lng->txt("adn_import_mc_questions"));
-        $form->setFormAction($ilCtrl->getFormAction($this, "listFiles"));
+        $form->setTitle($this->lng->txt("adn_import_mc_questions"));
+        $form->setFormAction($this->ctrl->getFormAction($this, "listFiles"));
 
-        $opts = new ilCheckboxGroupInputGUI($lng->txt("adn_import_include"), "opts");
+        $opts = new ilCheckboxGroupInputGUI($this->lng->txt("adn_import_include"), "opts");
         $opts->setRequired(true);
         $form->addItem($opts);
 
-        $mc = new ilCheckboxOption($lng->txt("adn_include_mc_questions"), "mc");
+        $mc = new ilCheckboxOption($this->lng->txt("adn_include_mc_questions"), "mc");
         $opts->addOption($mc);
 
-        $case = new ilCheckboxOption($lng->txt("adn_include_case_questions"), "case");
+        $case = new ilCheckboxOption($this->lng->txt("adn_include_case_questions"), "case");
         $opts->addOption($case);
 
-        $obj = new ilCheckboxOption($lng->txt("adn_include_objectives"), "obj");
+        $obj = new ilCheckboxOption($this->lng->txt("adn_include_objectives"), "obj");
         $opts->addOption($obj);
 
-        $tgt = new ilCheckboxOption($lng->txt("adn_include_target_numbers"), "tgt");
+        $tgt = new ilCheckboxOption($this->lng->txt("adn_include_target_numbers"), "tgt");
         $opts->addOption($tgt);
 
-        $goods = new ilCheckboxOption($lng->txt("adn_include_goods"), "goods");
+        $goods = new ilCheckboxOption($this->lng->txt("adn_include_goods"), "goods");
         $opts->addOption($goods);
 
-        $del = new ilCheckboxInputGUI($lng->txt("adn_delete_old_data"), "delall");
+        $del = new ilCheckboxInputGUI($this->lng->txt("adn_delete_old_data"), "delall");
         $form->addItem($del);
 
-        $update = new ilCheckboxInputGUI($lng->txt("adn_enable_updates"), "update");
+        $update = new ilCheckboxInputGUI($this->lng->txt("adn_enable_updates"), "update");
         $form->addItem($update);
 
-        $file = new ilFileInputGUI($lng->txt("file"), "file");
+        $file = new ilFileInputGUI($this->lng->txt("file"), "file");
         $file->setRequired(true);
         $file->setSuffixes(array("zip"));
         $form->addItem($file);
 
-        $form->addCommandButton("confirmImport", $lng->txt("update"));
-        $form->addCommandButton("listFiles", $lng->txt("cancel"));
+        $form->addCommandButton("confirmImport", $this->lng->txt("update"));
+        $form->addCommandButton("listFiles", $this->lng->txt("cancel"));
 
         return $form;
     }
@@ -168,7 +179,6 @@ class adnMCQuestionExportGUI
      */
     protected function confirmImport()
     {
-        global $tpl, $lng, $ilCtrl;
 
         $form = $this->initUploadForm();
         if ($form->checkInput()) {
@@ -195,10 +205,10 @@ class adnMCQuestionExportGUI
                 if ($log !== false) {
                     include_once("./Services/Utilities/classes/class.ilConfirmationGUI.php");
                     $cgui = new ilConfirmationGUI();
-                    $cgui->setFormAction($ilCtrl->getFormAction($this));
-                    $cgui->setHeaderText($lng->txt("adn_sure_import_mc_questions"));
-                    $cgui->setCancel($lng->txt("cancel"), "listFiles");
-                    $cgui->setConfirm($lng->txt("import"), "saveImport");
+                    $cgui->setFormAction($this->ctrl->getFormAction($this));
+                    $cgui->setHeaderText($this->lng->txt("adn_sure_import_mc_questions"));
+                    $cgui->setCancel($this->lng->txt("cancel"), "listFiles");
+                    $cgui->setConfirm($this->lng->txt("import"), "saveImport");
 
                     // add form values for next request
                     $cgui->addHiddenItem("token", basename($target));
@@ -228,7 +238,7 @@ class adnMCQuestionExportGUI
                                 $cgui->addItem(
                                     "dummy_id[]",
                                     1,
-                                    $lng->txt("adn_mc_import_" . $type . "_valid") . ": " . sizeof($data["valid"])
+                                    $this->lng->txt("adn_mc_import_" . $type . "_valid") . ": " . sizeof($data["valid"])
                                 );
                             }
                             // invalid: show items
@@ -246,18 +256,18 @@ class adnMCQuestionExportGUI
                                 $cgui->addItem(
                                     "dummy_id[]",
                                     1,
-                                    $lng->txt("adn_mc_import_" . $type . "_invalid") . ": " . $invalid
+                                    $this->lng->txt("adn_mc_import_" . $type . "_invalid") . ": " . $invalid
                                 );
                             }
                         }
                     }
 
-                    $tpl->setContent($cgui->getHTML());
+                    $this->tpl->setContent($cgui->getHTML());
                     return;
                 }
             }
 
-            ilUtil::sendFailure($lng->txt("adn_mc_questions_import_failed"));
+            ilUtil::sendFailure($this->lng->txt("adn_mc_questions_import_failed"));
         }
 
         $form->setValuesByPost();
@@ -269,7 +279,6 @@ class adnMCQuestionExportGUI
      */
     protected function saveImport()
     {
-        global $tpl, $lng, $ilCtrl;
 
         $token = $_REQUEST["token"];
         if ($token) {
@@ -290,13 +299,13 @@ class adnMCQuestionExportGUI
                     false
                 )) {
                     unlink($target);
-                    ilUtil::sendSuccess($lng->txt("adn_mc_questions_import_success"), true);
-                    $ilCtrl->redirect($this, "listFiles");
+                    ilUtil::sendSuccess($this->lng->txt("adn_mc_questions_import_success"), true);
+                    $this->ctrl->redirect($this, "listFiles");
                 }
             }
         }
-        ilUtil::sendFailure($lng->txt("adn_mc_questions_import_failed"), true);
-        $ilCtrl->redirect($this, "listFiles");
+        ilUtil::sendFailure($this->lng->txt("adn_mc_questions_import_failed"), true);
+        $this->ctrl->redirect($this, "listFiles");
     }
 
     /**
@@ -304,25 +313,24 @@ class adnMCQuestionExportGUI
      */
     public function confirmDeleteFiles()
     {
-        global $ilCtrl, $tpl, $lng, $ilTabs;
 
         // check whether at least one item has been seleced
         if (!is_array($_POST["file_id"]) || count($_POST["file_id"]) == 0) {
-            ilUtil::sendFailure($lng->txt("no_checkbox"), true);
-            $ilCtrl->redirect($this, "listFiles");
+            ilUtil::sendFailure($this->lng->txt("no_checkbox"), true);
+            $this->ctrl->redirect($this, "listFiles");
         } else {
-            $ilTabs->setBackTarget(
-                $lng->txt("back"),
-                $ilCtrl->getLinkTarget($this, "listFiles")
+            $this->tabs->setBackTarget(
+                $this->lng->txt("back"),
+                $this->ctrl->getLinkTarget($this, "listFiles")
             );
 
             // display confirmation message
             include_once("./Services/Utilities/classes/class.ilConfirmationGUI.php");
             $cgui = new ilConfirmationGUI();
-            $cgui->setFormAction($ilCtrl->getFormAction($this));
-            $cgui->setHeaderText($lng->txt("adn_sure_delete_export_files"));
-            $cgui->setCancel($lng->txt("cancel"), "listFiles");
-            $cgui->setConfirm($lng->txt("delete"), "deleteFiles");
+            $cgui->setFormAction($this->ctrl->getFormAction($this));
+            $cgui->setHeaderText($this->lng->txt("adn_sure_delete_export_files"));
+            $cgui->setCancel($this->lng->txt("cancel"), "listFiles");
+            $cgui->setConfirm($this->lng->txt("delete"), "deleteFiles");
 
             include_once("./Services/ADN/ED/classes/class.adnQuestionExport.php");
 
@@ -331,7 +339,7 @@ class adnMCQuestionExportGUI
                 $cgui->addItem("file_id[]", $i, adnQuestionExport::lookupName($i));
             }
 
-            $tpl->setContent($cgui->getHTML());
+            $this->tpl->setContent($cgui->getHTML());
         }
     }
 
@@ -340,7 +348,6 @@ class adnMCQuestionExportGUI
      */
     protected function deleteFiles()
     {
-        global $ilCtrl, $lng;
 
         if (is_array($_POST["file_id"])) {
             include_once("./Services/ADN/ED/classes/class.adnQuestionExport.php");
@@ -348,8 +355,8 @@ class adnMCQuestionExportGUI
                 adnQuestionExport::delete($i);
             }
         }
-        ilUtil::sendSuccess($lng->txt("adn_export_file_deleted"), true);
-        $ilCtrl->redirect($this, "listFiles");
+        ilUtil::sendSuccess($this->lng->txt("adn_export_file_deleted"), true);
+        $this->ctrl->redirect($this, "listFiles");
     }
 
     /**
@@ -357,15 +364,14 @@ class adnMCQuestionExportGUI
      */
     protected function downloadFile()
     {
-        global $ilCtrl, $lng;
 
         include_once("./Services/ADN/ED/classes/class.adnQuestionExport.php");
         $file = adnQuestionExport::getFilePath() . "/" . $_REQUEST["exf_id"];
         if (file_exists($file)) {
             ilUtil::deliverFile($file, adnQuestionExport::lookupName($_REQUEST["exf_id"], true));
         } else {
-            ilUtil::sendFailure($lng->txt("adn_file_corrupt"), true);
-            $ilCtrl->redirect($this, "listFiles");
+            ilUtil::sendFailure($this->lng->txt("adn_file_corrupt"), true);
+            $this->ctrl->redirect($this, "listFiles");
         }
     }
 }

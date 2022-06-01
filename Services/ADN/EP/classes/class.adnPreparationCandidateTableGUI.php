@@ -48,7 +48,6 @@ class adnPreparationCandidateTableGUI extends ilTable2GUI
         $a_show_prospects = false
     )
     {
-        global $ilCtrl, $lng;
 
         $this->show_professionals = (bool) $a_show_professionals;
         $this->show_prospects = (bool) $a_show_prospects;
@@ -57,10 +56,10 @@ class adnPreparationCandidateTableGUI extends ilTable2GUI
 
         $this->setId("adn_tbl_pcd");
 
-        $this->setTitle($lng->txt("adn_candidates"));
+        $this->setTitle($this->lng->txt("adn_candidates"));
 
         if (adnPerm::check(adnPerm::EP, adnPerm::WRITE)) {
-            $this->addMultiCommand("confirmCandidatesDeletion", $lng->txt("adn_delete_candidates"));
+            $this->addMultiCommand("confirmCandidatesDeletion", $this->lng->txt("adn_delete_candidates"));
             $this->addColumn("", "", 1);
         }
 
@@ -77,7 +76,7 @@ class adnPreparationCandidateTableGUI extends ilTable2GUI
         $this->setDefaultOrderDirection("asc");
 
         include_once "Services/ADN/ED/classes/class.adnSubjectArea.php";
-        $this->map["type"] = array("" => $lng->txt("adn_filter_none")) + adnSubjectArea::getAllAreas();
+        $this->map["type"] = array("" => $this->lng->txt("adn_filter_none")) + adnSubjectArea::getAllAreas();
 
         include_once "Services/ADN/MD/classes/class.adnWMO.php";
         $this->map["registered_by"] = adnWMO::getWMOsSelect();
@@ -87,7 +86,7 @@ class adnPreparationCandidateTableGUI extends ilTable2GUI
 
         $this->initFilter();
 
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.candidate_row.html", "Services/ADN/EP");
 
         $this->importData();
@@ -144,13 +143,12 @@ class adnPreparationCandidateTableGUI extends ilTable2GUI
      */
     public function initFilter()
     {
-        global $lng;
 
         $name = $this->addFilterItemByMetaType(
             "name",
             self::FILTER_TEXT,
             false,
-            $lng->txt("adn_last_name")
+            $this->lng->txt("adn_last_name")
         );
         $name->readFromSession();
         $this->filter["last_name"] = $name->getValue();
@@ -159,7 +157,7 @@ class adnPreparationCandidateTableGUI extends ilTable2GUI
             "first_name",
             self::FILTER_TEXT,
             false,
-            $lng->txt("adn_first_name")
+            $this->lng->txt("adn_first_name")
         );
         $first_name->readFromSession();
         $this->filter["first_name"] = $first_name->getValue();
@@ -168,7 +166,7 @@ class adnPreparationCandidateTableGUI extends ilTable2GUI
             "birthdate",
             self::FILTER_DATE_RANGE,
             false,
-            $lng->txt("adn_birthdate")
+            $this->lng->txt("adn_birthdate")
         );
         $birthdate->readFromSession();
         $this->filter["birthdate"] = $birthdate->getDate();
@@ -177,11 +175,11 @@ class adnPreparationCandidateTableGUI extends ilTable2GUI
             "type",
             self::FILTER_SELECT,
             false,
-            $lng->txt("adn_type_of_examination")
+            $this->lng->txt("adn_type_of_examination")
         );
         include_once "Services/ADN/ED/classes/class.adnSubjectArea.php";
         $this->filter_options["type"] = adnSubjectArea::getAllAreas();
-        $all = array('' => $lng->txt('adn_filter_all')) + $this->filter_options["type"];
+        $all = array('' => $this->lng->txt('adn_filter_all')) + $this->filter_options["type"];
         $types->setOptions($all);
         $types->readFromSession();
         $this->filter["subject_area"] = $types->getValue();
@@ -190,9 +188,9 @@ class adnPreparationCandidateTableGUI extends ilTable2GUI
             "registered_by",
             self::FILTER_SELECT,
             false,
-            $lng->txt("adn_registered_by")
+            $this->lng->txt("adn_registered_by")
         );
-        $wsd->setOptions(array(0 => $lng->txt("adn_filter_all")) + $this->map["registered_by"]);
+        $wsd->setOptions(array(0 => $this->lng->txt("adn_filter_all")) + $this->map["registered_by"]);
         $wsd->readFromSession();
         $this->filter["registered_by"] = $wsd->getValue();
     }
@@ -204,19 +202,18 @@ class adnPreparationCandidateTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
 
         // actions...
 
-        $ilCtrl->setParameter($this->parent_obj, "cd_id", $a_set["id"]);
+        $this->ctrl->setParameter($this->parent_obj, "cd_id", $a_set["id"]);
 
         if (adnPerm::check(adnPerm::EP, adnPerm::WRITE)) {
             // edit
             $this->tpl->setCurrentBlock("action");
-            $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_edit_candidate"));
+            $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_edit_candidate"));
             $this->tpl->setVariable(
                 "HREF_CMD",
-                $ilCtrl->getLinkTarget($this->parent_obj, "editCandidate")
+                $this->ctrl->getLinkTarget($this->parent_obj, "editCandidate")
             );
             $this->tpl->parseCurrentBlock();
 
@@ -226,7 +223,7 @@ class adnPreparationCandidateTableGUI extends ilTable2GUI
             $this->tpl->parseCurrentBlock();
         }
 
-        $ilCtrl->setParameter($this->parent_obj, "cd_id", "");
+        $this->ctrl->setParameter($this->parent_obj, "cd_id", "");
         
         
         // properties

@@ -180,7 +180,6 @@ class adnReportInvoice extends adnReport
      */
     public function create()
     {
-        global $ilUser;
     
         // Write on task (fillPdfTemplate for every candidate) and finally merge them in one PDF.
         include_once './Services/ADN/Report/classes/class.adnTaskScheduleWriter.php';
@@ -206,7 +205,7 @@ class adnReportInvoice extends adnReport
         $map = $this->addStandardRightColumn(
             array(),
             $this->getWMO()->getId(),
-            $ilUser->getId()
+            $this->user->getId()
         );
             
         //  Fill standard address
@@ -240,26 +239,25 @@ class adnReportInvoice extends adnReport
      */
     protected function fillMap($map)
     {
-        global $lng,$ilUser;
         
         $cost = $this->getWMO()->getCost($this->getInvoiceType());
         $map['number'] = $cost['no'];
 
         switch ($this->getInvoiceType()) {
             case adnWMO::COST_CERTIFICATE:
-                $map['description'] = $lng->txt('adn_wmo_cost_certificate_short');
+                $map['description'] = $this->lng->txt('adn_wmo_cost_certificate_short');
                 break;
 
             case adnWMO::COST_DUPLICATE:
-                $map['description'] = $lng->txt('adn_wmo_cost_duplicate_short');
+                $map['description'] = $this->lng->txt('adn_wmo_cost_duplicate_short');
                 break;
 
             case adnWMO::COST_EXAM:
-                $map['description'] = $lng->txt('adn_wmo_cost_exam_short');
+                $map['description'] = $this->lng->txt('adn_wmo_cost_exam_short');
                 break;
 
             case adnWMO::COST_EXTENSION:
-                $map['description'] = $lng->txt('adn_wmo_cost_extension_short');
+                $map['description'] = $this->lng->txt('adn_wmo_cost_extension_short');
                 break;
         }
 
@@ -277,10 +275,10 @@ class adnReportInvoice extends adnReport
         $map['account'] = $this->getWMO()->getBankInstitute();
         
         $map['rcp_salutation'] =
-            $lng->txt('adn_report_salutation_' . $this->getPro()->getSalutation()) . ' ' .
+            $this->lng->txt('adn_report_salutation_' . $this->getPro()->getSalutation()) . ' ' .
             $this->getPro()->getLastName() . ', ';
         
-        $map['iss_lastname'] = $ilUser->getLastname();
+        $map['iss_lastname'] = $this->user->getLastname();
 
         $map['legal'] = $this->getLegalRemedies($this->getWMO());
 

@@ -13,6 +13,20 @@
  */
 class adnExaminationQuestionGUI
 {
+    protected ilCtrl $ctrl;
+    protected ilTabsGUI $tabs;
+    protected ilLanguage $lng;
+    protected ilGlobalTemplateInterface $tpl;
+
+    public function __construct()
+    {
+        global $DIC;
+
+        $this->ctrl = $DIC->ctrl();
+        $this->tabs = $DIC->tabs();
+        $this->lng = $DIC->language();
+        $this->tpl = $DIC->ui()->mainTemplate();
+    }
     /**
      * Set tabs
      *
@@ -20,21 +34,20 @@ class adnExaminationQuestionGUI
      */
     public function setTabs($a_activate)
     {
-        global $ilTabs, $lng, $txt, $ilCtrl;
 
-        $ilTabs->addTab(
+        $this->tabs->addTab(
             "mc_questions",
-            $lng->txt("adn_mc_questions"),
-            $ilCtrl->getLinkTargetByClass("adnmcquestiongui", "listMCQuestions")
+            $this->lng->txt("adn_mc_questions"),
+            $this->ctrl->getLinkTargetByClass("adnmcquestiongui", "listMCQuestions")
         );
 
-        $ilTabs->addTab(
+        $this->tabs->addTab(
             "case_questions",
-            $lng->txt("adn_case_questions"),
-            $ilCtrl->getLinkTargetByClass("adncasequestiongui", "listCaseQuestions")
+            $this->lng->txt("adn_case_questions"),
+            $this->ctrl->getLinkTargetByClass("adncasequestiongui", "listCaseQuestions")
         );
 
-        $ilTabs->activateTab($a_activate);
+        $this->tabs->activateTab($a_activate);
     }
 
     /**
@@ -60,7 +73,6 @@ class adnExaminationQuestionGUI
      */
     protected function activateQuestionHelper($a_status)
     {
-        global $ilCtrl, $tpl, $lng;
 
         if (get_class($this) == "adnMCQuestionGUI") {
             $list_cmd = "listMCQuestions";
@@ -70,8 +82,8 @@ class adnExaminationQuestionGUI
 
         // check whether at least one item has been seleced
         if (!is_array($_POST["question_id"]) || count($_POST["question_id"]) == 0) {
-            ilUtil::sendFailure($lng->txt("no_checkbox"), true);
-            $ilCtrl->redirect($this, $list_cmd);
+            ilUtil::sendFailure($this->lng->txt("no_checkbox"), true);
+            $this->ctrl->redirect($this, $list_cmd);
         } else {
             include_once("./Services/ADN/ED/classes/class.adnExaminationQuestion.php");
             
@@ -83,12 +95,12 @@ class adnExaminationQuestionGUI
             }
 
             if ($a_status) {
-                $mess = $lng->txt("adn_questions_activated");
+                $mess = $this->lng->txt("adn_questions_activated");
             } else {
-                $mess = $lng->txt("adn_questions_deactivated");
+                $mess = $this->lng->txt("adn_questions_deactivated");
             }
             ilUtil::sendSuccess($mess, true);
-            $ilCtrl->redirect($this, $list_cmd);
+            $this->ctrl->redirect($this, $list_cmd);
         }
     }
 
@@ -101,7 +113,6 @@ class adnExaminationQuestionGUI
      */
     protected function initBaseForm($a_catalog_area, $a_mode = "edit")
     {
-        global $lng, $ilCtrl;
         
         // get form object and add input fields
         include_once("Services/Form/classes/class.ilPropertyFormGUI.php");
@@ -130,14 +141,14 @@ class adnExaminationQuestionGUI
                 }
             }
         }
-        $objective = new ilSelectInputGUI($lng->txt("adn_objective"), "objective");
+        $objective = new ilSelectInputGUI($this->lng->txt("adn_objective"), "objective");
         $objective->setOptions($options);
         $objective->setRequired(true);
         $form->addItem($objective);
 
         // mc: numeric
         if (get_class($this) == "adnMCQuestionGUI") {
-            $nr = new ilNumberInputGUI($lng->txt("adn_nr"), "nr");
+            $nr = new ilNumberInputGUI($this->lng->txt("adn_nr"), "nr");
             $nr->setRequired(true);
             $nr->setSize(5);
             $nr->setMaxLength(3);
@@ -146,7 +157,7 @@ class adnExaminationQuestionGUI
         }
         // case: alpha-numeric
         else {
-            $nr = new ilTextInputGUI($lng->txt("adn_nr"), "nr");
+            $nr = new ilTextInputGUI($this->lng->txt("adn_nr"), "nr");
             $nr->setRequired(true);
             $nr->setSize(5);
             $nr->setMaxLength(5);
@@ -154,7 +165,7 @@ class adnExaminationQuestionGUI
         }
 
         // title
-        $title = new ilTextInputGUI($lng->txt("adn_title"), "title");
+        $title = new ilTextInputGUI($this->lng->txt("adn_title"), "title");
         $title->setMaxLength(200);
         if (get_class($this) == "adnMCQuestionGUI") {
             $title->setRequired(true);
@@ -164,7 +175,7 @@ class adnExaminationQuestionGUI
         $form->addItem($title);
 
         // question
-        $question = new ilTextAreaInputGUI($lng->txt("adn_question"), "question");
+        $question = new ilTextAreaInputGUI($this->lng->txt("adn_question"), "question");
         $question->setCols(80);
         $question->setRows(5);
         $question->setRequired(true);
@@ -173,17 +184,17 @@ class adnExaminationQuestionGUI
         $form->addItem($question);
 
         // question image
-        $image = new ilImageFileInputGUI($lng->txt("adn_image_for_question"), "quest_image");
+        $image = new ilImageFileInputGUI($this->lng->txt("adn_image_for_question"), "quest_image");
         $form->addItem($image);
 
         // status
         $options = array(
-            "1" => $lng->txt("adn_active"),
-            "0" => $lng->txt("adn_inactive"),
+            "1" => $this->lng->txt("adn_active"),
+            "0" => $this->lng->txt("adn_inactive"),
         );
-        $status = new ilSelectInputGUI($lng->txt("status"), "status");
+        $status = new ilSelectInputGUI($this->lng->txt("status"), "status");
         $status->setOptions($options);
-        $status->setInfo($lng->txt(""));
+        $status->setInfo($this->lng->txt(""));
         $form->addItem($status);
 
         if ($a_mode != "create") {
@@ -199,9 +210,9 @@ class adnExaminationQuestionGUI
 
             $file = $this->question->getFilePath() . $this->question->getId() . "_1";
             if (file_exists($file)) {
-                $ilCtrl->setParameter($this, "img", 1);
-                $image->setImage($ilCtrl->getLinkTarget($this, "showImage"));
-                $ilCtrl->setParameter($this, "img", "");
+                $this->ctrl->setParameter($this, "img", 1);
+                $image->setImage($this->ctrl->getLinkTarget($this, "showImage"));
+                $this->ctrl->setParameter($this, "img", "");
 
                 $image->setAlt($this->question->getFileName(1));
             }
@@ -222,14 +233,13 @@ class adnExaminationQuestionGUI
      */
     protected function addFormLastChange(ilPropertyFormGUI $a_form, $a_mode = "edit")
     {
-        global $lng;
         
         $sh = new ilFormSectionHeaderGUI();
-        $sh->setTitle($lng->txt("adn_last_change"));
+        $sh->setTitle($this->lng->txt("adn_last_change"));
         $a_form->addItem($sh);
 
         if ($a_mode == "edit") {
-            $comment = new ilTextAreaInputGUI($lng->txt("adn_last_change_comment"), "comment");
+            $comment = new ilTextAreaInputGUI($this->lng->txt("adn_last_change_comment"), "comment");
             $comment->setCols(80);
             $comment->setRows(5);
             $a_form->addItem($comment);
@@ -238,7 +248,7 @@ class adnExaminationQuestionGUI
         $date = $this->question->getLastUpdate();
         if (!$date->isNull()) {
             $date = ilDatePresentation::formatDate($date);
-            $last_update = new ilNonEditableValueGUI($lng->txt("adn_last_change_date"));
+            $last_update = new ilNonEditableValueGUI($this->lng->txt("adn_last_change_date"));
             $last_update->setValue($date);
             $a_form->addItem($last_update);
         }
@@ -249,14 +259,14 @@ class adnExaminationQuestionGUI
             $user = $user["lastname"] . ", " . $user["firstname"] . " [" . $user["login"] . "]";
         }
         if ($user) {
-            $last_update_user = new ilNonEditableValueGUI($lng->txt("adn_last_change_user"));
+            $last_update_user = new ilNonEditableValueGUI($this->lng->txt("adn_last_change_user"));
             $last_update_user->setValue($user);
             $a_form->addItem($last_update_user);
         }
 
         $comment = $this->question->getComment();
         if ($comment) {
-            $last_comment = new ilNonEditableValueGUI($lng->txt("adn_last_change_comment"));
+            $last_comment = new ilNonEditableValueGUI($this->lng->txt("adn_last_change_comment"));
             $last_comment->setValue($comment);
             $a_form->addItem($last_comment);
         }
@@ -264,7 +274,7 @@ class adnExaminationQuestionGUI
         $date = $this->question->getStatusDate();
         if (!$date->isNull()) {
             $date = ilDatePresentation::formatDate($date);
-            $last_status = new ilNonEditableValueGUI($lng->txt("adn_last_change_status"));
+            $last_status = new ilNonEditableValueGUI($this->lng->txt("adn_last_change_status"));
             $last_status->setValue($date);
             $a_form->addItem($last_status);
         }
@@ -279,7 +289,6 @@ class adnExaminationQuestionGUI
      */
     protected function setFormValues(adnExaminationQuestion $question, ilPropertyFormGUI $a_form)
     {
-        global $lng;
 
         // objective or subobjective?
         $obj = $a_form->getInput("objective");
@@ -311,8 +320,8 @@ class adnExaminationQuestionGUI
             
             return true;
         } else {
-            ilUtil::sendFailure($lng->txt("form_input_not_valid"));
-            $a_form->getItemByPostVar("nr")->setAlert($lng->txt("adn_question_unique_number"));
+            ilUtil::sendFailure($this->lng->txt("form_input_not_valid"));
+            $a_form->getItemByPostVar("nr")->setAlert($this->lng->txt("adn_question_unique_number"));
         }
 
         return false;

@@ -30,7 +30,6 @@ class adnPersonalDataTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd, $a_mode)
     {
-        global $ilCtrl, $lng;
 
         $this->setId("adn_tbl_adpdm");
         parent::__construct($a_parent_obj, $a_parent_cmd);
@@ -39,9 +38,9 @@ class adnPersonalDataTableGUI extends ilTable2GUI
 
         $this->setDisableFilterHiding(true);
 
-        $this->setTitle($lng->txt("adn_ad_personal_data"));
+        $this->setTitle($this->lng->txt("adn_ad_personal_data"));
 
-        $this->addMultiCommand("delete", $lng->txt("delete"));
+        $this->addMultiCommand("delete", $this->lng->txt("delete"));
 
         $this->addColumn("", "", "1px", true);
         $this->addColumn($this->lng->txt("adn_last_name"), "last_name");
@@ -58,7 +57,7 @@ class adnPersonalDataTableGUI extends ilTable2GUI
         $this->setDefaultOrderField("last_name");
         $this->setDefaultOrderDirection("asc");
 
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.personal_data_row.html", "Services/ADN/AD");
 
         $this->initFilter();
@@ -81,7 +80,6 @@ class adnPersonalDataTableGUI extends ilTable2GUI
      */
     public function initFilter()
     {
-        global $lng;
 
         if (!in_array($this->mode, array("cand", "cert"))) {
 
@@ -90,7 +88,7 @@ class adnPersonalDataTableGUI extends ilTable2GUI
                 "equal_last_name",
                 self::FILTER_CHECKBOX,
                 false,
-                $lng->txt("adn_ad_equal_last_name")
+                $this->lng->txt("adn_ad_equal_last_name")
             );
             $name->readFromSession();
             $this->filter["equal"]["last_name"] = $name->getChecked();
@@ -100,7 +98,7 @@ class adnPersonalDataTableGUI extends ilTable2GUI
                 "equal_birthdate",
                 self::FILTER_CHECKBOX,
                 false,
-                $lng->txt("adn_ad_equal_birthdate")
+                $this->lng->txt("adn_ad_equal_birthdate")
             );
             $name->readFromSession();
             $this->filter["equal"]["birthdate"] = $name->getChecked();
@@ -110,7 +108,7 @@ class adnPersonalDataTableGUI extends ilTable2GUI
                 "equal_city",
                 self::FILTER_CHECKBOX,
                 false,
-                $lng->txt("adn_ad_equal_city")
+                $this->lng->txt("adn_ad_equal_city")
             );
             $name->readFromSession();
             $this->filter["equal"]["pa_city"] = $name->getChecked();
@@ -120,28 +118,12 @@ class adnPersonalDataTableGUI extends ilTable2GUI
                 "equal_street",
                 self::FILTER_CHECKBOX,
                 false,
-                $lng->txt("adn_ad_equal_street")
+                $this->lng->txt("adn_ad_equal_street")
             );
             $name->readFromSession();
             $this->filter["equal"]["pa_street"] = $name->getChecked();
         }
 
-        // wmo
-        /*			 see bug #15
-        include_once("./Services/ADN/MD/classes/class.adnWMO.php");
-        $options = array(
-            "" => $lng->txt("adn_filter_all")
-        );
-        foreach (adnWMO::getAllWMOs(true) as $wmo)
-        {
-            $options[$wmo["id"]] = $wmo["name"];
-        }
-        $wmo = $this->addFilterItemByMetaType("registered_by", self::FILTER_SELECT, false,
-            $lng->txt("adn_ad_wmo"));
-        $wmo->setOptions($options);
-        $wmo->readFromSession();
-        $this->filter["registered_by"] = $wmo->getValue();
-        */
     }
 
     /**
@@ -151,25 +133,24 @@ class adnPersonalDataTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $ilCtrl, $lng;
 
-        $ilCtrl->setParameter($this->parent_obj, "pid", $a_set["id"]);
+        $this->ctrl->setParameter($this->parent_obj, "pid", $a_set["id"]);
         $this->tpl->setCurrentBlock("action");
-        $this->tpl->setVariable("HREF_CMD", $ilCtrl->getLinkTarget($this->parent_obj, "showPersonalDataDetails"));
-        $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_details"));
+        $this->tpl->setVariable("HREF_CMD", $this->ctrl->getLinkTarget($this->parent_obj, "showPersonalDataDetails"));
+        $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_details"));
         $this->tpl->parseCurrentBlock();
-        $ilCtrl->setParameter($this->parent_obj, "pid", $_GET["pid"]);
+        $this->ctrl->setParameter($this->parent_obj, "pid", $_GET["pid"]);
 
-        $ilCtrl->setParameterByClass("adnCertificateGUI", "pid", $a_set["id"]);
+        $this->ctrl->setParameterByClass("adnCertificateGUI", "pid", $a_set["id"]);
 
         if ($a_set["foreign_cert_handed_in"]) {
             $this->tpl->setCurrentBlock("action");
-            $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_extend_certificate_foreign"));
-            $this->tpl->setVariable("HREF_CMD", $ilCtrl->getLinkTargetByClass(array("adnBaseGUI", "adnCertifiedProfessionalGUI", "adnCertificateGUI"), "extendCertificate"));
+            $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_extend_certificate_foreign"));
+            $this->tpl->setVariable("HREF_CMD", $this->ctrl->getLinkTargetByClass(array("adnBaseGUI", "adnCertifiedProfessionalGUI", "adnCertificateGUI"), "extendCertificate"));
             $this->tpl->parseCurrentBlock();
         }
 
-        $ilCtrl->setParameterByClass("adnCertificateGUI", "pid", $_GET["id"]);
+        $this->ctrl->setParameterByClass("adnCertificateGUI", "pid", $_GET["id"]);
 
         // properties
         $this->tpl->setVariable("VAL_LAST_NAME", $a_set["last_name"]);

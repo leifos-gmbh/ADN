@@ -25,7 +25,6 @@ class adnAnswerSheetAssignment extends adnDBBase
      */
     public function __construct($a_id = null, $a_user_id = null, $a_sheet_id = null)
     {
-        global $ilCtrl;
 
         if (!$a_id && $a_user_id && $a_sheet_id) {
             $this->setUser($a_user_id);
@@ -123,7 +122,6 @@ class adnAnswerSheetAssignment extends adnDBBase
      */
     public function read()
     {
-        global $ilDB;
 
         $id = $this->getId();
 
@@ -131,10 +129,10 @@ class adnAnswerSheetAssignment extends adnDBBase
             return;
         }
 
-        $res = $ilDB->query("SELECT ep_answer_sheet_id, cp_professional_id, generated_on" .
+        $res = $this->db->query("SELECT ep_answer_sheet_id, cp_professional_id, generated_on" .
             " FROM adn_ep_cand_sheet" .
-            " WHERE id = " . $ilDB->quote($id, "integer"));
-        $set = $ilDB->fetchAssoc($res);
+            " WHERE id = " . $this->db->quote($id, "integer"));
+        $set = $this->db->fetchAssoc($res);
         $this->setSheet($set["ep_answer_sheet_id"]);
         $this->setUser($set["cp_professional_id"]);
         $this->setGeneratedOn(new ilDateTime($set["generated_on"], IL_CAL_DATE, ilTimeZone::UTC));
@@ -173,16 +171,15 @@ class adnAnswerSheetAssignment extends adnDBBase
      */
     public function save()
     {
-        global $ilDB;
 
         // sequence
-        $this->setId($ilDB->nextId("adn_ep_cand_sheet"));
+        $this->setId($this->db->nextId("adn_ep_cand_sheet"));
         $id = $this->getId();
 
         $fields = $this->propertiesToFields();
         $fields["id"] = array("integer", $id);
             
-        $ilDB->insert("adn_ep_cand_sheet", $fields);
+        $this->db->insert("adn_ep_cand_sheet", $fields);
 
         parent::_save($id, "adn_ep_cand_sheet");
 
@@ -196,7 +193,6 @@ class adnAnswerSheetAssignment extends adnDBBase
      */
     public function update()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if (!$id) {
@@ -205,7 +201,7 @@ class adnAnswerSheetAssignment extends adnDBBase
         
         $fields = $this->propertiesToFields();
 
-        $ilDB->update("adn_ep_cand_sheet", $fields, array("id" => array("integer", $id)));
+        $this->db->update("adn_ep_cand_sheet", $fields, array("id" => array("integer", $id)));
         parent::_update($id, "adn_ep_cand_sheet");
 
         return true;
@@ -218,12 +214,11 @@ class adnAnswerSheetAssignment extends adnDBBase
      */
     public function delete()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if ($id) {
-            $ilDB->manipulate("DELETE FROM adn_ep_cand_sheet" .
-                " WHERE id = " . $ilDB->quote($id, "integer"));
+            $this->db->manipulate("DELETE FROM adn_ep_cand_sheet" .
+                " WHERE id = " . $this->db->quote($id, "integer"));
             $this->setId(null);
             return true;
         }
@@ -238,9 +233,10 @@ class adnAnswerSheetAssignment extends adnDBBase
      */
     public static function getAllSheets($a_user_id, $a_event_id = false)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
-        $sql .= "SELECT id,ep_answer_sheet_id,generated_on" .
+        $sql = "SELECT id,ep_answer_sheet_id,generated_on" .
             " FROM adn_ep_cand_sheet" .
             " WHERE cp_professional_id = " . $ilDB->quote($a_user_id, "integer");
 
@@ -276,9 +272,10 @@ class adnAnswerSheetAssignment extends adnDBBase
         $a_sheet_id = false
     )
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
-        $sql .= "SELECT cs.id,cs.ep_answer_sheet_id" .
+        $sql = "SELECT cs.id,cs.ep_answer_sheet_id" .
             " FROM adn_ep_cand_sheet cs" .
             " JOIN adn_ep_answer_sheet sh ON (cs.ep_answer_sheet_id = sh.id)";
 
@@ -334,7 +331,8 @@ class adnAnswerSheetAssignment extends adnDBBase
      */
     public static function isAssigned($a_sheet_id)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
         
         $query = "SELECT * FROM adn_ep_cand_sheet " .
             "WHERE ep_answer_sheet_id = " . $ilDB->quote($a_sheet_id, 'integer');
@@ -354,7 +352,8 @@ class adnAnswerSheetAssignment extends adnDBBase
      */
     public static function find($a_user_id, $a_sheet_id)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id FROM adn_ep_cand_sheet" .
             " WHERE cp_professional_id = " . $ilDB->quote((int) $a_user_id, "integer") .
@@ -377,29 +376,28 @@ class adnAnswerSheetAssignment extends adnDBBase
      */
     public function isReportDeprecated()
     {
-        global $ilDB;
 
         // Check for modified questions
         $query = 'SELECT * FROM adn_ep_sheet_question ' .
         'JOIN adn_ed_question ON ed_question_id = id ' .
-        'WHERE ep_answer_sheet_id = ' . $ilDB->quote($this->getSheet(), 'integer') . ' ' .
-        'AND last_update > ' . $ilDB->quote(
+        'WHERE ep_answer_sheet_id = ' . $this->db->quote($this->getSheet(), 'integer') . ' ' .
+        'AND last_update > ' . $this->db->quote(
             $this->getGeneratedOn()->get(IL_CAL_DATETIME, '', ilTimeZone::UTC),
             'timestamp'
         );
 
-        $res = $ilDB->query($query);
+        $res = $this->db->query($query);
         if ($res->numRows()) {
             return true;
         }
 
         // Check for modified question sheets
         $query = "SELECT * FROM adn_ep_answer_sheet " .
-        'WHERE last_update > ' . $ilDB->quote(
+        'WHERE last_update > ' . $this->db->quote(
             $this->getGeneratedOn()->get(IL_CAL_DATETIME, '', ilTimeZone::UTC),
             'timestamp'
         );
-        $res = $ilDB->query($query);
+        $res = $this->db->query($query);
 
         return $res->numRows() ? true : false;
     }

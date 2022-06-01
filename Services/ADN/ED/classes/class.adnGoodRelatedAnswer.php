@@ -28,7 +28,6 @@ class adnGoodRelatedAnswer extends adnDBBase
      */
     public function __construct($a_id = null)
     {
-        global $ilCtrl;
 
         if ($a_id) {
             $this->setId($a_id);
@@ -171,27 +170,26 @@ class adnGoodRelatedAnswer extends adnDBBase
      */
     public function read()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if (!$id) {
             return;
         }
 
-        $res = $ilDB->query("SELECT ed_question_id,answer,butan_or_empty" .
+        $res = $this->db->query("SELECT ed_question_id,answer,butan_or_empty" .
             " FROM adn_ed_good_rel_answer" .
-            " WHERE id = " . $ilDB->quote($this->getId(), "integer"));
-        $set = $ilDB->fetchAssoc($res);
+            " WHERE id = " . $this->db->quote($this->getId(), "integer"));
+        $set = $this->db->fetchAssoc($res);
         $this->setAnswer($set["answer"]);
         $this->setButanOrEmpty($set["butan_or_empty"]);
         $this->setQuestionId($set["ed_question_id"]);
 
         // add goods from sub-table
-        $res = $ilDB->query("SELECT ed_good_id" .
+        $res = $this->db->query("SELECT ed_good_id" .
             " FROM adn_ed_case_answ_good" .
-            " WHERE ed_good_related_answer_id = " . $ilDB->quote($this->getId(), "integer"));
+            " WHERE ed_good_related_answer_id = " . $this->db->quote($this->getId(), "integer"));
         $goods = array();
-        while ($row = $ilDB->fetchAssoc($res)) {
+        while ($row = $this->db->fetchAssoc($res)) {
             $goods[] = $row["ed_good_id"];
         }
         $this->setGoods($goods);
@@ -220,15 +218,14 @@ class adnGoodRelatedAnswer extends adnDBBase
      */
     public function save()
     {
-        global $ilDB;
 
-        $this->setId($ilDB->nextId("adn_ed_good_rel_answer"));
+        $this->setId($this->db->nextId("adn_ed_good_rel_answer"));
         $id = $this->getId();
 
         $fields = $this->propertiesToFields();
         $fields["id"] = array("integer", $id);
             
-        $ilDB->insert("adn_ed_good_rel_answer", $fields);
+        $this->db->insert("adn_ed_good_rel_answer", $fields);
 
         $this->saveGoods();
 
@@ -244,7 +241,6 @@ class adnGoodRelatedAnswer extends adnDBBase
      */
     public function update()
     {
-        global $ilDB;
         
         $id = $this->getId();
         if (!$id) {
@@ -253,7 +249,7 @@ class adnGoodRelatedAnswer extends adnDBBase
 
         $fields = $this->propertiesToFields();
         
-        $ilDB->update("adn_ed_good_rel_answer", $fields, array("id" => array("integer", $id)));
+        $this->db->update("adn_ed_good_rel_answer", $fields, array("id" => array("integer", $id)));
 
         $this->saveGoods();
 
@@ -267,19 +263,18 @@ class adnGoodRelatedAnswer extends adnDBBase
      */
     protected function saveGoods()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if ($id) {
-            $ilDB->manipulate("DELETE FROM adn_ed_case_answ_good" .
-                " WHERE ed_good_related_answer_id = " . $ilDB->quote($id, "integer"));
+            $this->db->manipulate("DELETE FROM adn_ed_case_answ_good" .
+                " WHERE ed_good_related_answer_id = " . $this->db->quote($id, "integer"));
 
             if (sizeof($this->goods)) {
                 foreach ($this->goods as $good_id) {
                     $fields = array("ed_good_related_answer_id" => array("integer", $id),
                         "ed_good_id" => array("integer", $good_id));
 
-                    $ilDB->insert("adn_ed_case_answ_good", $fields);
+                    $this->db->insert("adn_ed_case_answ_good", $fields);
                 }
             }
         }
@@ -292,15 +287,14 @@ class adnGoodRelatedAnswer extends adnDBBase
      */
     public function delete()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if ($id) {
             // U.PV.5.10: archived flag is not used here!
-            $ilDB->manipulate("DELETE FROM adn_ed_case_answ_good" .
-                " WHERE ed_good_related_answer_id = " . $ilDB->quote($id, "integer"));
-            $ilDB->manipulate("DELETE FROM adn_ed_good_rel_answer" .
-                " WHERE id = " . $ilDB->quote($id, "integer"));
+            $this->db->manipulate("DELETE FROM adn_ed_case_answ_good" .
+                " WHERE ed_good_related_answer_id = " . $this->db->quote($id, "integer"));
+            $this->db->manipulate("DELETE FROM adn_ed_good_rel_answer" .
+                " WHERE id = " . $this->db->quote($id, "integer"));
             $this->setId(null);
             return true;
         }
@@ -314,7 +308,8 @@ class adnGoodRelatedAnswer extends adnDBBase
      */
     public static function getAllAnswers($a_question_id)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id,answer,butan_or_empty" .
             " FROM adn_ed_good_rel_answer" .
@@ -351,7 +346,8 @@ class adnGoodRelatedAnswer extends adnDBBase
      */
     protected static function lookupProperty($a_id, $a_prop)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query("SELECT " . $a_prop .
             " FROM adn_ed_good_rel_answer" .
@@ -379,7 +375,8 @@ class adnGoodRelatedAnswer extends adnDBBase
      */
     public static function findByGood($a_id)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $res = $ilDB->query("SELECT ed_good_related_answer_id" .
             " FROM adn_ed_case_answ_good" .

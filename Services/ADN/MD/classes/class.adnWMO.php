@@ -53,7 +53,6 @@ class adnWMO extends adnDBBase
      */
     public function __construct($a_id = 0)
     {
-        global $ilCtrl;
 
         if ($a_id !== 0) {
             $this->setId($a_id);
@@ -663,21 +662,20 @@ class adnWMO extends adnDBBase
      */
     public function read()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if (!$id) {
             return;
         }
 
-        $res = $ilDB->query("SELECT code_nr,name,subtitle,street,street_no,postal_code,city,visit_street," .
+        $res = $this->db->query("SELECT code_nr,name,subtitle,street,street_no,postal_code,city,visit_street," .
             "visit_street_no,visit_postal_code,visit_city,bank,bank_id,account_id,bic,iban,phone," .
             "fax,email,internet,cert_nr,cert_description,cert_cost,duplicate_nr,duplicate_description," .
             "duplicate_cost,ext_nr,ext_description,ext_cost,exam_nr,exam_description,exam_cost,notification_email," .
             "exam_gas_chem_nr,exam_gas_chem_description,exam_gas_chem_cost" .
             " FROM adn_md_wmo" .
-            " WHERE id = " . $ilDB->quote($id, "integer"));
-        $set = $ilDB->fetchAssoc($res);
+            " WHERE id = " . $this->db->quote($id, "integer"));
+        $set = $this->db->fetchAssoc($res);
         
         $this->setCode($set["code_nr"]);
         $this->setName($set["name"]);
@@ -765,16 +763,15 @@ class adnWMO extends adnDBBase
      */
     public function save()
     {
-        global $ilDB;
 
         // sequence
-        $this->setId($ilDB->nextId("adn_md_wmo"));
+        $this->setId($this->db->nextId("adn_md_wmo"));
         $id = $this->getId();
 
         $fields = $this->propertiesToFields();
         $fields["id"] = array("integer", $id);
         
-        $ilDB->insert("adn_md_wmo", $fields);
+        $this->db->insert("adn_md_wmo", $fields);
 
         parent::_save($id, "adn_md_wmo");
 
@@ -788,7 +785,6 @@ class adnWMO extends adnDBBase
      */
     public function update()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if (!$id) {
@@ -797,7 +793,7 @@ class adnWMO extends adnDBBase
         
         $fields = $this->propertiesToFields();
 
-        $ilDB->update("adn_md_wmo", $fields, array("id" => array("integer", $id)));
+        $this->db->update("adn_md_wmo", $fields, array("id" => array("integer", $id)));
 
         parent::_update($id, "adn_md_wmo");
 
@@ -847,7 +843,8 @@ class adnWMO extends adnDBBase
      */
     public static function getAllWMOs($a_with_archived = false)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id,code_nr,name,subtitle" .
             " FROM adn_md_wmo";
@@ -870,7 +867,8 @@ class adnWMO extends adnDBBase
      */
     public static function getWMOsSelect(array $a_old_values = null)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id,name,archived" .
             " FROM adn_md_wmo";
@@ -898,7 +896,8 @@ class adnWMO extends adnDBBase
      */
     protected static function lookupProperty($a_id, $a_prop)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query("SELECT " . $a_prop .
             " FROM adn_md_wmo" .
@@ -939,7 +938,8 @@ class adnWMO extends adnDBBase
      */
     public static function lookupIdForCode($a_code)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query("SELECT id" .
             " FROM adn_md_wmo" .

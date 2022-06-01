@@ -20,6 +20,8 @@ class adnQuestionTargetNumbersObjectiveTableGUI extends ilTable2GUI
     protected ?adnQuestionTargetNumbers $entry;
     protected string $mode;
 
+    protected ilToolbarGUI $toolbar;
+
     /**
      * Constructor
      *
@@ -39,12 +41,13 @@ class adnQuestionTargetNumbersObjectiveTableGUI extends ilTable2GUI
         $a_mode = ''
     )
     {
-        global $ilCtrl, $lng, $ilToolbar;
+        global $DIC;
 
         $this->area_id = (string) $a_area_id;
         $this->type = (string) $a_type;
         $this->entry = $a_entry;
         $this->mode = (string) $a_mode;
+        $this->toolbar = $DIC->toolbar();
 
         parent::__construct($a_parent_obj, $a_parent_cmd);
 
@@ -53,11 +56,11 @@ class adnQuestionTargetNumbersObjectiveTableGUI extends ilTable2GUI
         $this->setLimit(9999);
         $this->disable("footer");
 
-        $this->setTitle($lng->txt("adn_target_nr_of_questions"));
+        $this->setTitle($this->lng->txt("adn_target_nr_of_questions"));
 
         $this->addColumn($this->lng->txt("adn_objective"));
 
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.target_nr_objective_row.html", "Services/ADN/ED");
 
         $this->importData();
@@ -72,19 +75,19 @@ class adnQuestionTargetNumbersObjectiveTableGUI extends ilTable2GUI
         }
 
         if (adnPerm::check(adnPerm::ED, adnPerm::WRITE)) {
-            $ilToolbar->setFormAction($ilCtrl->getFormAction($a_parent_obj));
-            $ilToolbar->setCloseFormTag(false);
+            $this->toolbar->setFormAction($this->ctrl->getFormAction($a_parent_obj));
+            $this->toolbar->setCloseFormTag(false);
 
             include_once "Services/Form/classes/class.ilPropertyFormGUI.php";
-            $number = new ilTextInputGUI($lng->txt("adn_target_number") .
+            $number = new ilTextInputGUI($this->lng->txt("adn_target_number") .
                 " <span class=\"asterisk\">*</span>", "number");
             $number->setRequired(true);
             $number->setSize(2);
             $number->setMaxLength(2);
-            $ilToolbar->addInputItem($number, $lng->txt("adn_target_number"));
+            $this->toolbar->addInputItem($number, $this->lng->txt("adn_target_number"));
 
-            $max = new ilCheckboxInputGUI($lng->txt("adn_max_one_per_objective"), "single");
-            $ilToolbar->addInputItem($max, $lng->txt("adn_max_one_per_objective"));
+            $max = new ilCheckboxInputGUI($this->lng->txt("adn_max_one_per_objective"), "single");
+            $this->toolbar->addInputItem($max, $this->lng->txt("adn_max_one_per_objective"));
         }
 
         // creation: save/cancel buttons and title
@@ -97,11 +100,11 @@ class adnQuestionTargetNumbersObjectiveTableGUI extends ilTable2GUI
                     $max->setChecked($post["single"]);
                 }
                 
-                $ilToolbar->addFormButton($lng->txt("save"), "saveTarget");
-                $ilToolbar->addFormButton($lng->txt("cancel"), "listTargets");
+                $this->toolbar->addFormButton($this->lng->txt("save"), "saveTarget");
+                $this->toolbar->addFormButton($this->lng->txt("cancel"), "listTargets");
             }
             
-            $this->setTitle($lng->txt("adn_add_question_target_number"));
+            $this->setTitle($this->lng->txt("adn_add_question_target_number"));
         } else {
             if (adnPerm::check(adnPerm::ED, adnPerm::WRITE)) {
                 if (!$post) {
@@ -115,11 +118,11 @@ class adnQuestionTargetNumbersObjectiveTableGUI extends ilTable2GUI
                 }
 
                 // editing: update/cancel buttons and title
-                $ilToolbar->addFormButton($lng->txt("save"), "updateTarget");
-                $ilToolbar->addFormButton($lng->txt("cancel"), "listTargets");
+                $this->toolbar->addFormButton($this->lng->txt("save"), "updateTarget");
+                $this->toolbar->addFormButton($this->lng->txt("cancel"), "listTargets");
             }
             
-            $this->setTitle($lng->txt("adn_edit_question_target_number"));
+            $this->setTitle($this->lng->txt("adn_edit_question_target_number"));
         }
     }
 

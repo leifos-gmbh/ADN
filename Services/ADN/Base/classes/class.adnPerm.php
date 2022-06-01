@@ -59,7 +59,9 @@ class adnPerm
      */
     public static function check($a_component, $a_perm)
     {
-        global $rbacsystem;
+        global $DIC;
+
+        $rbacsystem = $DIC->rbac()->system();
 
         self::init();
         if (isset(self::$perm_objects[$a_component])) {

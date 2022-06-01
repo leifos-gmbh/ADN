@@ -19,12 +19,12 @@ $fields = array(
         ,"type" => "text"
     )
 );
-$ilDB->createTable("adn_ad_character", $fields, false, false, true);
+$this->db->createTable("adn_ad_character", $fields, false, false, true);
 
 $pk_fields = array("id");
-$ilDB->addPrimaryKey("adn_ad_character", $pk_fields);
+$this->db->addPrimaryKey("adn_ad_character", $pk_fields);
 
-$ilDB->createSequence("adn_ad_character", 1);
+$this->db->createSequence("adn_ad_character", 1);
 
 ?>
 <#2>
@@ -101,7 +101,7 @@ $fields = array(
         ,"type" => "integer"
     )
 );
-$ilDB->createTable("adn_ad_user", $fields, false, false, true);
+$this->db->createTable("adn_ad_user", $fields, false, false, true);
 
 ?>
 <#3>
@@ -181,12 +181,12 @@ $fields = array(
         ,"type" => "date"
     )
 );
-$ilDB->createTable("adn_cp_invoice", $fields, false, false, true);
+$this->db->createTable("adn_cp_invoice", $fields, false, false, true);
 
 $pk_fields = array("id");
-$ilDB->addPrimaryKey("adn_cp_invoice", $pk_fields);
+$this->db->addPrimaryKey("adn_cp_invoice", $pk_fields);
 
-$ilDB->createSequence('adn_cp_invoice');
+$this->db->createSequence('adn_cp_invoice');
 
 ?>
 <#4>
@@ -409,10 +409,10 @@ $fields = array(
         ,"type" => "integer"
     )
 );
-$ilDB->createTable("adn_cp_professional", $fields, false, false, true);
+$this->db->createTable("adn_cp_professional", $fields, false, false, true);
 
 $pk_fields = array("id");
-$ilDB->addPrimaryKey("adn_cp_professional", $pk_fields);
+$this->db->addPrimaryKey("adn_cp_professional", $pk_fields);
 
 ?>
 <#5>
@@ -454,10 +454,10 @@ $fields = array(
         ,"type" => "integer"
     )
 );
-$ilDB->createTable("adn_ec_given_answer", $fields, false, false, true);
+$this->db->createTable("adn_ec_given_answer", $fields, false, false, true);
 
 $pk_fields = array("ep_cand_sheet_id","ed_question_id");
-$ilDB->addPrimaryKey("adn_ec_given_answer", $pk_fields);
+$this->db->addPrimaryKey("adn_ec_given_answer", $pk_fields);
 
 
 ?>
@@ -525,12 +525,12 @@ $fields = array(
         ,"type" => "integer"
     )
 );
-$ilDB->createTable("adn_ed_case", $fields, false, false, true);
+$this->db->createTable("adn_ed_case", $fields, false, false, true);
 
 $pk_fields = array("id");
-$ilDB->addPrimaryKey("adn_ed_case", $pk_fields);
+$this->db->addPrimaryKey("adn_ed_case", $pk_fields);
 
-$ilDB->createSequence("adn_ed_case", 1);
+$this->db->createSequence("adn_ed_case", 1);
 
 ?>
 <#7>
@@ -555,10 +555,10 @@ $fields = array(
         ,"type" => "integer"
     )
 );
-$ilDB->createTable("adn_ed_case_answ_good", $fields, false, false, true);
+$this->db->createTable("adn_ed_case_answ_good", $fields, false, false, true);
 
 $pk_fields = array("ed_good_related_answer_id","ed_good_id");
-$ilDB->addPrimaryKey("adn_ed_case_answ_good", $pk_fields);
+$this->db->addPrimaryKey("adn_ed_case_answ_good", $pk_fields);
 
 
 ?>
@@ -663,12 +663,12 @@ $fields = array(
         ,"type" => "integer"
     )
 );
-$ilDB->createTable("adn_ed_good", $fields, false, false, true);
+$this->db->createTable("adn_ed_good", $fields, false, false, true);
 
 $pk_fields = array("id");
-$ilDB->addPrimaryKey("adn_ed_good", $pk_fields);
+$this->db->addPrimaryKey("adn_ed_good", $pk_fields);
 
-$ilDB->createSequence("adn_ed_good", 1);
+$this->db->createSequence("adn_ed_good", 1);
 
 ?>
 <#9>
@@ -731,12 +731,12 @@ $fields = array(
         ,"type" => "integer"
     )
 );
-$ilDB->createTable("adn_ed_good_category", $fields, false, false, true);
+$this->db->createTable("adn_ed_good_category", $fields, false, false, true);
 
 $pk_fields = array("id");
-$ilDB->addPrimaryKey("adn_ed_good_category", $pk_fields);
+$this->db->addPrimaryKey("adn_ed_good_category", $pk_fields);
 
-$ilDB->createSequence("adn_ed_good_category", 1);
+$this->db->createSequence("adn_ed_good_category", 1);
 
 ?>
 <#10>
@@ -803,12 +803,12 @@ $fields = array(
         ,"type" => "integer"
     )
 );
-$ilDB->createTable("adn_ed_good_rel_answer", $fields, false, false, true);
+$this->db->createTable("adn_ed_good_rel_answer", $fields, false, false, true);
 
 $pk_fields = array("id");
-$ilDB->addPrimaryKey("adn_ed_good_rel_answer", $pk_fields);
+$this->db->addPrimaryKey("adn_ed_good_rel_answer", $pk_fields);
 
-$ilDB->createSequence("adn_ed_good_rel_answer", 1);
+$this->db->createSequence("adn_ed_good_rel_answer", 1);
 
 ?>
 <#11>
@@ -877,12 +877,12 @@ $fields = array(
         ,"type" => "integer"
     )
 );
-$ilDB->createTable("adn_ed_license", $fields, false, false, true);
+$this->db->createTable("adn_ed_license", $fields, false, false, true);
 
 $pk_fields = array("id");
-$ilDB->addPrimaryKey("adn_ed_license", $pk_fields);
+$this->db->addPrimaryKey("adn_ed_license", $pk_fields);
 
-$ilDB->createSequence("adn_ed_license", 1);
+$this->db->createSequence("adn_ed_license", 1);
 
 ?>
 <#12>
@@ -907,10 +907,10 @@ $fields = array(
         ,"type" => "integer"
     )
 );
-$ilDB->createTable("adn_ed_license_good", $fields, false, false, true);
+$this->db->createTable("adn_ed_license_good", $fields, false, false, true);
 
 $pk_fields = array("ed_license_id","ed_good_id");
-$ilDB->addPrimaryKey("adn_ed_license_good", $pk_fields);
+$this->db->addPrimaryKey("adn_ed_license_good", $pk_fields);
 
 
 ?>
@@ -994,12 +994,12 @@ $fields = array(
         ,"type" => "text"
     )
 );
-$ilDB->createTable("adn_ed_objective", $fields, false, false, true);
+$this->db->createTable("adn_ed_objective", $fields, false, false, true);
 
 $pk_fields = array("id");
-$ilDB->addPrimaryKey("adn_ed_objective", $pk_fields);
+$this->db->addPrimaryKey("adn_ed_objective", $pk_fields);
 
-$ilDB->createSequence("adn_ed_objective", 1);
+$this->db->createSequence("adn_ed_objective", 1);
 
 ?>
 <#14>
@@ -1106,12 +1106,12 @@ $fields = array(
         ,"type" => "clob"
     )
 );
-$ilDB->createTable("adn_ed_question", $fields, false, false, true);
+$this->db->createTable("adn_ed_question", $fields, false, false, true);
 
 $pk_fields = array("id");
-$ilDB->addPrimaryKey("adn_ed_question", $pk_fields);
+$this->db->addPrimaryKey("adn_ed_question", $pk_fields);
 
-$ilDB->createSequence("adn_ed_question", 1);
+$this->db->createSequence("adn_ed_question", 1);
 
 ?>
 <#15>
@@ -1140,10 +1140,10 @@ $fields = array(
         ,"type" => "integer"
     )
 );
-$ilDB->createTable("adn_ed_question_case", $fields, false, false, true);
+$this->db->createTable("adn_ed_question_case", $fields, false, false, true);
 
 $pk_fields = array("ed_question_id");
-$ilDB->addPrimaryKey("adn_ed_question_case", $pk_fields);
+$this->db->addPrimaryKey("adn_ed_question_case", $pk_fields);
 
 ?>
 <#16>
@@ -1168,10 +1168,10 @@ $fields = array(
         ,"type" => "integer"
     )
 );
-$ilDB->createTable("adn_ed_quest_case_good", $fields, false, false, true);
+$this->db->createTable("adn_ed_quest_case_good", $fields, false, false, true);
 
 $pk_fields = array("ed_question_id","ed_good_id");
-$ilDB->addPrimaryKey("adn_ed_quest_case_good", $pk_fields);
+$this->db->addPrimaryKey("adn_ed_quest_case_good", $pk_fields);
 
 
 ?>
@@ -1237,10 +1237,10 @@ $fields = array(
         ,"type" => "text"
     )
 );
-$ilDB->createTable("adn_ed_question_mc", $fields, false, false, true);
+$this->db->createTable("adn_ed_question_mc", $fields, false, false, true);
 
 $pk_fields = array("ed_question_id");
-$ilDB->addPrimaryKey("adn_ed_question_mc", $pk_fields);
+$this->db->addPrimaryKey("adn_ed_question_mc", $pk_fields);
 
 ?>
 <#18>
@@ -1316,12 +1316,12 @@ $fields = array(
         ,"type" => "integer"
     )
 );
-$ilDB->createTable("adn_ed_quest_target_nr", $fields, false, false, true);
+$this->db->createTable("adn_ed_quest_target_nr", $fields, false, false, true);
 
 $pk_fields = array("id");
-$ilDB->addPrimaryKey("adn_ed_quest_target_nr", $pk_fields);
+$this->db->addPrimaryKey("adn_ed_quest_target_nr", $pk_fields);
 
-$ilDB->createSequence("adn_ed_quest_target_nr", 1);
+$this->db->createSequence("adn_ed_quest_target_nr", 1);
 
 ?>
 <#19>
@@ -1365,10 +1365,10 @@ $fields = array(
         ,"type" => "integer"
     )
 );
-$ilDB->createTable("adn_ed_question_total", $fields, false, false, true);
+$this->db->createTable("adn_ed_question_total", $fields, false, false, true);
 
 $pk_fields = array("subject_area","mc_case");
-$ilDB->addPrimaryKey("adn_ed_question_total", $pk_fields);
+$this->db->addPrimaryKey("adn_ed_question_total", $pk_fields);
 
 ?>
 <#20>
@@ -1444,12 +1444,12 @@ $fields = array(
         ,"type" => "text"
     )
 );
-$ilDB->createTable("adn_ed_subobjective", $fields, false, false, true);
+$this->db->createTable("adn_ed_subobjective", $fields, false, false, true);
 
 $pk_fields = array("id");
-$ilDB->addPrimaryKey("adn_ed_subobjective", $pk_fields);
+$this->db->addPrimaryKey("adn_ed_subobjective", $pk_fields);
 
-$ilDB->createSequence("adn_ed_subobjective", 1);
+$this->db->createSequence("adn_ed_subobjective", 1);
 
 ?>
 <#21>
@@ -1479,7 +1479,7 @@ $fields = array(
         ,"type" => "integer"
     )
 );
-$ilDB->createTable("adn_ed_target_nr_obj", $fields, false, false, true);
+$this->db->createTable("adn_ed_target_nr_obj", $fields, false, false, true);
 
 ?>
 <#22>
@@ -1572,12 +1572,12 @@ $fields = array(
         ,"type" => "timestamp"
     )
 );
-$ilDB->createTable("adn_ep_answer_sheet", $fields, false, false, true);
+$this->db->createTable("adn_ep_answer_sheet", $fields, false, false, true);
 
 $pk_fields = array("id");
-$ilDB->addPrimaryKey("adn_ep_answer_sheet", $pk_fields);
+$this->db->addPrimaryKey("adn_ep_answer_sheet", $pk_fields);
 
-$ilDB->createSequence('adn_ep_answer_sheet');
+$this->db->createSequence('adn_ep_answer_sheet');
 
 ?>
 <#23>
@@ -1684,12 +1684,12 @@ $fields = array(
         ,"type" => "text"
     )
 );
-$ilDB->createTable("adn_ep_assignment", $fields, false, false, true);
+$this->db->createTable("adn_ep_assignment", $fields, false, false, true);
 
 $pk_fields = array("id");
-$ilDB->addPrimaryKey("adn_ep_assignment", $pk_fields);
+$this->db->addPrimaryKey("adn_ep_assignment", $pk_fields);
 
-$ilDB->createSequence('adn_ep_assignment');
+$this->db->createSequence('adn_ep_assignment');
 
 ?>
 <#24>
@@ -1764,12 +1764,12 @@ $fields = array(
         ,"type" => "text"
     )
 );
-$ilDB->createTable("adn_ep_cand_sheet", $fields, false, false, true);
+$this->db->createTable("adn_ep_cand_sheet", $fields, false, false, true);
 
 $pk_fields = array("id");
-$ilDB->addPrimaryKey("adn_ep_cand_sheet", $pk_fields);
+$this->db->addPrimaryKey("adn_ep_cand_sheet", $pk_fields);
 
-$ilDB->createSequence('edn_ep_cand_sheet');
+$this->db->createSequence('edn_ep_cand_sheet');
 
 ?>
 <#25>
@@ -1879,12 +1879,12 @@ $fields = array(
         ,"type" => "integer"
     )
 );
-$ilDB->createTable("adn_ep_exam_event", $fields, false, false, true);
+$this->db->createTable("adn_ep_exam_event", $fields, false, false, true);
 
 $pk_fields = array("id");
-$ilDB->addPrimaryKey("adn_ep_exam_event", $pk_fields);
+$this->db->addPrimaryKey("adn_ep_exam_event", $pk_fields);
 
-$ilDB->createSequence("adn_ep_exam_event", 1);
+$this->db->createSequence("adn_ep_exam_event", 1);
 
 ?>
 <#26>
@@ -1947,12 +1947,12 @@ $fields = array(
         ,"type" => "text"
     )
 );
-$ilDB->createTable("adn_ep_exam_invitation", $fields, false, false, true);
+$this->db->createTable("adn_ep_exam_invitation", $fields, false, false, true);
 
 $pk_fields = array("id");
-$ilDB->addPrimaryKey("adn_ep_exam_invitation", $pk_fields);
+$this->db->addPrimaryKey("adn_ep_exam_invitation", $pk_fields);
 
-$ilDB->createSequence('adn_ep_exam_invitation');
+$this->db->createSequence('adn_ep_exam_invitation');
 
 ?>
 <#27>
@@ -2008,12 +2008,12 @@ $fields = array(
         ,"type" => "integer"
     )
 );
-$ilDB->createTable("adn_ep_information", $fields, false, false, true);
+$this->db->createTable("adn_ep_information", $fields, false, false, true);
 
 $pk_fields = array("id");
-$ilDB->addPrimaryKey("adn_ep_information", $pk_fields);
+$this->db->addPrimaryKey("adn_ep_information", $pk_fields);
 
-$ilDB->createSequence("adn_ep_information", 1);
+$this->db->createSequence("adn_ep_information", 1);
 
 ?>
 <#28>
@@ -2038,10 +2038,10 @@ $fields = array(
         ,"type" => "integer"
     )
 );
-$ilDB->createTable("adn_ep_sheet_question", $fields, false, false, true);
+$this->db->createTable("adn_ep_sheet_question", $fields, false, false, true);
 
 $pk_fields = array("ep_answer_sheet_id","ed_question_id");
-$ilDB->addPrimaryKey("adn_ep_sheet_question", $pk_fields);
+$this->db->addPrimaryKey("adn_ep_sheet_question", $pk_fields);
 
 
 ?>
@@ -2197,12 +2197,12 @@ $fields = array(
         ,"type" => "text"
     )
 );
-$ilDB->createTable("adn_es_certificate", $fields, false, false, true);
+$this->db->createTable("adn_es_certificate", $fields, false, false, true);
 
 $pk_fields = array("id");
-$ilDB->addPrimaryKey("adn_es_certificate", $pk_fields);
+$this->db->addPrimaryKey("adn_es_certificate", $pk_fields);
 
-$ilDB->createSequence('adn_es_certificate');
+$this->db->createSequence('adn_es_certificate');
 
 ?>
 <#30>
@@ -2272,12 +2272,12 @@ $fields = array(
         ,"type" => "text"
     )
 );
-$ilDB->createTable("adn_md_cochair", $fields, false, false, true);
+$this->db->createTable("adn_md_cochair", $fields, false, false, true);
 
 $pk_fields = array("id");
-$ilDB->addPrimaryKey("adn_md_cochair", $pk_fields);
+$this->db->addPrimaryKey("adn_md_cochair", $pk_fields);
 
-$ilDB->createSequence("adn_md_cochair", 1);
+$this->db->createSequence("adn_md_cochair", 1);
 
 ?>
 <#31>
@@ -2340,12 +2340,12 @@ $fields = array(
         ,"type" => "text"
     )
 );
-$ilDB->createTable("adn_md_country", $fields, false, false, true);
+$this->db->createTable("adn_md_country", $fields, false, false, true);
 
 $pk_fields = array("id");
-$ilDB->addPrimaryKey("adn_md_country", $pk_fields);
+$this->db->addPrimaryKey("adn_md_country", $pk_fields);
 
-$ilDB->createSequence("adn_md_country", 1);
+$this->db->createSequence("adn_md_country", 1);
 
 ?>
 <#32>
@@ -2436,12 +2436,12 @@ $fields = array(
         ,"type" => "text"
     )
 );
-$ilDB->createTable("adn_md_exam_facility", $fields, false, false, true);
+$this->db->createTable("adn_md_exam_facility", $fields, false, false, true);
 
 $pk_fields = array("id");
-$ilDB->addPrimaryKey("adn_md_exam_facility", $pk_fields);
+$this->db->addPrimaryKey("adn_md_exam_facility", $pk_fields);
 
-$ilDB->createSequence("adn_md_exam_facility", 1);
+$this->db->createSequence("adn_md_exam_facility", 1);
 
 ?>
 <#33>
@@ -2707,12 +2707,12 @@ $fields = array(
         ,"type" => "integer"
     )
 );
-$ilDB->createTable("adn_md_wmo", $fields, false, false, true);
+$this->db->createTable("adn_md_wmo", $fields, false, false, true);
 
 $pk_fields = array("id");
-$ilDB->addPrimaryKey("adn_md_wmo", $pk_fields);
+$this->db->addPrimaryKey("adn_md_wmo", $pk_fields);
 
-$ilDB->createSequence("adn_md_wmo", 1);
+$this->db->createSequence("adn_md_wmo", 1);
 
 ?>
 <#34>
@@ -2792,12 +2792,12 @@ $fields = array(
         ,"type" => "integer"
     )
 );
-$ilDB->createTable("adn_ta_event", $fields, false, false, true);
+$this->db->createTable("adn_ta_event", $fields, false, false, true);
 
 $pk_fields = array("id");
-$ilDB->addPrimaryKey("adn_ta_event", $pk_fields);
+$this->db->addPrimaryKey("adn_ta_event", $pk_fields);
 
-$ilDB->createSequence("adn_ta_event", 1);
+$this->db->createSequence("adn_ta_event", 1);
 
 ?>
 <#35>
@@ -2853,12 +2853,12 @@ $fields = array(
         ,"type" => "integer"
     )
 );
-$ilDB->createTable("adn_ta_expertise", $fields, false, false, true);
+$this->db->createTable("adn_ta_expertise", $fields, false, false, true);
 
 $pk_fields = array("id");
-$ilDB->addPrimaryKey("adn_ta_expertise", $pk_fields);
+$this->db->addPrimaryKey("adn_ta_expertise", $pk_fields);
 
-$ilDB->createSequence("adn_ta_expertise", 1);
+$this->db->createSequence("adn_ta_expertise", 1);
 
 ?>
 <#36>
@@ -2918,12 +2918,12 @@ $fields = array(
         ,"type" => "integer"
     )
 );
-$ilDB->createTable("adn_ta_facility", $fields, false, false, true);
+$this->db->createTable("adn_ta_facility", $fields, false, false, true);
 
 $pk_fields = array("id");
-$ilDB->addPrimaryKey("adn_ta_facility", $pk_fields);
+$this->db->addPrimaryKey("adn_ta_facility", $pk_fields);
 
-$ilDB->createSequence("adn_ta_facility", 1);
+$this->db->createSequence("adn_ta_facility", 1);
 
 ?>
 <#37>
@@ -2986,12 +2986,12 @@ $fields = array(
         ,"type" => "integer"
     )
 );
-$ilDB->createTable("adn_ta_information", $fields, false, false, true);
+$this->db->createTable("adn_ta_information", $fields, false, false, true);
 
 $pk_fields = array("id");
-$ilDB->addPrimaryKey("adn_ta_information", $pk_fields);
+$this->db->addPrimaryKey("adn_ta_information", $pk_fields);
 
-$ilDB->createSequence("adn_ta_information", 1);
+$this->db->createSequence("adn_ta_information", 1);
 
 ?>
 <#38>
@@ -3061,12 +3061,12 @@ $fields = array(
         ,"type" => "integer"
     )
 );
-$ilDB->createTable("adn_ta_instructor", $fields, false, false, true);
+$this->db->createTable("adn_ta_instructor", $fields, false, false, true);
 
 $pk_fields = array("id");
-$ilDB->addPrimaryKey("adn_ta_instructor", $pk_fields);
+$this->db->addPrimaryKey("adn_ta_instructor", $pk_fields);
 
-$ilDB->createSequence("adn_ta_instructor", 1);
+$this->db->createSequence("adn_ta_instructor", 1);
 
 ?>
 <#39>
@@ -3091,10 +3091,10 @@ $fields = array(
         ,"type" => "integer"
     )
 );
-$ilDB->createTable("adn_ta_instructor_exp", $fields, false, false, true);
+$this->db->createTable("adn_ta_instructor_exp", $fields, false, false, true);
 
 $pk_fields = array("ta_instructor_id","ta_expertise_id");
-$ilDB->addPrimaryKey("adn_ta_instructor_exp", $pk_fields);
+$this->db->addPrimaryKey("adn_ta_instructor_exp", $pk_fields);
 
 ?>
 <#40>
@@ -3119,10 +3119,10 @@ $fields = array(
         ,"type" => "text"
     )
 );
-$ilDB->createTable("adn_ta_instr_ttype", $fields, false, false, true);
+$this->db->createTable("adn_ta_instr_ttype", $fields, false, false, true);
 
 $pk_fields = array("ta_instructor_id","training_type");
-$ilDB->addPrimaryKey("adn_ta_instr_ttype", $pk_fields);
+$this->db->addPrimaryKey("adn_ta_instr_ttype", $pk_fields);
 
 ?>
 <#41>
@@ -3268,12 +3268,12 @@ $fields = array(
         ,"type" => "text"
     )
 );
-$ilDB->createTable("adn_ta_provider", $fields, false, false, true);
+$this->db->createTable("adn_ta_provider", $fields, false, false, true);
 
 $pk_fields = array("id");
-$ilDB->addPrimaryKey("adn_ta_provider", $pk_fields);
+$this->db->addPrimaryKey("adn_ta_provider", $pk_fields);
 
-$ilDB->createSequence("adn_ta_provider", 1);
+$this->db->createSequence("adn_ta_provider", 1);
 
 ?>
 <#42>
@@ -3303,10 +3303,10 @@ $fields = array(
         ,"type" => "timestamp"
     )
 );
-$ilDB->createTable("adn_ta_provider_ttype", $fields, false, false, true);
+$this->db->createTable("adn_ta_provider_ttype", $fields, false, false, true);
 
 $pk_fields = array("ta_provider_id","training_type");
-$ilDB->addPrimaryKey("adn_ta_provider_ttype", $pk_fields);
+$this->db->addPrimaryKey("adn_ta_provider_ttype", $pk_fields);
 
 
 ?>
@@ -3315,7 +3315,7 @@ $ilDB->addPrimaryKey("adn_ta_provider_ttype", $pk_fields);
 
 $fields = array("cp_professional_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1", "adn_cp_invoice", $fields, "adn_cp_professional", $ref_fields);
+$this->db->addForeignKey("fk1", "adn_cp_invoice", $fields, "adn_cp_professional", $ref_fields);
 
 ?>
 <#44>
@@ -3323,7 +3323,7 @@ $ilDB->addForeignKey("fk1", "adn_cp_invoice", $fields, "adn_cp_professional", $r
 
 $fields = array("ep_exam_event_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2", "adn_cp_invoice", $fields, "adn_ep_exam_event", $ref_fields);
+$this->db->addForeignKey("fk2", "adn_cp_invoice", $fields, "adn_ep_exam_event", $ref_fields);
 
 ?>
 <#45>
@@ -3331,7 +3331,7 @@ $ilDB->addForeignKey("fk2", "adn_cp_invoice", $fields, "adn_ep_exam_event", $ref
 
 $fields = array("es_certificate_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk3", "adn_cp_invoice", $fields, "adn_es_certificate", $ref_fields);
+$this->db->addForeignKey("fk3", "adn_cp_invoice", $fields, "adn_es_certificate", $ref_fields);
 
 ?>
 <#46>
@@ -3339,7 +3339,7 @@ $ilDB->addForeignKey("fk3", "adn_cp_invoice", $fields, "adn_es_certificate", $re
 
 $fields = array("registered_by_wmo_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1", "adn_cp_professional", $fields, "adn_md_wmo", $ref_fields);
+$this->db->addForeignKey("fk1", "adn_cp_professional", $fields, "adn_md_wmo", $ref_fields);
 
 ?>
 <#47>
@@ -3347,7 +3347,7 @@ $ilDB->addForeignKey("fk1", "adn_cp_professional", $fields, "adn_md_wmo", $ref_f
 
 $fields = array("blocked_by_wmo_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2", "adn_cp_professional", $fields, "adn_md_wmo", $ref_fields);
+$this->db->addForeignKey("fk2", "adn_cp_professional", $fields, "adn_md_wmo", $ref_fields);
 
 ?>
 <#48>
@@ -3355,7 +3355,7 @@ $ilDB->addForeignKey("fk2", "adn_cp_professional", $fields, "adn_md_wmo", $ref_f
 
 $fields = array("citizenship");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk3", "adn_cp_professional", $fields, "adn_md_country", $ref_fields);
+$this->db->addForeignKey("fk3", "adn_cp_professional", $fields, "adn_md_country", $ref_fields);
 
 ?>
 <#49>
@@ -3363,7 +3363,7 @@ $ilDB->addForeignKey("fk3", "adn_cp_professional", $fields, "adn_md_country", $r
 
 $fields = array("pa_country");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk4", "adn_cp_professional", $fields, "adn_md_country", $ref_fields);
+$this->db->addForeignKey("fk4", "adn_cp_professional", $fields, "adn_md_country", $ref_fields);
 
 ?>
 <#50>
@@ -3371,7 +3371,7 @@ $ilDB->addForeignKey("fk4", "adn_cp_professional", $fields, "adn_md_country", $r
 
 $fields = array("sa_country");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk5", "adn_cp_professional", $fields, "adn_md_country", $ref_fields);
+$this->db->addForeignKey("fk5", "adn_cp_professional", $fields, "adn_md_country", $ref_fields);
 
 ?>
 <#51>
@@ -3379,7 +3379,7 @@ $ilDB->addForeignKey("fk5", "adn_cp_professional", $fields, "adn_md_country", $r
 
 $fields = array("last_ta_event_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk6", "adn_cp_professional", $fields, "adn_ta_event", $ref_fields);
+$this->db->addForeignKey("fk6", "adn_cp_professional", $fields, "adn_ta_event", $ref_fields);
 
 ?>
 <#52>
@@ -3387,7 +3387,7 @@ $ilDB->addForeignKey("fk6", "adn_cp_professional", $fields, "adn_ta_event", $ref
 
 $fields = array("ep_cand_sheet_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1", "adn_ec_given_answer", $fields, "adn_ep_cand_sheet", $ref_fields);
+$this->db->addForeignKey("fk1", "adn_ec_given_answer", $fields, "adn_ep_cand_sheet", $ref_fields);
 
 ?>
 <#53>
@@ -3395,7 +3395,7 @@ $ilDB->addForeignKey("fk1", "adn_ec_given_answer", $fields, "adn_ep_cand_sheet",
 
 $fields = array("ed_question_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2", "adn_ec_given_answer", $fields, "adn_ed_question", $ref_fields);
+$this->db->addForeignKey("fk2", "adn_ec_given_answer", $fields, "adn_ed_question", $ref_fields);
 
 ?>
 <#54>
@@ -3403,7 +3403,7 @@ $ilDB->addForeignKey("fk2", "adn_ec_given_answer", $fields, "adn_ed_question", $
 
 $fields = array("ed_good_related_answer_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1", "adn_ed_case_answ_good", $fields, "adn_ed_good_rel_answer", $ref_fields);
+$this->db->addForeignKey("fk1", "adn_ed_case_answ_good", $fields, "adn_ed_good_rel_answer", $ref_fields);
 
 ?>
 <#55>
@@ -3411,7 +3411,7 @@ $ilDB->addForeignKey("fk1", "adn_ed_case_answ_good", $fields, "adn_ed_good_rel_a
 
 $fields = array("ed_good_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2", "adn_ed_case_answ_good", $fields, "adn_ed_good", $ref_fields);
+$this->db->addForeignKey("fk2", "adn_ed_case_answ_good", $fields, "adn_ed_good", $ref_fields);
 
 ?>
 <#56>
@@ -3419,7 +3419,7 @@ $ilDB->addForeignKey("fk2", "adn_ed_case_answ_good", $fields, "adn_ed_good", $re
 
 $fields = array("ed_good_category_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2", "adn_ed_good", $fields, "adn_ed_good_category", $ref_fields);
+$this->db->addForeignKey("fk2", "adn_ed_good", $fields, "adn_ed_good_category", $ref_fields);
 
 ?>
 <#57>
@@ -3427,7 +3427,7 @@ $ilDB->addForeignKey("fk2", "adn_ed_good", $fields, "adn_ed_good_category", $ref
 
 $fields = array("ed_question_id");
 $ref_fields = array("ed_question_id");
-$ilDB->addForeignKey("fk1", "adn_ed_good_rel_answer", $fields, "adn_ed_question_case", $ref_fields);
+$this->db->addForeignKey("fk1", "adn_ed_good_rel_answer", $fields, "adn_ed_question_case", $ref_fields);
 
 ?>
 <#58>
@@ -3435,7 +3435,7 @@ $ilDB->addForeignKey("fk1", "adn_ed_good_rel_answer", $fields, "adn_ed_question_
 
 $fields = array("ed_license_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1", "adn_ed_license_good", $fields, "adn_ed_license", $ref_fields);
+$this->db->addForeignKey("fk1", "adn_ed_license_good", $fields, "adn_ed_license", $ref_fields);
 
 ?>
 <#59>
@@ -3443,7 +3443,7 @@ $ilDB->addForeignKey("fk1", "adn_ed_license_good", $fields, "adn_ed_license", $r
 
 $fields = array("ed_good_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2", "adn_ed_license_good", $fields, "adn_ed_good", $ref_fields);
+$this->db->addForeignKey("fk2", "adn_ed_license_good", $fields, "adn_ed_good", $ref_fields);
 
 ?>
 <#60>
@@ -3451,7 +3451,7 @@ $ilDB->addForeignKey("fk2", "adn_ed_license_good", $fields, "adn_ed_good", $ref_
 
 $fields = array("ed_objective_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1", "adn_ed_question", $fields, "adn_ed_objective", $ref_fields);
+$this->db->addForeignKey("fk1", "adn_ed_question", $fields, "adn_ed_objective", $ref_fields);
 
 ?>
 <#61>
@@ -3459,7 +3459,7 @@ $ilDB->addForeignKey("fk1", "adn_ed_question", $fields, "adn_ed_objective", $ref
 
 $fields = array("ed_subobjective_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2", "adn_ed_question", $fields, "adn_ed_subobjective", $ref_fields);
+$this->db->addForeignKey("fk2", "adn_ed_question", $fields, "adn_ed_subobjective", $ref_fields);
 
 ?>
 <#62>
@@ -3467,7 +3467,7 @@ $ilDB->addForeignKey("fk2", "adn_ed_question", $fields, "adn_ed_subobjective", $
 
 $fields = array("ed_question_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1", "adn_ed_question_case", $fields, "adn_ed_question", $ref_fields);
+$this->db->addForeignKey("fk1", "adn_ed_question_case", $fields, "adn_ed_question", $ref_fields);
 
 ?>
 <#63>
@@ -3475,7 +3475,7 @@ $ilDB->addForeignKey("fk1", "adn_ed_question_case", $fields, "adn_ed_question", 
 
 $fields = array("ed_question_id");
 $ref_fields = array("ed_question_id");
-$ilDB->addForeignKey("fk1", "adn_ed_quest_case_good", $fields, "adn_ed_question_case", $ref_fields);
+$this->db->addForeignKey("fk1", "adn_ed_quest_case_good", $fields, "adn_ed_question_case", $ref_fields);
 
 ?>
 <#64>
@@ -3483,7 +3483,7 @@ $ilDB->addForeignKey("fk1", "adn_ed_quest_case_good", $fields, "adn_ed_question_
 
 $fields = array("ed_good_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2", "adn_ed_quest_case_good", $fields, "adn_ed_good", $ref_fields);
+$this->db->addForeignKey("fk2", "adn_ed_quest_case_good", $fields, "adn_ed_good", $ref_fields);
 
 ?>
 <#65>
@@ -3491,7 +3491,7 @@ $ilDB->addForeignKey("fk2", "adn_ed_quest_case_good", $fields, "adn_ed_good", $r
 
 $fields = array("ed_question_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1", "adn_ed_question_mc", $fields, "adn_ed_question", $ref_fields);
+$this->db->addForeignKey("fk1", "adn_ed_question_mc", $fields, "adn_ed_question", $ref_fields);
 
 ?>
 <#66>
@@ -3499,7 +3499,7 @@ $ilDB->addForeignKey("fk1", "adn_ed_question_mc", $fields, "adn_ed_question", $r
 
 $fields = array("ed_objective_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1", "adn_ed_subobjective", $fields, "adn_ed_objective", $ref_fields);
+$this->db->addForeignKey("fk1", "adn_ed_subobjective", $fields, "adn_ed_objective", $ref_fields);
 
 ?>
 <#67>
@@ -3507,7 +3507,7 @@ $ilDB->addForeignKey("fk1", "adn_ed_subobjective", $fields, "adn_ed_objective", 
 
 $fields = array("ed_objective_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1", "adn_ed_target_nr_obj", $fields, "adn_ed_objective", $ref_fields);
+$this->db->addForeignKey("fk1", "adn_ed_target_nr_obj", $fields, "adn_ed_objective", $ref_fields);
 
 ?>
 <#68>
@@ -3515,7 +3515,7 @@ $ilDB->addForeignKey("fk1", "adn_ed_target_nr_obj", $fields, "adn_ed_objective",
 
 $fields = array("ed_subobjective_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2", "adn_ed_target_nr_obj", $fields, "adn_ed_subobjective", $ref_fields);
+$this->db->addForeignKey("fk2", "adn_ed_target_nr_obj", $fields, "adn_ed_subobjective", $ref_fields);
 
 ?>
 <#69>
@@ -3523,7 +3523,7 @@ $ilDB->addForeignKey("fk2", "adn_ed_target_nr_obj", $fields, "adn_ed_subobjectiv
 
 $fields = array("ep_exam_event_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1", "adn_ep_answer_sheet", $fields, "adn_ep_exam_event", $ref_fields);
+$this->db->addForeignKey("fk1", "adn_ep_answer_sheet", $fields, "adn_ep_exam_event", $ref_fields);
 
 ?>
 <#70>
@@ -3531,7 +3531,7 @@ $ilDB->addForeignKey("fk1", "adn_ep_answer_sheet", $fields, "adn_ep_exam_event",
 
 $fields = array("ed_license_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2", "adn_ep_answer_sheet", $fields, "adn_ed_license", $ref_fields);
+$this->db->addForeignKey("fk2", "adn_ep_answer_sheet", $fields, "adn_ed_license", $ref_fields);
 
 ?>
 <#71>
@@ -3539,7 +3539,7 @@ $ilDB->addForeignKey("fk2", "adn_ep_answer_sheet", $fields, "adn_ed_license", $r
 
 $fields = array("prev_ed_good_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk3", "adn_ep_answer_sheet", $fields, "adn_ed_good", $ref_fields);
+$this->db->addForeignKey("fk3", "adn_ep_answer_sheet", $fields, "adn_ed_good", $ref_fields);
 
 ?>
 <#72>
@@ -3547,7 +3547,7 @@ $ilDB->addForeignKey("fk3", "adn_ep_answer_sheet", $fields, "adn_ed_good", $ref_
 
 $fields = array("new_ed_good_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk4", "adn_ep_answer_sheet", $fields, "adn_ed_good", $ref_fields);
+$this->db->addForeignKey("fk4", "adn_ep_answer_sheet", $fields, "adn_ed_good", $ref_fields);
 
 ?>
 <#73>
@@ -3555,7 +3555,7 @@ $ilDB->addForeignKey("fk4", "adn_ep_answer_sheet", $fields, "adn_ed_good", $ref_
 
 $fields = array("ep_exam_event_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1", "adn_ep_assignment", $fields, "adn_ep_exam_event", $ref_fields);
+$this->db->addForeignKey("fk1", "adn_ep_assignment", $fields, "adn_ep_exam_event", $ref_fields);
 
 ?>
 <#74>
@@ -3563,7 +3563,7 @@ $ilDB->addForeignKey("fk1", "adn_ep_assignment", $fields, "adn_ep_exam_event", $
 
 $fields = array("cp_professional_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2", "adn_ep_assignment", $fields, "adn_cp_professional", $ref_fields);
+$this->db->addForeignKey("fk2", "adn_ep_assignment", $fields, "adn_cp_professional", $ref_fields);
 
 ?>
 <#75>
@@ -3571,7 +3571,7 @@ $ilDB->addForeignKey("fk2", "adn_ep_assignment", $fields, "adn_cp_professional",
 
 $fields = array("cp_professional_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1", "adn_ep_cand_sheet", $fields, "adn_cp_professional", $ref_fields);
+$this->db->addForeignKey("fk1", "adn_ep_cand_sheet", $fields, "adn_cp_professional", $ref_fields);
 
 ?>
 <#76>
@@ -3579,7 +3579,7 @@ $ilDB->addForeignKey("fk1", "adn_ep_cand_sheet", $fields, "adn_cp_professional",
 
 $fields = array("ep_answer_sheet_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2", "adn_ep_cand_sheet", $fields, "adn_ep_answer_sheet", $ref_fields);
+$this->db->addForeignKey("fk2", "adn_ep_cand_sheet", $fields, "adn_ep_answer_sheet", $ref_fields);
 
 ?>
 <#77>
@@ -3587,7 +3587,7 @@ $ilDB->addForeignKey("fk2", "adn_ep_cand_sheet", $fields, "adn_ep_answer_sheet",
 
 $fields = array("md_exam_facility_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1", "adn_ep_exam_event", $fields, "adn_md_exam_facility", $ref_fields);
+$this->db->addForeignKey("fk1", "adn_ep_exam_event", $fields, "adn_md_exam_facility", $ref_fields);
 
 ?>
 <#78>
@@ -3595,7 +3595,7 @@ $ilDB->addForeignKey("fk1", "adn_ep_exam_event", $fields, "adn_md_exam_facility"
 
 $fields = array("chairman_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2", "adn_ep_exam_event", $fields, "adn_md_cochair", $ref_fields);
+$this->db->addForeignKey("fk2", "adn_ep_exam_event", $fields, "adn_md_cochair", $ref_fields);
 
 ?>
 <#79>
@@ -3603,7 +3603,7 @@ $ilDB->addForeignKey("fk2", "adn_ep_exam_event", $fields, "adn_md_cochair", $ref
 
 $fields = array("co_chair_1_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk3", "adn_ep_exam_event", $fields, "adn_md_cochair", $ref_fields);
+$this->db->addForeignKey("fk3", "adn_ep_exam_event", $fields, "adn_md_cochair", $ref_fields);
 
 ?>
 <#80>
@@ -3611,7 +3611,7 @@ $ilDB->addForeignKey("fk3", "adn_ep_exam_event", $fields, "adn_md_cochair", $ref
 
 $fields = array("co_chair_2_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk4", "adn_ep_exam_event", $fields, "adn_md_cochair", $ref_fields);
+$this->db->addForeignKey("fk4", "adn_ep_exam_event", $fields, "adn_md_cochair", $ref_fields);
 
 ?>
 <#81>
@@ -3619,7 +3619,7 @@ $ilDB->addForeignKey("fk4", "adn_ep_exam_event", $fields, "adn_md_cochair", $ref
 
 $fields = array("cp_professional_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1", "adn_ep_exam_invitation", $fields, "adn_cp_professional", $ref_fields);
+$this->db->addForeignKey("fk1", "adn_ep_exam_invitation", $fields, "adn_cp_professional", $ref_fields);
 
 ?>
 <#82>
@@ -3627,7 +3627,7 @@ $ilDB->addForeignKey("fk1", "adn_ep_exam_invitation", $fields, "adn_cp_professio
 
 $fields = array("ep_exam_event_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2", "adn_ep_exam_invitation", $fields, "adn_ep_exam_event", $ref_fields);
+$this->db->addForeignKey("fk2", "adn_ep_exam_invitation", $fields, "adn_ep_exam_event", $ref_fields);
 
 ?>
 <#83>
@@ -3635,7 +3635,7 @@ $ilDB->addForeignKey("fk2", "adn_ep_exam_invitation", $fields, "adn_ep_exam_even
 
 $fields = array("ep_answer_sheet_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1", "adn_ep_sheet_question", $fields, "adn_ep_answer_sheet", $ref_fields);
+$this->db->addForeignKey("fk1", "adn_ep_sheet_question", $fields, "adn_ep_answer_sheet", $ref_fields);
 
 ?>
 <#84>
@@ -3643,7 +3643,7 @@ $ilDB->addForeignKey("fk1", "adn_ep_sheet_question", $fields, "adn_ep_answer_she
 
 $fields = array("ed_question_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2", "adn_ep_sheet_question", $fields, "adn_ed_question", $ref_fields);
+$this->db->addForeignKey("fk2", "adn_ep_sheet_question", $fields, "adn_ed_question", $ref_fields);
 
 ?>
 <#85>
@@ -3651,7 +3651,7 @@ $ilDB->addForeignKey("fk2", "adn_ep_sheet_question", $fields, "adn_ed_question",
 
 $fields = array("cp_professional_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1", "adn_es_certificate", $fields, "adn_cp_professional", $ref_fields);
+$this->db->addForeignKey("fk1", "adn_es_certificate", $fields, "adn_cp_professional", $ref_fields);
 
 ?>
 <#86>
@@ -3659,7 +3659,7 @@ $ilDB->addForeignKey("fk1", "adn_es_certificate", $fields, "adn_cp_professional"
 
 $fields = array("ep_exam_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2", "adn_es_certificate", $fields, "adn_ep_exam_event", $ref_fields);
+$this->db->addForeignKey("fk2", "adn_es_certificate", $fields, "adn_ep_exam_event", $ref_fields);
 
 ?>
 <#87>
@@ -3667,7 +3667,7 @@ $ilDB->addForeignKey("fk2", "adn_es_certificate", $fields, "adn_ep_exam_event", 
 
 $fields = array("issued_by_wmo");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk3", "adn_es_certificate", $fields, "adn_md_wmo", $ref_fields);
+$this->db->addForeignKey("fk3", "adn_es_certificate", $fields, "adn_md_wmo", $ref_fields);
 
 ?>
 <#88>
@@ -3675,7 +3675,7 @@ $ilDB->addForeignKey("fk3", "adn_es_certificate", $fields, "adn_md_wmo", $ref_fi
 
 $fields = array("md_wmo_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1", "adn_md_cochair", $fields, "adn_md_wmo", $ref_fields);
+$this->db->addForeignKey("fk1", "adn_md_cochair", $fields, "adn_md_wmo", $ref_fields);
 
 ?>
 <#89>
@@ -3683,7 +3683,7 @@ $ilDB->addForeignKey("fk1", "adn_md_cochair", $fields, "adn_md_wmo", $ref_fields
 
 $fields = array("md_wmo_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1", "adn_md_exam_facility", $fields, "adn_md_wmo", $ref_fields);
+$this->db->addForeignKey("fk1", "adn_md_exam_facility", $fields, "adn_md_wmo", $ref_fields);
 
 ?>
 <#90>
@@ -3691,7 +3691,7 @@ $ilDB->addForeignKey("fk1", "adn_md_exam_facility", $fields, "adn_md_wmo", $ref_
 
 $fields = array("ta_provider_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1", "adn_ta_event", $fields, "adn_ta_provider", $ref_fields);
+$this->db->addForeignKey("fk1", "adn_ta_event", $fields, "adn_ta_provider", $ref_fields);
 
 ?>
 <#91>
@@ -3699,7 +3699,7 @@ $ilDB->addForeignKey("fk1", "adn_ta_event", $fields, "adn_ta_provider", $ref_fie
 
 $fields = array("ta_facility_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2", "adn_ta_event", $fields, "adn_ta_facility", $ref_fields);
+$this->db->addForeignKey("fk2", "adn_ta_event", $fields, "adn_ta_facility", $ref_fields);
 
 ?>
 <#92>
@@ -3707,7 +3707,7 @@ $ilDB->addForeignKey("fk2", "adn_ta_event", $fields, "adn_ta_facility", $ref_fie
 
 $fields = array("ta_provider_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1", "adn_ta_facility", $fields, "adn_ta_provider", $ref_fields);
+$this->db->addForeignKey("fk1", "adn_ta_facility", $fields, "adn_ta_provider", $ref_fields);
 
 ?>
 <#93>
@@ -3715,7 +3715,7 @@ $ilDB->addForeignKey("fk1", "adn_ta_facility", $fields, "adn_ta_provider", $ref_
 
 $fields = array("ta_provider_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1", "adn_ta_instructor", $fields, "adn_ta_provider", $ref_fields);
+$this->db->addForeignKey("fk1", "adn_ta_instructor", $fields, "adn_ta_provider", $ref_fields);
 
 ?>
 <#94>
@@ -3723,7 +3723,7 @@ $ilDB->addForeignKey("fk1", "adn_ta_instructor", $fields, "adn_ta_provider", $re
 
 $fields = array("ta_instructor_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1", "adn_ta_instructor_exp", $fields, "adn_ta_instructor", $ref_fields);
+$this->db->addForeignKey("fk1", "adn_ta_instructor_exp", $fields, "adn_ta_instructor", $ref_fields);
 
 ?>
 <#95>
@@ -3731,7 +3731,7 @@ $ilDB->addForeignKey("fk1", "adn_ta_instructor_exp", $fields, "adn_ta_instructor
 
 $fields = array("ta_expertise_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk2", "adn_ta_instructor_exp", $fields, "adn_ta_expertise", $ref_fields);
+$this->db->addForeignKey("fk2", "adn_ta_instructor_exp", $fields, "adn_ta_expertise", $ref_fields);
 
 ?>
 <#96>
@@ -3739,7 +3739,7 @@ $ilDB->addForeignKey("fk2", "adn_ta_instructor_exp", $fields, "adn_ta_expertise"
 
 $fields = array("ta_instructor_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1", "adn_ta_instr_ttype", $fields, "adn_ta_instructor", $ref_fields);
+$this->db->addForeignKey("fk1", "adn_ta_instr_ttype", $fields, "adn_ta_instructor", $ref_fields);
 
 ?>
 <#97>
@@ -3747,7 +3747,7 @@ $ilDB->addForeignKey("fk1", "adn_ta_instr_ttype", $fields, "adn_ta_instructor", 
 
 $fields = array("ta_provider_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk1", "adn_ta_provider_ttype", $fields, "adn_ta_provider", $ref_fields);
+$this->db->addForeignKey("fk1", "adn_ta_provider_ttype", $fields, "adn_ta_provider", $ref_fields);
 
 ?>
 <#98>
@@ -3756,7 +3756,7 @@ $ilDB->addForeignKey("fk1", "adn_ta_provider_ttype", $fields, "adn_ta_provider",
 ?>
 <#99>
 <?php
-    $ilDB->modifyTableColumn(
+    $this->db->modifyTableColumn(
     'adn_cp_professional',
     'subject_area',
     array("type" => "text", "length" => 5, "notnull" => false, "default" => "")
@@ -3764,7 +3764,7 @@ $ilDB->addForeignKey("fk1", "adn_ta_provider_ttype", $fields, "adn_ta_provider",
 ?>
 <#100>
 <?php
-    $ilDB->modifyTableColumn(
+    $this->db->modifyTableColumn(
     'adn_md_wmo',
     'visit_street',
     array("type" => "text", "length" => 50, "notnull" => false,
@@ -3773,7 +3773,7 @@ $ilDB->addForeignKey("fk1", "adn_ta_provider_ttype", $fields, "adn_ta_provider",
 ?>
 <#101>
 <?php
-    $ilDB->modifyTableColumn(
+    $this->db->modifyTableColumn(
     'adn_md_wmo',
     'visit_street_no',
     array("type" => "text", "length" => 10, "notnull" => false,
@@ -3782,7 +3782,7 @@ $ilDB->addForeignKey("fk1", "adn_ta_provider_ttype", $fields, "adn_ta_provider",
 ?>
 <#102>
 <?php
-    $ilDB->modifyTableColumn(
+    $this->db->modifyTableColumn(
     'adn_md_wmo',
     'visit_postal_code',
     array("type" => "text", "length" => 10, "notnull" => false,
@@ -3791,7 +3791,7 @@ $ilDB->addForeignKey("fk1", "adn_ta_provider_ttype", $fields, "adn_ta_provider",
 ?>
 <#103>
 <?php
-    $ilDB->modifyTableColumn(
+    $this->db->modifyTableColumn(
     'adn_md_wmo',
     'visit_city',
     array("type" => "text", "length" => 50, "notnull" => false,
@@ -3800,8 +3800,8 @@ $ilDB->addForeignKey("fk1", "adn_ta_provider_ttype", $fields, "adn_ta_provider",
 ?>
 <#104>
 <?php
-if (!$ilDB->tableColumnExists("adn_ep_assignment", "archived")) {
-    $ilDB->addTableColumn("adn_ep_assignment", "archived", array(
+if (!$this->db->tableColumnExists("adn_ep_assignment", "archived")) {
+    $this->db->addTableColumn("adn_ep_assignment", "archived", array(
         "type" => "integer",
         "notnull" => false,
         "length" => 1));
@@ -3809,7 +3809,7 @@ if (!$ilDB->tableColumnExists("adn_ep_assignment", "archived")) {
 ?>
 <#105>
 <?php
-    $ilDB->modifyTableColumn(
+    $this->db->modifyTableColumn(
     'adn_ta_provider',
     'pa_postal_code',
     array("type" => "text", "length" => 10, "notnull" => false,
@@ -3818,7 +3818,7 @@ if (!$ilDB->tableColumnExists("adn_ep_assignment", "archived")) {
 ?>
 <#106>
 <?php
-    $ilDB->modifyTableColumn(
+    $this->db->modifyTableColumn(
     'adn_ta_provider',
     'pa_city',
     array("type" => "text", "length" => 50, "notnull" => false,
@@ -3831,7 +3831,6 @@ if (!$ilDB->tableColumnExists("adn_ep_assignment", "archived")) {
 ?>
 <#108>
 <?php
-    global $rbacadmin;
     include_once './Services/AccessControl/classes/class.ilObjRole.php';
 
     $roles = array(
@@ -3842,42 +3841,42 @@ if (!$ilDB->tableColumnExists("adn_ep_assignment", "archived")) {
 
     foreach ($roles as $r => $p) {
         // create object record
-        $id = $ilDB->nextId("object_data");
+        $id = $this->db->nextId("object_data");
         $q = "INSERT INTO object_data " .
              "(obj_id,type,title,description,owner,create_date,last_update,import_id) " .
              "VALUES " .
              "(" .
-             $ilDB->quote($id, "integer") . "," .
-             $ilDB->quote("role", "text") . "," .
-             $ilDB->quote($r, "text") . "," .
-             $ilDB->quote("", "text") . "," .
-             $ilDB->quote(0, "integer") . "," .
-             $ilDB->now() . "," .
-             $ilDB->now() . "," .
-             $ilDB->quote("", "text") . ")";
-        $ilDB->manipulate($q);
+             $this->db->quote($id, "integer") . "," .
+             $this->db->quote("role", "text") . "," .
+             $this->db->quote($r, "text") . "," .
+             $this->db->quote("", "text") . "," .
+             $this->db->quote(0, "integer") . "," .
+             $this->db->now() . "," .
+             $this->db->now() . "," .
+             $this->db->quote("", "text") . ")";
+        $this->db->manipulate($q);
 
         // create role record
         $query = "INSERT INTO role_data " .
             "(role_id,allow_register,assign_users,disk_quota) " .
             "VALUES " .
-            "(" . $ilDB->quote($id, 'integer') . "," .
-            $ilDB->quote(false, 'integer') . "," .
-            $ilDB->quote(false, 'integer') . "," .
-            $ilDB->quote(0, 'integer') . ")"
+            "(" . $this->db->quote($id, 'integer') . "," .
+            $this->db->quote(false, 'integer') . "," .
+            $this->db->quote(false, 'integer') . "," .
+            $this->db->quote(0, 'integer') . ")"
             ;
-        $ilDB->manipulate($query);
+        $this->db->manipulate($query);
 
         // assign role to global role folder
         $query = sprintf(
             'INSERT INTO rbac_fa (rol_id, parent, assign, protected) ' .
             'VALUES (%s,%s,%s,%s)',
-            $ilDB->quote($id, 'integer'),
-            $ilDB->quote(8, 'integer'),
-            $ilDB->quote('y', 'text'),
-            $ilDB->quote($p, 'text')
+            $this->db->quote($id, 'integer'),
+            $this->db->quote(8, 'integer'),
+            $this->db->quote('y', 'text'),
+            $this->db->quote($p, 'text')
         );
-        $res = $ilDB->manipulate($query);
+        $res = $this->db->manipulate($query);
     }
 ?>
 <#109>
@@ -3885,8 +3884,8 @@ if (!$ilDB->tableColumnExists("adn_ep_assignment", "archived")) {
 $types = array("xata", "xaed", "xaep", "xaec", "xaes", "xacp", "xast", "xamd", "xaad");
 foreach ($types as $t) {
     // register new object type
-    $id = $ilDB->nextId("object_data");
-    $ilDB->manipulateF(
+    $id = $this->db->nextId("object_data");
+    $this->db->manipulateF(
         "INSERT INTO object_data (obj_id, type, title, description, owner, create_date, last_update) " .
             "VALUES (%s, %s, %s, %s, %s, %s, %s)",
         array("integer", "text", "text", "text", "integer", "timestamp", "timestamp"),
@@ -3895,8 +3894,8 @@ foreach ($types as $t) {
     $typ_id = $id;
 
     // create object data entry
-    $id = $ilDB->nextId("object_data");
-    $ilDB->manipulateF(
+    $id = $this->db->nextId("object_data");
+    $this->db->manipulateF(
         "INSERT INTO object_data (obj_id, type, title, description, owner, create_date, last_update) " .
             "VALUES (%s, %s, %s, %s, %s, %s, %s)",
         array("integer", "text", "text", "text", "integer", "timestamp", "timestamp"),
@@ -3904,8 +3903,8 @@ foreach ($types as $t) {
     );
 
     // create object reference entry
-    $ref_id = $ilDB->nextId('object_reference');
-    $res = $ilDB->manipulateF(
+    $ref_id = $this->db->nextId('object_reference');
+    $res = $this->db->manipulateF(
         "INSERT INTO object_reference (ref_id, obj_id) VALUES (%s, %s)",
         array("integer", "integer"),
         array($ref_id, $id)
@@ -3917,22 +3916,22 @@ foreach ($types as $t) {
 
     // add rbac operations
     // 1: edit_permissions, 2: visible, 3: read, 4:write
-    $ilDB->manipulateF(
+    $this->db->manipulateF(
         "INSERT INTO rbac_ta (typ_id, ops_id) VALUES (%s, %s)",
         array("integer", "integer"),
         array($typ_id, 1)
     );
-    $ilDB->manipulateF(
+    $this->db->manipulateF(
         "INSERT INTO rbac_ta (typ_id, ops_id) VALUES (%s, %s)",
         array("integer", "integer"),
         array($typ_id, 2)
     );
-    $ilDB->manipulateF(
+    $this->db->manipulateF(
         "INSERT INTO rbac_ta (typ_id, ops_id) VALUES (%s, %s)",
         array("integer", "integer"),
         array($typ_id, 3)
     );
-    $ilDB->manipulateF(
+    $this->db->manipulateF(
         "INSERT INTO rbac_ta (typ_id, ops_id) VALUES (%s, %s)",
         array("integer", "integer"),
         array($typ_id, 4)
@@ -3945,8 +3944,8 @@ foreach ($types as $t) {
 ?>
 <#111>
 <?php
-if (!$ilDB->tableColumnExists("adn_ep_answer_sheet", "archived")) {
-    $ilDB->addTableColumn("adn_ep_answer_sheet", "archived", array(
+if (!$this->db->tableColumnExists("adn_ep_answer_sheet", "archived")) {
+    $this->db->addTableColumn("adn_ep_answer_sheet", "archived", array(
         "type" => "integer",
         "notnull" => false,
         "length" => 1));
@@ -3954,12 +3953,12 @@ if (!$ilDB->tableColumnExists("adn_ep_answer_sheet", "archived")) {
 ?>
 <#112>
 <?php
-    $ilDB->createSequence("adn_ep_cand_sheet");
+    $this->db->createSequence("adn_ep_cand_sheet");
 ?>
 <#113>
 <?php
-if (!$ilDB->tableColumnExists("adn_ep_cand_sheet", "archived")) {
-    $ilDB->addTableColumn("adn_ep_cand_sheet", "archived", array(
+if (!$this->db->tableColumnExists("adn_ep_cand_sheet", "archived")) {
+    $this->db->addTableColumn("adn_ep_cand_sheet", "archived", array(
         "type" => "integer",
         "notnull" => false,
         "length" => 1));
@@ -3967,8 +3966,8 @@ if (!$ilDB->tableColumnExists("adn_ep_cand_sheet", "archived")) {
 ?>
 <#114>
 <?php
-if (!$ilDB->tableColumnExists("adn_ed_objective", "sheet_subjected")) {
-    $ilDB->addTableColumn("adn_ed_objective", "sheet_subjected", array(
+if (!$this->db->tableColumnExists("adn_ed_objective", "sheet_subjected")) {
+    $this->db->addTableColumn("adn_ed_objective", "sheet_subjected", array(
         "type" => "integer",
         "notnull" => false,
         "length" => 1));
@@ -3977,14 +3976,14 @@ if (!$ilDB->tableColumnExists("adn_ed_objective", "sheet_subjected")) {
 <#115>
 <?php
 
-    $ilDB->dropTableColumn("adn_es_certificate", "proof_of_experience");
+    $this->db->dropTableColumn("adn_es_certificate", "proof_of_experience");
 
     $fields = array("proof_train_dry", "proof_train_tank", "proof_train_combined",
         "proof_train_gas", "proof_train_chemicals", "proof_exp_gas",
         "proof_exp_chemicals");
 
     foreach ($fields as $f) {
-        $ilDB->addTableColumn("adn_es_certificate", $f, array(
+        $this->db->addTableColumn("adn_es_certificate", $f, array(
             "notnull" => true,
             "length" => 1,
             "default" => "0",
@@ -3994,15 +3993,15 @@ if (!$ilDB->tableColumnExists("adn_ed_objective", "sheet_subjected")) {
 
 <#116>
 <?php
-    $ilDB->dropTableColumn("adn_es_certificate", "type_dry");
-    $ilDB->addTableColumn("adn_es_certificate", "type_dm", array(
+    $this->db->dropTableColumn("adn_es_certificate", "type_dry");
+    $this->db->addTableColumn("adn_es_certificate", "type_dm", array(
         "notnull" => true,
         "length" => 1,
         "default" => "0",
         "type" => "integer"));
 
-    $ilDB->dropTableColumn("adn_es_certificate", "proof_train_dry");
-    $ilDB->addTableColumn("adn_es_certificate", "proof_train_dm", array(
+    $this->db->dropTableColumn("adn_es_certificate", "proof_train_dry");
+    $this->db->addTableColumn("adn_es_certificate", "proof_train_dm", array(
         "notnull" => true,
         "length" => 1,
         "default" => "0",
@@ -4012,8 +4011,8 @@ if (!$ilDB->tableColumnExists("adn_ed_objective", "sheet_subjected")) {
 
 <#117>
 <?php
-    $ilDB->dropTableColumn("adn_es_certificate", "nr");
-    $ilDB->addTableColumn("adn_es_certificate", "nr", array(
+    $this->db->dropTableColumn("adn_es_certificate", "nr");
+    $this->db->addTableColumn("adn_es_certificate", "nr", array(
         "notnull" => true,
         "length" => 4,
         "default" => "0",
@@ -4022,8 +4021,8 @@ if (!$ilDB->tableColumnExists("adn_ed_objective", "sheet_subjected")) {
 <#118>
 <?php
 
-    $ilDB->dropTableColumn("adn_es_certificate", "proof_train_chemicals");
-    $ilDB->addTableColumn("adn_es_certificate", "proof_train_chem", array(
+    $this->db->dropTableColumn("adn_es_certificate", "proof_train_chemicals");
+    $this->db->addTableColumn("adn_es_certificate", "proof_train_chem", array(
         "notnull" => true,
         "length" => 1,
         "default" => "0",
@@ -4032,8 +4031,8 @@ if (!$ilDB->tableColumnExists("adn_ed_objective", "sheet_subjected")) {
 <#119>
 <?php
 
-    $ilDB->dropTableColumn("adn_es_certificate", "proof_exp_chemicals");
-    $ilDB->addTableColumn("adn_es_certificate", "proof_exp_chem", array(
+    $this->db->dropTableColumn("adn_es_certificate", "proof_exp_chemicals");
+    $this->db->addTableColumn("adn_es_certificate", "proof_exp_chem", array(
         "notnull" => true,
         "length" => 1,
         "default" => "0",
@@ -4042,14 +4041,14 @@ if (!$ilDB->tableColumnExists("adn_ed_objective", "sheet_subjected")) {
 <#120>
 <?php
 
-    $ilDB->dropTableColumn("adn_es_certificate", "issued_on");
-    $ilDB->addTableColumn("adn_es_certificate", "issued_on", array(
+    $this->db->dropTableColumn("adn_es_certificate", "issued_on");
+    $this->db->addTableColumn("adn_es_certificate", "issued_on", array(
         "notnull" => true,
         "type" => "date"));
 ?>
 <#121>
 <?php
-    $ilDB->modifyTableColumn(
+    $this->db->modifyTableColumn(
     'adn_ed_objective',
     'nr',
     array("type" => "text", "length" => 50, "notnull" => false,
@@ -4058,7 +4057,7 @@ if (!$ilDB->tableColumnExists("adn_ed_objective", "sheet_subjected")) {
 ?>
 <#122>
 <?php
-    $ilDB->modifyTableColumn(
+    $this->db->modifyTableColumn(
     'adn_ed_subobjective',
     'nr',
     array("type" => "text", "length" => 50, "notnull" => false,
@@ -4067,15 +4066,15 @@ if (!$ilDB->tableColumnExists("adn_ed_objective", "sheet_subjected")) {
 ?>
 <#123>
 <?php
-    $ilDB->dropTableColumn("adn_ed_question_case", "default_answer");
-    $ilDB->addTableColumn("adn_ed_question_case", "default_answer", array(
+    $this->db->dropTableColumn("adn_ed_question_case", "default_answer");
+    $this->db->addTableColumn("adn_ed_question_case", "default_answer", array(
         "notnull" => false,
         "type" => "clob"));
 ?>
 <#124>
 <?php
-    $ilDB->dropTableColumn("adn_ta_facility", "name");
-    $ilDB->addTableColumn(
+    $this->db->dropTableColumn("adn_ta_facility", "name");
+    $this->db->addTableColumn(
         "adn_ta_facility",
         "name",
         array("type" => "text", "length" => 4000, "notnull" => false,
@@ -4343,8 +4342,8 @@ foreach (explode("\n", $raw) as $item) {
 }
 
 $old = array();
-$set = $ilDB->query("SELECT id FROM adn_md_country ORDER BY id");
-while ($row = $ilDB->fetchAssoc($set)) {
+$set = $this->db->query("SELECT id FROM adn_md_country ORDER BY id");
+while ($row = $this->db->fetchAssoc($set)) {
     $old[] = $row["id"];
 }
 
@@ -4357,20 +4356,20 @@ foreach ($countries as $code => $name) {
     $id = null;
     if (sizeof($old)) {
         $id = array_shift($old);
-        $ilDB->update("adn_md_country", $fields, array("id" => array("integer", $id)));
+        $this->db->update("adn_md_country", $fields, array("id" => array("integer", $id)));
     } else {
-        $fields["id"] = array("integer", $ilDB->nextId("adn_md_country"));
+        $fields["id"] = array("integer", $this->db->nextId("adn_md_country"));
         $fields["create_date"] = $fields["last_update"] = array("timestamp", date("Y-m-d H:i:s"));
         $fields["create_user"] = $fields["last_update_user"] = array("integer", 1);
-        $ilDB->insert("adn_md_country", $fields);
+        $this->db->insert("adn_md_country", $fields);
     }
 }
 
 ?>
 <#126>
 <?php
-if (!$ilDB->tableColumnExists("adn_ep_sheet_question", "ed_objective_id")) {
-    $ilDB->addTableColumn("adn_ep_sheet_question", "ed_objective_id", array(
+if (!$this->db->tableColumnExists("adn_ep_sheet_question", "ed_objective_id")) {
+    $this->db->addTableColumn("adn_ep_sheet_question", "ed_objective_id", array(
         "type" => "integer",
         "notnull" => false,
         "length" => 4));
@@ -4381,7 +4380,7 @@ if (!$ilDB->tableColumnExists("adn_ep_sheet_question", "ed_objective_id")) {
 
 $fields = array("ed_objective_id");
 $ref_fields = array("id");
-$ilDB->addForeignKey("fk3", "adn_ep_sheet_question", $fields, "adn_ed_objective", $ref_fields);
+$this->db->addForeignKey("fk3", "adn_ep_sheet_question", $fields, "adn_ed_objective", $ref_fields);
 ?>
 <#128>
 <?php
@@ -4389,11 +4388,11 @@ $ilDB->addForeignKey("fk3", "adn_ep_sheet_question", $fields, "adn_ed_objective"
 ?>
 <#129>
 <?php
-    $ilDB->createSequence('adn_cp_professional', 1);
+    $this->db->createSequence('adn_cp_professional', 1);
 ?>
 <#130>
 <?php
-    $ilDB->dropTableColumn("adn_es_certificate", "nr_of_duplicates");
+    $this->db->dropTableColumn("adn_es_certificate", "nr_of_duplicates");
 ?>
 <#131>
 <?php
@@ -4410,12 +4409,12 @@ $fields = array(
         ,"type" => "timestamp"
     )
 );
-$ilDB->createTable("add_es_duplicate", $fields, false, false, true);
+$this->db->createTable("add_es_duplicate", $fields, false, false, true);
 
 ?>
 <#132>
 <?php
-$ilDB->dropTable("add_es_duplicate");
+$this->db->dropTable("add_es_duplicate");
 ?>
 <#133>
 <?php
@@ -4432,16 +4431,16 @@ $fields = array(
         ,"type" => "timestamp"
     )
 );
-$ilDB->createTable("adn_es_duplicate", $fields, false, false, true);
+$this->db->createTable("adn_es_duplicate", $fields, false, false, true);
 
 ?>
 <#134>
 <?php
-    $ilDB->dropTableColumn("adn_es_duplicate", "duplicate_issued_on");
+    $this->db->dropTableColumn("adn_es_duplicate", "duplicate_issued_on");
 ?>
 <#135>
 <?php
-    $ilDB->addTableColumn("adn_es_duplicate", "duplicate_issued_on", array(
+    $this->db->addTableColumn("adn_es_duplicate", "duplicate_issued_on", array(
         "notnull" => true
         ,"default" => ""
         ,"type" => "date"));
@@ -4450,13 +4449,13 @@ $ilDB->createTable("adn_es_duplicate", $fields, false, false, true);
 <?php
 
     // set code number of existing (test) wmos to 99
-    $ilDB->manipulate("UPDATE adn_md_wmo SET " .
-    " code_nr = " . $ilDB->quote("99", "integer"));
+    $this->db->manipulate("UPDATE adn_md_wmo SET " .
+    " code_nr = " . $this->db->quote("99", "integer"));
 
     $wmos = array("1" => "WSD Nord", "2" => "WSD Nordwest", "3" => "WSD Mitte", "4" => "WSD West",
         "5" => "WSD Südwest", "6" => "WSD Süd", "7" => "WSD Ost");
     foreach ($wmos as $code => $name) {
-        $id = $ilDB->nextId("adn_md_wmo");
+        $id = $this->db->nextId("adn_md_wmo");
 
         $fields = array(
             "code_nr" => array("text", $code),
@@ -4494,7 +4493,7 @@ $ilDB->createTable("adn_es_duplicate", $fields, false, false, true);
             $fields[$id . "_cost"] = array("integer", 0);
         }
 
-        $ilDB->insert("adn_md_wmo", $fields);
+        $this->db->insert("adn_md_wmo", $fields);
     }
 ?>
 <#137>
@@ -4503,7 +4502,7 @@ $ilDB->createTable("adn_es_duplicate", $fields, false, false, true);
 
     foreach ($adn_fields as $f) {
         // Add definition entry
-        $next_id = $ilDB->nextId('udf_definition');
+        $next_id = $this->db->nextId('udf_definition');
 
         $values = array(
             'field_id' => array('integer', $next_id),
@@ -4522,7 +4521,7 @@ $ilDB->createTable("adn_es_duplicate", $fields, false, false, true);
             'group_export' => array('integer', 0)
         );
 
-        $ilDB->insert('udf_definition', $values);
+        $this->db->insert('udf_definition', $values);
     }
 ?>
 <#138>
@@ -4532,16 +4531,16 @@ $ilDB->createTable("adn_es_duplicate", $fields, false, false, true);
 <#139>
 <?php
 
-$ilDB->manipulate("DELETE FROM adn_ad_character");
+$this->db->manipulate("DELETE FROM adn_ad_character");
 
 $chars = array("°", "Σ", "ρ", "²", "³", "₀", "₁", "₂",
     "₃", "₄", "₅", "₆", "₇", "₈", "₉");
 
 foreach ($chars as $char) {
-    $fields = array("id" => array("integer", $ilDB->nextId("adn_ad_character")),
+    $fields = array("id" => array("integer", $this->db->nextId("adn_ad_character")),
         "charact" => array("text", $char));
 
-    $ilDB->insert("adn_ad_character", $fields);
+    $this->db->insert("adn_ad_character", $fields);
 }
 
 ?>
@@ -4559,7 +4558,7 @@ $ini->GROUPS = parse_ini_file($client_ini, true);
 $ini->setVariable("language", "default", "de");
 $ini->write();
 
-$ilDB->update("settings", array(
+$this->db->update("settings", array(
         "value" => array("clob", "de")
     ), array(
         "module" => array("text", "common"),
@@ -4571,7 +4570,7 @@ $ilDB->update("settings", array(
 <#142>
 <?php
 
-$ilDB->update("settings", array(
+$this->db->update("settings", array(
         "value" => array("clob", "0")
     ), array(
         "module" => array("text", "common"),
@@ -4582,8 +4581,8 @@ $ilDB->update("settings", array(
 
 <#143>
 <?php
-if (!$ilDB->tableColumnExists("adn_cp_professional", "ilias_user_id")) {
-    $ilDB->addTableColumn("adn_cp_professional", "ilias_user_id", array(
+if (!$this->db->tableColumnExists("adn_cp_professional", "ilias_user_id")) {
+    $this->db->addTableColumn("adn_cp_professional", "ilias_user_id", array(
         "notnull" => false
         ,"length" => 4
         ,"default" => null
@@ -4594,12 +4593,12 @@ if (!$ilDB->tableColumnExists("adn_cp_professional", "ilias_user_id")) {
 <#144>
 <?php
     include_once './Services/AccessControl/classes/class.ilObjRole.php';
-    $set = $ilDB->query(
+    $set = $this->db->query(
         "SELECT * FROM object_data WHERE " .
-        " type = " . $ilDB->quote("role", "text") . " AND " .
-        " title = " . $ilDB->quote("Kandidat", "text")
+        " type = " . $this->db->quote("role", "text") . " AND " .
+        " title = " . $this->db->quote("Kandidat", "text")
     );
-    $rec = $ilDB->fetchAssoc($set);
+    $rec = $this->db->fetchAssoc($set);
 
     $client_ini = CLIENT_WEB_DIR . "/client.ini.php";
     $ini = new ilIniFile($client_ini);
@@ -4616,8 +4615,8 @@ if (!$ilDB->tableColumnExists("adn_cp_professional", "ilias_user_id")) {
 
 <#146>
 <?php
-if ($ilDB->tableExists("adn_ad_user")) {
-    $ilDB->dropTable("adn_ad_user");
+if ($this->db->tableExists("adn_ad_user")) {
+    $this->db->dropTable("adn_ad_user");
 }
 ?>
 
@@ -4629,8 +4628,8 @@ if ($ilDB->tableExists("adn_ad_user")) {
 <#148>
 <?php
 
-if (!$ilDB->tableColumnExists("adn_ed_question", "padded_nr")) {
-    $ilDB->addTableColumn("adn_ed_question", "padded_nr", array(
+if (!$this->db->tableColumnExists("adn_ed_question", "padded_nr")) {
+    $this->db->addTableColumn("adn_ed_question", "padded_nr", array(
             "notnull" => false
             ,"length" => 10
             ,"default" => ""
@@ -4638,8 +4637,8 @@ if (!$ilDB->tableColumnExists("adn_ed_question", "padded_nr")) {
             ,"type" => "text"));
 }
 
-$set = $ilDB->query("SELECT id,nr FROM adn_ed_question");
-while ($row = $ilDB->fetchAssoc($set)) {
+$set = $this->db->query("SELECT id,nr FROM adn_ed_question");
+while ($row = $this->db->fetchAssoc($set)) {
     $qnr = $padded_nr = $row["nr"];
 
     // chop first digit from rest, normalize and re-combine
@@ -4648,9 +4647,9 @@ while ($row = $ilDB->fetchAssoc($set)) {
         $padded_nr = $digit . substr($padded_nr, strlen($qnr_clean[1]));
     }
 
-    $ilDB->manipulate("UPDATE adn_ed_question" .
-        " SET padded_nr = " . $ilDB->quote($padded_nr, "text") .
-        " WHERE id = " . $ilDB->quote($row["id"], "integer"));
+    $this->db->manipulate("UPDATE adn_ed_question" .
+        " SET padded_nr = " . $this->db->quote($padded_nr, "text") .
+        " WHERE id = " . $this->db->quote($row["id"], "integer"));
 }
 
 ?>
@@ -4667,7 +4666,7 @@ while ($row = $ilDB->fetchAssoc($set)) {
 
 <#151>
 <?php
-    $ilDB->modifyTableColumn(
+    $this->db->modifyTableColumn(
     'adn_cp_professional',
     'subject_area',
     array("type" => "text", "length" => 5, "notnull" => false,
@@ -4677,8 +4676,8 @@ while ($row = $ilDB->fetchAssoc($set)) {
 
 <#152>
 <?php
-if (!$ilDB->tableColumnExists("adn_ep_assignment", "scoring_update")) {
-    $ilDB->addTableColumn("adn_ep_assignment ", "scoring_update", array(
+if (!$this->db->tableColumnExists("adn_ep_assignment", "scoring_update")) {
+    $this->db->addTableColumn("adn_ep_assignment ", "scoring_update", array(
         "notnull" => false,
         "default" => "",
         "type" => "timestamp"));
@@ -4687,8 +4686,8 @@ if (!$ilDB->tableColumnExists("adn_ep_assignment", "scoring_update")) {
 
 <#153>
 <?php
-if (!$ilDB->tableColumnExists("adn_ep_assignment", "scoring_update_user")) {
-    $ilDB->addTableColumn("adn_ep_assignment ", "scoring_update_user", array(
+if (!$this->db->tableColumnExists("adn_ep_assignment", "scoring_update_user")) {
+    $this->db->addTableColumn("adn_ep_assignment ", "scoring_update_user", array(
         "notnull" => false,
         "length" => 4,
         "type" => "integer"));
@@ -4698,7 +4697,7 @@ if (!$ilDB->tableColumnExists("adn_ep_assignment", "scoring_update_user")) {
 <#154>
 <?php
 
-    $ilDB->modifyTableColumn(
+    $this->db->modifyTableColumn(
         "adn_md_wmo",
         "iban",
         array("type" => "text", "length" => 34, "notnull" => false,

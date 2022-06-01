@@ -12,6 +12,17 @@ include_once("./Services/ADN/Base/classes/class.adnDBBase.php");
  */
 class adnPersonalDataNotification extends ilCronJob
 {
+    protected ilLanguage $lng;
+    protected ilSetting $setting;
+    protected ilMailMimeSenderFactory $mail;
+
+    public function __construct()
+    {
+        global $DIC;
+        $this->lng = $DIC->language();
+        $this->setting = $DIC->settings();
+        $this->mail = $DIC['mail.mime.sender.factory'];
+    }
     public function getId()
     {
         return "adn_pd_notification";
@@ -19,16 +30,12 @@ class adnPersonalDataNotification extends ilCronJob
 
     public function getTitle()
     {
-        global $lng;
-
-        return $lng->txt("adn_personal_data_notification");
+        return $this->lng->txt("adn_personal_data_notification");
     }
 
     public function getDescription()
     {
-        global $lng;
-
-        return $lng->txt("adn_personal_data_notification_desc");
+        return $this->lng->txt("adn_personal_data_notification_desc");
     }
 
     public function getDefaultScheduleType()
@@ -58,7 +65,6 @@ class adnPersonalDataNotification extends ilCronJob
 
     public function run()
     {
-        global $lng;
 
         $log = ilLoggerFactory::getLogger("root");
         $log->notice("started");
@@ -149,22 +155,9 @@ class adnPersonalDataNotification extends ilCronJob
      */
     protected function sendMail($a_wmo_id, $a_cand_nr, $a_cert_nr)
     {
-        global $lng, $ilSetting;
 
         $log = ilLoggerFactory::getLogger("root");
 
-        //include_once "./Services/Notification/classes/class.ilSystemNotification.php";
-        //$ntf = new ilSystemNotification();
-        //$ntf->setLangModules(array("crs", "news"));
-
-        // user specific language
-        //$lng = "de";
-
-        /*include_once './Services/Locator/classes/class.ilLocatorGUI.php';
-        require_once "HTML/Template/ITX.php";
-        require_once "./Services/UICore/classes/class.ilTemplateHTMLITX.php";
-        require_once "./Services/UICore/classes/class.ilTemplate.php";
-        require_once "./Services/Link/classes/class.ilLink.php";*/
 
         include_once("./Services/ADN/MD/classes/class.adnWMO.php");
         $wmo = new adnWMO($a_wmo_id);
@@ -173,18 +166,18 @@ class adnPersonalDataNotification extends ilCronJob
         $mail_adress = $wmo->getNotificationEmail();
 
 
-        $lng->loadLanguageModule("adn");
-        $message = $lng->txtlng("adn", "adn_new_delete_candidates_mess", "de");
-        $subject = $lng->txtlng("adn", "adn_new_delete_candidates_subj", "de");
+        $this->lng->loadLanguageModule("adn");
+        $message = $this->lng->txtlng("adn", "adn_new_delete_candidates_mess", "de");
+        $subject = $this->lng->txtlng("adn", "adn_new_delete_candidates_subj", "de");
 
         $message = str_replace("{GDWS}", $wmo->getName(), $message);
         $user_str = "";
         if ($a_cand_nr > 0) {
-            $user_str .= $lng->txt("adn_ad_pd_cand") . ": " . $a_cand_nr . " <br />" . ILIAS_HTTP_PATH . "/goto.php?client_id=" . CLIENT_ID .
+            $user_str .= $this->lng->txt("adn_ad_pd_cand") . ": " . $a_cand_nr . " <br />" . ILIAS_HTTP_PATH . "/goto.php?client_id=" . CLIENT_ID .
                 "&target=adn_candd_" . $wmo->getId() . "<br />";
         }
         if ($a_cert_nr > 0) {
-            $user_str .= $lng->txt("adn_ad_pd_cert") . ": " . $a_cert_nr . " <br />" . ILIAS_HTTP_PATH . "/goto.php?client_id=" . CLIENT_ID .
+            $user_str .= $this->lng->txt("adn_ad_pd_cert") . ": " . $a_cert_nr . " <br />" . ILIAS_HTTP_PATH . "/goto.php?client_id=" . CLIENT_ID .
                 "&target=adn_certd_" . $wmo->getId() . "<br />";
         }
         $message = str_replace("{USER}", $user_str, $message);
@@ -200,13 +193,12 @@ class adnPersonalDataNotification extends ilCronJob
 
         include_once './Services/Mail/classes/class.ilMimeMail.php';
 
-        /** @var ilMailMimeSenderFactory $senderFactory */
-        $senderFactory = $GLOBALS["DIC"]["mail.mime.sender.factory"];
+        $senderFactory = $this->mail;
 
         $mime = new ilMimeMail();
         $mime->From($senderFactory->system());
         $mime->To($mail_adress);
-        $mime->Cc($ilSetting->get('adn_cron_cc'));
+        $mime->Cc($this->setting->get('adn_cron_cc'));
         $mime->Subject($subject);
         $mime->Body($message);
         $mime->Send();
@@ -225,11 +217,10 @@ class adnPersonalDataNotification extends ilCronJob
 
     public function addCustomSettingsToForm(ilPropertyFormGUI $a_form)
     {
-        global $lng, $ilSetting;
 
-        $lng->loadLanguageModule('adn');
-        $mail = new ilTextInputGUI($lng->txt('adn_cron_cc'), 'cc');
-        $mail->setValue($ilSetting->get('adn_cron_cc'));
+        $this->lng->loadLanguageModule('adn');
+        $mail = new ilTextInputGUI($this->lng->txt('adn_cron_cc'), 'cc');
+        $mail->setValue($this->setting->get('adn_cron_cc'));
         $a_form->addItem($mail);
 
         return $a_form;
@@ -237,9 +228,7 @@ class adnPersonalDataNotification extends ilCronJob
 
     public function saveCustomSettings(ilPropertyFormGUI $a_form)
     {
-        global $ilSetting;
-
-        $ilSetting->set('adn_cron_cc', $a_form->getInput('cc'));
+        $this->setting->set('adn_cron_cc', $a_form->getInput('cc'));
     }
 
 

@@ -15,15 +15,21 @@
  */
 class adnOnlineAnswerSheetGUI
 {
+    protected ilCtrl $ctrl;
+    protected ilLanguage $lng;
+    protected ilGlobalTemplateInterface $tpl;
     /**
      * Constructor
      */
     public function __construct()
     {
-        global $ilCtrl;
+        global $DIC;
+        $this->ctrl = $DIC->ctrl();
+        $this->lng = $DIC->language();
+        $this->tpl = $DIC->ui()->mainTemplate();
 
         // keep event
-        $ilCtrl->saveParameter($this, "ev_id");
+        $this->ctrl->saveParameter($this, "ev_id");
     }
     
     /**
@@ -31,18 +37,17 @@ class adnOnlineAnswerSheetGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl, $lng, $tpl;
 
-        $tpl->setTitle($lng->txt("adn_es") . " - " . $lng->txt("adn_es_oas"));
+        $this->tpl->setTitle($this->lng->txt("adn_es") . " - " . $this->lng->txt("adn_es_oas"));
         
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
         
         // forward command to next gui class in control flow
         switch ($next_class) {
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("listEvents");
+                $cmd = $this->ctrl->getCmd("listEvents");
                 
                 switch ($cmd) {
                     // commands that need read permission
@@ -64,7 +69,6 @@ class adnOnlineAnswerSheetGUI
      */
     protected function listEvents()
     {
-        global $tpl;
 
         // table of examination events
         include_once("./Services/ADN/ES/classes/class.adnExaminationEventTableGUI.php");
@@ -76,7 +80,7 @@ class adnOnlineAnswerSheetGUI
         );
         
         // output table
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -120,7 +124,6 @@ class adnOnlineAnswerSheetGUI
      */
     protected function downloadSheets()
     {
-        global $lng,$ilCtrl;
 
         include_once './Services/ADN/Report/exceptions/class.adnReportException.php';
         try {
@@ -134,14 +137,14 @@ class adnOnlineAnswerSheetGUI
             );
         } catch (adnReportException $e) {
             ilUtil::sendFailure($e->getMessage(), true);
-            $ilCtrl->redirect($this, 'listEvents');
+            $this->ctrl->redirect($this, 'listEvents');
         }
         
         $event_id = $_REQUEST['ev_id'];
         $ass_id = $_REQUEST['ass_id'];
         if (!$ass_id or !$event_id) {
-            ilUtil::sendFailure($lng->txt('select_one'), true);
-            $ilCtrl->redirect($this, 'listParticipants');
+            ilUtil::sendFailure($this->lng->txt('select_one'), true);
+            $this->ctrl->redirect($this, 'listParticipants');
         }
     }
 }

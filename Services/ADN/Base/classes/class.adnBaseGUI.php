@@ -14,22 +14,34 @@ include_once("./Services/ADN/Base/classes/class.adnPerm.php");
  *
  * @ingroup ServicesADN
  *
- * @ilCtrl_Calls adnBaseGUI: adnTrainingAdministrationGUI, adnExaminationDefinitionGUI
- * @ilCtrl_Calls adnBaseGUI: adnExaminationPreparationGUI, adnMasterDataGUI
- * @ilCtrl_Calls adnBaseGUI: adnCertifiedProfessionalGUI, adnExaminationScoringGUI
- * @ilCtrl_Calls adnBaseGUI: adnAdministrationGUI, adnStatisticsGUI, adnTestGUI
- * @ilCtrl_Calls adnBaseGUI: adnELearningGUI
+ * @this->ctrl_Calls adnBaseGUI: adnTrainingAdministrationGUI, adnExaminationDefinitionGUI
+ * @this->ctrl_Calls adnBaseGUI: adnExaminationPreparationGUI, adnMasterDataGUI
+ * @this->ctrl_Calls adnBaseGUI: adnCertifiedProfessionalGUI, adnExaminationScoringGUI
+ * @this->ctrl_Calls adnBaseGUI: adnAdministrationGUI, adnStatisticsGUI, adnTestGUI
+ * @this->ctrl_Calls adnBaseGUI: adnELearningGUI
  */
 class adnBaseGUI
 {
     protected static bool $help_done = false;
+    
+    protected ilCtrl $ctrl;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilLanguage $lng;
+    protected ilIniFile $client_ini;
+    protected ilObjUser $user;
 
     /**
      * Constructor
      */
     public function __construct()
     {
+        global $DIC;
         include_once "./Services/ADN/Base/classes/class.adnDBBase.php";
+        $this->ctrl = $DIC->ctrl();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->lng = $DIC->language();
+        $this->client_ini = $DIC->clientIni();
+        $this->user = $DIC->user();
 
         // relative dates are not to be used
         ilDatePresentation::setUseRelativeDates(false);
@@ -40,31 +52,30 @@ class adnBaseGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl, $tpl, $lng, $ilClientIniFile,$ilUser;
 
-        $lng->loadLanguageModule("adn");
+        $this->lng->loadLanguageModule("adn");
 
         // set the standard template
         //		$tpl->getStandardTemplate();
 
-        $next_class = $ilCtrl->getNextClass();
-        $cmd = $ilCtrl->getCmd();
+        $next_class = $this->ctrl->getNextClass();
+        $cmd = $this->ctrl->getCmd();
 
         // online test
         if (isset($_SESSION["adn_online_test"])) {
             $next_class = "adntestgui";
-            if ($ilCtrl->getNextClass() == "") {
-                $ilCtrl->setCmdClass("adntestgui");
+            if ($this->ctrl->getNextClass() == "") {
+                $this->ctrl->setCmdClass("adntestgui");
             }
         }
 
         // e-learning section
-        if (is_object($ilClientIniFile)) {
-            if ($ilClientIniFile->readVariable("system", "ELEARNING_MODE") == "1" and
-                $ilUser->getId() == ANONYMOUS_USER_ID) {
+        if (is_object($this->client_ini)) {
+            if ($this->client_ini->readVariable("system", "ELEARNING_MODE") == "1" and
+                $this->user->getId() == ANONYMOUS_USER_ID) {
                 $next_class = "adnelearninggui";
-                if ($ilCtrl->getNextClass() == "") {
-                    $ilCtrl->setCmdClass("adnelearninggui");
+                if ($this->ctrl->getNextClass() == "") {
+                    $this->ctrl->setCmdClass("adnelearninggui");
                 }
             }
         }
@@ -74,9 +85,9 @@ class adnBaseGUI
         // @todo: set this dependent on user role
         if ($next_class == "" && $cmd != "processMenuItem") {
             // default: training administration start screen
-            $ilCtrl->setCmd("");
-            $ilCtrl->setCmdClass("adntrainingadministrationgui");
-            $next_class = $ilCtrl->getNextClass();
+            $this->ctrl->setCmd("");
+            $this->ctrl->setCmdClass("adntrainingadministrationgui");
+            $next_class = $this->ctrl->getNextClass();
         } elseif ($cmd == "processMenuItem" && $next_class != "adntestgui"
             && $next_class != "adnelearninggui") {	// menu item triggered
             // extract responsible component and forward to component
@@ -84,38 +95,38 @@ class adnBaseGUI
             $menu_item = explode("_", $_GET["menu_item"]);
             switch ($menu_item[0]) {
                 case adnMainMenuGUI::TA:
-                    $ilCtrl->setCmdClass("adntrainingadministrationgui");
+                    $this->ctrl->setCmdClass("adntrainingadministrationgui");
                     break;
 
                 case adnMainMenuGUI::ED:
-                    $ilCtrl->setCmdClass("adnexaminationdefinitiongui");
+                    $this->ctrl->setCmdClass("adnexaminationdefinitiongui");
                     break;
 
                 case adnMainMenuGUI::EP:
-                    $ilCtrl->setCmdClass("adnexaminationpreparationgui");
+                    $this->ctrl->setCmdClass("adnexaminationpreparationgui");
                     break;
 
                 case adnMainMenuGUI::CP:
-                    $ilCtrl->setCmdClass("adncertifiedprofessionalgui");
+                    $this->ctrl->setCmdClass("adncertifiedprofessionalgui");
                     break;
 
                 case adnMainMenuGUI::ES:
-                    $ilCtrl->setCmdClass("adnexaminationscoringgui");
+                    $this->ctrl->setCmdClass("adnexaminationscoringgui");
                     break;
 
                 case adnMainMenuGUI::MD:
-                    $ilCtrl->setCmdClass("adnmasterdatagui");
+                    $this->ctrl->setCmdClass("adnmasterdatagui");
                     break;
 
                 case adnMainMenuGUI::AD:
-                    $ilCtrl->setCmdClass("adnadministrationgui");
+                    $this->ctrl->setCmdClass("adnadministrationgui");
                     break;
 
                 case adnMainMenuGUI::ST:
-                    $ilCtrl->setCmdClass("adnstatisticsgui");
+                    $this->ctrl->setCmdClass("adnstatisticsgui");
                     break;
             }
-            $next_class = $ilCtrl->getNextClass();
+            $next_class = $this->ctrl->getNextClass();
         }
 
         // forward command to next gui class in control flow
@@ -123,66 +134,66 @@ class adnBaseGUI
             case "adntrainingadministrationgui":
                 include_once("./Services/ADN/TA/classes/class.adnTrainingAdministrationGUI.php");
                 $ta_gui = new adnTrainingAdministrationGUI();
-                $ilCtrl->forwardCommand($ta_gui);
+                $this->ctrl->forwardCommand($ta_gui);
                 break;
 
             case "adnexaminationdefinitiongui":
                 include_once("./Services/ADN/ED/classes/class.adnExaminationDefinitionGUI.php");
                 $ed_gui = new adnExaminationDefinitionGUI();
-                $ilCtrl->forwardCommand($ed_gui);
+                $this->ctrl->forwardCommand($ed_gui);
                 break;
 
             case "adnexaminationpreparationgui":
                 include_once("./Services/ADN/EP/classes/class.adnExaminationPreparationGUI.php");
                 $ep_gui = new adnExaminationPreparationGUI();
-                $ilCtrl->forwardCommand($ep_gui);
+                $this->ctrl->forwardCommand($ep_gui);
                 break;
 
             case "adncertifiedprofessionalgui":
                 include_once("./Services/ADN/CP/classes/class.adnCertifiedProfessionalGUI.php");
                 $ta_gui = new adnCertifiedProfessionalGUI();
-                $ilCtrl->forwardCommand($ta_gui);
+                $this->ctrl->forwardCommand($ta_gui);
                 break;
 
             case "adnexaminationscoringgui":
                 include_once("./Services/ADN/ES/classes/class.adnExaminationScoringGUI.php");
                 $ta_gui = new adnExaminationScoringGUI();
-                $ilCtrl->forwardCommand($ta_gui);
+                $this->ctrl->forwardCommand($ta_gui);
                 break;
 
             case "adnmasterdatagui":
                 include_once("./Services/ADN/MD/classes/class.adnMasterDataGUI.php");
                 $ta_gui = new adnMasterDataGUI();
-                $ilCtrl->forwardCommand($ta_gui);
+                $this->ctrl->forwardCommand($ta_gui);
                 break;
 
             case "adnadministrationgui":
                 include_once("./Services/ADN/AD/classes/class.adnAdministrationGUI.php");
                 $ad_gui = new adnAdministrationGUI();
-                $ilCtrl->forwardCommand($ad_gui);
+                $this->ctrl->forwardCommand($ad_gui);
                 break;
 
             case "adnstatisticsgui":
                 include_once("./Services/ADN/ST/classes/class.adnStatisticsGUI.php");
                 $st_gui = new adnStatisticsGUI();
-                $ilCtrl->forwardCommand($st_gui);
+                $this->ctrl->forwardCommand($st_gui);
                 break;
 
             case "adntestgui":
                 include_once("./Services/ADN/EC/classes/class.adnTestGUI.php");
                 $test_gui = new adnTestGUI();
-                $ilCtrl->forwardCommand($test_gui);
+                $this->ctrl->forwardCommand($test_gui);
                 break;
 
             case "adnelearninggui":
                 include_once("./Services/ADN/EL/classes/class.adnELearningGUI.php");
                 $el_gui = new adnELearningGUI();
-                $ilCtrl->forwardCommand($el_gui);
+                $this->ctrl->forwardCommand($el_gui);
                 break;
         }
 
         // output the screen
-        $tpl->printToStdOut();
+        $this->tpl->printToStdOut();
     }
 
 
@@ -223,7 +234,8 @@ class adnBaseGUI
      */
     public static function setHelpButton($a_key)
     {
-        global $ilCtrl, $lng, $tpl;
+        global $DIC;
+        $lng = $DIC->language();
 
         if (self::$help_done) {
             return;

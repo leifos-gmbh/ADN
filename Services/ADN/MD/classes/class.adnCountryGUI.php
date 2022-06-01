@@ -17,16 +17,27 @@ class adnCountryGUI
 {
     // current country object
     protected ?adnCountry $country = null;
+
+    protected ilCtrl $ctrl;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilToolbarGUI $toolbar;
+    protected ilLanguage $lng;
+    protected ilTabsGUI $tabs;
     
     /**
      * Constructor
      */
     public function __construct()
     {
-        global $ilCtrl;
+        global $DIC;
+        $this->ctrl = $DIC->ctrl();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->toolbar = $DIC->toolbar();
+        $this->lng = $DIC->language();
+        $this->tabs = $DIC->tabs();
         
         // save country ID through requests
-        $ilCtrl->saveParameter($this, array("cnt_id"));
+        $this->ctrl->saveParameter($this, array("cnt_id"));
         
         $this->readCountry();
     }
@@ -36,16 +47,15 @@ class adnCountryGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl;
         
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
         
         // forward command to next gui class in control flow
         switch ($next_class) {
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("listCountries");
+                $cmd = $this->ctrl->getCmd("listCountries");
                 
                 switch ($cmd) {
                     // commands that need read permission
@@ -88,12 +98,11 @@ class adnCountryGUI
      */
     protected function listCountries()
     {
-        global $tpl, $ilCtrl, $ilToolbar, $lng;
 
         if (adnPerm::check(adnPerm::MD, adnPerm::WRITE)) {
-            $ilToolbar->addButton(
-                $lng->txt("adn_add_country"),
-                $ilCtrl->getLinkTarget($this, "addCountry")
+            $this->toolbar->addButton(
+                $this->lng->txt("adn_add_country"),
+                $this->ctrl->getLinkTarget($this, "addCountry")
             );
         }
         
@@ -102,7 +111,7 @@ class adnCountryGUI
         $table = new adnCountryTableGUI($this, "listCountries");
         
         // output table
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -112,14 +121,13 @@ class adnCountryGUI
      */
     protected function addCountry(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $lng, $ilTabs, $ilCtrl;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listCountries"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listCountries"));
 
         if (!$a_form) {
             $a_form = $this->initCountryForm(true);
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
 
     /**
@@ -127,7 +135,6 @@ class adnCountryGUI
      */
     protected function saveCountry()
     {
-        global $tpl, $lng, $ilCtrl;
 
         $form = $this->initCountryForm(true);
         if ($form->checkInput()) {
@@ -136,8 +143,8 @@ class adnCountryGUI
             $country->setCode($form->getInput("code"));
             $country->setName($form->getInput("name"));
             if ($country->save()) {
-                ilUtil::sendSuccess($lng->txt("adn_country_created"), true);
-                $ilCtrl->redirect($this, "listCountries");
+                ilUtil::sendSuccess($this->lng->txt("adn_country_created"), true);
+                $this->ctrl->redirect($this, "listCountries");
             }
         }
         
@@ -152,14 +159,13 @@ class adnCountryGUI
      */
     protected function editCountry(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $lng, $ilTabs, $ilCtrl;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listCountries"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listCountries"));
 
         if (!$a_form) {
             $a_form = $this->initCountryForm();
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
 
     /**
@@ -167,15 +173,14 @@ class adnCountryGUI
      */
     protected function updateCountry()
     {
-        global $tpl, $lng, $ilCtrl;
 
         $form = $this->initCountryForm();
         if ($form->checkInput()) {
             $this->country->setCode($form->getInput("code"));
             $this->country->setName($form->getInput("name"));
             if ($this->country->update()) {
-                ilUtil::sendSuccess($lng->txt("adn_country_updated"), true);
-                $ilCtrl->redirect($this, "listCountries");
+                ilUtil::sendSuccess($this->lng->txt("adn_country_updated"), true);
+                $this->ctrl->redirect($this, "listCountries");
             }
         }
 
@@ -190,33 +195,32 @@ class adnCountryGUI
      */
     protected function initCountryForm($a_create = false)
     {
-        global  $lng, $ilCtrl;
 
         include_once "Services/Form/classes/class.ilPropertyFormGUI.php";
         $form = new ilPropertyFormGUI();
-        $form->setTitle($lng->txt("adn_country"));
-        $form->setFormAction($ilCtrl->getFormAction($this, "listCountries"));
+        $form->setTitle($this->lng->txt("adn_country"));
+        $form->setFormAction($this->ctrl->getFormAction($this, "listCountries"));
 
-        $name = new ilTextInputGUI($lng->txt("adn_name"), "name");
+        $name = new ilTextInputGUI($this->lng->txt("adn_name"), "name");
         $name->setRequired(true);
         $name->setMaxLength(100);
         $form->addItem($name);
 
-        $code = new ilTextInputGUI($lng->txt("adn_country_code"), "code");
+        $code = new ilTextInputGUI($this->lng->txt("adn_country_code"), "code");
         $code->setRequired(true);
         $code->setMaxLength(2);
         $code->setSize(2);
         $form->addItem($code);
 
         if ($a_create) {
-            $form->addCommandButton("saveCountry", $lng->txt("save"));
+            $form->addCommandButton("saveCountry", $this->lng->txt("save"));
         } else {
             $code->setValue($this->country->getCode());
             $name->setValue($this->country->getName());
 
-            $form->addCommandButton("updateCountry", $lng->txt("save"));
+            $form->addCommandButton("updateCountry", $this->lng->txt("save"));
         }
-        $form->addCommandButton("listCountries", $lng->txt("cancel"));
+        $form->addCommandButton("listCountries", $this->lng->txt("cancel"));
 
         return $form;
     }
@@ -226,25 +230,24 @@ class adnCountryGUI
      */
     public function confirmDeleteCountries()
     {
-        global $ilCtrl, $tpl, $lng, $ilTabs;
 
         // check whether at least one item has been seleced
         if (!is_array($_POST["cnt_id"]) || count($_POST["cnt_id"]) == 0) {
-            ilUtil::sendFailure($lng->txt("no_checkbox"), true);
-            $ilCtrl->redirect($this, "listCountries");
+            ilUtil::sendFailure($this->lng->txt("no_checkbox"), true);
+            $this->ctrl->redirect($this, "listCountries");
         } else {
-            $ilTabs->setBackTarget(
-                $lng->txt("back"),
-                $ilCtrl->getLinkTarget($this, "listCountries")
+            $this->tabs->setBackTarget(
+                $this->lng->txt("back"),
+                $this->ctrl->getLinkTarget($this, "listCountries")
             );
 
             // display confirmation message
             include_once("./Services/Utilities/classes/class.ilConfirmationGUI.php");
             $cgui = new ilConfirmationGUI();
-            $cgui->setFormAction($ilCtrl->getFormAction($this));
-            $cgui->setHeaderText($lng->txt("adn_sure_delete_countries"));
-            $cgui->setCancel($lng->txt("cancel"), "listCountries");
-            $cgui->setConfirm($lng->txt("delete"), "deleteCountries");
+            $cgui->setFormAction($this->ctrl->getFormAction($this));
+            $cgui->setHeaderText($this->lng->txt("adn_sure_delete_countries"));
+            $cgui->setCancel($this->lng->txt("cancel"), "listCountries");
+            $cgui->setConfirm($this->lng->txt("delete"), "deleteCountries");
 
             include_once("./Services/ADN/MD/classes/class.adnCountry.php");
 
@@ -253,7 +256,7 @@ class adnCountryGUI
                 $cgui->addItem("cnt_id[]", $i, adnCountry::lookupName($i));
             }
 
-            $tpl->setContent($cgui->getHTML());
+            $this->tpl->setContent($cgui->getHTML());
         }
     }
 
@@ -262,7 +265,6 @@ class adnCountryGUI
      */
     protected function deleteCountries()
     {
-        global $ilCtrl, $lng;
 
         include_once("./Services/ADN/MD/classes/class.adnCountry.php");
 
@@ -272,7 +274,7 @@ class adnCountryGUI
                 $country->delete();
             }
         }
-        ilUtil::sendSuccess($lng->txt("adn_country_deleted"), true);
-        $ilCtrl->redirect($this, "listCountries");
+        ilUtil::sendSuccess($this->lng->txt("adn_country_deleted"), true);
+        $this->ctrl->redirect($this, "listCountries");
     }
 }

@@ -33,7 +33,6 @@ class adnInstructor extends adnDBBase
      */
     public function __construct($a_id = null)
     {
-        global $ilCtrl;
 
         if ($a_id) {
             $this->setId($a_id);
@@ -188,17 +187,16 @@ class adnInstructor extends adnDBBase
      */
     public function read()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if (!$id) {
             return;
         }
 
-        $res = $ilDB->query("SELECT ta_provider_id,last_name,first_name" .
+        $res = $this->db->query("SELECT ta_provider_id,last_name,first_name" .
             " FROM adn_ta_instructor" .
-            " WHERE id = " . $ilDB->quote($this->getId(), "integer"));
-        $set = $ilDB->fetchAssoc($res);
+            " WHERE id = " . $this->db->quote($this->getId(), "integer"));
+        $set = $this->db->fetchAssoc($res);
         $this->setProvider($set["ta_provider_id"]);
         $this->setLastName($set["last_name"]);
         $this->setFirstName($set["first_name"]);
@@ -206,21 +204,21 @@ class adnInstructor extends adnDBBase
         parent::_read($id, "adn_ta_instructor");
 
         // get instructor training types
-        $set = $ilDB->query("SELECT *" .
+        $set = $this->db->query("SELECT *" .
             " FROM adn_ta_instr_ttype" .
             " WHERE ta_instructor_id = " . $id);
         $types = array();
-        while ($rec = $ilDB->fetchAssoc($set)) {
+        while ($rec = $this->db->fetchAssoc($set)) {
             $types[] = $rec["training_type"];
         }
         $this->setTypesOfTraining($types);
 
         // get instructor areas of expertise
-        $set = $ilDB->query("SELECT *" .
+        $set = $this->db->query("SELECT *" .
             " FROM adn_ta_instructor_exp" .
             " WHERE ta_instructor_id = " . $id);
         $areas = array();
-        while ($rec = $ilDB->fetchAssoc($set)) {
+        while ($rec = $this->db->fetchAssoc($set)) {
             $areas[] = $rec["ta_expertise_id"];
         }
         $this->setAreasOfExpertise($areas);
@@ -245,19 +243,18 @@ class adnInstructor extends adnDBBase
      */
     protected function saveTrainingTypes()
     {
-        global $ilDB;
         
         $id = $this->getId();
         if ($id) {
-            $ilDB->manipulate("DELETE FROM adn_ta_instr_ttype" .
-                " WHERE ta_instructor_id = " . $ilDB->quote($id, "integer"));
+            $this->db->manipulate("DELETE FROM adn_ta_instr_ttype" .
+                " WHERE ta_instructor_id = " . $this->db->quote($id, "integer"));
 
             if (is_array($this->training_types)) {
                 foreach ($this->training_types as $type) {
                     $fields = array("ta_instructor_id" => array("integer", $id),
                         "training_type" => array("text", $type));
 
-                    $ilDB->insert("adn_ta_instr_ttype", $fields);
+                    $this->db->insert("adn_ta_instr_ttype", $fields);
                 }
             }
         }
@@ -268,19 +265,18 @@ class adnInstructor extends adnDBBase
      */
     protected function saveAreasOfExpertise()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if ($id) {
-            $ilDB->manipulate("DELETE FROM adn_ta_instructor_exp" .
-                " WHERE ta_instructor_id = " . $ilDB->quote($id, "integer"));
+            $this->db->manipulate("DELETE FROM adn_ta_instructor_exp" .
+                " WHERE ta_instructor_id = " . $this->db->quote($id, "integer"));
 
             if (is_array($this->expertise)) {
                 foreach ($this->expertise as $area) {
                     $fields = array("ta_instructor_id" => array("integer", $id),
                         "ta_expertise_id" => array("integer", $area));
 
-                    $ilDB->insert("adn_ta_instructor_exp", $fields);
+                    $this->db->insert("adn_ta_instructor_exp", $fields);
                 }
             }
         }
@@ -293,16 +289,15 @@ class adnInstructor extends adnDBBase
      */
     public function save()
     {
-        global $ilDB;
 
         // sequence
-        $this->setId($ilDB->nextId("adn_ta_instructor"));
+        $this->setId($this->db->nextId("adn_ta_instructor"));
         $id = $this->getId();
 
         $fields = $this->propertiesToFields();
         $fields["id"] = array("integer", $id);
             
-        $ilDB->insert("adn_ta_instructor", $fields);
+        $this->db->insert("adn_ta_instructor", $fields);
 
         $this->saveTrainingTypes();
         $this->saveAreasOfExpertise();
@@ -319,7 +314,6 @@ class adnInstructor extends adnDBBase
      */
     public function update()
     {
-        global $ilDB;
         
         $id = $this->getId();
         if (!$id) {
@@ -328,7 +322,7 @@ class adnInstructor extends adnDBBase
 
         $fields = $this->propertiesToFields();
         
-        $ilDB->update("adn_ta_instructor", $fields, array("id" => array("integer", $id)));
+        $this->db->update("adn_ta_instructor", $fields, array("id" => array("integer", $id)));
 
         $this->saveTrainingTypes();
         $this->saveAreasOfExpertise();
@@ -345,17 +339,16 @@ class adnInstructor extends adnDBBase
      */
     public function delete()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if ($id) {
             // U.SV.2.4: archived flag is not used as instructors are no foreign items
-            $ilDB->manipulate("DELETE FROM adn_ta_instructor_exp" .
-                " WHERE ta_instructor_id = " . $ilDB->quote($id, "integer"));
-            $ilDB->manipulate("DELETE FROM adn_ta_instr_ttype" .
-                " WHERE ta_instructor_id = " . $ilDB->quote($id, "integer"));
-            $ilDB->manipulate("DELETE FROM adn_ta_instructor" .
-                " WHERE id = " . $ilDB->quote($id, "integer"));
+            $this->db->manipulate("DELETE FROM adn_ta_instructor_exp" .
+                " WHERE ta_instructor_id = " . $this->db->quote($id, "integer"));
+            $this->db->manipulate("DELETE FROM adn_ta_instr_ttype" .
+                " WHERE ta_instructor_id = " . $this->db->quote($id, "integer"));
+            $this->db->manipulate("DELETE FROM adn_ta_instructor" .
+                " WHERE id = " . $this->db->quote($id, "integer"));
             $this->setId(null);
             return true;
         }
@@ -370,7 +363,8 @@ class adnInstructor extends adnDBBase
      */
     public static function getAllInstructors($a_provider_id, $a_with_archived = false)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id,last_name,first_name" .
             " FROM adn_ta_instructor" .
@@ -413,7 +407,8 @@ class adnInstructor extends adnDBBase
      */
     public static function getInstructorsSelect($a_provider_id)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id,last_name,first_name" .
             " FROM adn_ta_instructor" .
@@ -438,7 +433,8 @@ class adnInstructor extends adnDBBase
      */
     protected static function lookupProperty($a_id, $a_prop)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query("SELECT " . $a_prop .
             " FROM adn_ta_instructor" .

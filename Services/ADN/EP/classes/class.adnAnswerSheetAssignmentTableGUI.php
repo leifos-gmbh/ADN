@@ -37,7 +37,6 @@ class adnAnswerSheetAssignmentTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd, $a_event_id, $a_archived = false)
     {
-        global $ilCtrl, $lng;
 
         parent::__construct($a_parent_obj, $a_parent_cmd);
 
@@ -47,18 +46,18 @@ class adnAnswerSheetAssignmentTableGUI extends ilTable2GUI
         $this->event = new adnExaminationEvent((int) $a_event_id);
         $this->event_done = (bool) $a_archived;
         
-        $this->setTitle($lng->txt("adn_answer_sheet_assignment") . ": " .
+        $this->setTitle($this->lng->txt("adn_answer_sheet_assignment") . ": " .
             adnExaminationEvent::lookupName((int) $a_event_id));
 
         if (adnPerm::check(adnPerm::EP, adnPerm::WRITE)) {
             if (!$this->event_done) {
-                $this->addCommandButton("saveSheetAssignment", $lng->txt("adn_save_assignment"));
-                $this->addCommandButton("generateSheets", $lng->txt("adn_generate_sheets"));
+                $this->addCommandButton("saveSheetAssignment", $this->lng->txt("adn_save_assignment"));
+                $this->addCommandButton("generateSheets", $this->lng->txt("adn_generate_sheets"));
             }
 
             $this->addMultiCommand(
                 "downloadExaminationDocuments",
-                $lng->txt("adn_download_answer_scoring_material")
+                $this->lng->txt("adn_download_answer_scoring_material")
             );
             $this->addColumn("", "", 1);
         }
@@ -79,7 +78,7 @@ class adnAnswerSheetAssignmentTableGUI extends ilTable2GUI
         $this->map["sheets_split"] = adnAnswerSheet::getSheetsSelect($this->event->getId(), true);
         $this->map["sheets"] = adnAnswerSheet::getSheetsSelect($this->event->getId());
         
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.assignment_row.html", "Services/ADN/EP");
 
         $this->importData();
@@ -141,7 +140,6 @@ class adnAnswerSheetAssignmentTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
 
         // properties
         $this->tpl->setVariable("VAL_NAME", $a_set["last_name"]);

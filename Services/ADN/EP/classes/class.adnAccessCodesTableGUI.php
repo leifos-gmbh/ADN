@@ -27,7 +27,6 @@ class adnAccessCodesTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd, $a_event_id)
     {
-        global $ilCtrl, $lng;
 
         $this->event_id = (int) $a_event_id;
 
@@ -35,7 +34,7 @@ class adnAccessCodesTableGUI extends ilTable2GUI
         parent::__construct($a_parent_obj, $a_parent_cmd);
 
         include_once("./Services/ADN/EP/classes/class.adnExaminationEvent.php");
-        $this->setTitle($lng->txt("adn_registered_candidates") . ": " .
+        $this->setTitle($this->lng->txt("adn_registered_candidates") . ": " .
             adnExaminationEvent::lookupName($this->event_id));
         
         $this->addColumn($this->lng->txt("adn_last_name"), "last_name");
@@ -47,7 +46,7 @@ class adnAccessCodesTableGUI extends ilTable2GUI
         $this->setDefaultOrderField("last_name");
         $this->setDefaultOrderDirection("asc");
 
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.access_code_row.html", "Services/ADN/EP");
     
         $this->importData();
@@ -82,7 +81,6 @@ class adnAccessCodesTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
 
         // properties
         $this->tpl->setVariable("VAL_LAST_NAME", $a_set["last_name"]);

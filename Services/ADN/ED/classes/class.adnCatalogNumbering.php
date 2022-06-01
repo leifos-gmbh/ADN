@@ -114,7 +114,8 @@ class adnCatalogNumbering
      */
     public static function getAreaTextRepresentation($a_code)
     {
-        global $lng;
+        global $DIC;
+        $lng = $DIC->language();
 
         switch ($a_code) {
             case 210:

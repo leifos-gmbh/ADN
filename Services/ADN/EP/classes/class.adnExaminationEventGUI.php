@@ -19,16 +19,27 @@ class adnExaminationEventGUI
 
     protected bool $archived = false;
 
+    protected ilCtrl $ctrl;
+    protected ilLanguage $lng;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilToolbarGUI $toolbar;
+    protected ilTabsGUI $tabs;
+
     /**
      * Constructor
      */
     public function __construct()
     {
-        global $ilCtrl;
+        global $DIC;
+        $this->ctrl = $DIC->ctrl();
+        $this->lng = $DIC->language();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->toolbar = $DIC->toolbar();
+        $this->tabs = $DIC->tabs();
         
         // save event ID through requests
-        $ilCtrl->saveParameter($this, array("ev_id"));
-        $ilCtrl->saveParameter($this, array("arc"));
+        $this->ctrl->saveParameter($this, array("ev_id"));
+        $this->ctrl->saveParameter($this, array("arc"));
 
         $this->archived = (bool) $_REQUEST["arc"];
         
@@ -40,18 +51,17 @@ class adnExaminationEventGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl, $lng, $tpl;
 
-        $tpl->setTitle($lng->txt("adn_ep") . " - " . $lng->txt("adn_ep_ees"));
+        $this->tpl->setTitle($this->lng->txt("adn_ep") . " - " . $this->lng->txt("adn_ep_ees"));
         
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
         
         // forward command to next gui class in control flow
         switch ($next_class) {
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("listEvents");
+                $cmd = $this->ctrl->getCmd("listEvents");
 
                 switch ($cmd) {
                     // commands that need read permission
@@ -135,12 +145,11 @@ class adnExaminationEventGUI
      */
     protected function listEvents()
     {
-        global $tpl, $ilToolbar, $lng, $ilCtrl;
 
         if (!$this->archived && adnPerm::check(adnPerm::EP, adnPerm::WRITE)) {
-            $ilToolbar->addButton(
-                $lng->txt("adn_add_examination_event"),
-                $ilCtrl->getLinkTarget($this, "addEvent")
+            $this->toolbar->addButton(
+                $this->lng->txt("adn_add_examination_event"),
+                $this->ctrl->getLinkTarget($this, "addEvent")
             );
         }
 
@@ -154,7 +163,7 @@ class adnExaminationEventGUI
         );
         
         // output table
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -164,14 +173,13 @@ class adnExaminationEventGUI
      */
     protected function addEvent(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $ilTabs, $ilCtrl, $lng;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listEvents"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listEvents"));
 
         if (!$a_form) {
             $a_form = $this->initEventForm("create");
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
 
     /**
@@ -181,14 +189,13 @@ class adnExaminationEventGUI
      */
     protected function editEvent(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $ilTabs, $ilCtrl, $lng;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listEvents"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listEvents"));
 
         if (!$a_form) {
             $a_form = $this->initEventForm("edit");
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
 
     /**
@@ -196,13 +203,12 @@ class adnExaminationEventGUI
      */
     protected function showEvent()
     {
-        global $tpl, $ilTabs, $ilCtrl, $lng;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listEvents"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listEvents"));
 
         $form = $this->initEventForm("show");
         $form = $form->convertToReadonly();
-        $tpl->setContent($form->getHTML());
+        $this->tpl->setContent($form->getHTML());
     }
 
     /**
@@ -213,27 +219,26 @@ class adnExaminationEventGUI
      */
     protected function initEventForm($a_mode = "edit")
     {
-        global $lng, $ilCtrl;
 
         // get form object and add input fields
         include_once("Services/Form/classes/class.ilPropertyFormGUI.php");
         $form = new ilPropertyFormGUI();
 
         // subject area (foreign, but static)
-        $type = new ilSelectInputGUI($lng->txt("adn_type_of_exam"), "type");
+        $type = new ilSelectInputGUI($this->lng->txt("adn_type_of_exam"), "type");
         $type->setRequired(true);
         include_once "Services/ADN/ED/classes/class.adnSubjectArea.php";
         $type->setOptions(adnSubjectArea::getAllAreas());
         $form->addItem($type);
 
-        $date = new ilDateTimeInputGUI($lng->txt("date"), "date");
+        $date = new ilDateTimeInputGUI($this->lng->txt("date"), "date");
         $date->setRequired(true);
         // $date_from->setShowTime(true);
         $form->addItem($date);
 
         include_once "Services/Form/classes/class.ilCombinationInputGUI.php";
         include_once "Services/Form/classes/class.ilTimeInputGUI.php";
-        $time = new ilCombinationInputGUI($lng->txt("adn_timeframe"), $time);
+        $time = new ilCombinationInputGUI($this->lng->txt("adn_timeframe"), $time);
         $time->setRequired(true);
         $time_from = new ilTimeInputGUI("", "time_from");
         $time->addCombinationItem("from", $time_from);
@@ -243,7 +248,7 @@ class adnExaminationEventGUI
         $form->addItem($time);
 
         // exam facility (foreign key)
-        $facility = new ilSelectInputGUI($lng->txt("adn_exam_facility"), "facility");
+        $facility = new ilSelectInputGUI($this->lng->txt("adn_exam_facility"), "facility");
         $facility->setRequired(true);
         $fac = null;
         if ($a_mode != "create") {
@@ -263,19 +268,19 @@ class adnExaminationEventGUI
         }
         $cochairs = adnCoChair::getCoChairsSelect(null, $cos);
         
-        $chair = new ilSelectInputGUI($lng->txt("adn_chairman"), "chair");
+        $chair = new ilSelectInputGUI($this->lng->txt("adn_chairman"), "chair");
         $chair->setOptions($cochairs);
         $form->addItem($chair);
 
-        $cochair1 = new ilSelectInputGUI($lng->txt("adn_cochair") . " 1", "cochair1");
+        $cochair1 = new ilSelectInputGUI($this->lng->txt("adn_cochair") . " 1", "cochair1");
         $cochair1->setOptions($cochairs);
         $form->addItem($cochair1);
 
-        $cochair2 = new ilSelectInputGUI($lng->txt("adn_cochair") . " 2", "cochair2");
+        $cochair2 = new ilSelectInputGUI($this->lng->txt("adn_cochair") . " 2", "cochair2");
         $cochair2->setOptions($cochairs);
         $form->addItem($cochair2);
 
-        $cost = new ilNumberInputGUI($lng->txt("adn_additional_costs"), "cost");
+        $cost = new ilNumberInputGUI($this->lng->txt("adn_additional_costs"), "cost");
         $cost->setDecimals(2);
         $cost->setMaxLength(6);
         $cost->setSize(6);
@@ -284,9 +289,9 @@ class adnExaminationEventGUI
 
         if ($a_mode == "create") {
             // creation: save/cancel buttons and title
-            $form->addCommandButton("saveEvent", $lng->txt("save"));
-            $form->addCommandButton("listEvents", $lng->txt("cancel"));
-            $form->setTitle($lng->txt("adn_add_examination_event"));
+            $form->addCommandButton("saveEvent", $this->lng->txt("save"));
+            $form->addCommandButton("listEvents", $this->lng->txt("cancel"));
+            $form->setTitle($this->lng->txt("adn_add_examination_event"));
         } else {
             // parse/split dates
             $date_from = $this->event->getDateFrom()->get(IL_CAL_DATETIME);
@@ -304,15 +309,15 @@ class adnExaminationEventGUI
 
             if ($a_mode != "show") {
                 // editing: update/cancel buttons and title
-                $form->addCommandButton("updateEvent", $lng->txt("save"));
-                $form->addCommandButton("listEvents", $lng->txt("cancel"));
-                $form->setTitle($lng->txt("adn_edit_examination_event"));
+                $form->addCommandButton("updateEvent", $this->lng->txt("save"));
+                $form->addCommandButton("listEvents", $this->lng->txt("cancel"));
+                $form->setTitle($this->lng->txt("adn_edit_examination_event"));
             } else {
-                $form->setTitle($lng->txt("adn_examination_event"));
+                $form->setTitle($this->lng->txt("adn_examination_event"));
             }
         }
 
-        $form->setFormAction($ilCtrl->getFormAction($this));
+        $form->setFormAction($this->ctrl->getFormAction($this));
 
         return $form;
     }
@@ -322,7 +327,6 @@ class adnExaminationEventGUI
      */
     protected function saveEvent()
     {
-        global $tpl, $lng, $ilCtrl;
 
         $form = $this->initEventForm("create");
 
@@ -351,8 +355,8 @@ class adnExaminationEventGUI
             
             if ($event->save()) {
                 // show success message and return to list
-                ilUtil::sendSuccess($lng->txt("adn_examination_event_created"), true);
-                $ilCtrl->redirect($this, "listEvents");
+                ilUtil::sendSuccess($this->lng->txt("adn_examination_event_created"), true);
+                $this->ctrl->redirect($this, "listEvents");
             }
         }
 
@@ -366,7 +370,6 @@ class adnExaminationEventGUI
      */
     protected function updateEvent()
     {
-        global $lng, $ilCtrl, $tpl;
 
         $form = $this->initEventForm("edit");
 
@@ -393,8 +396,8 @@ class adnExaminationEventGUI
              
             if ($this->event->update()) {
                 // show success message and return to list
-                ilUtil::sendSuccess($lng->txt("adn_examination_event_updated"), true);
-                $ilCtrl->redirect($this, "listEvents");
+                ilUtil::sendSuccess($this->lng->txt("adn_examination_event_updated"), true);
+                $this->ctrl->redirect($this, "listEvents");
             }
         }
 
@@ -408,25 +411,24 @@ class adnExaminationEventGUI
      */
     protected function confirmEventsDeletion()
     {
-        global $ilCtrl, $tpl, $lng, $ilTabs;
 
         // check whether at least one item has been seleced
         if (!is_array($_POST["event_id"]) || count($_POST["event_id"]) == 0) {
-            ilUtil::sendFailure($lng->txt("no_checkbox"), true);
-            $ilCtrl->redirect($this, "listEvents");
+            ilUtil::sendFailure($this->lng->txt("no_checkbox"), true);
+            $this->ctrl->redirect($this, "listEvents");
         } else {
-            $ilTabs->setBackTarget(
-                $lng->txt("back"),
-                $ilCtrl->getLinkTarget($this, "listEvents")
+            $this->tabs->setBackTarget(
+                $this->lng->txt("back"),
+                $this->ctrl->getLinkTarget($this, "listEvents")
             );
             
             // display confirmation message
             include_once("./Services/Utilities/classes/class.ilConfirmationGUI.php");
             $cgui = new ilConfirmationGUI();
-            $cgui->setFormAction($ilCtrl->getFormAction($this));
-            $cgui->setHeaderText($lng->txt("adn_sure_delete_examination_events"));
-            $cgui->setCancel($lng->txt("cancel"), "listEvents");
-            $cgui->setConfirm($lng->txt("delete"), "deleteEvents");
+            $cgui->setFormAction($this->ctrl->getFormAction($this));
+            $cgui->setHeaderText($this->lng->txt("adn_sure_delete_examination_events"));
+            $cgui->setCancel($this->lng->txt("cancel"), "listEvents");
+            $cgui->setConfirm($this->lng->txt("delete"), "deleteEvents");
 
             // list objects that should be deleted
             include_once("./Services/ADN/EP/classes/class.adnExaminationEvent.php");
@@ -434,7 +436,7 @@ class adnExaminationEventGUI
                 $cgui->addItem("event_id[]", $i, adnExaminationEvent::lookupName($i));
             }
 
-            $tpl->setContent($cgui->getHTML());
+            $this->tpl->setContent($cgui->getHTML());
         }
     }
 
@@ -443,7 +445,6 @@ class adnExaminationEventGUI
      */
     protected function deleteEvents()
     {
-        global $ilCtrl, $lng;
 
         include_once("./Services/ADN/EP/classes/class.adnExaminationEvent.php");
 
@@ -453,8 +454,8 @@ class adnExaminationEventGUI
                 $event->delete();
             }
         }
-        ilUtil::sendSuccess($lng->txt("adn_examination_event_deleted"), true);
-        $ilCtrl->redirect($this, "listEvents");
+        ilUtil::sendSuccess($this->lng->txt("adn_examination_event_deleted"), true);
+        $this->ctrl->redirect($this, "listEvents");
     }
     
     /**
@@ -462,31 +463,30 @@ class adnExaminationEventGUI
      */
     public function setTabs()
     {
-        global $ilTabs, $lng, $txt, $ilCtrl;
 
-        $ilCtrl->setParameter($this, "arc", "");
+        $this->ctrl->setParameter($this, "arc", "");
 
-        $ilTabs->addTab(
+        $this->tabs->addTab(
             "current",
-            $lng->txt("adn_current_examination_events"),
-            $ilCtrl->getLinkTarget($this, "listEvents")
+            $this->lng->txt("adn_current_examination_events"),
+            $this->ctrl->getLinkTarget($this, "listEvents")
         );
 
 
-        $ilCtrl->setParameter($this, "arc", "1");
+        $this->ctrl->setParameter($this, "arc", "1");
 
-        $ilTabs->addTab(
+        $this->tabs->addTab(
             "archived",
-            $lng->txt("adn_archived_examination_events"),
-            $ilCtrl->getLinkTarget($this, "listEvents")
+            $this->lng->txt("adn_archived_examination_events"),
+            $this->ctrl->getLinkTarget($this, "listEvents")
         );
 
-        $ilCtrl->setParameter($this, "arc", $this->archived);
+        $this->ctrl->setParameter($this, "arc", $this->archived);
 
         if ($this->archived) {
-            $ilTabs->activateTab("archived");
+            $this->tabs->activateTab("archived");
         } else {
-            $ilTabs->activateTab("current");
+            $this->tabs->activateTab("current");
         }
     }
 }

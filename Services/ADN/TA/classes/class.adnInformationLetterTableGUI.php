@@ -23,16 +23,15 @@ class adnInformationLetterTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd)
     {
-        global $ilCtrl, $lng;
 
         parent::__construct($a_parent_obj, $a_parent_cmd);
 
         $this->setId("adn_ta_inf");
         
-        $this->setTitle($lng->txt("adn_information_letters"));
+        $this->setTitle($this->lng->txt("adn_information_letters"));
 
         if (adnPerm::check(adnPerm::TA, adnPerm::WRITE)) {
-            $this->addMultiCommand("confirmInformationLettersDeletion", $lng->txt("delete"));
+            $this->addMultiCommand("confirmInformationLettersDeletion", $this->lng->txt("delete"));
             $this->addColumn("", "", "1");
         }
 
@@ -42,7 +41,7 @@ class adnInformationLetterTableGUI extends ilTable2GUI
         $this->setDefaultOrderField("name");
         $this->setDefaultOrderDirection("asc");
         
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.letters_row.html", "Services/ADN/TA");
         
         $this->importData();
@@ -67,11 +66,10 @@ class adnInformationLetterTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
         
         // actions...
 
-        $ilCtrl->setParameter($this->parent_obj, "il_id", $a_set["id"]);
+        $this->ctrl->setParameter($this->parent_obj, "il_id", $a_set["id"]);
 
         if (adnPerm::check(adnPerm::TA, adnPerm::WRITE)) {
             // checkbox for deletion
@@ -85,16 +83,16 @@ class adnInformationLetterTableGUI extends ilTable2GUI
             $this->tpl->setCurrentBlock("action");
             $this->tpl->setVariable(
                 "TXT_CMD",
-                $lng->txt("download")
+                $this->lng->txt("download")
             );
             $this->tpl->setVariable(
                 "HREF_CMD",
-                $ilCtrl->getLinkTarget($this->parent_obj, "downloadInformationLetter")
+                $this->ctrl->getLinkTarget($this->parent_obj, "downloadInformationLetter")
             );
             $this->tpl->parseCurrentBlock();
         }
         
-        $ilCtrl->setParameter($this->parent_obj, "il_id", "");
+        $this->ctrl->setParameter($this->parent_obj, "il_id", "");
 
         
         // properties

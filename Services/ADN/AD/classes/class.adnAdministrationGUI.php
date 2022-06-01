@@ -16,18 +16,19 @@
  */
 class adnAdministrationGUI
 {
-    /**
-     * Execute command
-     */
     public function executeCommand()
     {
-        global $ilCtrl, $lng, $tpl;
+        global $DIC;
+        
+        $tpl = $DIC->ui()->mainTemplate();
+        $ilCtrl = $DIC->ctrl();
+        $lng = $DIC->language();
 
         // set page title
-        $tpl->setTitle($lng->txt("adn_ad"));
+        $this->tpl->setTitle($this->lng->txt("adn_ad"));
 
-        $next_class = $ilCtrl->getNextClass();
-        $cmd = $ilCtrl->getCmd();
+        $next_class = $this->ctrl->getNextClass();
+        $cmd = $this->ctrl->getCmd();
 
         // menu item triggered
         if ($cmd == "processMenuItem") {
@@ -36,45 +37,45 @@ class adnAdministrationGUI
             switch ($_GET["menu_item"]) {
                 // maintenance mode
                 case adnMainMenuGUI::AD_MNT:
-                    $ilCtrl->setCmdClass("adnmaintenancegui");
-                    $ilCtrl->setCmd("editMode");
+                    $this->ctrl->setCmdClass("adnmaintenancegui");
+                    $this->ctrl->setCmd("editMode");
                     break;
 
                 // special characters
                 case adnMainMenuGUI::AD_CHR:
-                    $ilCtrl->setCmdClass("adncharactergui");
-                    $ilCtrl->setCmd("listCharacters");
+                    $this->ctrl->setCmdClass("adncharactergui");
+                    $this->ctrl->setCmd("listCharacters");
                     break;
 
                 // export mc
                 case adnMainMenuGUI::AD_MCX:
-                    $ilCtrl->setCmdClass("adnmcquestionexportgui");
-                    $ilCtrl->setCmd("listFiles");
+                    $this->ctrl->setCmdClass("adnmcquestionexportgui");
+                    $this->ctrl->setCmd("listFiles");
                     break;
 
                 // users
                 case adnMainMenuGUI::AD_USR:
-                    $ilCtrl->setCmdClass("adnusergui");
-                    $ilCtrl->setCmd("listUsers");
+                    $this->ctrl->setCmdClass("adnusergui");
+                    $this->ctrl->setCmd("listUsers");
                     break;
 
                 // import professionals
                 case adnMainMenuGUI::AD_ICP:
-                    $ilCtrl->setCmdClass("adnprofessionalimportgui");
-                    $ilCtrl->setCmd("importFile");
+                    $this->ctrl->setCmdClass("adnprofessionalimportgui");
+                    $this->ctrl->setCmd("importFile");
                     break;
 
             }
-            $next_class = $ilCtrl->getNextClass();
+            $next_class = $this->ctrl->getNextClass();
         }
 
         // If no next class is responsible for handling the
         // command, set the default class
         if ($next_class == "") {
             // default: maintenance mode
-            $ilCtrl->setCmd("");
-            $ilCtrl->setCmdClass("adnmaintenancegui");
-            $next_class = $ilCtrl->getNextClass();
+            $this->ctrl->setCmd("");
+            $this->ctrl->setCmdClass("adnmaintenancegui");
+            $next_class = $this->ctrl->getNextClass();
         }
 
         // forward command to next gui class in control flow
@@ -82,35 +83,35 @@ class adnAdministrationGUI
             case "adnmaintenancegui":
                 include_once("./Services/ADN/AD/classes/class.adnMaintenanceGUI.php");
                 $ct_gui = new adnMaintenanceGUI();
-                $ilCtrl->forwardCommand($ct_gui);
+                $this->ctrl->forwardCommand($ct_gui);
                 break;
 
             case "adncharactergui":
                 include_once("./Services/ADN/AD/classes/class.adnCharacterGUI.php");
                 $ct_gui = new adnCharacterGUI();
-                $ilCtrl->forwardCommand($ct_gui);
+                $this->ctrl->forwardCommand($ct_gui);
                 break;
 
             case "adnmcquestionexportgui":
                 include_once("./Services/ADN/AD/classes/class.adnMCQuestionExportGUI.php");
                 $mcx_gui = new adnMCQuestionExportGUI();
-                $ilCtrl->forwardCommand($mcx_gui);
+                $this->ctrl->forwardCommand($mcx_gui);
                 break;
 
             case "adnusergui":
                 include_once("./Services/ADN/AD/classes/class.adnUserGUI.php");
                 $usr_gui = new adnUserGUI();
-                $ilCtrl->forwardCommand($usr_gui);
+                $this->ctrl->forwardCommand($usr_gui);
                 break;
-            
+
             case "adnprofessionalimportgui":
                 include_once("./Services/ADN/AD/classes/class.adnProfessionalImportGUI.php");
                 $pro_gui = new adnProfessionalImportGUI();
-                $ilCtrl->forwardCommand($pro_gui);
+                $this->ctrl->forwardCommand($pro_gui);
                 break;
 
         }
 
-        adnBaseGUI::setHelpButton($ilCtrl->getCmdClass());
+        adnBaseGUI::setHelpButton($this->ctrl->getCmdClass());
     }
 }

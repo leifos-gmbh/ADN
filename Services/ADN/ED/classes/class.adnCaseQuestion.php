@@ -103,26 +103,25 @@ class adnCaseQuestion extends adnExaminationQuestion
      */
     public function read()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if (!$id) {
             return;
         }
 
-        $res = $ilDB->query("SELECT default_answer,good_specific_question" .
+        $res = $this->db->query("SELECT default_answer,good_specific_question" .
             " FROM adn_ed_question_case" .
-            " WHERE ed_question_id = " . $ilDB->quote($id, "integer"));
-        $set = $ilDB->fetchAssoc($res);
+            " WHERE ed_question_id = " . $this->db->quote($id, "integer"));
+        $set = $this->db->fetchAssoc($res);
         $this->setDefaultAnswer($set["default_answer"]);
         $this->setGoodSpecific($set["good_specific_question"]);
 
         // read goods from sub-table
-        $res = $ilDB->query("SELECT ed_good_id" .
+        $res = $this->db->query("SELECT ed_good_id" .
             " FROM adn_ed_quest_case_good WHERE ed_question_id = " .
-            $ilDB->quote($this->getId(), "integer"));
+            $this->db->quote($this->getId(), "integer"));
         $goods = array();
-        while ($row = $ilDB->fetchAssoc($res)) {
+        while ($row = $this->db->fetchAssoc($res)) {
             $goods[] = $row["ed_good_id"];
         }
         $this->setGoods($goods);
@@ -151,13 +150,12 @@ class adnCaseQuestion extends adnExaminationQuestion
      */
     public function save()
     {
-        global $ilDB;
 
         parent::save();
     
         $fields = $this->CasePropertiesToFields();
-        
-        $ilDB->insert("adn_ed_question_case", $fields);
+
+        $this->db->insert("adn_ed_question_case", $fields);
 
         $this->saveGoods();
 
@@ -171,7 +169,6 @@ class adnCaseQuestion extends adnExaminationQuestion
      */
     public function update()
     {
-        global $ilDB;
         
         $id = $this->getId();
         if (!$id) {
@@ -179,8 +176,8 @@ class adnCaseQuestion extends adnExaminationQuestion
         }
 
         $fields = $this->CasePropertiesToFields();
-        
-        $ilDB->update(
+
+        $this->db->update(
             "adn_ed_question_case",
             $fields,
             array("ed_question_id" => array("integer", $id))
@@ -201,7 +198,6 @@ class adnCaseQuestion extends adnExaminationQuestion
      */
     public function delete($a_force = false)
     {
-        global $ilDB;
 
         $id = $this->getId();
         if ($id) {
@@ -219,11 +215,11 @@ class adnCaseQuestion extends adnExaminationQuestion
                         $answer->delete();
                     }
                 }
-        
-                $ilDB->manipulate("DELETE FROM adn_ed_quest_case_good WHERE ed_question_id = " .
-                    $ilDB->quote($id, "integer"));
-                $ilDB->manipulate("DELETE FROM adn_ed_question_case WHERE ed_question_id = " .
-                    $ilDB->quote($id, "integer"));
+
+                $this->db->manipulate("DELETE FROM adn_ed_quest_case_good WHERE ed_question_id = " .
+                    $this->db->quote($id, "integer"));
+                $this->db->manipulate("DELETE FROM adn_ed_question_case WHERE ed_question_id = " .
+                    $this->db->quote($id, "integer"));
                 
                 parent::delete();
             }
@@ -236,19 +232,18 @@ class adnCaseQuestion extends adnExaminationQuestion
      */
     protected function saveGoods()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if ($id) {
-            $ilDB->manipulate("DELETE FROM adn_ed_quest_case_good" .
-                " WHERE ed_question_id = " . $ilDB->quote($id, "integer"));
+            $this->db->manipulate("DELETE FROM adn_ed_quest_case_good" .
+                " WHERE ed_question_id = " . $this->db->quote($id, "integer"));
 
             if (is_array($this->goods) && count($this->goods) > 0) {
                 foreach ($this->goods as $good_id) {
                     $fields = array("ed_question_id" => array("integer", $id),
                         "ed_good_id" => array("integer", $good_id));
 
-                    $ilDB->insert("adn_ed_quest_case_good", $fields);
+                    $this->db->insert("adn_ed_quest_case_good", $fields);
                 }
             }
         }
@@ -262,7 +257,8 @@ class adnCaseQuestion extends adnExaminationQuestion
      */
     public static function findByGood($a_id)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $res = $ilDB->query("SELECT ed_question_id" .
             " FROM adn_ed_quest_case_good" .

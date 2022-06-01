@@ -23,17 +23,16 @@ class adnTrainingProviderTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd)
     {
-        global $ilCtrl, $lng;
         
         parent::__construct($a_parent_obj, $a_parent_cmd);
         include_once("./Services/ADN/TA/classes/class.adnTrainingProvider.php");
 
         $this->setId("adn_ta_prov");
         
-        $this->setTitle($lng->txt("adn_training_providers"));
+        $this->setTitle($this->lng->txt("adn_training_providers"));
 
         if (adnPerm::check(adnPerm::TA, adnPerm::WRITE)) {
-            $this->addMultiCommand("confirmTrainingProviderDeletion", $lng->txt("delete"));
+            $this->addMultiCommand("confirmTrainingProviderDeletion", $this->lng->txt("delete"));
             $this->addColumn("", "", "1");
         }
 
@@ -45,7 +44,7 @@ class adnTrainingProviderTableGUI extends ilTable2GUI
         $this->setDefaultOrderField("name");
         $this->setDefaultOrderDirection("asc");
 
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.training_providers_row.html", "Services/ADN/TA");
         
         $this->importData();
@@ -96,50 +95,49 @@ class adnTrainingProviderTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
         
         // actions...
 
-        $ilCtrl->setParameter($this->parent_obj, "tp_id", $a_set["id"]);
+        $this->ctrl->setParameter($this->parent_obj, "tp_id", $a_set["id"]);
 
         if (adnPerm::check(adnPerm::TA, adnPerm::WRITE)) {
             // ...edit
             $this->tpl->setCurrentBlock("action");
             $this->tpl->setVariable(
                 "TXT_CMD",
-                $lng->txt("adn_edit_contact_data")
+                $this->lng->txt("adn_edit_contact_data")
             );
             $this->tpl->setVariable(
                 "HREF_CMD",
-                $ilCtrl->getLinkTarget($this->parent_obj, "editTrainingProvider")
+                $this->ctrl->getLinkTarget($this->parent_obj, "editTrainingProvider")
             );
             $this->tpl->parseCurrentBlock();
             $this->tpl->setCurrentBlock("action");
             $this->tpl->setVariable(
                 "TXT_CMD",
-                $lng->txt("adn_edit_types_of_training")
+                $this->lng->txt("adn_edit_types_of_training")
             );
             $this->tpl->setVariable(
                 "HREF_CMD",
-                $ilCtrl->getLinkTarget($this->parent_obj, "listTrainingTypes")
+                $this->ctrl->getLinkTarget($this->parent_obj, "listTrainingTypes")
             );
             $this->tpl->parseCurrentBlock();
 
             // ... edit instructors
             $this->tpl->setCurrentBlock("action");
-            $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_edit_instructors"));
+            $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_edit_instructors"));
             $this->tpl->setVariable(
                 "HREF_CMD",
-                $ilCtrl->getLinkTargetByClass("adninstructorgui", "listInstructors")
+                $this->ctrl->getLinkTargetByClass("adninstructorgui", "listInstructors")
             );
             $this->tpl->parseCurrentBlock();
 
             // ... edit facilities
             $this->tpl->setCurrentBlock("action");
-            $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_edit_training_facilities"));
+            $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_edit_training_facilities"));
             $this->tpl->setVariable(
                 "HREF_CMD",
-                $ilCtrl->getLinkTargetByClass("adntrainingfacilitygui", "listTrainingFacilities")
+                $this->ctrl->getLinkTargetByClass("adntrainingfacilitygui", "listTrainingFacilities")
             );
             $this->tpl->parseCurrentBlock();
 
@@ -153,29 +151,29 @@ class adnTrainingProviderTableGUI extends ilTable2GUI
             if (!adnPerm::check(adnPerm::TA, adnPerm::WRITE)) {
                 // ... show details
                 $this->tpl->setCurrentBlock("action");
-                $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_show_details"));
+                $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_show_details"));
                 $this->tpl->setVariable(
                     "HREF_CMD",
-                    $ilCtrl->getLinkTarget($this->parent_obj, "showTrainingProvider")
+                    $this->ctrl->getLinkTarget($this->parent_obj, "showTrainingProvider")
                 );
                 $this->tpl->parseCurrentBlock();
             }
 
-            $ilCtrl->setParameter($this->parent_obj, "istp", "1");
+            $this->ctrl->setParameter($this->parent_obj, "istp", "1");
 
             // ... training events
             $this->tpl->setCurrentBlock("action");
-            $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_training_events"));
+            $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_training_events"));
             $this->tpl->setVariable(
                 "HREF_CMD",
-                $ilCtrl->getLinkTargetByClass("adntrainingeventgui", "listTrainingEvents")
+                $this->ctrl->getLinkTargetByClass("adntrainingeventgui", "listTrainingEvents")
             );
             $this->tpl->parseCurrentBlock();
 
-            $ilCtrl->setParameter($this->parent_obj, "istp", "");
+            $this->ctrl->setParameter($this->parent_obj, "istp", "");
         }
 
-        $ilCtrl->setParameter($this->parent_obj, "tp_id", "");
+        $this->ctrl->setParameter($this->parent_obj, "tp_id", "");
 
 
         // properties

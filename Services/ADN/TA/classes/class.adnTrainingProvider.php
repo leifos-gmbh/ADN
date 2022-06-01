@@ -402,16 +402,15 @@ class adnTrainingProvider extends adnDBBase
      */
     public function read()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if (!$id) {
             return;
         }
 
-        $set = $ilDB->query("SELECT * FROM adn_ta_provider" .
-            " WHERE id = " . $ilDB->quote($id, "integer"));
-        if ($rec = $ilDB->fetchAssoc($set)) {
+        $set = $this->db->query("SELECT * FROM adn_ta_provider" .
+            " WHERE id = " . $this->db->quote($id, "integer"));
+        if ($rec = $this->db->fetchAssoc($set)) {
             $this->setName($rec["name"]);
             $this->setContact($rec["contact"]);
             $this->setStreet($rec["street"]);
@@ -430,11 +429,11 @@ class adnTrainingProvider extends adnDBBase
         }
 
         // get training types
-        $set = $ilDB->query("SELECT *" .
+        $set = $this->db->query("SELECT *" .
             " FROM adn_ta_provider_ttype" .
             " WHERE ta_provider_id = " . $id);
         $types = array();
-        while ($rec = $ilDB->fetchAssoc($set)) {
+        while ($rec = $this->db->fetchAssoc($set)) {
             $date = new ilDate($rec["approval_date"], IL_CAL_DATE, ilTimeZone::UTC);
             $types[$rec["training_type"]] = $date;
         }
@@ -476,19 +475,18 @@ class adnTrainingProvider extends adnDBBase
      */
     public function saveTrainingTypes()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if ($id) {
-            $ilDB->manipulate("DELETE FROM adn_ta_provider_ttype" .
-                " WHERE ta_provider_id = " . $ilDB->quote($id, "integer"));
+            $this->db->manipulate("DELETE FROM adn_ta_provider_ttype" .
+                " WHERE ta_provider_id = " . $this->db->quote($id, "integer"));
 
             foreach ($this->training_types as $type => $date) {
                 $fields = array("ta_provider_id" => array("integer", $id),
                     "training_type" => array("text", $type),
                     "approval_date" => array("timestamp", $date->get(IL_CAL_DATETIME, "", ilTimeZone::UTC)));
 
-                $ilDB->insert("adn_ta_provider_ttype", $fields);
+                $this->db->insert("adn_ta_provider_ttype", $fields);
             }
         }
     }
@@ -500,10 +498,9 @@ class adnTrainingProvider extends adnDBBase
      */
     public function save()
     {
-        global $ilDB, $ilUser;
 
         // sequence
-        $this->setId($ilDB->nextId("adn_ta_provider"));
+        $this->setId($this->db->nextId("adn_ta_provider"));
         $id = $this->getId();
         if (!$id) {
             return;
@@ -512,7 +509,7 @@ class adnTrainingProvider extends adnDBBase
         $fields = $this->propertiesToFields();
         $fields["id"] = array("integer", $id);
 
-        $ilDB->insert("adn_ta_provider", $fields);
+        $this->db->insert("adn_ta_provider", $fields);
 
         parent::_save($id, "adn_ta_provider");
 
@@ -526,7 +523,6 @@ class adnTrainingProvider extends adnDBBase
      */
     public function update()
     {
-        global $ilDB, $ilUser;
 
         $id = $this->getId();
         if (!$id) {
@@ -535,7 +531,7 @@ class adnTrainingProvider extends adnDBBase
 
         $fields = $this->propertiesToFields();
 
-        $ilDB->update("adn_ta_provider", $fields, array("id" => array("integer", $id)));
+        $this->db->update("adn_ta_provider", $fields, array("id" => array("integer", $id)));
 
         parent::_update($id, "adn_ta_provider");
 
@@ -549,7 +545,6 @@ class adnTrainingProvider extends adnDBBase
      */
     public function delete()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if ($id) {
@@ -613,10 +608,10 @@ class adnTrainingProvider extends adnDBBase
                     }
                 }
                 
-                $ilDB->manipulate("DELETE FROM adn_ta_provider_ttype" .
-                    " WHERE ta_provider_id = " . $ilDB->quote($id, "integer"));
-                $ilDB->manipulate("DELETE FROM adn_ta_provider" .
-                    " WHERE id = " . $ilDB->quote($id, "integer"));
+                $this->db->manipulate("DELETE FROM adn_ta_provider_ttype" .
+                    " WHERE ta_provider_id = " . $this->db->quote($id, "integer"));
+                $this->db->manipulate("DELETE FROM adn_ta_provider" .
+                    " WHERE id = " . $this->db->quote($id, "integer"));
                 $this->setId(null);
             }
 
@@ -634,7 +629,8 @@ class adnTrainingProvider extends adnDBBase
      */
     public static function getAllTrainingProviders($a_with_archived = false)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id,name FROM adn_ta_provider";
 
@@ -669,7 +665,8 @@ class adnTrainingProvider extends adnDBBase
      */
     public static function getTrainingProvidersSelect()
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query("SELECT id,name" .
             " FROM adn_ta_provider" .
@@ -692,7 +689,8 @@ class adnTrainingProvider extends adnDBBase
      */
     protected static function lookupProperty($a_id, $a_prop)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query(
             "SELECT " . $a_prop .

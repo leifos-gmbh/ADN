@@ -49,7 +49,6 @@ class adnCertifiedProfessional extends adnDBBase
      */
     public function __construct($a_id = 0)
     {
-        global $ilCtrl;
 
         if ($a_id !== 0) {
             $this->setId($a_id);
@@ -736,14 +735,13 @@ class adnCertifiedProfessional extends adnDBBase
      */
     public function read()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if (!$id) {
             return;
         }
 
-        $res = $ilDB->query("SELECT salutation,last_name,first_name," .
+        $res = $this->db->query("SELECT salutation,last_name,first_name," .
             "birthdate,citizenship,subject_area," .
             "registered_for_exam,foreign_certificate,foreign_cert_handed_in,pa_country,pa_postal_code," .
             "pa_city,pa_street," .
@@ -753,8 +751,8 @@ class adnCertifiedProfessional extends adnDBBase
             "registered_by_wmo_id,blocked_until," .
             "blocked_by_wmo_id,last_ta_event_id,ilias_user_id" .
             " FROM adn_cp_professional" .
-            " WHERE id = " . $ilDB->quote($id, "integer"));
-        $set = $ilDB->fetchAssoc($res);
+            " WHERE id = " . $this->db->quote($id, "integer"));
+        $set = $this->db->fetchAssoc($res);
         $this->setSalutation($set["salutation"]);
         $this->setLastName($set["last_name"]);
         $this->setFirstName($set["first_name"]);
@@ -856,16 +854,15 @@ class adnCertifiedProfessional extends adnDBBase
      */
     public function save()
     {
-        global $ilDB;
 
         // sequence
-        $this->setId($ilDB->nextId("adn_cp_professional"));
+        $this->setId($this->db->nextId("adn_cp_professional"));
         $id = $this->getId();
 
         $fields = $this->propertiesToFields();
         $fields["id"] = array("integer", $id);
             
-        $ilDB->insert("adn_cp_professional", $fields);
+        $this->db->insert("adn_cp_professional", $fields);
 
         parent::_save($id, "adn_cp_professional");
         
@@ -879,7 +876,6 @@ class adnCertifiedProfessional extends adnDBBase
      */
     public function update()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if (!$id) {
@@ -888,7 +884,7 @@ class adnCertifiedProfessional extends adnDBBase
         
         $fields = $this->propertiesToFields();
 
-        $ilDB->update("adn_cp_professional", $fields, array("id" => array("integer", $id)));
+        $this->db->update("adn_cp_professional", $fields, array("id" => array("integer", $id)));
 
         parent::_update($id, "adn_cp_professional");
 
@@ -902,7 +898,6 @@ class adnCertifiedProfessional extends adnDBBase
      */
     public function delete()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if ($id) {
@@ -1032,17 +1027,17 @@ class adnCertifiedProfessional extends adnDBBase
                     foreach ($all as $event_id) {
                         $sheets = adnAnswerSheetAssignment::getSheetsSelect($id, $event_id);
                         if ($sheets) {
-                            $ilDB->manipulate("DELETE FROM adn_ep_cand_sheet" .
-                                " WHERE " . $ilDB->in("id", array_keys($sheets), false, "integer"));
+                            $this->db->manipulate("DELETE FROM adn_ep_cand_sheet" .
+                                " WHERE " . $this->db->in("id", array_keys($sheets), false, "integer"));
                         }
 
-                        $ilDB->manipulate("DELETE FROM adn_ep_exam_invitation" .
-                            " WHERE ep_exam_event_id = " . $ilDB->quote($event_id, "integer") .
-                            " AND cp_professional_id = " . $ilDB->quote($id, "integer"));
+                        $this->db->manipulate("DELETE FROM adn_ep_exam_invitation" .
+                            " WHERE ep_exam_event_id = " . $this->db->quote($event_id, "integer") .
+                            " AND cp_professional_id = " . $this->db->quote($id, "integer"));
 
-                        $ilDB->manipulate("DELETE FROM adn_ep_assignment" .
-                            " WHERE ep_exam_event_id = " . $ilDB->quote($event_id, "integer") .
-                            " AND cp_professional_id = " . $ilDB->quote($id, "integer"));
+                        $this->db->manipulate("DELETE FROM adn_ep_assignment" .
+                            " WHERE ep_exam_event_id = " . $this->db->quote($event_id, "integer") .
+                            " AND cp_professional_id = " . $this->db->quote($id, "integer"));
                     }
                 }
 
@@ -1051,14 +1046,14 @@ class adnCertifiedProfessional extends adnDBBase
             } else {
                 // $ilDB->manipulate("DELETE FROM adn_es_certificate".
                 //		"WHERE cp_professional_id = ".$ilDB->quote($id, "integer"));
-                $ilDB->manipulate("DELETE FROM adn_ep_cand_sheet" .
-                    " WHERE cp_professional_id = " . $ilDB->quote($id, "integer"));
-                $ilDB->manipulate("DELETE FROM adn_ep_exam_invitation" .
-                    " WHERE cp_professional_id = " . $ilDB->quote($id, "integer"));
-                $ilDB->manipulate("DELETE FROM adn_ep_assignment" .
-                    " WHERE cp_professional_id = " . $ilDB->quote($id, "integer"));
-                $ilDB->manipulate("DELETE FROM adn_cp_professional" .
-                    " WHERE id = " . $ilDB->quote($id, "integer"));
+                $this->db->manipulate("DELETE FROM adn_ep_cand_sheet" .
+                    " WHERE cp_professional_id = " . $this->db->quote($id, "integer"));
+                $this->db->manipulate("DELETE FROM adn_ep_exam_invitation" .
+                    " WHERE cp_professional_id = " . $this->db->quote($id, "integer"));
+                $this->db->manipulate("DELETE FROM adn_ep_assignment" .
+                    " WHERE cp_professional_id = " . $this->db->quote($id, "integer"));
+                $this->db->manipulate("DELETE FROM adn_cp_professional" .
+                    " WHERE id = " . $this->db->quote($id, "integer"));
                 $this->setId(null);
                 return true;
             }
@@ -1074,7 +1069,8 @@ class adnCertifiedProfessional extends adnDBBase
      */
     public static function getAllCandidates(array $a_filter = null, $a_with_archived = false)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT a.id,a.last_name,a.first_name,a.birthdate,a.citizenship,a.subject_area," .
             "a.registered_by_wmo_id, a.create_date, " .
@@ -1170,7 +1166,8 @@ class adnCertifiedProfessional extends adnDBBase
      */
     public static function getCandidatesSelect()
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id,last_name,first_name" .
             " FROM adn_cp_professional" .
@@ -1194,7 +1191,8 @@ class adnCertifiedProfessional extends adnDBBase
      */
     protected static function lookupProperty($a_id, $a_prop)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query("SELECT " . $a_prop .
             " FROM adn_cp_professional" .
@@ -1233,7 +1231,8 @@ class adnCertifiedProfessional extends adnDBBase
         $a_return_id = false
     )
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id" .
             " FROM adn_cp_professional" .
@@ -1273,7 +1272,8 @@ class adnCertifiedProfessional extends adnDBBase
      */
     public static function hasCountry($a_id)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $id = $ilDB->quote($a_id, "integer");
 
@@ -1316,7 +1316,9 @@ class adnCertifiedProfessional extends adnDBBase
      */
     public static function prepareUser($a_cp_id)
     {
-        global $ilClientIniFile, $rbacadmin;
+        global $DIC;
+        $rbacadmin = $DIC->rbac()->admin();
+        $ilClientIniFile = $DIC->clientIni();
 
         $cp_prof = new adnCertifiedProfessional($a_cp_id);
         if ($cp_prof->getIliasUserId() <= 0) {
@@ -1355,7 +1357,8 @@ class adnCertifiedProfessional extends adnDBBase
      */
     public static function getCPIdForUserLogin($a_login)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $user_id = ilObjUser::_lookupId($a_login);
         $set = $ilDB->query("SELECT id" .

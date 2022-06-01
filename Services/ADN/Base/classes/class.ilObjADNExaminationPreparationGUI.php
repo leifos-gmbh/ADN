@@ -36,24 +36,23 @@ class ilObjADNExaminationPreparationGUI extends ilObjectGUI
      */
     public function executeCommand()
     {
-        global $rbacsystem,$ilErr,$ilAccess;
 
         $next_class = $this->ctrl->getNextClass($this);
         $cmd = $this->ctrl->getCmd();
 
         $this->prepareOutput();
 
-        if (!$ilAccess->checkAccess('read', '', $this->object->getRefId())) {
-            $ilErr->raiseError($this->lng->txt('no_permission'), $ilErr->WARNING);
+        if (!$this->access->checkAccess('read', '', $this->object->getRefId())) {
+            $this->ilErr->raiseError($this->lng->txt('no_permission'), $this->ilErr->WARNING);
         }
 
         switch ($next_class) {
             case 'ilpermissiongui':
-                if ($rbacsystem->checkAccess('edit_permission', $this->object->getRefId())) {
+                if ($this->rbacsystem->checkAccess('edit_permission', $this->object->getRefId())) {
                     $this->tabs_gui->setTabActive('perm_settings');
                     include_once("Services/AccessControl/classes/class.ilPermissionGUI.php");
                     $perm_gui = new ilPermissionGUI($this);
-                    $ret = &$this->ctrl->forwardCommand($perm_gui);
+                    $ret = $this->ctrl->forwardCommand($perm_gui);
                 }
                 break;
 
@@ -72,9 +71,8 @@ class ilObjADNExaminationPreparationGUI extends ilObjectGUI
      */
     public function getAdminTabs()
     {
-        global $rbacsystem, $ilAccess;
 
-        if ($rbacsystem->checkAccess('edit_permission', $this->object->getRefId())) {
+        if ($this->rbacsystem->checkAccess('edit_permission', $this->object->getRefId())) {
             $this->tabs_gui->addTarget(
                 "perm_settings",
                 $this->ctrl->getLinkTargetByClass('ilpermissiongui', "perm"),
@@ -92,8 +90,6 @@ class ilObjADNExaminationPreparationGUI extends ilObjectGUI
      */
     public function view()
     {
-        global $ilCtrl;
-
-        $ilCtrl->redirectByClass("ilpermissiongui", "perm");
+        $this->ctrl->redirectByClass("ilpermissiongui", "perm");
     }
 }

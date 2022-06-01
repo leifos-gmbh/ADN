@@ -33,22 +33,37 @@ class adnProfessionalImportGUI
     protected const COL_POSTAL_STREET_NUMBER = null;
     protected const COL_POSTAL_CODE = null;
     protected const COL_POSTAL_CITY = null;
-    
+
+    protected ilCtrl $ctrl;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilLanguage $lng;
+    protected ilTabsGUI $tabs;
+    protected ilDBInterface $db;
+
+    public function __construct()
+    {
+        global $DIC;
+
+        $this->ctrl = $DIC->ctrl();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->lng = $DIC->language();
+        $this->tabs = $DIC->tabs();
+        $this->db = $DIC->database();
+    }
     /**
      * Execute command
      */
     public function executeCommand()
     {
-        global $ilCtrl;
         
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
         
         // forward command to next gui class in control flow
         switch ($next_class) {
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("importFile");
+                $cmd = $this->ctrl->getCmd("importFile");
 
                 switch ($cmd) {
                     // commands that need write permission
@@ -72,7 +87,6 @@ class adnProfessionalImportGUI
      */
     protected function importFile(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $lng, $ilTabs, $ilCtrl;
 
         // remove "old" tmp files
         include_once "Services/ADN/ED/classes/class.adnQuestionExport.php";
@@ -83,7 +97,7 @@ class adnProfessionalImportGUI
         if (!$a_form) {
             $a_form = $this->initUploadForm();
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
 
     /**
@@ -92,40 +106,39 @@ class adnProfessionalImportGUI
      */
     protected function initUploadForm()
     {
-        global  $lng, $ilCtrl;
 
         include_once "Services/Form/classes/class.ilPropertyFormGUI.php";
         $form = new ilPropertyFormGUI();
-        $form->setTitle($lng->txt("adn_ad_icp"));
-        $form->setFormAction($ilCtrl->getFormAction($this, "importFile"));
+        $form->setTitle($this->lng->txt("adn_ad_icp"));
+        $form->setFormAction($this->ctrl->getFormAction($this, "importFile"));
 
         include_once "Services/ADN/MD/classes/class.adnWMO.php";
-        $wmo = new ilSelectInputGUI($lng->txt("adn_default_wmo"), "wmo");
+        $wmo = new ilSelectInputGUI($this->lng->txt("adn_default_wmo"), "wmo");
         $wmo->setOptions(array("" => "-") + adnWMO::getWMOsSelect());
         $wmo->setRequired(true);
         $form->addItem($wmo);
 
         include_once "Services/ADN/MD/classes/class.adnCountry.php";
-        $country = new ilSelectInputGUI($lng->txt("adn_default_country"), "country");
+        $country = new ilSelectInputGUI($this->lng->txt("adn_default_country"), "country");
         $country->setOptions(array("" => "-") + adnCountry::getCountriesSelect());
         $country->setRequired(true);
         $form->addItem($country);
 
-        $anon = new ilCheckboxInputGUI($lng->txt("adn_anonymize"), "anon");
+        $anon = new ilCheckboxInputGUI($this->lng->txt("adn_anonymize"), "anon");
         $form->addItem($anon);
 
-        $limit = new ilNumberInputGUI($lng->txt("adn_limit"), "limit");
+        $limit = new ilNumberInputGUI($this->lng->txt("adn_limit"), "limit");
         $limit->setSize(4);
         $limit->setMaxLength(4);
         $form->addItem($limit);
 
-        $file = new ilFileInputGUI($lng->txt("file"), "file");
+        $file = new ilFileInputGUI($this->lng->txt("file"), "file");
         $file->setRequired(true);
         $file->setSuffixes(array("csv"));
         $form->addItem($file);
 
-        $form->addCommandButton("confirmImport", $lng->txt("update"));
-        $form->addCommandButton("importFile", $lng->txt("cancel"));
+        $form->addCommandButton("confirmImport", $this->lng->txt("update"));
+        $form->addCommandButton("importFile", $this->lng->txt("cancel"));
 
         return $form;
     }
@@ -135,7 +148,6 @@ class adnProfessionalImportGUI
      */
     protected function confirmImport()
     {
-        global $tpl, $lng, $ilCtrl;
 
         $form = $this->initUploadForm();
         if ($form->checkInput()) {
@@ -156,9 +168,9 @@ class adnProfessionalImportGUI
                 if ($log !== false) {
                     include_once("./Services/Utilities/classes/class.ilConfirmationGUI.php");
                     $cgui = new ilConfirmationGUI();
-                    $cgui->setFormAction($ilCtrl->getFormAction($this));
-                    $cgui->setHeaderText($lng->txt("adn_sure_import_mc_questions"));
-                    $cgui->setCancel($lng->txt("cancel"), "importFile");
+                    $cgui->setFormAction($this->ctrl->getFormAction($this));
+                    $cgui->setHeaderText($this->lng->txt("adn_sure_import_mc_questions"));
+                    $cgui->setCancel($this->lng->txt("cancel"), "importFile");
                     
                     $certs = $existing = $all = $errors_count = $notices_count = 0;
                     $has_errors = false;
@@ -201,21 +213,21 @@ class adnProfessionalImportGUI
                         $cgui->addItem(
                             "dummy_id[]",
                             1,
-                            $lng->txt("adn_professional_import_new") . ": " .
+                            $this->lng->txt("adn_professional_import_new") . ": " .
                             ($all - $existing)
                         );
                         $cgui->addItem(
                             "dummy_id[]",
                             1,
-                            $lng->txt("adn_professional_import_existing") . ": " . $existing
+                            $this->lng->txt("adn_professional_import_existing") . ": " . $existing
                         );
                         $cgui->addItem(
                             "dummy_id[]",
                             1,
-                            $lng->txt("adn_certificates") . ": " . $certs
+                            $this->lng->txt("adn_certificates") . ": " . $certs
                         );
                         
-                        $cgui->setConfirm($lng->txt("import"), "saveImport");
+                        $cgui->setConfirm($this->lng->txt("import"), "saveImport");
                         
                         // add form values for next request
                         $cgui->addHiddenItem("token", basename($target));
@@ -228,14 +240,14 @@ class adnProfessionalImportGUI
                         $cgui->addItem("dummy_id[]", 1, "Fehler: " . $errors_count);
                     }
                                         
-                    $tpl->setContent($cgui->getHTML() .
+                    $this->tpl->setContent($cgui->getHTML() .
                         '<div class="il_Description_no_margin">Ausstellungsjahr (Spalte ' . (self::COL_CERTIFICATE_YEAR + 1) .
                             ') wird beim Import ignoriert. Fehler verhindern den Import.</div>');
                     return;
                 }
             }
 
-            ilUtil::sendFailure($lng->txt("adn_professional_import_failed"));
+            ilUtil::sendFailure($this->lng->txt("adn_professional_import_failed"));
         }
 
         $form->setValuesByPost();
@@ -247,7 +259,6 @@ class adnProfessionalImportGUI
      */
     protected function saveImport()
     {
-        global $tpl, $lng, $ilCtrl;
 
         $token = $_REQUEST["token"];
         if ($token) {
@@ -263,13 +274,13 @@ class adnProfessionalImportGUI
                     false
                 )) {
                     unlink($target);
-                    ilUtil::sendSuccess($lng->txt("adn_professional_import_success"), true);
-                    $ilCtrl->redirect($this, "importFile");
+                    ilUtil::sendSuccess($this->lng->txt("adn_professional_import_success"), true);
+                    $this->ctrl->redirect($this, "importFile");
                 }
             }
         }
-        ilUtil::sendFailure($lng->txt("adn_professional_import_failed"), true);
-        $ilCtrl->redirect($this, "importFile");
+        ilUtil::sendFailure($this->lng->txt("adn_professional_import_failed"), true);
+        $this->ctrl->redirect($this, "importFile");
     }
     
     protected function checkDate($a_counter, $a_target, &$a_value, array &$a_pro, $a_allow_future = false)
@@ -490,7 +501,6 @@ class adnProfessionalImportGUI
     
     protected function importProfessional($a_anonymize, array $pro, $a_default_wmo)
     {
-        global $ilDB;
         
         // data used for anonymization
         $ano_last = array("Meier", "Müller", "Meyer", "Mayer", "Maier", "Schmitz", "Neumann",
@@ -558,25 +568,25 @@ class adnProfessionalImportGUI
                 }
 
                 $valid_cp_certificates = array();
-                $set = $ilDB->query("SELECT id,valid_until FROM adn_es_certificate" .
-                    " WHERE cp_professional_id = " . $ilDB->quote($cid, "integer"));
-                while ($row = $ilDB->fetchAssoc($set)) {
+                $set = $this->db->query("SELECT id,valid_until FROM adn_es_certificate" .
+                    " WHERE cp_professional_id = " . $this->db->quote($cid, "integer"));
+                while ($row = $this->db->fetchAssoc($set)) {
                     if ($row["valid_until"] > date("Y-m-d")) {
                         $valid_cp_certificates[$row["id"]] = $row["valid_until"];
                     }
                 }
                 if (sizeof($valid_cp_certificates)) {
                     // set the status of all other certificates of the user to invalid
-                    $ilDB->manipulate("UPDATE adn_es_certificate" .
-                        " SET status = " . $ilDB->quote(adnCertificate::STATUS_INVALID, "integer") .
-                        " WHERE cp_professional_id = " . $ilDB->quote($cid, "integer"));
+                    $this->db->manipulate("UPDATE adn_es_certificate" .
+                        " SET status = " . $this->db->quote(adnCertificate::STATUS_INVALID, "integer") .
+                        " WHERE cp_professional_id = " . $this->db->quote($cid, "integer"));
 
                     // latest is to be valid
                     asort($valid_cp_certificates);
                     $valid_cp_certificate = array_pop(array_keys($valid_cp_certificates));
-                    $ilDB->manipulate("UPDATE adn_es_certificate" .
-                        " SET status = " . $ilDB->quote(adnCertificate::STATUS_VALID, "integer") .
-                        " WHERE id = " . $ilDB->quote($valid_cp_certificate, "integer"));
+                    $this->db->manipulate("UPDATE adn_es_certificate" .
+                        " SET status = " . $this->db->quote(adnCertificate::STATUS_VALID, "integer") .
+                        " WHERE id = " . $this->db->quote($valid_cp_certificate, "integer"));
                 }
             }
 

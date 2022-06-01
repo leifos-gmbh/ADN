@@ -18,14 +18,12 @@ include_once './webservice/soap/classes/class.ilSoapAdministration.php';
  */
 class adnSoapELearning extends ilSoapAdministration
 {
-    /**
-     * Constructor
-     *
-     * @param
-     * @return
-     */
+    protected ilLanguage $lng;
+
     public function __construct()
     {
+        global $DIC;
+        $this->lng = $DIC->language();
     }
     
     
@@ -44,8 +42,7 @@ class adnSoapELearning extends ilSoapAdministration
             return $this->__raiseError($this->__getMessage(), $this->__getMessageCode());
         }
 
-        global $lng;
-        $lng->loadLanguageModule("adn");
+        $this->lng->loadLanguageModule("adn");
         
         $resp = array();
         
@@ -74,8 +71,7 @@ class adnSoapELearning extends ilSoapAdministration
             return $this->__raiseError($this->__getMessage(), $this->__getMessageCode());
         }
 
-        global $lng;
-        $lng->loadLanguageModule("adn");
+        $this->lng->loadLanguageModule("adn");
         
         include_once "./Services/ADN/ED/classes/class.adnQuestionTargetNumbers.php";
         $sheet_questions = adnQuestionTargetNumbers::generateMCSheet($a_sa_id);
@@ -104,8 +100,7 @@ class adnSoapELearning extends ilSoapAdministration
             return $this->__raiseError($this->__getMessage(), $this->__getMessageCode());
         }
 
-        global $lng;
-        $lng->loadLanguageModule("adn");
+        $this->lng->loadLanguageModule("adn");
         
         include_once("./Services/ADN/ED/classes/class.adnMCQuestion.php");
         include_once("./Services/ADN/ED/classes/class.adnExaminationQuestionGUI.php");
@@ -141,8 +136,7 @@ class adnSoapELearning extends ilSoapAdministration
             return $this->__raiseError($this->__getMessage(), $this->__getMessageCode());
         }
 
-        global $lng;
-        $lng->loadLanguageModule("adn");
+        $this->lng->loadLanguageModule("adn");
         
         // save the answer
         if ($a_save_q_id > 0 && $a_given_answer > 0) {
@@ -232,8 +226,7 @@ class adnSoapELearning extends ilSoapAdministration
             return $this->__raiseError($this->__getMessage(), $this->__getMessageCode());
         }
 
-        global $lng;
-        $lng->loadLanguageModule("adn");
+        $this->lng->loadLanguageModule("adn");
         
         // save the answer
         if ($a_save_q_id > 0 && $a_given_answer > 0) {
@@ -322,8 +315,7 @@ class adnSoapELearning extends ilSoapAdministration
             return $this->__raiseError($this->__getMessage(), $this->__getMessageCode());
         }
 
-        global $lng;
-        $lng->loadLanguageModule("adn");
+        $this->lng->loadLanguageModule("adn");
 
         return ILIAS_HTTP_PATH . "/el_download.php?cmd=scoring_sheet&sid=" . $sid;
     }
@@ -343,8 +335,7 @@ class adnSoapELearning extends ilSoapAdministration
             return $this->__raiseError($this->__getMessage(), $this->__getMessageCode());
         }
 
-        global $lng;
-        $lng->loadLanguageModule("adn");
+        $this->lng->loadLanguageModule("adn");
         
         $result = array();
 

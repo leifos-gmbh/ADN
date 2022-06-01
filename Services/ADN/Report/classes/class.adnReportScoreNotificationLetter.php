@@ -168,7 +168,6 @@ class adnReportScoreNotificationLetter extends adnReport
      */
     public function create()
     {
-        global $ilUser;
         
         include_once './Services/ADN/Report/classes/class.adnReportFileUtils.php';
         
@@ -279,7 +278,7 @@ class adnReportScoreNotificationLetter extends adnReport
             $map = $this->addStandardRightColumn(
                 $map,
                 $wmo,
-                $ilUser->getId()
+                $this->user->getId()
             );
             
             //  Fill standard address
@@ -315,7 +314,7 @@ class adnReportScoreNotificationLetter extends adnReport
         */
         $writer->xmlEndTag('tasks');
 
-        $GLOBALS['ilLog']->write($writer->xmlDumpMem(true));
+        $this->log->info($writer->xmlDumpMem(true));
         
         try {
             $adapter = new adnRpcAdapter();
@@ -408,17 +407,16 @@ class adnReportScoreNotificationLetter extends adnReport
      */
     public function addScoreFields($map, $cand, $assignment)
     {
-        global $lng,$ilUser;
         
-        $lng->loadLanguageModule('dateplaner');
+        $this->lng->loadLanguageModule('dateplaner');
         
         include_once './Services/Calendar/classes/class.ilCalendarUtil.php';
 
         $map['rcp_salutation'] =
-            $lng->txt('adn_report_salutation_' . $cand->getSalutation()) . ' ' .
+            $this->lng->txt('adn_report_salutation_' . $cand->getSalutation()) . ' ' .
             $cand->getLastName() . ', ';
         
-        $map['iss_lastname'] = $ilUser->getLastname();
+        $map['iss_lastname'] = $this->user->getLastname();
         $map['exam_wsd'] = $this->getWMO()->getName();
         
         // Costs
@@ -429,30 +427,30 @@ class adnReportScoreNotificationLetter extends adnReport
         // Date of exam
         $exam = $this->getEvent()->getDateFrom();
         $weekday = $exam->get(IL_CAL_FKT_DATE, 'D');
-        $weekday = $lng->txt(substr($weekday, 0, 2) . '_long');
+        $weekday = $this->lng->txt(substr($weekday, 0, 2) . '_long');
         $map['exam_date'] = sprintf(
-            $lng->txt('adn_date_long'),
+            $this->lng->txt('adn_date_long'),
             $weekday,
             $exam->get(IL_CAL_FKT_DATE, 'd.m.Y')
         );
 
         $points = $this->getPoints($assignment);
         $map['exam_points'] = sprintf(
-            $lng->txt('adn_report_score_points'),
+            $this->lng->txt('adn_report_score_points'),
             $points['reached'],
             $points['possible']
         );
         $map['exam_points'] = str_replace('.', ',', $map['exam_points']);
         
         $map['exam_points_mc'] = sprintf(
-            $lng->txt('adn_report_score_points'),
+            $this->lng->txt('adn_report_score_points'),
             $assignment->getScoreMc(),
             30
         );
         $map['exam_points_mc'] = str_replace('.', ',', $map['exam_points_mc']);
             
         $map['exam_points_case'] = sprintf(
-            $lng->txt('adn_report_score_points'),
+            $this->lng->txt('adn_report_score_points'),
             $assignment->getScoreCase(),
             30
         );
@@ -462,7 +460,7 @@ class adnReportScoreNotificationLetter extends adnReport
         if ($cand->getBlockedUntil() instanceof ilDate) {
             $end = $cand->getBlockedUntil();
             $map['limit'] = (string) $end->get(IL_CAL_FKT_DATE, 'd') . '. ' .
-                $lng->txt('month_' . $end->get(IL_CAL_FKT_DATE, 'm') . '_long') . ' ' .
+                $this->lng->txt('month_' . $end->get(IL_CAL_FKT_DATE, 'm') . '_long') . ' ' .
                 $end->get(IL_CAL_FKT_DATE, 'Y');
         } else {
             $map['limit'] = (string) '';

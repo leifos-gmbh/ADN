@@ -27,6 +27,17 @@ class adnDBBase
     protected string $new_file;
     protected string $file_dir;
 
+    protected ilDBInterface $db;
+    protected ilObjUser $user;
+
+    public function __construct()
+    {
+        global $DIC;
+
+        $this->db = $DIC->database();
+        $this->user = $DIC->user();
+    }
+
     /**
      * Set creation date
      *
@@ -136,12 +147,11 @@ class adnDBBase
      */
     protected function _read($a_id, $a_table, $a_primary_key = "id")
     {
-        global $ilDB;
 
-        $res = $ilDB->query("SELECT create_date,create_user,last_update,last_update_user,archived" .
+        $res = $this->db->query("SELECT create_date,create_user,last_update,last_update_user,archived" .
             " FROM " . $a_table .
-            " WHERE " . $a_primary_key . " = " . $ilDB->quote($a_id, "integer"));
-        $set = $ilDB->fetchAssoc($res);
+            " WHERE " . $a_primary_key . " = " . $this->db->quote($a_id, "integer"));
+        $set = $this->db->fetchAssoc($res);
 
         $this->setArchived($set["archived"]);
         $this->setCreateDate(new ilDateTime($set["create_date"], IL_CAL_DATETIME, ilTimeZone::UTC));
@@ -163,12 +173,11 @@ class adnDBBase
      */
     public function _save($a_id, $a_table, $a_primary_key = "id")
     {
-        global $ilDB, $ilUser;
 
         $this->setCreateDate(new ilDateTime(time(), IL_CAL_UNIX));
-        $this->setCreateUser($ilUser->getId());
+        $this->setCreateUser($this->user->getId());
         $this->setLastUpdate(new ilDateTime(time(), IL_CAL_UNIX));
-        $this->setLastUpdateUser($ilUser->getId());
+        $this->setLastUpdateUser($this->user->getId());
     
         $fields = array("create_date" => array("timestamp",
                 $this->getCreateDate()->get(IL_CAL_DATETIME, "", ilTimeZone::UTC)),
@@ -178,7 +187,7 @@ class adnDBBase
             "last_update_user" => array("integer", $this->getLastUpdateUser()),
             "archived" => array("integer", (int) $this->isArchived()));
 
-        return $ilDB->update($a_table, $fields, array($a_primary_key => array("integer", $a_id)));
+        return $this->db->update($a_table, $fields, array($a_primary_key => array("integer", $a_id)));
     }
 
     /**
@@ -191,17 +200,16 @@ class adnDBBase
      */
     public function _update($a_id, $a_table, $a_primary_key = "id")
     {
-        global $ilDB, $ilUser;
         
         $this->setLastUpdate(new ilDateTime(time(), IL_CAL_UNIX));
-        $this->setLastUpdateUser($ilUser->getId());
+        $this->setLastUpdateUser($this->user->getId());
 
         $fields = array("last_update" => array("timestamp",
             $this->getLastUpdate()->get(IL_CAL_DATETIME, "", ilTimeZone::UTC)),
             "last_update_user" => array("integer", $this->getLastUpdateUser()),
             "archived" => array("integer", (int) $this->isArchived()));
 
-        return $ilDB->update($a_table, $fields, array($a_primary_key => array("integer", $a_id)));
+        return $this->db->update($a_table, $fields, array($a_primary_key => array("integer", $a_id)));
     }
 
     
@@ -354,7 +362,8 @@ class adnDBBase
      */
     protected static function handleAlphaNumericFilter(array &$a_where, $a_column, $a_value)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         if ($ilDB->getDBType() == "mysql" || $ilDB->getDBType() == "innodb") {
             $cast_value = $cast_column = "CAST(%s AS UNSIGNED)";
@@ -389,7 +398,8 @@ class adnDBBase
 
     protected static function handleName($a_name, $a_archived)
     {
-        global $lng;
+        global $DIC;
+        $lng = $DIC->language();
         
         if ($a_archived) {
             $a_name .= " " . $lng->txt("adn_archived_flag");

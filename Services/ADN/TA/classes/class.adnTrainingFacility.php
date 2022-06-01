@@ -24,7 +24,6 @@ class adnTrainingFacility extends adnDBBase
      */
     public function __construct($a_id = 0)
     {
-        global $ilCtrl;
 
         if ($a_id !== 0) {
             $this->setId($a_id);
@@ -97,17 +96,16 @@ class adnTrainingFacility extends adnDBBase
      */
     public function read()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if (!$id) {
             return;
         }
 
-        $res = $ilDB->query("SELECT ta_provider_id,name" .
+        $res = $this->db->query("SELECT ta_provider_id,name" .
             " FROM adn_ta_facility" .
-            " WHERE id = " . $ilDB->quote($this->getId(), "integer"));
-        $set = $ilDB->fetchAssoc($res);
+            " WHERE id = " . $this->db->quote($this->getId(), "integer"));
+        $set = $this->db->fetchAssoc($res);
         $this->setProvider($set["ta_provider_id"]);
         $this->setName($set["name"]);
 
@@ -134,16 +132,15 @@ class adnTrainingFacility extends adnDBBase
      */
     public function save()
     {
-        global $ilDB;
 
         // sequence
-        $this->setId($ilDB->nextId("adn_ta_facility"));
+        $this->setId($this->db->nextId("adn_ta_facility"));
         $id = $this->getId();
 
         $fields = $this->propertiesToFields();
         $fields["id"] = array("integer", $id);
             
-        $ilDB->insert("adn_ta_facility", $fields);
+        $this->db->insert("adn_ta_facility", $fields);
 
         parent::_save($id, "adn_ta_facility");
         
@@ -157,7 +154,6 @@ class adnTrainingFacility extends adnDBBase
      */
     public function update()
     {
-        global $ilDB;
         
         $id = $this->getId();
         if (!$id) {
@@ -166,7 +162,7 @@ class adnTrainingFacility extends adnDBBase
 
         $fields = $this->propertiesToFields();
         
-        $ilDB->update("adn_ta_facility", $fields, array("id" => array("integer", $id)));
+        $this->db->update("adn_ta_facility", $fields, array("id" => array("integer", $id)));
 
         parent::_update($id, "adn_ta_facility");
 
@@ -180,7 +176,6 @@ class adnTrainingFacility extends adnDBBase
      */
     public function delete()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if ($id) {
@@ -196,11 +191,11 @@ class adnTrainingFacility extends adnDBBase
                 $this->setArchived(true);
                 return $this->update();
             } else {
-                $ilDB->manipulate("UPDATE adn_ta_event" .
-                    " SET ta_facility_id = " . $ilDB->quote(null, "integer") .
-                    " WHERE ta_facility_id = " . $ilDB->quote($id, "integer"));
-                $ilDB->manipulate("DELETE FROM adn_ta_facility" .
-                    " WHERE id = " . $ilDB->quote($id, "integer"));
+                $this->db->manipulate("UPDATE adn_ta_event" .
+                    " SET ta_facility_id = " . $this->db->quote(null, "integer") .
+                    " WHERE ta_facility_id = " . $this->db->quote($id, "integer"));
+                $this->db->manipulate("DELETE FROM adn_ta_facility" .
+                    " WHERE id = " . $this->db->quote($id, "integer"));
                 $this->setId(null);
                 return true;
             }
@@ -216,7 +211,8 @@ class adnTrainingFacility extends adnDBBase
      */
     public static function getAllTrainingFacilities($a_provider_id, $a_with_archived = false)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id,name" .
             " FROM adn_ta_facility" .
@@ -242,7 +238,8 @@ class adnTrainingFacility extends adnDBBase
      */
     public static function getTrainingFacilitiesSelect($a_provider_id = null, $a_old_value = null)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id,name" .
             " FROM adn_ta_facility";
@@ -275,7 +272,8 @@ class adnTrainingFacility extends adnDBBase
      */
     protected static function lookupProperty($a_id, $a_prop)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query("SELECT " . $a_prop .
             " FROM adn_ta_facility" .

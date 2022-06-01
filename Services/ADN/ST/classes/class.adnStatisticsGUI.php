@@ -15,18 +15,31 @@
  */
 class adnStatisticsGUI
 {
+
+    protected ilCtrl $ctrl;
+    protected ilLanguage $lng;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilToolbarGUI $toolbar;
+
+    public function __construct()
+    {
+        global $DIC;
+        $this->ctrl = $DIC->ctrl();
+        $this->lng = $DIC->language();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->toolbar = $DIC->toolbar();
+    }
     /**
      * Execute command
      */
     public function executeCommand()
     {
-        global $ilCtrl, $lng, $tpl;
 
         // set page title
-        $tpl->setTitle($lng->txt("adn_st"));
+        $this->tpl->setTitle($this->lng->txt("adn_st"));
 
-        $next_class = $ilCtrl->getNextClass();
-        $cmd = $ilCtrl->getCmd();
+        $next_class = $this->ctrl->getNextClass();
+        $cmd = $this->ctrl->getCmd();
 
         switch ($cmd) {	// menu item triggered
             case "processMenuItem":
@@ -95,7 +108,7 @@ class adnStatisticsGUI
                 break;
         }
 
-        adnBaseGUI::setHelpButton($ilCtrl->getCmdClass());
+        adnBaseGUI::setHelpButton($this->ctrl->getCmdClass());
     }
 
     /**
@@ -103,19 +116,18 @@ class adnStatisticsGUI
      */
     protected function showExams()
     {
-        global $tpl, $lng, $ilToolbar, $ilCtrl;
 
-        $ilToolbar->addButton(
-            $lng->txt("adn_download_statistics"),
-            $ilCtrl->getLinkTarget($this, "downloadExams")
+        $this->toolbar->addButton(
+            $this->lng->txt("adn_download_statistics"),
+            $this->ctrl->getLinkTarget($this, "downloadExams")
         );
         
-        $tpl->setTitle($lng->txt("adn_st") . " - " . $lng->txt("adn_st_exs"));
+        $this->tpl->setTitle($this->lng->txt("adn_st") . " - " . $this->lng->txt("adn_st_exs"));
 
         include_once "Services/ADN/ST/classes/class.adnStatisticsExamsTableGUI.php";
         $table = new adnStatisticsExamsTableGUI($this, "showExams");
 
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -149,19 +161,18 @@ class adnStatisticsGUI
      */
     protected function showExtensionsRefresher()
     {
-        global $tpl, $lng, $ilToolbar, $ilCtrl;
 
-        $ilToolbar->addButton(
-            $lng->txt("adn_download_statistics"),
-            $ilCtrl->getLinkTarget($this, "downloadExtensionsRefresher")
+        $this->toolbar->addButton(
+            $this->lng->txt("adn_download_statistics"),
+            $this->ctrl->getLinkTarget($this, "downloadExtensionsRefresher")
         );
 
-        $tpl->setTitle($lng->txt("adn_st") . " - " . $lng->txt("adn_st_ers"));
+        $this->tpl->setTitle($this->lng->txt("adn_st") . " - " . $this->lng->txt("adn_st_ers"));
 
         include_once "Services/ADN/ST/classes/class.adnStatisticsExtensionsRefresherTableGUI.php";
         $table = new adnStatisticsExtensionsRefresherTableGUI($this, "showExtensionsRefresher");
 
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -195,19 +206,18 @@ class adnStatisticsGUI
      */
     protected function showExtensionsExperience()
     {
-        global $tpl, $lng, $ilToolbar, $ilCtrl;
 
-        $ilToolbar->addButton(
-            $lng->txt("adn_download_statistics"),
-            $ilCtrl->getLinkTarget($this, "downloadExtensionsExperience")
+        $this->toolbar->addButton(
+            $this->lng->txt("adn_download_statistics"),
+            $this->ctrl->getLinkTarget($this, "downloadExtensionsExperience")
         );
 
-        $tpl->setTitle($lng->txt("adn_st") . " - " . $lng->txt("adn_st_ees"));
+        $this->tpl->setTitle($this->lng->txt("adn_st") . " - " . $this->lng->txt("adn_st_ees"));
 
         include_once "Services/ADN/ST/classes/class.adnStatisticsExtensionsExperienceTableGUI.php";
         $table = new adnStatisticsExtensionsExperienceTableGUI($this, "showExtensionsExperience");
 
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -241,19 +251,18 @@ class adnStatisticsGUI
      */
     protected function showCertificatesOther()
     {
-        global $tpl, $lng, $ilToolbar, $ilCtrl;
 
-        $ilToolbar->addButton(
-            $lng->txt("adn_download_statistics"),
-            $ilCtrl->getLinkTarget($this, "downloadCertificatesOther")
+        $this->toolbar->addButton(
+            $this->lng->txt("adn_download_statistics"),
+            $this->ctrl->getLinkTarget($this, "downloadCertificatesOther")
         );
 
-        $tpl->setTitle($lng->txt("adn_st") . " - " . $lng->txt("adn_st_cos"));
+        $this->tpl->setTitle($this->lng->txt("adn_st") . " - " . $this->lng->txt("adn_st_cos"));
 
         include_once "Services/ADN/ST/classes/class.adnStatisticsCertificatesOtherTableGUI.php";
         $table = new adnStatisticsCertificatesOtherTableGUI($this, "showCertificatesOther");
 
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -288,19 +297,18 @@ class adnStatisticsGUI
      */
     protected function showCertificatesTotal()
     {
-        global $tpl, $lng, $ilToolbar, $ilCtrl;
 
-        $ilToolbar->addButton(
-            $lng->txt("adn_download_statistics"),
-            $ilCtrl->getLinkTarget($this, "downloadCertificatesTotal")
+        $this->toolbar->addButton(
+            $this->lng->txt("adn_download_statistics"),
+            $this->ctrl->getLinkTarget($this, "downloadCertificatesTotal")
         );
 
-        $tpl->setTitle($lng->txt("adn_st") . " - " . $lng->txt("adn_st_tns"));
+        $this->tpl->setTitle($this->lng->txt("adn_st") . " - " . $this->lng->txt("adn_st_tns"));
 
         include_once "Services/ADN/ST/classes/class.adnStatisticsCertificatesTotalTableGUI.php";
         $table = new adnStatisticsCertificatesTotalTableGUI($this, "showCertificatesTotal");
 
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -335,19 +343,18 @@ class adnStatisticsGUI
      */
     protected function showCertificatesGasChem()
     {
-        global $tpl, $lng, $ilToolbar, $ilCtrl;
 
-        $ilToolbar->addButton(
-            $lng->txt("adn_download_statistics"),
-            $ilCtrl->getLinkTarget($this, "downloadCertificatesGasChem")
+        $this->toolbar->addButton(
+            $this->lng->txt("adn_download_statistics"),
+            $this->ctrl->getLinkTarget($this, "downloadCertificatesGasChem")
         );
 
-        $tpl->setTitle($lng->txt("adn_st") . " - " . $lng->txt("adn_st_tgc"));
+        $this->tpl->setTitle($this->lng->txt("adn_st") . " - " . $this->lng->txt("adn_st_tgc"));
 
         include_once "Services/ADN/ST/classes/class.adnStatisticsCertificatesGasChemTableGUI.php";
         $table = new adnStatisticsCertificatesGasChemTableGUI($this, "showCertificatesGasChem");
 
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -381,7 +388,6 @@ class adnStatisticsGUI
      */
     protected function downloadExams()
     {
-        global $ilCtrl,$lng;
         
         include_once "Services/ADN/ST/classes/class.adnStatisticsExamsTableGUI.php";
         $table = new adnStatisticsExamsTableGUI($this, "showExtensionsRefresher");
@@ -410,7 +416,7 @@ class adnStatisticsGUI
             );
         } catch (adnReportException $e) {
             ilUtil::sendFailure($e->getMessage(), true);
-            $ilCtrl->redirect($this, 'showExams');
+            $this->ctrl->redirect($this, 'showExams');
         }
     }
     
@@ -419,7 +425,6 @@ class adnStatisticsGUI
      */
     protected function downloadExtensionsExperience()
     {
-        global $ilCtrl,$lng;
         
         include_once "Services/ADN/ST/classes/class.adnStatisticsExtensionsExperienceTableGUI.php";
         $table = new adnStatisticsExtensionsExperienceTableGUI($this, "showExtensionsExperience");
@@ -451,7 +456,7 @@ class adnStatisticsGUI
             );
         } catch (adnReportException $e) {
             ilUtil::sendFailure($e->getMessage(), true);
-            $ilCtrl->redirect($this, 'showExams');
+            $this->ctrl->redirect($this, 'showExams');
         }
     }
 
@@ -460,7 +465,6 @@ class adnStatisticsGUI
      */
     protected function downloadExtensionsRefresher()
     {
-        global $ilCtrl,$lng;
         
         include_once "Services/ADN/ST/classes/class.adnStatisticsExtensionsRefresherTableGUI.php";
         $table = new adnStatisticsExtensionsRefresherTableGUI($this, "showExtensionsRefresher");
@@ -489,7 +493,7 @@ class adnStatisticsGUI
             );
         } catch (adnReportException $e) {
             ilUtil::sendFailure($e->getMessage(), true);
-            $ilCtrl->redirect($this, 'showExams');
+            $this->ctrl->redirect($this, 'showExams');
         }
     }
     
@@ -498,7 +502,6 @@ class adnStatisticsGUI
      */
     protected function downloadCertificatesOther()
     {
-        global $ilCtrl,$lng;
         
         include_once "Services/ADN/ST/classes/class.adnStatisticsCertificatesOtherTableGUI.php";
         $table = new adnStatisticsCertificatesOtherTableGUI($this, "showCertificatesOther");
@@ -527,7 +530,7 @@ class adnStatisticsGUI
             );
         } catch (adnReportException $e) {
             ilUtil::sendFailure($e->getMessage(), true);
-            $ilCtrl->redirect($this, 'showExams');
+            $this->ctrl->redirect($this, 'showExams');
         }
     }
     
@@ -536,7 +539,6 @@ class adnStatisticsGUI
      */
     protected function downloadCertificatesGasChem()
     {
-        global $ilCtrl,$lng;
         
         include_once "Services/ADN/ST/classes/class.adnStatisticsCertificatesGasChemTableGUI.php";
         $table = new adnStatisticsCertificatesGasChemTableGUI($this, "showCertificatesGasChem");
@@ -565,7 +567,7 @@ class adnStatisticsGUI
             );
         } catch (adnReportException $e) {
             ilUtil::sendFailure($e->getMessage(), true);
-            $ilCtrl->redirect($this, 'showExams');
+            $this->ctrl->redirect($this, 'showExams');
         }
     }
 
@@ -574,7 +576,6 @@ class adnStatisticsGUI
      */
     protected function downloadCertificatesTotal()
     {
-        global $ilCtrl,$lng;
         
         include_once "Services/ADN/ST/classes/class.adnStatisticsCertificatesTotalTableGUI.php";
         $table = new adnStatisticsCertificatesTotalTableGUI($this, "showCertificatesTotal");
@@ -603,7 +604,7 @@ class adnStatisticsGUI
             );
         } catch (adnReportException $e) {
             ilUtil::sendFailure($e->getMessage(), true);
-            $ilCtrl->redirect($this, 'showExams');
+            $this->ctrl->redirect($this, 'showExams');
         }
     }
 }

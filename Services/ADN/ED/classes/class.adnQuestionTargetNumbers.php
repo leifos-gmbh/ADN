@@ -31,7 +31,6 @@ class adnQuestionTargetNumbers extends adnDBBase
      */
     public function __construct($a_id = 0)
     {
-        global $ilCtrl;
 
         if ($a_id !== 0) {
             $this->setId($a_id);
@@ -193,28 +192,27 @@ class adnQuestionTargetNumbers extends adnDBBase
      */
     public function read()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if (!$id) {
             return;
         }
 
-        $res = $ilDB->query("SELECT subject_area,mc_case,nr_of_questions,max_one_per_objective" .
+        $res = $this->db->query("SELECT subject_area,mc_case,nr_of_questions,max_one_per_objective" .
             " FROM adn_ed_quest_target_nr" .
-            " WHERE id = " . $ilDB->quote($this->getId(), "integer"));
-        $set = $ilDB->fetchAssoc($res);
+            " WHERE id = " . $this->db->quote($this->getId(), "integer"));
+        $set = $this->db->fetchAssoc($res);
         $this->setArea($set["subject_area"]);
         $this->setType($set["mc_case"]);
         $this->setNumber($set["nr_of_questions"]);
         $this->setSingle($set["max_one_per_objective"]);
 
         // get (sub-)objectives from subj-table
-        $res = $ilDB->query("SELECT ed_objective_id,ed_subobjective_id" .
+        $res = $this->db->query("SELECT ed_objective_id,ed_subobjective_id" .
             " FROM adn_ed_target_nr_obj" .
-            " WHERE ed_question_target_nr_id = " . $ilDB->quote($this->getId(), "integer"));
+            " WHERE ed_question_target_nr_id = " . $this->db->quote($this->getId(), "integer"));
         $obj = array();
-        while ($row = $ilDB->fetchAssoc($res)) {
+        while ($row = $this->db->fetchAssoc($res)) {
             $obj[] = $row;
         }
         $this->setObjectives($obj);
@@ -244,15 +242,14 @@ class adnQuestionTargetNumbers extends adnDBBase
      */
     public function save()
     {
-        global $ilDB;
 
-        $this->setId($ilDB->nextId("adn_ed_quest_target_nr"));
+        $this->setId($this->db->nextId("adn_ed_quest_target_nr"));
         $id = $this->getId();
 
         $fields = $this->propertiesToFields();
         $fields["id"] = array("integer", $id);
             
-        $ilDB->insert("adn_ed_quest_target_nr", $fields);
+        $this->db->insert("adn_ed_quest_target_nr", $fields);
 
         $this->saveObjectives();
 
@@ -268,7 +265,6 @@ class adnQuestionTargetNumbers extends adnDBBase
      */
     public function update()
     {
-        global $ilDB;
         
         $id = $this->getId();
         if (!$id) {
@@ -277,7 +273,7 @@ class adnQuestionTargetNumbers extends adnDBBase
 
         $fields = $this->propertiesToFields();
         
-        $ilDB->update("adn_ed_quest_target_nr", $fields, array("id" => array("integer", $id)));
+        $this->db->update("adn_ed_quest_target_nr", $fields, array("id" => array("integer", $id)));
 
         $this->saveObjectives();
 
@@ -291,12 +287,11 @@ class adnQuestionTargetNumbers extends adnDBBase
      */
     protected function saveObjectives()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if ($id) {
-            $ilDB->manipulate("DELETE FROM adn_ed_target_nr_obj" .
-                " WHERE ed_question_target_nr_id = " . $ilDB->quote($id, "integer"));
+            $this->db->manipulate("DELETE FROM adn_ed_target_nr_obj" .
+                " WHERE ed_question_target_nr_id = " . $this->db->quote($id, "integer"));
 
             if (!empty($this->objectives)) {
                 foreach ($this->objectives as $item) {
@@ -304,7 +299,7 @@ class adnQuestionTargetNumbers extends adnDBBase
                         "ed_objective_id" => array("integer", $item["ed_objective_id"]),
                         "ed_subobjective_id" => array("integer", $item["ed_subobjective_id"]));
 
-                    $ilDB->insert("adn_ed_target_nr_obj", $fields);
+                    $this->db->insert("adn_ed_target_nr_obj", $fields);
                 }
             }
         }
@@ -317,15 +312,14 @@ class adnQuestionTargetNumbers extends adnDBBase
      */
     public function delete()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if ($id) {
             // U.PV.7.4: archived flag is not used here!
-            $ilDB->manipulate("DELETE FROM adn_ed_target_nr_obj" .
-                " WHERE ed_question_target_nr_id = " . $ilDB->quote($id, "integer"));
-            $ilDB->manipulate("DELETE FROM adn_ed_quest_target_nr" .
-                " WHERE id = " . $ilDB->quote($id, "integer"));
+            $this->db->manipulate("DELETE FROM adn_ed_target_nr_obj" .
+                " WHERE ed_question_target_nr_id = " . $this->db->quote($id, "integer"));
+            $this->db->manipulate("DELETE FROM adn_ed_quest_target_nr" .
+                " WHERE id = " . $this->db->quote($id, "integer"));
             $this->setId(null);
             return true;
         }
@@ -340,7 +334,8 @@ class adnQuestionTargetNumbers extends adnDBBase
      */
     public static function getAllTargets($a_area = false, $a_type = false)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id,nr_of_questions,max_one_per_objective,subject_area,mc_case" .
             " FROM adn_ed_quest_target_nr";
@@ -390,7 +385,8 @@ class adnQuestionTargetNumbers extends adnDBBase
      */
     protected static function lookupProperty($a_id, $a_prop)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query("SELECT " . $a_prop .
             " FROM adn_ed_quest_target_nr" .
@@ -407,7 +403,8 @@ class adnQuestionTargetNumbers extends adnDBBase
      */
     public static function lookupName($a_id)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         // for a useful identifier we need (sub-)objective data
 
@@ -458,7 +455,9 @@ class adnQuestionTargetNumbers extends adnDBBase
      */
     public static function saveOverall($a_area_id, $a_type, $a_value)
     {
-        global $ilDB, $ilUser;
+        global $DIC;
+        $ilDB = $DIC->database();
+        $ilUser = $DIC->user();
 
         $ilDB->manipulate("DELETE FROM adn_ed_question_total" .
             " WHERE subject_area = " . $ilDB->quote($a_area_id, "text") .
@@ -483,7 +482,8 @@ class adnQuestionTargetNumbers extends adnDBBase
      */
     public static function readOverall($a_area_id, $a_type)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query("SELECT total" .
             " FROM adn_ed_question_total" .
@@ -690,7 +690,8 @@ class adnQuestionTargetNumbers extends adnDBBase
      */
     public static function getByObjective($a_id)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
         
         $res = $ilDB->query("SELECT ed_question_target_nr_id" .
             " FROM adn_ed_target_nr_obj" .
@@ -710,7 +711,8 @@ class adnQuestionTargetNumbers extends adnDBBase
      */
     public static function getBySubobjective($a_id)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $res = $ilDB->query("SELECT ed_question_target_nr_id" .
             " FROM adn_ed_target_nr_obj" .

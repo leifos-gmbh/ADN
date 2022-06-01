@@ -20,23 +20,33 @@ class adnTrainingEventGUI
     protected bool $not_overview = false;
 
     protected bool $archived = false;
-    
+
+    protected ilCtrl $ctrl;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilLanguage $lng;
+    protected ilToolbarGUI $toolbar;
+    protected ilTabsGUI $tabs;
     /**
      * Constructor
      */
     public function __construct()
     {
-        global $ilCtrl;
+        global $DIC;
+        $this->ctrl = $DIC->ctrl();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->lng = $DIC->language();
+        $this->toolbar = $DIC->toolbar();
+        $this->tabs = $DIC->tabs();
 
         $this->provider_id = (int) $_REQUEST["tp_id"];
         $this->not_overview = (bool) $_REQUEST["istp"];
         $this->archived = (bool) $_REQUEST["arc"];
         
         // save context, training provider, event ID, archived through requests
-        $ilCtrl->saveParameter($this, array("istp"));
-        $ilCtrl->saveParameter($this, array("tp_id"));
-        $ilCtrl->saveParameter($this, array("te_id"));
-        $ilCtrl->saveParameter($this, array("arc"));
+        $this->ctrl->saveParameter($this, array("istp"));
+        $this->ctrl->saveParameter($this, array("tp_id"));
+        $this->ctrl->saveParameter($this, array("te_id"));
+        $this->ctrl->saveParameter($this, array("arc"));
         
         $this->readTrainingEvent();
     }
@@ -46,13 +56,12 @@ class adnTrainingEventGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl, $tpl, $lng;
         
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
 
         // set page title
         if (!$this->not_overview) {
-            $tpl->setTitle($lng->txt("adn_ta") . " - " . $lng->txt("adn_ta_tes"));
+            $this->tpl->setTitle($this->lng->txt("adn_ta") . " - " . $this->lng->txt("adn_ta_tes"));
         }
     
         $this->setTabs("current_tr_events");
@@ -63,7 +72,7 @@ class adnTrainingEventGUI
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("listTrainingEvents");
+                $cmd = $this->ctrl->getCmd("listTrainingEvents");
 
                 switch ($cmd) {
                     // commands that need read permission
@@ -110,13 +119,12 @@ class adnTrainingEventGUI
      */
     protected function listTrainingEvents()
     {
-        global $tpl, $ilToolbar, $ilCtrl, $lng;
 
         if (!$this->archived && $this->not_overview && $this->provider_id &&
                 adnPerm::check(adnPerm::TA, adnPerm::WRITE)) {
-            $ilToolbar->addButton(
-                $lng->txt("adn_add_training_event"),
-                $ilCtrl->getLinkTarget($this, "addTrainingEvent")
+            $this->toolbar->addButton(
+                $this->lng->txt("adn_add_training_event"),
+                $this->ctrl->getLinkTarget($this, "addTrainingEvent")
             );
         }
 
@@ -136,7 +144,7 @@ class adnTrainingEventGUI
         );
         
         // output table
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -234,12 +242,11 @@ class adnTrainingEventGUI
      */
     protected function addTrainingEvent(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl;
 
         if (!$a_form) {
             $a_form = $this->initTrainingEventForm("create");
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
     
     /**
@@ -249,12 +256,11 @@ class adnTrainingEventGUI
      */
     protected function editTrainingEvent(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl;
 
         if (!$a_form) {
             $a_form = $this->initTrainingEventForm("edit");
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
 
     /**
@@ -264,13 +270,12 @@ class adnTrainingEventGUI
      */
     protected function showTrainingEvent()
     {
-        global $tpl, $ilTabs, $lng, $ilCtrl;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listTrainingEvents"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listTrainingEvents"));
 
         $form = $this->initTrainingEventForm("show");
         $form = $form->convertToReadonly();
-        $tpl->setContent($form->getHTML());
+        $this->tpl->setContent($form->getHTML());
     }
     
     /**
@@ -281,7 +286,6 @@ class adnTrainingEventGUI
      */
     protected function initTrainingEventForm($a_mode = "edit")
     {
-        global $lng, $ilCtrl;
 
         // get form object and add input fields
         include_once("Services/Form/classes/class.ilPropertyFormGUI.php");
@@ -294,7 +298,7 @@ class adnTrainingEventGUI
         $types_map = adnTypesOfTraining::getAllTypes();
         
         // type of training ("foreign key", depend on provider)
-        $type = new ilSelectInputGUI($lng->txt("adn_type_of_training"), "type");
+        $type = new ilSelectInputGUI($this->lng->txt("adn_type_of_training"), "type");
         $options = array();
         foreach ($provider->getTypesOfTraining() as $ttype) {
             $options[$ttype] = $types_map[$ttype];
@@ -311,18 +315,18 @@ class adnTrainingEventGUI
         $form->addItem($type);
 
         // date from
-        $from = new ilDateTimeInputGUI($lng->txt("adn_date_from"), "dfrom");
+        $from = new ilDateTimeInputGUI($this->lng->txt("adn_date_from"), "dfrom");
         $from->setRequired(true);
         $form->addItem($from);
 
         // date to
-        $to = new ilDateTimeInputGUI($lng->txt("adn_date_to"), "dto");
+        $to = new ilDateTimeInputGUI($this->lng->txt("adn_date_to"), "dto");
         $to->setRequired(true);
         $form->addItem($to);
 
         // facilities (foreign key)
         include_once "Services/ADN/TA/classes/class.adnTrainingFacility.php";
-        $facility = new ilSelectInputGUI($lng->txt("adn_training_facility"), "facility");
+        $facility = new ilSelectInputGUI($this->lng->txt("adn_training_facility"), "facility");
         $fac = null;
         if ($a_mode != "create") {
             $fac = $this->training_event->getFacility();
@@ -333,9 +337,9 @@ class adnTrainingEventGUI
         
         if ($a_mode == "create") {
             // creation: save/cancel buttons and title
-            $form->addCommandButton("saveTrainingEvent", $lng->txt("save"));
-            $form->addCommandButton("listTrainingEvents", $lng->txt("cancel"));
-            $form->setTitle($lng->txt("adn_add_training_event") . ": " . $provider->getName());
+            $form->addCommandButton("saveTrainingEvent", $this->lng->txt("save"));
+            $form->addCommandButton("listTrainingEvents", $this->lng->txt("cancel"));
+            $form->setTitle($this->lng->txt("adn_add_training_event") . ": " . $provider->getName());
         } else {
             $type->setValue($this->training_event->getType());
             $from->setDate($this->training_event->getDateFrom());
@@ -344,14 +348,14 @@ class adnTrainingEventGUI
 
             if ($a_mode == "edit") {
                 // editing: update/cancel buttons and title
-                $form->addCommandButton("updateTrainingEvent", $lng->txt("save"));
-                $form->addCommandButton("listTrainingEvents", $lng->txt("cancel"));
-                $form->setTitle($lng->txt("adn_edit_training_event") . ": " . $provider->getName());
+                $form->addCommandButton("updateTrainingEvent", $this->lng->txt("save"));
+                $form->addCommandButton("listTrainingEvents", $this->lng->txt("cancel"));
+                $form->setTitle($this->lng->txt("adn_edit_training_event") . ": " . $provider->getName());
             } else {
-                $form->setTitle($lng->txt("adn_training_event") . ": " . $provider->getName());
+                $form->setTitle($this->lng->txt("adn_training_event") . ": " . $provider->getName());
 
                 if (!$_REQUEST["tp_id"]) {
-                    $provider = new ilTextInputGUI($lng->txt("adn_training_provider"), "provider");
+                    $provider = new ilTextInputGUI($this->lng->txt("adn_training_provider"), "provider");
                     $provider->setValue(
                         adnTrainingProvider::lookupName($this->training_event->getProvider())
                     );
@@ -360,7 +364,7 @@ class adnTrainingEventGUI
             }
         }
         
-        $form->setFormAction($ilCtrl->getFormAction($this));
+        $form->setFormAction($this->ctrl->getFormAction($this));
 
         return $form;
     }
@@ -370,7 +374,6 @@ class adnTrainingEventGUI
      */
     protected function saveTrainingEvent()
     {
-        global $tpl, $lng, $ilCtrl;
         
         $form = $this->initTrainingEventForm("create");
         
@@ -392,13 +395,13 @@ class adnTrainingEventGUI
 
                 if ($training_event->save()) {
                     // show success message and return to list
-                    ilUtil::sendSuccess($lng->txt("adn_training_event_created"), true);
-                    $ilCtrl->redirect($this, "listTrainingEvents");
+                    ilUtil::sendSuccess($this->lng->txt("adn_training_event_created"), true);
+                    $this->ctrl->redirect($this, "listTrainingEvents");
                 }
             } else {
-                ilUtil::sendFailure($lng->txt("form_input_not_valid"));
-                $form->getItemByPostVar("dfrom")->setAlert($lng->txt("adn_invalid_date_range"));
-                $form->getItemByPostVar("dto")->setAlert($lng->txt("adn_invalid_date_range"));
+                ilUtil::sendFailure($this->lng->txt("form_input_not_valid"));
+                $form->getItemByPostVar("dfrom")->setAlert($this->lng->txt("adn_invalid_date_range"));
+                $form->getItemByPostVar("dto")->setAlert($this->lng->txt("adn_invalid_date_range"));
             }
         }
         
@@ -412,7 +415,6 @@ class adnTrainingEventGUI
      */
     protected function updateTrainingEvent()
     {
-        global $lng, $ilCtrl, $tpl;
         
         $form = $this->initTrainingEventForm("edit");
         
@@ -429,13 +431,13 @@ class adnTrainingEventGUI
 
                 if ($this->training_event->update()) {
                     // show success message and return to list
-                    ilUtil::sendSuccess($lng->txt("adn_training_event_updated"), true);
-                    $ilCtrl->redirect($this, "listTrainingEvents");
+                    ilUtil::sendSuccess($this->lng->txt("adn_training_event_updated"), true);
+                    $this->ctrl->redirect($this, "listTrainingEvents");
                 }
             } else {
-                ilUtil::sendFailure($lng->txt("form_input_not_valid"));
-                $form->getItemByPostVar("dfrom")->setAlert($lng->txt("adn_invalid_date_range"));
-                $form->getItemByPostVar("dto")->setAlert($lng->txt("adn_invalid_date_range"));
+                ilUtil::sendFailure($this->lng->txt("form_input_not_valid"));
+                $form->getItemByPostVar("dfrom")->setAlert($this->lng->txt("adn_invalid_date_range"));
+                $form->getItemByPostVar("dto")->setAlert($this->lng->txt("adn_invalid_date_range"));
             }
         }
         
@@ -449,20 +451,19 @@ class adnTrainingEventGUI
      */
     protected function confirmTrainingEventDeletion()
     {
-        global $ilCtrl, $tpl, $lng;
         
         // check whether at least one item has been seleced
         if (!is_array($_POST["training_event_id"]) || count($_POST["training_event_id"]) == 0) {
-            ilUtil::sendFailure($lng->txt("no_checkbox"), true);
-            $ilCtrl->redirect($this, "listTrainingEvents");
+            ilUtil::sendFailure($this->lng->txt("no_checkbox"), true);
+            $this->ctrl->redirect($this, "listTrainingEvents");
         } else {
             // display confirmation message
             include_once("./Services/Utilities/classes/class.ilConfirmationGUI.php");
             $cgui = new ilConfirmationGUI();
-            $cgui->setFormAction($ilCtrl->getFormAction($this));
-            $cgui->setHeaderText($lng->txt("adn_sure_delete_training_event"));
-            $cgui->setCancel($lng->txt("cancel"), "listTrainingEvents");
-            $cgui->setConfirm($lng->txt("delete"), "deleteTrainingEvent");
+            $cgui->setFormAction($this->ctrl->getFormAction($this));
+            $cgui->setHeaderText($this->lng->txt("adn_sure_delete_training_event"));
+            $cgui->setCancel($this->lng->txt("cancel"), "listTrainingEvents");
+            $cgui->setConfirm($this->lng->txt("delete"), "deleteTrainingEvent");
             
             // list objects that should be deleted
             foreach ($_POST["training_event_id"] as $i) {
@@ -470,7 +471,7 @@ class adnTrainingEventGUI
                 $cgui->addItem("training_event_id[]", $i, adnTrainingEvent::lookupName($i));
             }
             
-            $tpl->setContent($cgui->getHTML());
+            $this->tpl->setContent($cgui->getHTML());
         }
     }
     
@@ -479,7 +480,6 @@ class adnTrainingEventGUI
      */
     protected function deleteTrainingEvent()
     {
-        global $ilCtrl, $lng;
         
         include_once("./Services/ADN/TA/classes/class.adnTrainingEvent.php");
         
@@ -489,8 +489,8 @@ class adnTrainingEventGUI
                 $training_event->delete();
             }
         }
-        ilUtil::sendSuccess($lng->txt("adn_training_event_deleted"), true);
-        $ilCtrl->redirect($this, "listTrainingEvents");
+        ilUtil::sendSuccess($this->lng->txt("adn_training_event_deleted"), true);
+        $this->ctrl->redirect($this, "listTrainingEvents");
     }
 
     /**
@@ -498,47 +498,46 @@ class adnTrainingEventGUI
      */
     public function setTabs($a_activate)
     {
-        global $ilTabs, $lng, $ilCtrl;
 
         // back to provider list
         if ($this->not_overview) {
-            $ilTabs->setBackTarget(
-                $lng->txt("back"),
-                $ilCtrl->getLinkTargetByClass("adntrainingprovidergui", "listTrainingProviders")
+            $this->tabs->setBackTarget(
+                $this->lng->txt("back"),
+                $this->ctrl->getLinkTargetByClass("adntrainingprovidergui", "listTrainingProviders")
             );
         }
         
         // back to event list (if event form or confirmation)
-        if (in_array($ilCtrl->getCmd(), array("editTrainingEvent", "addTrainingEvent",
+        if (in_array($this->ctrl->getCmd(), array("editTrainingEvent", "addTrainingEvent",
             "confirmTrainingEventDeletion"))) {
-            $ilTabs->setBackTarget(
-                $lng->txt("back"),
-                $ilCtrl->getLinkTarget($this, "listTrainingEvents")
+            $this->tabs->setBackTarget(
+                $this->lng->txt("back"),
+                $this->ctrl->getLinkTarget($this, "listTrainingEvents")
             );
         }
 
-        $ilCtrl->setParameter($this, "arc", "");
+        $this->ctrl->setParameter($this, "arc", "");
 
-        $ilTabs->addTab(
+        $this->tabs->addTab(
             "current_tr_events",
-            $lng->txt("adn_current_tr_events"),
-            $ilCtrl->getLinkTarget($this, "listTrainingEvents")
+            $this->lng->txt("adn_current_tr_events"),
+            $this->ctrl->getLinkTarget($this, "listTrainingEvents")
         );
 
-        $ilCtrl->setParameter($this, "arc", "1");
+        $this->ctrl->setParameter($this, "arc", "1");
 
-        $ilTabs->addTab(
+        $this->tabs->addTab(
             "archived_tr_events",
-            $lng->txt("adn_archived_tr_events"),
-            $ilCtrl->getLinkTarget($this, "listTrainingEvents")
+            $this->lng->txt("adn_archived_tr_events"),
+            $this->ctrl->getLinkTarget($this, "listTrainingEvents")
         );
 
-        $ilCtrl->setParameter($this, "arc", $this->archived);
+        $this->ctrl->setParameter($this, "arc", $this->archived);
 
         if (!$this->archived) {
-            $ilTabs->activateTab("current_tr_events");
+            $this->tabs->activateTab("current_tr_events");
         } else {
-            $ilTabs->activateTab("archived_tr_events");
+            $this->tabs->activateTab("archived_tr_events");
         }
     }
 }

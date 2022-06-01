@@ -47,7 +47,6 @@ class adnAnswerSheetQuestionTableGUI extends ilTable2GUI
         array $a_question_ids = []
     )
     {
-        global $ilCtrl, $lng;
 
         parent::__construct($a_parent_obj, $a_parent_cmd);
 
@@ -66,9 +65,9 @@ class adnAnswerSheetQuestionTableGUI extends ilTable2GUI
         
         if (adnPerm::check(adnPerm::EP, adnPerm::WRITE)) {
             if (!$this->question_ids) {
-                $this->addMultiCommand("saveAddQuestions", $lng->txt("adn_add_questions"));
+                $this->addMultiCommand("saveAddQuestions", $this->lng->txt("adn_add_questions"));
             } else {
-                $this->addMultiCommand("saveAddQuestions", $lng->txt("adn_save_subjected_questions"));
+                $this->addMultiCommand("saveAddQuestions", $this->lng->txt("adn_save_subjected_questions"));
 
                 include_once "Services/ADN/ED/classes/class.adnObjective.php";
                 $obj = new adnObjective($this->objective_id);
@@ -88,7 +87,7 @@ class adnAnswerSheetQuestionTableGUI extends ilTable2GUI
         $this->setDefaultOrderField("number");
         $this->setDefaultOrderDirection("asc");
 
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.question_row.html", "Services/ADN/EP");
 
         $this->importData();
@@ -164,7 +163,6 @@ class adnAnswerSheetQuestionTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
 
         // properties
         $this->tpl->setVariable("VAL_NUMBER", $a_set["number"]);

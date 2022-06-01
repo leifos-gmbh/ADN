@@ -157,17 +157,16 @@ class adnTrainingEvent extends adnDBBase
      */
     public function read()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if (!$id) {
             return;
         }
 
-        $res = $ilDB->query("SELECT ta_provider_id,type,date_from,date_to,ta_facility_id" .
+        $res = $this->db->query("SELECT ta_provider_id,type,date_from,date_to,ta_facility_id" .
             " FROM adn_ta_event" .
-            " WHERE id = " . $ilDB->quote($this->getId(), "integer"));
-        $set = $ilDB->fetchAssoc($res);
+            " WHERE id = " . $this->db->quote($this->getId(), "integer"));
+        $set = $this->db->fetchAssoc($res);
         $this->setProvider($set["ta_provider_id"]);
         $this->setType($set["type"]);
         $this->setDateFrom(new ilDate($set["date_from"], IL_CAL_DATE, ilTimeZone::UTC));
@@ -204,16 +203,15 @@ class adnTrainingEvent extends adnDBBase
      */
     public function save()
     {
-        global $ilDB;
 
         // sequence
-        $this->setId($ilDB->nextId("adn_ta_event"));
+        $this->setId($this->db->nextId("adn_ta_event"));
         $id = $this->getId();
 
         $fields = $this->propertiesToFields();
         $fields["id"] = array("integer", $id);
             
-        $ilDB->insert("adn_ta_event", $fields);
+        $this->db->insert("adn_ta_event", $fields);
 
         parent::_save($id, "adn_ta_event");
         
@@ -227,7 +225,6 @@ class adnTrainingEvent extends adnDBBase
      */
     public function update()
     {
-        global $ilDB;
         
         $id = $this->getId();
         if (!$id) {
@@ -236,7 +233,7 @@ class adnTrainingEvent extends adnDBBase
 
         $fields = $this->propertiesToFields();
         
-        $ilDB->update("adn_ta_event", $fields, array("id" => array("integer", $id)));
+        $this->db->update("adn_ta_event", $fields, array("id" => array("integer", $id)));
 
         parent::_update($id, "adn_ta_event");
 
@@ -250,7 +247,6 @@ class adnTrainingEvent extends adnDBBase
      */
     public function delete()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if ($id) {
@@ -265,8 +261,8 @@ class adnTrainingEvent extends adnDBBase
             }
             // upcoming: full delete
             else {
-                $ilDB->manipulate("DELETE FROM adn_ta_event" .
-                    " WHERE id = " . $ilDB->quote($id, "integer"));
+                $this->db->manipulate("DELETE FROM adn_ta_event" .
+                    " WHERE id = " . $this->db->quote($id, "integer"));
                 $this->setId(null);
                 return true;
             }
@@ -288,7 +284,8 @@ class adnTrainingEvent extends adnDBBase
         $a_with_archived = false
     )
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id,ta_facility_id,ta_provider_id,type,date_from,date_to" .
             " FROM adn_ta_event";
@@ -350,7 +347,8 @@ class adnTrainingEvent extends adnDBBase
      */
     protected static function lookupProperty($a_id, $a_prop)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query("SELECT " . $a_prop .
             " FROM adn_ta_event" .
@@ -369,7 +367,8 @@ class adnTrainingEvent extends adnDBBase
      */
     public static function lookupName($a_id)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
         
         $set = $ilDB->query("SELECT ta_facility_id,type,date_from,date_to" .
             " FROM adn_ta_event" .

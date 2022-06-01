@@ -31,7 +31,6 @@ class adnExaminationQuestion extends adnDBBase
      */
     public function __construct($a_id = null)
     {
-        global $ilCtrl;
 
         $this->setFileDirectory("ed_question");
 
@@ -275,18 +274,17 @@ class adnExaminationQuestion extends adnDBBase
      */
     public function read()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if (!$id) {
             return;
         }
 
-        $res = $ilDB->query("SELECT ed_objective_id,ed_subobjective_id,nr,title,question,status," .
+        $res = $this->db->query("SELECT ed_objective_id,ed_subobjective_id,nr,title,question,status," .
             "status_date,qfile,last_change_comment" .
             " FROM adn_ed_question" .
-            " WHERE id = " . $ilDB->quote($this->getId(), "integer"));
-        $set = $ilDB->fetchAssoc($res);
+            " WHERE id = " . $this->db->quote($this->getId(), "integer"));
+        $set = $this->db->fetchAssoc($res);
         $this->setBackupOf((int) $set["backup_of"]);
         $this->setObjective((int) $set["ed_objective_id"]);
         $this->setSubobjective((int) $set["ed_subobjective_id"]);
@@ -350,10 +348,9 @@ class adnExaminationQuestion extends adnDBBase
      */
     public function save()
     {
-        global $ilDB;
 
         // sequence
-        $this->setId($ilDB->nextId("adn_ed_question"));
+        $this->setId($this->db->nextId("adn_ed_question"));
         $id = $this->getId();
 
         $fields = $this->propertiesToFields();
@@ -365,7 +362,7 @@ class adnExaminationQuestion extends adnDBBase
             }
         }
             
-        $ilDB->insert("adn_ed_question", $fields);
+        $this->db->insert("adn_ed_question", $fields);
 
         parent::_save($id, "adn_ed_question");
         
@@ -379,7 +376,6 @@ class adnExaminationQuestion extends adnDBBase
      */
     public function update()
     {
-        global $ilDB;
         
         $id = $this->getId();
         if (!$id) {
@@ -394,7 +390,7 @@ class adnExaminationQuestion extends adnDBBase
             }
         }
         
-        $ilDB->update("adn_ed_question", $fields, array("id" => array("integer", $id)));
+        $this->db->update("adn_ed_question", $fields, array("id" => array("integer", $id)));
 
         parent::_update($id, "adn_ed_question");
 
@@ -408,23 +404,22 @@ class adnExaminationQuestion extends adnDBBase
      */
     public function delete()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if ($id) {
             $this->removeFile($id . "_1");
                         
             // online tests
-            $ilDB->manipulate("DELETE FROM adn_ec_given_answer" .
-                " WHERE ed_question_id = " . $ilDB->quote($id, "integer"));
+            $this->db->manipulate("DELETE FROM adn_ec_given_answer" .
+                " WHERE ed_question_id = " . $this->db->quote($id, "integer"));
             
             // answer sheet
-            $ilDB->manipulate("DELETE FROM adn_ep_sheet_question" .
-                " WHERE ed_question_id = " . $ilDB->quote($id, "integer"));
+            $this->db->manipulate("DELETE FROM adn_ep_sheet_question" .
+                " WHERE ed_question_id = " . $this->db->quote($id, "integer"));
             
             // archived flag is not used here ?!
-            $ilDB->manipulate("DELETE FROM adn_ed_question" .
-                " WHERE id = " . $ilDB->quote($id, "integer"));
+            $this->db->manipulate("DELETE FROM adn_ed_question" .
+                " WHERE id = " . $this->db->quote($id, "integer"));
             $this->setId(null);
             return true;
         }
@@ -461,7 +456,8 @@ class adnExaminationQuestion extends adnDBBase
         $a_no_backups_or_archived = true
     )
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         if (!$a_full_export) {
             $sql = "SELECT q.id,q.title AS name,q.nr,q.question,q.status,q.ed_subobjective_id,";
@@ -642,7 +638,8 @@ class adnExaminationQuestion extends adnDBBase
      */
     public static function getByObjective($a_objective_id, $a_number = null, $a_active_only = false)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id" .
             " FROM adn_ed_question" .
@@ -681,7 +678,8 @@ class adnExaminationQuestion extends adnDBBase
         $a_active_only = false
     )
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id" .
             " FROM adn_ed_question" .
@@ -715,7 +713,8 @@ class adnExaminationQuestion extends adnDBBase
      */
     protected static function lookupProperty($a_id, $a_prop)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query("SELECT " . $a_prop . " FROM adn_ed_question WHERE " .
             " id = " . $ilDB->quote($a_id, "integer"));
@@ -754,7 +753,6 @@ class adnExaminationQuestion extends adnDBBase
      */
     public function isNumberUnique($a_nr)
     {
-        global $ilDB;
 
         $nr = $a_nr;
         $id = $this->getId();
@@ -769,35 +767,35 @@ class adnExaminationQuestion extends adnDBBase
         if ($sub) {
             $sql = "SELECT id" .
                 " FROM adn_ed_question" .
-                " WHERE ed_subobjective_id = " . $ilDB->quote($sub, "integer") .
-                " AND nr = " . $ilDB->quote($nr, "text") .
-                " AND archived < " . $ilDB->quote(1, "integer") .
-                " AND (backup_of < " . $ilDB->quote(1, "integer") . " OR backup_of IS NULL)";
+                " WHERE ed_subobjective_id = " . $this->db->quote($sub, "integer") .
+                " AND nr = " . $this->db->quote($nr, "text") .
+                " AND archived < " . $this->db->quote(1, "integer") .
+                " AND (backup_of < " . $this->db->quote(1, "integer") . " OR backup_of IS NULL)";
 
             if ($id) {
-                $sql .= " AND id <> " . $ilDB->quote($id, "integer");
+                $sql .= " AND id <> " . $this->db->quote($id, "integer");
             }
 
-            $set = $ilDB->query($sql);
-            if ($ilDB->numRows($set)) {
+            $set = $this->db->query($sql);
+            if ($this->db->numRows($set)) {
                 return false;
             }
         } elseif ($obj) {
             $sql = "SELECT id" .
                 " FROM adn_ed_question" .
-                " WHERE ed_objective_id = " . $ilDB->quote($obj, "integer") .
-                " AND (ed_subobjective_id < " . $ilDB->quote(1, "integer") .
+                " WHERE ed_objective_id = " . $this->db->quote($obj, "integer") .
+                " AND (ed_subobjective_id < " . $this->db->quote(1, "integer") .
                 " OR ed_subobjective_id IS NULL)" .
-                " AND nr = " . $ilDB->quote($nr, "text") .
-                " AND archived < " . $ilDB->quote(1, "integer") .
-                " AND (backup_of < " . $ilDB->quote(1, "integer") . " OR backup_of IS NULL)";
+                " AND nr = " . $this->db->quote($nr, "text") .
+                " AND archived < " . $this->db->quote(1, "integer") .
+                " AND (backup_of < " . $this->db->quote(1, "integer") . " OR backup_of IS NULL)";
 
             if ($id) {
-                $sql .= " AND id <> " . $ilDB->quote($id, "integer");
+                $sql .= " AND id <> " . $this->db->quote($id, "integer");
             }
 
-            $set = $ilDB->query($sql);
-            if ($ilDB->numRows($set)) {
+            $set = $this->db->query($sql);
+            if ($this->db->numRows($set)) {
                 return false;
             }
         }
@@ -881,7 +879,8 @@ class adnExaminationQuestion extends adnDBBase
      */
     public static function getAllQuestionsWithBackup()
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query("SELECT DISTINCT(backup_of)" .
             " FROM adn_ed_question" .
@@ -901,12 +900,11 @@ class adnExaminationQuestion extends adnDBBase
      */
     public function getBackupId()
     {
-        global $ilDB;
         
-        $res = $ilDB->query("SELECT id" .
+        $res = $this->db->query("SELECT id" .
             " FROM adn_ed_question" .
-            " WHERE backup_of = " . $ilDB->quote($this->getId(), "integer"));
-        $set = $ilDB->fetchAssoc($res);
+            " WHERE backup_of = " . $this->db->quote($this->getId(), "integer"));
+        $set = $this->db->fetchAssoc($res);
         if ($set["id"]) {
             return $set["id"];
         }
@@ -919,7 +917,6 @@ class adnExaminationQuestion extends adnDBBase
      */
     public function readBackup()
     {
-        global $ilDB;
 
         $backup_id = $this->getBackupId();
         if ($backup_id) {
@@ -933,7 +930,6 @@ class adnExaminationQuestion extends adnDBBase
      */
     public function removeBackups()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if ($id) {

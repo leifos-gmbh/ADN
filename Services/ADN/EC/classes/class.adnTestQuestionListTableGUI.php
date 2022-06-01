@@ -31,7 +31,6 @@ class adnTestQuestionListTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd, $a_questions, $a_cand_sheet_id)
     {
-        global $ilCtrl, $lng;
         
         $this->cand_sheet_id = (int) $a_cand_sheet_id;
         $this->questions = $a_questions;
@@ -40,7 +39,7 @@ class adnTestQuestionListTableGUI extends ilTable2GUI
 
         $cnt = 1;
         $this->setData($this->questions);
-        $this->setTitle($lng->txt("adn_questions"));
+        $this->setTitle($this->lng->txt("adn_questions"));
         
         $this->addColumn($this->lng->txt("adn_nr"));
         $this->addColumn($this->lng->txt("adn_question"));
@@ -51,7 +50,7 @@ class adnTestQuestionListTableGUI extends ilTable2GUI
         $this->setDefaultOrderDirection("asc");
         $this->setLimit(100);
 
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.test_questions_row.html", "Services/ADN/EC");
     }
     
@@ -62,26 +61,25 @@ class adnTestQuestionListTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
 
         $question = new adnMCQuestion($a_set["q_id"]);
 
         // actions...
-        $ilCtrl->setParameter($this->parent_obj, "q_id", $a_set["q_id"]);
+        $this->ctrl->setParameter($this->parent_obj, "q_id", $a_set["q_id"]);
         
         // ...show question
         $this->tpl->setCurrentBlock("action");
         $this->tpl->setVariable(
             "TXT_CMD",
-            $lng->txt("adn_show_question")
+            $this->lng->txt("adn_show_question")
         );
         $this->tpl->setVariable(
             "HREF_CMD",
-            $ilCtrl->getLinkTarget($this->parent_obj, "jumpToQuestion")
+            $this->ctrl->getLinkTarget($this->parent_obj, "jumpToQuestion")
         );
         $this->tpl->parseCurrentBlock();
         
-        $ilCtrl->setParameter($this->parent_obj, "q_id", "");
+        $this->ctrl->setParameter($this->parent_obj, "q_id", "");
 
         // check if answer is given
         if (adnTest::lookupAnswer($this->cand_sheet_id, $a_set["q_id"]) > 0) {

@@ -19,16 +19,17 @@ class adnCaseQuestionGUI extends adnExaminationQuestionGUI
 {
     // current case question object
     protected ?adnCaseQuestion $question = null;
-    
+    protected ilToolbarGUI $toolbar;
     /**
      * Constructor
      */
     public function __construct()
     {
-        global $ilCtrl;
-        
+        global $DIC;
+        $this->toolbar = $DIC->toolbar();
+        parent::__construct();
         // save case question ID through requests
-        $ilCtrl->saveParameter($this, array("eq_id"));
+        $this->ctrl->saveParameter($this, array("eq_id"));
         
         $this->readCaseQuestion();
     }
@@ -38,13 +39,12 @@ class adnCaseQuestionGUI extends adnExaminationQuestionGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl, $ilTabs, $lng, $ilCtrl, $tpl;
 
-        $tpl->setTitle($lng->txt("adn_ed") . " - " . $lng->txt("adn_ed_eqs"));
+        $this->tpl->setTitle($this->lng->txt("adn_ed") . " - " . $this->lng->txt("adn_ed_eqs"));
 
         $this->setTabs("case_questions");
         
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
         
         // forward command to next gui class in control flow
         switch ($next_class) {
@@ -52,29 +52,29 @@ class adnCaseQuestionGUI extends adnExaminationQuestionGUI
 
                 // tab handling
                 
-                $ilTabs->addSubTab(
+                $this->tabs->addSubTab(
                     "editcase",
-                    $lng->txt("adn_edit_case_question"),
-                    $ilCtrl->getLinkTarget($this, "editCaseQuestion")
+                    $this->lng->txt("adn_edit_case_question"),
+                    $this->ctrl->getLinkTarget($this, "editCaseQuestion")
                 );
 
-                $ilTabs->addSubTab(
+                $this->tabs->addSubTab(
                     "goodrelatedanswer",
-                    $lng->txt("adn_good_related_answers"),
-                    $ilCtrl->getLinkTargetByClass("adngoodrelatedanswergui", "listAnswers")
+                    $this->lng->txt("adn_good_related_answers"),
+                    $this->ctrl->getLinkTargetByClass("adngoodrelatedanswergui", "listAnswers")
                 );
 
-                $ilTabs->activateSubTab("goodrelatedanswer");
+                $this->tabs->activateSubTab("goodrelatedanswer");
 
                 include_once("./Services/ADN/ED/classes/class.adnGoodRelatedAnswerGUI.php");
                 $cqa_gui = new adnGoodRelatedAnswerGUI();
-                $ilCtrl->forwardCommand($cqa_gui);
+                $this->ctrl->forwardCommand($cqa_gui);
                 break;
 
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("listCaseQuestions");
+                $cmd = $this->ctrl->getCmd("listCaseQuestions");
                 
                 switch ($cmd) {
                     // commands that need read permission
@@ -125,18 +125,17 @@ class adnCaseQuestionGUI extends adnExaminationQuestionGUI
      */
     protected function listCaseQuestions()
     {
-        global $tpl, $ilToolbar, $ilCtrl, $lng;
 
         // add button incl. area select
         if (adnPerm::check(adnPerm::ED, adnPerm::WRITE)) {
             include_once("./Services/ADN/ED/classes/class.adnObjective.php");
             $options = adnObjective::getAllCaseCatalogAreas();
             include_once("./Services/Form/classes/class.ilSelectInputGUI.php");
-            $si = new ilSelectInputGUI($lng->txt("adn_subject_area"), "catalog_area");
+            $si = new ilSelectInputGUI($this->lng->txt("adn_subject_area"), "catalog_area");
             $si->setOptions($options);
-            $ilToolbar->addInputItem($si, true);
-            $ilToolbar->setFormAction($ilCtrl->getFormAction($this, "addCaseQuestion"));
-            $ilToolbar->addFormButton($lng->txt("adn_add_case_question"), "addCaseQuestion");
+            $this->toolbar->addInputItem($si, true);
+            $this->toolbar->setFormAction($this->ctrl->getFormAction($this, "addCaseQuestion"));
+            $this->toolbar->addFormButton($this->lng->txt("adn_add_case_question"), "addCaseQuestion");
         }
 
         // table of mc quesstions
@@ -144,7 +143,7 @@ class adnCaseQuestionGUI extends adnExaminationQuestionGUI
         $table = new adnExaminationQuestionTableGUI($this, "listCaseQuestions", true);
 
         // output table
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -180,13 +179,12 @@ class adnCaseQuestionGUI extends adnExaminationQuestionGUI
      */
     protected function addCaseQuestion(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl;
 
         if (!$a_form) {
             $area = (int) $_REQUEST["catalog_area"];
             $a_form = $this->initCaseQuestionForm($area, "create");
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
     
     /**
@@ -196,26 +194,25 @@ class adnCaseQuestionGUI extends adnExaminationQuestionGUI
      */
     protected function editCaseQuestion(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $ilTabs, $lng, $txt, $ilCtrl;
 
-        $ilTabs->addSubTab(
+        $this->tabs->addSubTab(
             "editcase",
-            $lng->txt("adn_edit_case_question"),
-            $ilCtrl->getLinkTarget($this, "editCaseQuestion")
+            $this->lng->txt("adn_edit_case_question"),
+            $this->ctrl->getLinkTarget($this, "editCaseQuestion")
         );
 
-        $ilTabs->addSubTab(
+        $this->tabs->addSubTab(
             "goodrelatedanswer",
-            $lng->txt("adn_good_related_answers"),
-            $ilCtrl->getLinkTargetByClass("adngoodrelatedanswergui", "listAnswers")
+            $this->lng->txt("adn_good_related_answers"),
+            $this->ctrl->getLinkTargetByClass("adngoodrelatedanswergui", "listAnswers")
         );
 
-        $ilTabs->activateSubTab("editcase");
+        $this->tabs->activateSubTab("editcase");
 
         if (!$a_form) {
             $a_form = $this->initCaseQuestionForm($this->question->getCatalogArea(), "edit");
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
 
     /**
@@ -223,13 +220,12 @@ class adnCaseQuestionGUI extends adnExaminationQuestionGUI
      */
     protected function showCaseQuestion()
     {
-        global $tpl, $lng, $ilTabs, $ilCtrl;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listCaseQuestions"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listCaseQuestions"));
 
         $form = $this->initCaseQuestionForm($this->question->getCatalogArea(), "show");
         $form = $form->convertToReadonly();
-        $tpl->setContent($form->getHTML());
+        $this->tpl->setContent($form->getHTML());
     }
 
     /**
@@ -237,15 +233,14 @@ class adnCaseQuestionGUI extends adnExaminationQuestionGUI
      */
     protected function showCaseBackup()
     {
-        global $tpl, $lng, $ilTabs, $ilCtrl;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listCaseQuestions"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listCaseQuestions"));
 
         $this->question->readBackup();
 
         $form = $this->initCaseQuestionForm($this->question->getCatalogArea(), "backup");
         $form = $form->convertToReadonly();
-        $tpl->setContent($form->getHTML());
+        $this->tpl->setContent($form->getHTML());
     }
     
     /**
@@ -257,17 +252,16 @@ class adnCaseQuestionGUI extends adnExaminationQuestionGUI
      */
     protected function initCaseQuestionForm($a_catalog_area, $a_mode = "edit")
     {
-        global $lng, $ilCtrl, $ilTabs;
 
-        $ilTabs->setBackTarget(
-            $lng->txt("back"),
-            $ilCtrl->getLinkTarget($this, "listCaseQuestions")
+        $this->tabs->setBackTarget(
+            $this->lng->txt("back"),
+            $this->ctrl->getLinkTarget($this, "listCaseQuestions")
         );
 
         $form = $this->initBaseForm($a_catalog_area, $a_mode);
 
         // default answer
-        $default = new ilTextAreaInputGUI($lng->txt("adn_default_answer"), "default_answer");
+        $default = new ilTextAreaInputGUI($this->lng->txt("adn_default_answer"), "default_answer");
         $default->setCols(80);
         $default->setRows(10);
         $default->setSpecialCharacters(true);
@@ -275,7 +269,7 @@ class adnCaseQuestionGUI extends adnExaminationQuestionGUI
         $form->addItem($default);
 
         // good specific
-        $specific = new ilCheckboxInputGUI($lng->txt("adn_good_specific_answer"), "specific");
+        $specific = new ilCheckboxInputGUI($this->lng->txt("adn_good_specific_answer"), "specific");
         $form->addItem($specific);
 
         // goods (foreign key)
@@ -318,7 +312,7 @@ class adnCaseQuestionGUI extends adnExaminationQuestionGUI
                     }
                     $related[] = implode("; ", $goods) . ":<br />" . $answer["answer"];
                 }
-                $static = new ilNonEditableValueGUI($lng->txt("adn_good_related_answers"));
+                $static = new ilNonEditableValueGUI($this->lng->txt("adn_good_related_answers"));
                 $static->setValue("<div>" . implode("</div><div style=\"margin-top:5px\">", $related) . "</div>");
                 $form->addItem($static);
             }
@@ -326,9 +320,9 @@ class adnCaseQuestionGUI extends adnExaminationQuestionGUI
 
         if ($a_mode == "create") {
             // creation: save/cancel buttons and title
-            $form->addCommandButton("saveCaseQuestion", $lng->txt("save"));
-            $form->addCommandButton("listCaseQuestions", $lng->txt("cancel"));
-            $form->setTitle($lng->txt("adn_add_case_question"));
+            $form->addCommandButton("saveCaseQuestion", $this->lng->txt("save"));
+            $form->addCommandButton("listCaseQuestions", $this->lng->txt("cancel"));
+            $form->setTitle($this->lng->txt("adn_add_case_question"));
         } else {
             $this->addFormLastChange($form, $a_mode);
             
@@ -338,23 +332,23 @@ class adnCaseQuestionGUI extends adnExaminationQuestionGUI
             switch ($a_mode) {
                 case "edit":
                     // editing: update/cancel buttons and title
-                    $form->addCommandButton("updateCaseQuestion", $lng->txt("save"));
-                    $form->addCommandButton("updateBackupCaseQuestion", $lng->txt("adn_save_backup"));
-                    $form->addCommandButton("listCaseQuestions", $lng->txt("cancel"));
-                    $form->setTitle($lng->txt("adn_edit_case_question"));
+                    $form->addCommandButton("updateCaseQuestion", $this->lng->txt("save"));
+                    $form->addCommandButton("updateBackupCaseQuestion", $this->lng->txt("adn_save_backup"));
+                    $form->addCommandButton("listCaseQuestions", $this->lng->txt("cancel"));
+                    $form->setTitle($this->lng->txt("adn_edit_case_question"));
                     break;
 
                 case "show":
-                    $form->setTitle($lng->txt("adn_show_details"));
+                    $form->setTitle($this->lng->txt("adn_show_details"));
                     break;
 
                 case "backup":
-                    $form->setTitle($lng->txt("adn_show_backup"));
+                    $form->setTitle($this->lng->txt("adn_show_backup"));
                     break;
             }
         }
 
-        $form->setFormAction($ilCtrl->getFormAction($this));
+        $form->setFormAction($this->ctrl->getFormAction($this));
 
         return $form;
     }
@@ -364,7 +358,6 @@ class adnCaseQuestionGUI extends adnExaminationQuestionGUI
      */
     protected function saveCaseQuestion()
     {
-        global $tpl, $lng, $ilCtrl;
         
         $form = $this->initCaseQuestionForm((int) $_REQUEST["catalog_area"], "create");
         
@@ -387,9 +380,9 @@ class adnCaseQuestionGUI extends adnExaminationQuestionGUI
 
                 if ($case_question->save()) {
                     // show success message and return to list
-                    ilUtil::sendSuccess($lng->txt("adn_case_question_created"), true);
-                    $ilCtrl->setParameter($this, "eq_id", $case_question->getId());
-                    $ilCtrl->redirect($this, "listCaseQuestions");
+                    ilUtil::sendSuccess($this->lng->txt("adn_case_question_created"), true);
+                    $this->ctrl->setParameter($this, "eq_id", $case_question->getId());
+                    $this->ctrl->redirect($this, "listCaseQuestions");
                 }
             }
         }
@@ -404,7 +397,6 @@ class adnCaseQuestionGUI extends adnExaminationQuestionGUI
      */
     protected function updateCaseQuestion()
     {
-        global $lng, $ilCtrl, $tpl;
         
         $form = $this->initCaseQuestionForm((int) $_REQUEST["catalog_area"], "edit");
         
@@ -423,8 +415,8 @@ class adnCaseQuestionGUI extends adnExaminationQuestionGUI
 
                 if ($this->question->update()) {
                     // show success message and return to list
-                    ilUtil::sendSuccess($lng->txt("adn_case_question_updated"), true);
-                    $ilCtrl->redirect($this, "listCaseQuestions");
+                    ilUtil::sendSuccess($this->lng->txt("adn_case_question_updated"), true);
+                    $this->ctrl->redirect($this, "listCaseQuestions");
                 }
             }
         }
@@ -439,7 +431,6 @@ class adnCaseQuestionGUI extends adnExaminationQuestionGUI
      */
     protected function updateBackupCaseQuestion()
     {
-        global $lng;
 
         // only 1 backup per question
         $this->question->removeBackups();
@@ -470,7 +461,7 @@ class adnCaseQuestionGUI extends adnExaminationQuestionGUI
 
             $this->updateCaseQuestion();
         } else {
-            ilUtil::sendSuccess($lng->txt("adn_backup_fail"));
+            ilUtil::sendSuccess($this->lng->txt("adn_backup_fail"));
         }
     }
     
@@ -479,25 +470,24 @@ class adnCaseQuestionGUI extends adnExaminationQuestionGUI
      */
     protected function confirmQuestionDeletion()
     {
-        global $ilCtrl, $tpl, $lng, $ilTabs;
         
         // check whether at least one item has been seleced
         if (!is_array($_POST["question_id"]) || count($_POST["question_id"]) == 0) {
-            ilUtil::sendFailure($lng->txt("no_checkbox"), true);
-            $ilCtrl->redirect($this, "listCaseQuestions");
+            ilUtil::sendFailure($this->lng->txt("no_checkbox"), true);
+            $this->ctrl->redirect($this, "listCaseQuestions");
         } else {
-            $ilTabs->setBackTarget(
-                $lng->txt("back"),
-                $ilCtrl->getLinkTarget($this, "listCaseQuestions")
+            $this->tabs->setBackTarget(
+                $this->lng->txt("back"),
+                $this->ctrl->getLinkTarget($this, "listCaseQuestions")
             );
 
             // display confirmation message
             include_once("./Services/Utilities/classes/class.ilConfirmationGUI.php");
             $cgui = new ilConfirmationGUI();
-            $cgui->setFormAction($ilCtrl->getFormAction($this));
-            $cgui->setHeaderText($lng->txt("adn_sure_delete_case_questions"));
-            $cgui->setCancel($lng->txt("cancel"), "listCaseQuestions");
-            $cgui->setConfirm($lng->txt("delete"), "deleteCaseQuestion");
+            $cgui->setFormAction($this->ctrl->getFormAction($this));
+            $cgui->setHeaderText($this->lng->txt("adn_sure_delete_case_questions"));
+            $cgui->setCancel($this->lng->txt("cancel"), "listCaseQuestions");
+            $cgui->setConfirm($this->lng->txt("delete"), "deleteCaseQuestion");
             
             // list objects that should be deleted
             foreach ($_POST["question_id"] as $i) {
@@ -505,7 +495,7 @@ class adnCaseQuestionGUI extends adnExaminationQuestionGUI
                 $cgui->addItem("question_id[]", $i, adnCaseQuestion::lookupName($i));
             }
             
-            $tpl->setContent($cgui->getHTML());
+            $this->tpl->setContent($cgui->getHTML());
         }
     }
     
@@ -514,7 +504,6 @@ class adnCaseQuestionGUI extends adnExaminationQuestionGUI
      */
     protected function deleteCaseQuestion()
     {
-        global $ilCtrl, $lng;
         
         include_once("./Services/ADN/ED/classes/class.adnCaseQuestion.php");
         
@@ -524,7 +513,7 @@ class adnCaseQuestionGUI extends adnExaminationQuestionGUI
                 $case_question->delete();
             }
         }
-        ilUtil::sendSuccess($lng->txt("adn_case_question_deleted"), true);
-        $ilCtrl->redirect($this, "listCaseQuestions");
+        ilUtil::sendSuccess($this->lng->txt("adn_case_question_deleted"), true);
+        $this->ctrl->redirect($this, "listCaseQuestions");
     }
 }

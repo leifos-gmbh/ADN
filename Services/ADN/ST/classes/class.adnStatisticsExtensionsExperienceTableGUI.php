@@ -31,13 +31,12 @@ class adnStatisticsExtensionsExperienceTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd)
     {
-        global $ilCtrl, $lng;
 
         parent::__construct($a_parent_obj, $a_parent_cmd);
 
         $this->setId("adn_st_ees");
         
-        $this->setTitle($lng->txt("adn_st_ees"));
+        $this->setTitle($this->lng->txt("adn_st_ees"));
         
         $this->addColumn($this->lng->txt("adn_type_of_experience"), "type");
         $this->addColumn($this->lng->txt("adn_statistics_count"), "count");
@@ -48,7 +47,7 @@ class adnStatisticsExtensionsExperienceTableGUI extends ilTable2GUI
         $this->setResetCommand("resetExtensionsExperienceFilter");
         $this->setFilterCommand("applyExtensionsExperienceFilter");
         
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.experience_row.html", "Services/ADN/ST");
 
         include_once "Services/ADN/MD/classes/class.adnWMO.php";
@@ -64,15 +63,14 @@ class adnStatisticsExtensionsExperienceTableGUI extends ilTable2GUI
      */
     public function initFilter()
     {
-        global $lng;
 
         $wsd = $this->addFilterItemByMetaType(
             "wmo",
             self::FILTER_SELECT,
             false,
-            $lng->txt("adn_wmo")
+            $this->lng->txt("adn_wmo")
         );
-        $wsd->setOptions(array(0 => $lng->txt("adn_filter_all")) + $this->map["wmo"]);
+        $wsd->setOptions(array(0 => $this->lng->txt("adn_filter_all")) + $this->map["wmo"]);
         $wsd->readFromSession();
         $this->filter["wmo"] = $wsd->getValue();
 
@@ -80,7 +78,7 @@ class adnStatisticsExtensionsExperienceTableGUI extends ilTable2GUI
             "date",
             self::FILTER_DATE_RANGE,
             false,
-            $lng->txt("adn_timeframe")
+            $this->lng->txt("adn_timeframe")
         );
         $date->readFromSession();
         $this->filter["date"] = $date->getDate();
@@ -97,7 +95,6 @@ class adnStatisticsExtensionsExperienceTableGUI extends ilTable2GUI
      */
     protected function importData()
     {
-        global $lng;
         
         include_once "Services/ADN/ST/classes/class.adnStatistics.php";
         $tmp = adnStatistics::getExtensionsExperience($this->filter);
@@ -106,7 +103,7 @@ class adnStatisticsExtensionsExperienceTableGUI extends ilTable2GUI
         if ($tmp) {
             foreach ($tmp as $type => $count) {
                 $caption = str_replace("proof_exp_", "adn_type_of_experience_", $type);
-                $data[] = array("type" => $lng->txt($caption),
+                $data[] = array("type" => $this->lng->txt($caption),
                     "count" => $count);
             }
         }

@@ -32,7 +32,6 @@ class adnCertificateTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd, $a_cp_id = 0)
     {
-        global $ilCtrl, $lng;
 
         $this->setId("adn_tbl_crt");
 
@@ -46,9 +45,9 @@ class adnCertificateTableGUI extends ilTable2GUI
 
         // title
         if ($this->cp_id == 0) {
-            $this->setTitle($lng->txt("adn_certificates"));
+            $this->setTitle($this->lng->txt("adn_certificates"));
         } else {
-            $this->setTitle($lng->txt("adn_certificates") . ": " .
+            $this->setTitle($this->lng->txt("adn_certificates") . ": " .
                 $this->cp->getLastname() . ", " . $this->cp->getFirstname());
         }
 
@@ -69,7 +68,7 @@ class adnCertificateTableGUI extends ilTable2GUI
         $this->setDefaultOrderField("full_nr");
         $this->setDefaultOrderDirection("asc");
 
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.certificates_row.html", "Services/ADN/CP");
 
         $this->importData();
@@ -108,13 +107,12 @@ class adnCertificateTableGUI extends ilTable2GUI
      */
     public function initFilter()
     {
-        global $lng;
 
         $number = $this->addFilterItemByMetaType(
             "number",
             self::FILTER_TEXT,
             false,
-            $lng->txt("adn_number")
+            $this->lng->txt("adn_number")
         );
         $number->readFromSession();
         $this->filter["number"] = $number->getValue();
@@ -123,7 +121,7 @@ class adnCertificateTableGUI extends ilTable2GUI
             "last_name",
             self::FILTER_TEXT,
             false,
-            $lng->txt("adn_last_name")
+            $this->lng->txt("adn_last_name")
         );
         $last_name->readFromSession();
         $this->filter["last_name"] = $last_name->getValue();
@@ -132,7 +130,7 @@ class adnCertificateTableGUI extends ilTable2GUI
             "first_name",
             self::FILTER_TEXT,
             false,
-            $lng->txt("adn_first_name")
+            $this->lng->txt("adn_first_name")
         );
         $first_name->readFromSession();
         $this->filter["first_name"] = $first_name->getValue();
@@ -145,23 +143,22 @@ class adnCertificateTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
 
         // actions...
-        $ilCtrl->setParameter($this->parent_obj, "ct_id", $a_set["id"]);
+        $this->ctrl->setParameter($this->parent_obj, "ct_id", $a_set["id"]);
 
         // details
         $this->tpl->setCurrentBlock("action");
-        $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_show_details"));
+        $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_show_details"));
         if ($this->cp_id == 0) {
             $this->tpl->setVariable(
                 "HREF_CMD",
-                $ilCtrl->getLinkTarget($this->parent_obj, "showCertificate")
+                $this->ctrl->getLinkTarget($this->parent_obj, "showCertificate")
             );
         } else {
             $this->tpl->setVariable(
                 "HREF_CMD",
-                $ilCtrl->getLinkTarget($this->parent_obj, "showInvalidCertificate")
+                $this->ctrl->getLinkTarget($this->parent_obj, "showInvalidCertificate")
             );
         }
         $this->tpl->parseCurrentBlock();
@@ -172,10 +169,10 @@ class adnCertificateTableGUI extends ilTable2GUI
             if ($a_set["status"] == adnCertificate::STATUS_VALID && !adnCertificate::isDuplicate($a_set['id']) &&
                 !$a_set["is_extension"]) {
                 $this->tpl->setCurrentBlock("action");
-                $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_download_certificate"));
+                $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_download_certificate"));
                 $this->tpl->setVariable(
                     "HREF_CMD",
-                    $ilCtrl->getLinkTarget($this->parent_obj, "downloadCertificate")
+                    $this->ctrl->getLinkTarget($this->parent_obj, "downloadCertificate")
                 );
                 $this->tpl->parseCurrentBlock();
             }
@@ -183,10 +180,10 @@ class adnCertificateTableGUI extends ilTable2GUI
 
             // extend
             $this->tpl->setCurrentBlock("action");
-            $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_extend_certificate"));
+            $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_extend_certificate"));
             $this->tpl->setVariable(
                 "HREF_CMD",
-                $ilCtrl->getLinkTarget($this->parent_obj, "extendCertificate")
+                $this->ctrl->getLinkTarget($this->parent_obj, "extendCertificate")
             );
             $this->tpl->parseCurrentBlock();
         }
@@ -197,29 +194,29 @@ class adnCertificateTableGUI extends ilTable2GUI
                 // duplicate
                 if ($a_set["issued_by_wmo"] == $this->user_wmo) {
                     $this->tpl->setCurrentBlock("action");
-                    $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_duplicate_certificate"));
+                    $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_duplicate_certificate"));
                     $this->tpl->setVariable(
                         "HREF_CMD",
-                        $ilCtrl->getLinkTarget($this->parent_obj, "duplicateCertificate")
+                        $this->ctrl->getLinkTarget($this->parent_obj, "duplicateCertificate")
                     );
                     $this->tpl->parseCurrentBlock();
                 }
 
                 // generate invoice
                 $this->tpl->setCurrentBlock("action");
-                $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_generate_invoice"));
+                $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_generate_invoice"));
                 $this->tpl->setVariable(
                     "HREF_CMD",
-                    $ilCtrl->getLinkTarget($this->parent_obj, "generateInvoice")
+                    $this->ctrl->getLinkTarget($this->parent_obj, "generateInvoice")
                 );
                 $this->tpl->parseCurrentBlock();
 
                 // edit
                 $this->tpl->setCurrentBlock("action");
-                $this->tpl->setVariable("TXT_CMD", $lng->txt("edit"));
+                $this->tpl->setVariable("TXT_CMD", $this->lng->txt("edit"));
                 $this->tpl->setVariable(
                     "HREF_CMD",
-                    $ilCtrl->getLinkTarget($this->parent_obj, "edit")
+                    $this->ctrl->getLinkTarget($this->parent_obj, "edit")
                 );
                 $this->tpl->parseCurrentBlock();
             }
@@ -228,10 +225,10 @@ class adnCertificateTableGUI extends ilTable2GUI
             include_once './Services/ADN/Report/classes/class.adnReportCertificate.php';
             if ($a_set["is_extension"] and adnReportCertificate::hasCertificate($a_set['id'])) {
                 $this->tpl->setCurrentBlock("action");
-                $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_download_extension"));
+                $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_download_extension"));
                 $this->tpl->setVariable(
                     "HREF_CMD",
-                    $ilCtrl->getLinkTarget($this->parent_obj, "downloadExtension")
+                    $this->ctrl->getLinkTarget($this->parent_obj, "downloadExtension")
                 );
                 $this->tpl->parseCurrentBlock();
             }
@@ -239,10 +236,10 @@ class adnCertificateTableGUI extends ilTable2GUI
             // download duplicate
             if (adnCertificate::isDuplicate($a_set['id'])) {
                 $this->tpl->setCurrentBlock("action");
-                $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_download_duplicate"));
+                $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_download_duplicate"));
                 $this->tpl->setVariable(
                     "HREF_CMD",
-                    $ilCtrl->getLinkTarget($this->parent_obj, "downloadDuplicate")
+                    $this->ctrl->getLinkTarget($this->parent_obj, "downloadDuplicate")
                 );
                 $this->tpl->parseCurrentBlock();
             }
@@ -251,27 +248,27 @@ class adnCertificateTableGUI extends ilTable2GUI
             include_once './Services/ADN/Report/classes/class.adnReportInvoice.php';
             if (adnReportInvoice::hasInvoice($a_set['id'])) {
                 $this->tpl->setCurrentBlock("action");
-                $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_download_invoice"));
+                $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_download_invoice"));
                 $this->tpl->setVariable(
                     "HREF_CMD",
-                    $ilCtrl->getLinkTarget($this->parent_obj, "downloadInvoice")
+                    $this->ctrl->getLinkTarget($this->parent_obj, "downloadInvoice")
                 );
                 $this->tpl->parseCurrentBlock();
             }
-        
-            $ilCtrl->setParameter($this->parent_obj, "ct_id", "");
+
+            $this->ctrl->setParameter($this->parent_obj, "ct_id", "");
 
             // ... more certificates
             if (adnCertificate::countCertificatesForProfessional($a_set["cp_professional_id"]) > 1) {
-                $ilCtrl->setParameter($this->parent_obj, "cp_id", $a_set["cp_professional_id"]);
+                $this->ctrl->setParameter($this->parent_obj, "cp_id", $a_set["cp_professional_id"]);
                 $this->tpl->setCurrentBlock("action");
-                $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_more_certificates"));
+                $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_more_certificates"));
                 $this->tpl->setVariable(
                     "HREF_CMD",
-                    $ilCtrl->getLinkTarget($this->parent_obj, "showCertificatesOfProfessional")
+                    $this->ctrl->getLinkTarget($this->parent_obj, "showCertificatesOfProfessional")
                 );
                 $this->tpl->parseCurrentBlock();
-                $ilCtrl->setParameter($this->parent_obj, "cp_id", "");
+                $this->ctrl->setParameter($this->parent_obj, "cp_id", "");
             }
         }
 

@@ -18,19 +18,31 @@ class adnInstructorGUI
     protected int $provider_id = 0;
 
     protected ?adnInstructor $instructor = null;
+
+    protected ilCtrl $ctrl;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilLanguage $lng;
+    protected ilTabsGUI $tabs;
+    protected ilToolbarGUI $toolbar;
+
     
     /**
      * Constructor
      */
     public function __construct()
     {
-        global $ilCtrl;
+        global $DIC;
+        $this->ctrl = $DIC->ctrl();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->lng = $DIC->language();
+        $this->tabs = $DIC->tabs();
+        $this->toolbar = $DIC->toolbar();
 
         $this->provider_id = (int) $_REQUEST["tp_id"];
         
         // save provider and instructor ID through requests
-        $ilCtrl->saveParameter($this, array("tp_id"));
-        $ilCtrl->saveParameter($this, array("is_id"));
+        $this->ctrl->saveParameter($this, array("tp_id"));
+        $this->ctrl->saveParameter($this, array("is_id"));
         
         $this->readInstructor();
     }
@@ -40,16 +52,15 @@ class adnInstructorGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl;
         
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
         
         // forward command to next gui class in control flow
         switch ($next_class) {
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("listInstructors");
+                $cmd = $this->ctrl->getCmd("listInstructors");
                 
                 switch ($cmd) {
                     // commands that need read permission
@@ -92,23 +103,22 @@ class adnInstructorGUI
      */
     public function listInstructors()
     {
-        global $tpl, $lng, $ilTabs, $ilCtrl, $ilToolbar;
 
-        $ilTabs->setBackTarget(
-            $lng->txt("back"),
-            $ilCtrl->getLinkTargetByClass("adnTrainingProviderGUI", "listTrainingProviders")
+        $this->tabs->setBackTarget(
+            $this->lng->txt("back"),
+            $this->ctrl->getLinkTargetByClass("adnTrainingProviderGUI", "listTrainingProviders")
         );
 
         // add instructor
-        $ilToolbar->addButton(
-            $lng->txt("adn_add_instructor"),
-            $ilCtrl->getLinkTarget($this, "addInstructor")
+        $this->toolbar->addButton(
+            $this->lng->txt("adn_add_instructor"),
+            $this->ctrl->getLinkTarget($this, "addInstructor")
         );
 
         include_once("./Services/ADN/TA/classes/class.adnInstructorTableGUI.php");
         $table = new adnInstructorTableGUI($this, "listInstructors", $this->provider_id);
 
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
     
     /**
@@ -118,14 +128,13 @@ class adnInstructorGUI
      */
     protected function addInstructor(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $ilTabs, $ilCtrl, $lng;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listInstructors"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listInstructors"));
 
         if (!$a_form) {
             $a_form = $this->initInstructorForm("create");
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
     
     /**
@@ -135,14 +144,13 @@ class adnInstructorGUI
      */
     protected function editInstructor(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $ilTabs, $ilCtrl, $lng;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listInstructors"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listInstructors"));
 
         if (!$a_form) {
             $a_form = $this->initInstructorForm("edit");
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
     
     /**
@@ -153,7 +161,6 @@ class adnInstructorGUI
      */
     protected function initInstructorForm($a_mode = "edit")
     {
-        global $lng, $ilCtrl;
 
         include_once "Services/ADN/TA/classes/class.adnTrainingProvider.php";
         $provider = new adnTrainingProvider($this->provider_id);
@@ -163,19 +170,19 @@ class adnInstructorGUI
         $form = new ilPropertyFormGUI();
         
         // last name
-        $name = new ilTextInputGUI($lng->txt("adn_last_name"), "name");
+        $name = new ilTextInputGUI($this->lng->txt("adn_last_name"), "name");
         $name->setMaxLength(50);
         $name->setRequired(true);
         $form->addItem($name);
 
         // first name
-        $fname = new ilTextInputGUI($lng->txt("adn_first_name"), "fname");
+        $fname = new ilTextInputGUI($this->lng->txt("adn_first_name"), "fname");
         $fname->setMaxLength(50);
         $fname->setRequired(true);
         $form->addItem($fname);
 
         // training types (static values)
-        $types = new ilCheckboxGroupInputGUI($lng->txt("adn_types_of_training"), "train_type");
+        $types = new ilCheckboxGroupInputGUI($this->lng->txt("adn_types_of_training"), "train_type");
         $form->addItem($types);
         include_once("./Services/ADN/TA/classes/class.adnTypesOfTraining.php");
         foreach (adnTypesOfTraining::getAllTypes() as $type => $tlng) {
@@ -185,7 +192,7 @@ class adnInstructorGUI
 
         // areas of expertise (foreign key, but no archive flag)
         include_once("./Services/ADN/TA/classes/class.adnAreaOfExpertise.php");
-        $areas = new ilCheckboxGroupInputGUI($lng->txt("adn_areas_of_expertise"), "area_expertise");
+        $areas = new ilCheckboxGroupInputGUI($this->lng->txt("adn_areas_of_expertise"), "area_expertise");
         $form->addItem($areas);
         foreach (adnAreaOfExpertise::getAreasOfExpertiseSelect() as $id => $caption) {
             $cb = new ilCheckboxOption($caption, $id);
@@ -194,9 +201,9 @@ class adnInstructorGUI
         
         if ($a_mode == "create") {
             // creation: save/cancel buttons and title
-            $form->addCommandButton("saveInstructor", $lng->txt("save"));
-            $form->addCommandButton("listInstructors", $lng->txt("cancel"));
-            $form->setTitle($lng->txt("adn_add_instructor") . ": " . $provider->getName());
+            $form->addCommandButton("saveInstructor", $this->lng->txt("save"));
+            $form->addCommandButton("listInstructors", $this->lng->txt("cancel"));
+            $form->setTitle($this->lng->txt("adn_add_instructor") . ": " . $provider->getName());
         } else {
             $name->setValue($this->instructor->getLastName());
             $fname->setValue($this->instructor->getFirstName());
@@ -204,12 +211,12 @@ class adnInstructorGUI
             $areas->setValue($this->instructor->getAreasOfExpertise());
             
             // editing: update/cancel buttons and title
-            $form->addCommandButton("updateInstructor", $lng->txt("save"));
-            $form->addCommandButton("listInstructors", $lng->txt("cancel"));
-            $form->setTitle($lng->txt("adn_edit_instructor") . ": " . $provider->getName());
+            $form->addCommandButton("updateInstructor", $this->lng->txt("save"));
+            $form->addCommandButton("listInstructors", $this->lng->txt("cancel"));
+            $form->setTitle($this->lng->txt("adn_edit_instructor") . ": " . $provider->getName());
         }
         
-        $form->setFormAction($ilCtrl->getFormAction($this));
+        $form->setFormAction($this->ctrl->getFormAction($this));
 
         return $form;
     }
@@ -219,7 +226,6 @@ class adnInstructorGUI
      */
     protected function saveInstructor()
     {
-        global $tpl, $lng, $ilCtrl;
         
         $form = $this->initInstructorForm("create");
         
@@ -236,8 +242,8 @@ class adnInstructorGUI
 
             if ($instructor->save()) {
                 // show success message and return to list
-                ilUtil::sendSuccess($lng->txt("adn_instructor_created"), true);
-                $ilCtrl->redirect($this, "listInstructors");
+                ilUtil::sendSuccess($this->lng->txt("adn_instructor_created"), true);
+                $this->ctrl->redirect($this, "listInstructors");
             }
         }
 
@@ -251,7 +257,6 @@ class adnInstructorGUI
      */
     protected function updateInstructor()
     {
-        global $lng, $ilCtrl, $tpl;
         
         $form = $this->initInstructorForm("edit");
         
@@ -265,8 +270,8 @@ class adnInstructorGUI
 
             if ($this->instructor->update()) {
                 // show success message and return to list
-                ilUtil::sendSuccess($lng->txt("adn_instructor_updated"), true);
-                $ilCtrl->redirect($this, "listInstructors");
+                ilUtil::sendSuccess($this->lng->txt("adn_instructor_updated"), true);
+                $this->ctrl->redirect($this, "listInstructors");
             }
         }
         
@@ -280,25 +285,24 @@ class adnInstructorGUI
      */
     protected function confirmInstructorsDeletion()
     {
-        global $ilCtrl, $tpl, $lng, $ilTabs;
         
         // check whether at least one item has been seleced
         if (!is_array($_POST["instructor_id"]) || count($_POST["instructor_id"]) == 0) {
-            ilUtil::sendFailure($lng->txt("no_checkbox"), true);
-            $ilCtrl->redirect($this, "listInstructors");
+            ilUtil::sendFailure($this->lng->txt("no_checkbox"), true);
+            $this->ctrl->redirect($this, "listInstructors");
         } else {
-            $ilTabs->setBackTarget(
-                $lng->txt("back"),
-                $ilCtrl->getLinkTarget($this, "listInstructors")
+            $this->tabs->setBackTarget(
+                $this->lng->txt("back"),
+                $this->ctrl->getLinkTarget($this, "listInstructors")
             );
 
             // display confirmation message
             include_once("./Services/Utilities/classes/class.ilConfirmationGUI.php");
             $cgui = new ilConfirmationGUI();
-            $cgui->setFormAction($ilCtrl->getFormAction($this));
-            $cgui->setHeaderText($lng->txt("adn_sure_delete_instructors"));
-            $cgui->setCancel($lng->txt("cancel"), "listInstructors");
-            $cgui->setConfirm($lng->txt("delete"), "deleteInstructors");
+            $cgui->setFormAction($this->ctrl->getFormAction($this));
+            $cgui->setHeaderText($this->lng->txt("adn_sure_delete_instructors"));
+            $cgui->setCancel($this->lng->txt("cancel"), "listInstructors");
+            $cgui->setConfirm($this->lng->txt("delete"), "deleteInstructors");
 
             // list objects that should be deleted
             include_once("./Services/ADN/TA/classes/class.adnInstructor.php");
@@ -306,7 +310,7 @@ class adnInstructorGUI
                 $cgui->addItem("instructor_id[]", $i, adnInstructor::lookupName($i));
             }
             
-            $tpl->setContent($cgui->getHTML());
+            $this->tpl->setContent($cgui->getHTML());
         }
     }
     
@@ -315,7 +319,6 @@ class adnInstructorGUI
      */
     protected function deleteInstructors()
     {
-        global $ilCtrl, $lng;
         
         include_once("./Services/ADN/TA/classes/class.adnInstructor.php");
         
@@ -325,7 +328,7 @@ class adnInstructorGUI
                 $instructor->delete();
             }
         }
-        ilUtil::sendSuccess($lng->txt("adn_instructor_deleted"), true);
-        $ilCtrl->redirect($this, "listInstructors");
+        ilUtil::sendSuccess($this->lng->txt("adn_instructor_deleted"), true);
+        $this->ctrl->redirect($this, "listInstructors");
     }
 }

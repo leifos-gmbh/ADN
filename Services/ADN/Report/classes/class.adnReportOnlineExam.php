@@ -44,7 +44,6 @@ class adnReportOnlineExam extends adnReport
      */
     public function create()
     {
-        global $ilUser,$lng;
         
         include_once './Services/ADN/Report/classes/class.adnReportFileUtils.php';
         $form = adnReportFileUtils::getTemplatePathByType(
@@ -130,10 +129,9 @@ class adnReportOnlineExam extends adnReport
      */
     public function createSheets()
     {
-        global $lng;
 
-        $lng->loadLanguageModule('assessment');
-        $lng->loadLanguageModule('crs');
+        $this->lng->loadLanguageModule('assessment');
+        $this->lng->loadLanguageModule('crs');
         
         $this->initEvent();
 
@@ -235,7 +233,7 @@ class adnReportOnlineExam extends adnReport
                     $xml->xmlElement(
                         'paragraph',
                         array('type' => 'bold'),
-                        $lng->txt('adn_question') . ' ' . ++$counter . ': ' . $qst['number']
+                        $this->lng->txt('adn_question') . ' ' . ++$counter . ': ' . $qst['number']
                     );
 
                     $xml->xmlStartTag('paragraph', array('type' => 'phrase'));
@@ -328,12 +326,11 @@ class adnReportOnlineExam extends adnReport
      */
     public function createELearningSheet($a_qsts, $a_answers)
     {
-        global $lng;
 
         $map = array(1 => "A", 2 => "B", 3 => "C", 4 => "D");
 
         $this->initOutfile();
-        $lng->loadLanguageModule('assessment');
+        $this->lng->loadLanguageModule('assessment');
 
         include_once("./Services/ADN/ED/classes/class.adnMCQuestion.php");
         include_once './Services/Xml/classes/class.ilXmlWriter.php';
@@ -349,7 +346,7 @@ class adnReportOnlineExam extends adnReport
             #$xml->xmlElement('paragraph',array('type' => 'bold'),$counter.'.');
 
             $xml->xmlStartTag('paragraph', array('type' => 'phrase'));
-            $this->parseFormatting($xml, $counter . '. ' . $lng->txt('ass_question') . ': ' . $qst->getQuestion());
+            $this->parseFormatting($xml, $counter . '. ' . $this->lng->txt('ass_question') . ': ' . $qst->getQuestion());
             $xml->xmlEndTag('paragraph');
 
             // "Your  answer"
@@ -358,11 +355,11 @@ class adnReportOnlineExam extends adnReport
                 $answer = $qst->$method();
 
                 $xml->xmlStartTag('paragraph', array('type' => 'phrase'));
-                $this->parseFormatting($xml, $lng->txt('adn_your_answer') . ': ' . $answer['text']);
+                $this->parseFormatting($xml, $this->lng->txt('adn_your_answer') . ': ' . $answer['text']);
                 $xml->xmlEndTag('paragraph');
             } else {
                 $xml->xmlStartTag('paragraph', array('type' => 'phrase'));
-                $this->parseFormatting($xml, $lng->txt('adn_your_answer') . ': Nicht beantwortet');
+                $this->parseFormatting($xml, $this->lng->txt('adn_your_answer') . ': Nicht beantwortet');
                 $xml->xmlEndTag('paragraph');
             }
 
@@ -374,7 +371,7 @@ class adnReportOnlineExam extends adnReport
             $xml->xmlStartTag('paragraph', array('type' => 'phrase'));
             $this->parseFormatting(
                 $xml,
-                $lng->txt('adn_correct_answer') . ': ' . $answer['text']
+                $this->lng->txt('adn_correct_answer') . ': ' . $answer['text']
             );
             $xml->xmlEndTag('paragraph');
 
@@ -421,13 +418,12 @@ class adnReportOnlineExam extends adnReport
      */
     protected function writeSheet(adnAnswerSheet $sheet)
     {
-        global $lng;
         
         include_once './Services/Xml/classes/class.ilXmlWriter.php';
         $xml = new ilXmlWriter();
         $xml->xmlStartTag('questions');
         
-        $lng->loadLanguageModule('assessment');
+        $this->lng->loadLanguageModule('assessment');
 
         foreach ($sheet->getQuestions() as $qst_id) {
             include_once './Services/ADN/ED/classes/class.adnMCQuestion.php';
@@ -435,7 +431,7 @@ class adnReportOnlineExam extends adnReport
             $xml->xmlStartTag(
                 'question',
                 array(
-                    'name' => $lng->txt('ass_question') . ': '
+                    'name' => $this->lng->txt('ass_question') . ': '
                 )
             );
             $this->parseFormatting($xml, $qst->getTranslatedQuestion($sheet));
@@ -443,7 +439,7 @@ class adnReportOnlineExam extends adnReport
         }
         $xml->xmlEndTag('questions');
         
-        $GLOBALS['ilLog']->write(__METHOD__ . ': write to ' . $this->getDataDir() . '/' .
+        $this->log->info(__METHOD__ . ': write to ' . $this->getDataDir() . '/' .
             $sheet->getId() . '_sheet.xml');
         
         $xml->xmlDumpFile(

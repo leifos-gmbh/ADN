@@ -28,7 +28,6 @@ class adnExaminationEvent extends adnDBBase
      */
     public function __construct($a_id = 0)
     {
-        global $ilCtrl;
 
         if ($a_id !== 0) {
             $this->setId($a_id);
@@ -226,18 +225,17 @@ class adnExaminationEvent extends adnDBBase
      */
     public function read()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if (!$id) {
             return;
         }
 
-        $res = $ilDB->query("SELECT subject_area,date_from,date_to,md_exam_facility_id,chairman_id," .
+        $res = $this->db->query("SELECT subject_area,date_from,date_to,md_exam_facility_id,chairman_id," .
             "co_chair_1_id,co_chair_2_id,additional_costs" .
             " FROM adn_ep_exam_event" .
-            " WHERE id = " . $ilDB->quote($this->getId(), "integer"));
-        $set = $ilDB->fetchAssoc($res);
+            " WHERE id = " . $this->db->quote($this->getId(), "integer"));
+        $set = $this->db->fetchAssoc($res);
         $this->setType($set["subject_area"]);
         $this->setDateFrom(new ilDateTime($set["date_from"], IL_CAL_DATETIME, ilTimeZone::UTC));
         $this->setDateTo(new ilDateTime($set["date_to"], IL_CAL_DATETIME, ilTimeZone::UTC));
@@ -285,16 +283,15 @@ class adnExaminationEvent extends adnDBBase
      */
     public function save()
     {
-        global $ilDB;
 
         // sequence
-        $this->setId($ilDB->nextId("adn_ep_exam_event"));
+        $this->setId($this->db->nextId("adn_ep_exam_event"));
         $id = $this->getId();
 
         $fields = $this->propertiesToFields();
         $fields["id"] = array("integer", $id);
 
-        $ilDB->insert("adn_ep_exam_event", $fields);
+        $this->db->insert("adn_ep_exam_event", $fields);
 
         parent::_save($id, "adn_ep_exam_event");
         
@@ -308,7 +305,6 @@ class adnExaminationEvent extends adnDBBase
      */
     public function update()
     {
-        global $ilDB;
         
         $id = $this->getId();
         if (!$id) {
@@ -317,7 +313,7 @@ class adnExaminationEvent extends adnDBBase
 
         $fields = $this->propertiesToFields();
         
-        $ilDB->update("adn_ep_exam_event", $fields, array("id" => array("integer", $id)));
+        $this->db->update("adn_ep_exam_event", $fields, array("id" => array("integer", $id)));
 
         parent::_update($id, "adn_ep_exam_event");
 
@@ -331,7 +327,6 @@ class adnExaminationEvent extends adnDBBase
      */
     public function delete()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if ($id) {
@@ -349,12 +344,12 @@ class adnExaminationEvent extends adnDBBase
 
             // $ilDB->manipulate("DELETE FROM adn_es_certificate".
             //		" WHERE ep_exam_id = ".$ilDB->quote($id, "integer"));
-            $ilDB->manipulate("DELETE FROM adn_ep_exam_invitation" .
-                " WHERE ep_exam_event_id = " . $ilDB->quote($id, "integer"));
-            $ilDB->manipulate("DELETE FROM adn_ep_assignment" .
-                " WHERE ep_exam_event_id = " . $ilDB->quote($id, "integer"));
-            $ilDB->manipulate("DELETE FROM adn_ep_exam_event" .
-                " WHERE id = " . $ilDB->quote($id, "integer"));
+            $this->db->manipulate("DELETE FROM adn_ep_exam_invitation" .
+                " WHERE ep_exam_event_id = " . $this->db->quote($id, "integer"));
+            $this->db->manipulate("DELETE FROM adn_ep_assignment" .
+                " WHERE ep_exam_event_id = " . $this->db->quote($id, "integer"));
+            $this->db->manipulate("DELETE FROM adn_ep_exam_event" .
+                " WHERE id = " . $this->db->quote($id, "integer"));
             $this->setId(null);
             return true;
         }
@@ -369,7 +364,8 @@ class adnExaminationEvent extends adnDBBase
      */
     public static function getAllEvents(array $a_filter = null, $a_archived = false)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id,subject_area,date_from,date_to,md_exam_facility_id" .
             " FROM adn_ep_exam_event";
@@ -430,7 +426,8 @@ class adnExaminationEvent extends adnDBBase
      */
     public static function getEventsSelect()
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         include_once "Services/ADN/MD/classes/class.adnExamFacility.php";
         include_once "Services/ADN/ED/classes/class.adnSubjectArea.php";
@@ -460,7 +457,8 @@ class adnExaminationEvent extends adnDBBase
      */
     protected static function lookupProperty($a_id, $a_prop)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query("SELECT " . $a_prop .
             " FROM adn_ep_exam_event" .
@@ -477,7 +475,8 @@ class adnExaminationEvent extends adnDBBase
      */
     public static function lookupName($a_id)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
         
         include_once "Services/ADN/MD/classes/class.adnExamFacility.php";
         include_once "Services/ADN/ED/classes/class.adnSubjectArea.php";
@@ -516,7 +515,8 @@ class adnExaminationEvent extends adnDBBase
      */
     public static function hasChair($a_id)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
         
         $id = $ilDB->quote($a_id, "integer");
 
@@ -538,7 +538,8 @@ class adnExaminationEvent extends adnDBBase
      */
     public static function hasExamFacility($a_id)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $id = $ilDB->quote($a_id, "integer");
 

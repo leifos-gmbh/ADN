@@ -11,26 +11,28 @@
  */
 class adnLicense extends adnDBBase
 {
-    protected $id; // [int]
-    protected $type; // [int]
-    protected $name; // [string]
-    protected $goods; // [array]
+    protected int $id = 0;
+    protected int $type = 0;
+    protected string $name = '';
+    /**
+     * @var int[]
+     */
+    protected array $goods = [];
 
-    const TYPE_CHEMICALS = 1;
-    const TYPE_GAS = 2;
+    public const TYPE_CHEMICALS = 1;
+    public const TYPE_GAS = 2;
 
     /**
      * Constructor
      *
      * @param int $a_id instance id
      */
-    public function __construct($a_id = null)
+    public function __construct($a_id = 0)
     {
-        global $ilCtrl;
 
         $this->setFileDirectory("ed_license");
 
-        if ($a_id) {
+        if ($a_id !== 0) {
             $this->setId($a_id);
             $this->read();
         }
@@ -151,27 +153,26 @@ class adnLicense extends adnDBBase
      */
     public function read()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if (!$id) {
             return;
         }
 
-        $res = $ilDB->query("SELECT title,lfile,type" .
+        $res = $this->db->query("SELECT title,lfile,type" .
             " FROM adn_ed_license" .
-            " WHERE id = " . $ilDB->quote($this->getId(), "integer"));
-        $set = $ilDB->fetchAssoc($res);
+            " WHERE id = " . $this->db->quote($this->getId(), "integer"));
+        $set = $this->db->fetchAssoc($res);
         $this->setName($set["title"]);
         $this->setFileName($set["lfile"]);
         $this->setType($set["type"]);
 
         // get goods
         $goods = array();
-        $res = $ilDB->query("SELECT ed_good_id" .
+        $res = $this->db->query("SELECT ed_good_id" .
             " FROM adn_ed_license_good" .
-            " WHERE ed_license_id = " . $ilDB->quote($this->getId(), "integer"));
-        while ($row = $ilDB->fetchAssoc($res)) {
+            " WHERE ed_license_id = " . $this->db->quote($this->getId(), "integer"));
+        while ($row = $this->db->fetchAssoc($res)) {
             $goods[] = $row["ed_good_id"];
         }
         $this->setGoods($goods);
@@ -200,10 +201,9 @@ class adnLicense extends adnDBBase
      */
     public function save()
     {
-        global $ilDB;
 
         // sequence
-        $this->setId($ilDB->nextId("adn_ed_license"));
+        $this->setId($this->db->nextId("adn_ed_license"));
         $id = $this->getId();
 
         $fields = $this->propertiesToFields();
@@ -217,7 +217,7 @@ class adnLicense extends adnDBBase
             $fields["lfile"] = array("text", $this->getFileName());
         }
             
-        $ilDB->insert("adn_ed_license", $fields);
+        $this->db->insert("adn_ed_license", $fields);
 
         $this->saveGoods();
 
@@ -233,7 +233,6 @@ class adnLicense extends adnDBBase
      */
     public function update()
     {
-        global $ilDB;
         
         $id = $this->getId();
         if (!$id) {
@@ -250,7 +249,7 @@ class adnLicense extends adnDBBase
             $fields["lfile"] = array("text", $this->getFileName());
         }
         
-        $ilDB->update("adn_ed_license", $fields, array("id" => array("integer", $id)));
+        $this->db->update("adn_ed_license", $fields, array("id" => array("integer", $id)));
 
         $this->saveGoods();
 
@@ -264,18 +263,17 @@ class adnLicense extends adnDBBase
      */
     protected function saveGoods()
     {
-        global $ilDB;
         $id = $this->getId();
         if ($id) {
             // remove old entries first (so we do not have to sync)
-            $ilDB->manipulate("DELETE FROM adn_ed_license_good" .
-                " WHERE ed_license_id = " . $ilDB->quote($id, "integer"));
+            $this->db->manipulate("DELETE FROM adn_ed_license_good" .
+                " WHERE ed_license_id = " . $this->db->quote($id, "integer"));
             if (is_array($this->goods) && count($this->goods) > 0) {
                 foreach ($this->goods as $good_id) {
                     $fields = array("ed_license_id" => array("integer", $id),
                         "ed_good_id" => array("integer", $good_id));
 
-                    $ilDB->insert("adn_ed_license_good", $fields);
+                    $this->db->insert("adn_ed_license_good", $fields);
                 }
             }
         }
@@ -288,17 +286,16 @@ class adnLicense extends adnDBBase
      */
     public function delete()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if ($id) {
             $this->removeFile($id);
 
             // U.PV.10.4: archived flag is not used here!
-            $ilDB->manipulate("DELETE FROM adn_ed_license_good" .
-                " WHERE ed_license_id = " . $ilDB->quote($id, "integer"));
-            $ilDB->manipulate("DELETE FROM adn_ed_license" .
-                " WHERE id = " . $ilDB->quote($id, "integer"));
+            $this->db->manipulate("DELETE FROM adn_ed_license_good" .
+                " WHERE ed_license_id = " . $this->db->quote($id, "integer"));
+            $this->db->manipulate("DELETE FROM adn_ed_license" .
+                " WHERE id = " . $this->db->quote($id, "integer"));
             $this->setId(null);
             return true;
         }
@@ -312,7 +309,8 @@ class adnLicense extends adnDBBase
      */
     public static function getAllLicenses($a_type = false)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id,title as name,lfile" .
             " FROM adn_ed_license";
@@ -340,7 +338,8 @@ class adnLicense extends adnDBBase
      */
     public static function getLicensesSelect($a_type = false)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id,title" .
             " FROM adn_ed_license";
@@ -367,7 +366,8 @@ class adnLicense extends adnDBBase
      */
     protected static function lookupProperty($a_id, $a_prop)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query("SELECT " . $a_prop .
             " FROM adn_ed_license" .
@@ -395,7 +395,8 @@ class adnLicense extends adnDBBase
      */
     public static function findByGood($a_id)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $res = $ilDB->query("SELECT ed_license_id" .
             " FROM adn_ed_license_good" .

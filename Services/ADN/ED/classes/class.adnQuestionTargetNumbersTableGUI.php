@@ -30,7 +30,6 @@ class adnQuestionTargetNumbersTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd, $a_area_id, $a_type, array $a_targets)
     {
-        global $ilCtrl, $lng;
 
         $this->area_id = (string) $a_area_id;
         $this->type = (string) $a_type;
@@ -42,10 +41,10 @@ class adnQuestionTargetNumbersTableGUI extends ilTable2GUI
         $this->setLimit(9999);
         $this->disable("footer");
 
-        $this->setTitle($lng->txt("adn_target_nr_of_questions"));
+        $this->setTitle($this->lng->txt("adn_target_nr_of_questions"));
 
         if (adnPerm::check(adnPerm::ED, adnPerm::WRITE)) {
-            $this->addMultiCommand("confirmTargetsDeletion", $lng->txt("delete"));
+            $this->addMultiCommand("confirmTargetsDeletion", $this->lng->txt("delete"));
             $this->addColumn("", "", 1);
         }
         
@@ -57,7 +56,7 @@ class adnQuestionTargetNumbersTableGUI extends ilTable2GUI
         $this->setDefaultOrderField("objective");
         $this->setDefaultOrderDirection("asc");
 
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.target_nr_of_questions_row.html", "Services/ADN/ED");
 
         $this->importData($a_targets);
@@ -68,7 +67,6 @@ class adnQuestionTargetNumbersTableGUI extends ilTable2GUI
      */
     protected function importData($a_targets = null)
     {
-        global $lng;
 
         // value mapping (to have correct sorting)
         if ($a_targets) {
@@ -78,7 +76,7 @@ class adnQuestionTargetNumbersTableGUI extends ilTable2GUI
 
             foreach ($a_targets as $idx => $item) {
                 $a_targets[$idx]["max_one_per_objective"] =
-                    ($item["max_one_per_objective"] ? $lng->txt("yes") : $lng->txt("no"));
+                    ($item["max_one_per_objective"] ? $this->lng->txt("yes") : $this->lng->txt("no"));
 
                 $all_obj = array();
                 if ($item["objectives"]) {
@@ -113,22 +111,21 @@ class adnQuestionTargetNumbersTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
 
         $this->overall += $a_set["nr_of_questions"];
 
         // actions...
 
         if (adnPerm::check(adnPerm::ED, adnPerm::WRITE)) {
-            $ilCtrl->setParameter($this->parent_obj, "tgt_id", $a_set["id"]);
+            $this->ctrl->setParameter($this->parent_obj, "tgt_id", $a_set["id"]);
 
             // ...edit
             $this->tpl->setCurrentBlock("action");
-            $this->tpl->setVariable("TXT_CMD", $lng->txt("edit"));
-            $this->tpl->setVariable("HREF_CMD", $ilCtrl->getLinkTarget($this->parent_obj, "editTarget"));
+            $this->tpl->setVariable("TXT_CMD", $this->lng->txt("edit"));
+            $this->tpl->setVariable("HREF_CMD", $this->ctrl->getLinkTarget($this->parent_obj, "editTarget"));
             $this->tpl->parseCurrentBlock();
 
-            $ilCtrl->setParameter($this->parent_obj, "tgt_id", "");
+            $this->ctrl->setParameter($this->parent_obj, "tgt_id", "");
 
             // checkbox for deletion
             $this->tpl->setCurrentBlock("cbox");

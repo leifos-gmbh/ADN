@@ -36,7 +36,6 @@ class adnAssignment extends adnDBBase
      */
     public function __construct($a_id = 0, $a_user_id = 0, $a_event_id = 0)
     {
-        global $ilCtrl;
 
         if ($a_id === 0 && $a_user_id !== 0 && $a_event_id !== 0) {
             $this->setUser($a_user_id);
@@ -323,7 +322,6 @@ class adnAssignment extends adnDBBase
      */
     public function read()
     {
-        global $ilDB;
 
         $id = $this->getId();
 
@@ -331,12 +329,12 @@ class adnAssignment extends adnDBBase
             return;
         }
 
-        $res = $ilDB->query("SELECT ep_exam_event_id, cp_professional_id, " .
+        $res = $this->db->query("SELECT ep_exam_event_id, cp_professional_id, " .
             " invited_on, has_participated, score_mc, score_case, result_mc, " .
             " result_case, notified_on, access_code, scoring_update, scoring_update_user " .
             " FROM adn_ep_assignment" .
-            " WHERE id = " . $ilDB->quote($id, "integer"));
-        $set = $ilDB->fetchAssoc($res);
+            " WHERE id = " . $this->db->quote($id, "integer"));
+        $set = $this->db->fetchAssoc($res);
         $this->setEvent($set["ep_exam_event_id"]);
         $this->setUser($set["cp_professional_id"]);
         $this->setInvitedOn(new ilDate($set["invited_on"], IL_CAL_DATE, ilTimeZone::UTC));
@@ -394,16 +392,15 @@ class adnAssignment extends adnDBBase
      */
     public function save()
     {
-        global $ilDB;
 
         // sequence
-        $this->setId($ilDB->nextId("adn_ep_assignment"));
+        $this->setId($this->db->nextId("adn_ep_assignment"));
         $id = $this->getId();
 
         $fields = $this->propertiesToFields();
         $fields["id"] = array("integer", $id);
             
-        $ilDB->insert("adn_ep_assignment", $fields);
+        $this->db->insert("adn_ep_assignment", $fields);
 
         parent::_save($id, "adn_ep_assignment");
 
@@ -417,7 +414,6 @@ class adnAssignment extends adnDBBase
      */
     public function update()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if (!$id) {
@@ -426,7 +422,7 @@ class adnAssignment extends adnDBBase
         
         $fields = $this->propertiesToFields();
 
-        $ilDB->update("adn_ep_assignment", $fields, array("id" => array("integer", $id)));
+        $this->db->update("adn_ep_assignment", $fields, array("id" => array("integer", $id)));
         parent::_update($id, "adn_ep_assignment");
 
         return true;
@@ -439,7 +435,6 @@ class adnAssignment extends adnDBBase
      */
     public function delete()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if ($id) {
@@ -457,11 +452,11 @@ class adnAssignment extends adnDBBase
                     }
                 }
 
-                $ilDB->manipulate("DELETE FROM adn_ep_cand_sheet" .
-                    " WHERE " . $ilDB->in("id", $sheets, "", "integer"));
+                $this->db->manipulate("DELETE FROM adn_ep_cand_sheet" .
+                    " WHERE " . $this->db->in("id", $sheets, "", "integer"));
             }
-            $ilDB->manipulate("DELETE FROM adn_ep_assignment" .
-                " WHERE id = " . $ilDB->quote($id, "integer"));
+            $this->db->manipulate("DELETE FROM adn_ep_assignment" .
+                " WHERE id = " . $this->db->quote($id, "integer"));
             $this->setId(null);
             return true;
         }
@@ -475,7 +470,8 @@ class adnAssignment extends adnDBBase
      */
     public static function getAllAssignments(array $a_filter = null, array $a_user_fields = null)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT a.id,ep_exam_event_id,cp_professional_id,invited_on,has_participated," .
             "score_mc,score_case,result_mc,result_case,notified_on,access_code, e.subject_area" .
@@ -557,7 +553,8 @@ class adnAssignment extends adnDBBase
      */
     public static function getAllCurrentUserAssignments($a_user_id, $a_archived = false)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         // get all current events
         include_once "Services/ADN/EP/classes/class.adnExaminationEvent.php";
@@ -587,7 +584,8 @@ class adnAssignment extends adnDBBase
      */
     public static function getAllInvitations($a_event_id)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query("SELECT cp_professional_id,invited_on" .
             " FROM adn_ep_assignment" .
@@ -610,7 +608,8 @@ class adnAssignment extends adnDBBase
      */
     public static function find($a_user_id, $a_event_id)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id FROM adn_ep_assignment" .
             " WHERE cp_professional_id = " . $ilDB->quote((int) $a_user_id, "integer") .
@@ -631,7 +630,8 @@ class adnAssignment extends adnDBBase
      */
     public static function getScoreText($a_score)
     {
-        global $lng;
+        global $DIC;
+        $lng = $DIC->database();
 
         $t = "";
         switch ($a_score) {
@@ -683,7 +683,6 @@ class adnAssignment extends adnDBBase
      */
     public static function prepareOnlineTest($a_event_id)
     {
-        global $ilDB;
 
         $assignments =
             adnAssignment::getAllAssignments(array("event_id" => $a_event_id));
@@ -703,7 +702,8 @@ class adnAssignment extends adnDBBase
      */
     protected static function createAccessCode($a_ass_id)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $cp_id = self::lookupCertifiedProfessional($a_ass_id);
         $code = substr(ilUtil::randomhash(), 0, 6);
@@ -725,7 +725,8 @@ class adnAssignment extends adnDBBase
      */
     public static function codeUsed($a_cp_id, $a_code)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query(
             "SELECT id" .
@@ -748,7 +749,8 @@ class adnAssignment extends adnDBBase
      */
     protected static function lookupProperty($a_id, $a_prop)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query("SELECT " . $a_prop .
             " FROM adn_ep_assignment" .
@@ -777,7 +779,8 @@ class adnAssignment extends adnDBBase
      */
     public static function getAssignmentIdForCodeAndCP($a_cp_id, $a_code)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query(
             "SELECT id" .

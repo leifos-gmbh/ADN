@@ -30,7 +30,6 @@ class adnCandidateTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd, $a_event_id, $a_notification_mode = false)
     {
-        global $ilCtrl, $lng;
 
         $this->event_id = $a_event_id;
 
@@ -44,12 +43,12 @@ class adnCandidateTableGUI extends ilTable2GUI
         $this->id = "adn_tbl_ecd";
 
         include_once("./Services/ADN/EP/classes/class.adnExaminationEvent.php");
-        $this->setTitle($lng->txt("adn_registered_candidates") . ": " .
+        $this->setTitle($this->lng->txt("adn_registered_candidates") . ": " .
             adnExaminationEvent::lookupName($this->event_id));
 
         if ($this->notification_mode) {
             if (adnPerm::check(adnPerm::EP, adnPerm::WRITE)) {
-                $this->addMultiCommand("createLetters", $lng->txt("adn_create_notification_letters"));
+                $this->addMultiCommand("createLetters", $this->lng->txt("adn_create_notification_letters"));
             }
             $this->addColumn("", "", 1);
         }
@@ -79,7 +78,7 @@ class adnCandidateTableGUI extends ilTable2GUI
         $this->setDefaultOrderField("last_name");
         $this->setDefaultOrderDirection("asc");
 
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.candidate_row.html", "Services/ADN/ES");
 
         // get data
@@ -126,19 +125,18 @@ class adnCandidateTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
 
         // actions...
-        $ilCtrl->setParameter($this->parent_obj, "ass_id", $a_set["id"]);
+        $this->ctrl->setParameter($this->parent_obj, "ass_id", $a_set["id"]);
 
         if (!$this->notification_mode) {
             if (adnPerm::check(adnPerm::ES, adnPerm::WRITE)) {
                 // edit scoring
                 $this->tpl->setCurrentBlock("action");
-                $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_edit_scoring"));
+                $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_edit_scoring"));
                 $this->tpl->setVariable(
                     "HREF_CMD",
-                    $ilCtrl->getLinkTarget($this->parent_obj, "editScoring")
+                    $this->ctrl->getLinkTarget($this->parent_obj, "editScoring")
                 );
                 $this->tpl->parseCurrentBlock();
             }
@@ -151,17 +149,17 @@ class adnCandidateTableGUI extends ilTable2GUI
                 if (adnReportScoreNotificationLetter::hasFile($this->event_id, $a_set['id'])) {
                     // download notification letter
                     $this->tpl->setCurrentBlock("action");
-                    $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_download_notification_letter"));
+                    $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_download_notification_letter"));
                     $this->tpl->setVariable(
                         "HREF_CMD",
-                        $ilCtrl->getLinkTarget($this->parent_obj, "downloadLetter")
+                        $this->ctrl->getLinkTarget($this->parent_obj, "downloadLetter")
                     );
                     $this->tpl->parseCurrentBlock();
                 }
             }
         }
 
-        $ilCtrl->setParameter($this->parent_obj, "ass_id", "");
+        $this->ctrl->setParameter($this->parent_obj, "ass_id", "");
         
         
         // name
@@ -183,7 +181,7 @@ class adnCandidateTableGUI extends ilTable2GUI
         // participated?
         $this->tpl->setVariable(
             "VAL_PARTICIPATED",
-            $a_set["has_participated"] ? $lng->txt("yes") : $lng->txt("no")
+            $a_set["has_participated"] ? $this->lng->txt("yes") : $this->lng->txt("no")
         );
 
         // score

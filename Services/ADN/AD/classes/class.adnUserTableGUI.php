@@ -23,15 +23,14 @@ class adnUserTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd)
     {
-        global $ilCtrl, $lng;
 
         parent::__construct($a_parent_obj, $a_parent_cmd);
 
         $this->setId("adn_tbl_adusr");
 
-        $this->setTitle($lng->txt("adn_ad_usr"));
+        $this->setTitle($this->lng->txt("adn_ad_usr"));
 
-        $this->addCommandButton("saveUsers", $lng->txt("save"));
+        $this->addCommandButton("saveUsers", $this->lng->txt("save"));
         
         $this->addColumn($this->lng->txt("adn_last_name"), "last_name");
         $this->addColumn($this->lng->txt("adn_first_name"), "first_name");
@@ -40,7 +39,7 @@ class adnUserTableGUI extends ilTable2GUI
         $this->setDefaultOrderField("last_name");
         $this->setDefaultOrderDirection("asc");
 
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.user_row.html", "Services/ADN/AD");
 
         $this->importData();
@@ -65,7 +64,6 @@ class adnUserTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
 
         // properties
         $this->tpl->setVariable("VAL_LAST_NAME", $a_set["last_name"]);

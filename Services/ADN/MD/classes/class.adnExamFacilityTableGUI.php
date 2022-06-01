@@ -26,7 +26,6 @@ class adnExamFacilityTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd, $a_wmo_id)
     {
-        global $ilCtrl, $lng;
 
         $this->wmo_id = $a_wmo_id;
 
@@ -35,10 +34,10 @@ class adnExamFacilityTableGUI extends ilTable2GUI
         $this->setId("adn_tbl_mdefc");
 
         include_once "Services/ADN/MD/classes/class.adnWMO.php";
-        $this->setTitle($lng->txt("adn_exam_facilities") . ": " . adnWMO::lookupName($this->wmo_id));
+        $this->setTitle($this->lng->txt("adn_exam_facilities") . ": " . adnWMO::lookupName($this->wmo_id));
         
         if (adnPerm::check(adnPerm::MD, adnPerm::WRITE)) {
-            $this->addMultiCommand("confirmDeleteExamFacilities", $lng->txt("delete"));
+            $this->addMultiCommand("confirmDeleteExamFacilities", $this->lng->txt("delete"));
             $this->addColumn("", "");
         }
         
@@ -52,7 +51,7 @@ class adnExamFacilityTableGUI extends ilTable2GUI
         $this->setDefaultOrderField("name");
         $this->setDefaultOrderDirection("asc");
 
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.exam_facility_row.html", "Services/ADN/MD");
 
         $this->importData();
@@ -77,23 +76,22 @@ class adnExamFacilityTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
 
         // actions...
 
         if (adnPerm::check(adnPerm::MD, adnPerm::WRITE)) {
-            $ilCtrl->setParameter($this->parent_obj, "ef_id", $a_set["id"]);
+            $this->ctrl->setParameter($this->parent_obj, "ef_id", $a_set["id"]);
 
             // edit
             $this->tpl->setCurrentBlock("action");
-            $this->tpl->setVariable("TXT_CMD", $lng->txt("edit"));
+            $this->tpl->setVariable("TXT_CMD", $this->lng->txt("edit"));
             $this->tpl->setVariable(
                 "HREF_CMD",
-                $ilCtrl->getLinkTarget($this->parent_obj, "editExamFacility")
+                $this->ctrl->getLinkTarget($this->parent_obj, "editExamFacility")
             );
             $this->tpl->parseCurrentBlock();
 
-            $ilCtrl->setParameter($this->parent_obj, "ef_id", "");
+            $this->ctrl->setParameter($this->parent_obj, "ef_id", "");
 
             // checkbox for deletion
             $this->tpl->setCurrentBlock("cbox");

@@ -18,18 +18,28 @@
  */
 class adnExaminationDefinitionGUI
 {
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilLanguage $lng;
+    protected ilCtrl $ctrl;
+
+    public function __construct()
+    {
+        global $DIC;
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->lng = $DIC->language();
+        $this->ctrl = $DIC->ctrl();
+    }
     /**
      * Execute command
      */
     public function executeCommand()
     {
-        global $ilCtrl, $lng, $tpl;
 
         // set page title
-        $tpl->setTitle($lng->txt("adn_ed"));
+        $this->tpl->setTitle($this->lng->txt("adn_ed"));
 
-        $next_class = $ilCtrl->getNextClass();
-        $cmd = $ilCtrl->getCmd();
+        $next_class = $this->ctrl->getNextClass();
+        $cmd = $this->ctrl->getCmd();
 
         // menu item triggered?
         if ($cmd == "processMenuItem") {
@@ -38,49 +48,49 @@ class adnExaminationDefinitionGUI
             switch ($_GET["menu_item"]) {
                 // list objectives
                 case adnMainMenuGUI::ED_OBS:
-                    $ilCtrl->setCmdClass("adnobjectivegui");
-                    $ilCtrl->setCmd("listMCObjectives");
+                    $this->ctrl->setCmdClass("adnobjectivegui");
+                    $this->ctrl->setCmd("listMCObjectives");
                     break;
 
                 // list (mc) questions
                 case adnMainMenuGUI::ED_EQS:
-                    $ilCtrl->setCmdClass("adnmcquestiongui");
-                    $ilCtrl->setCmd("listMCQuestions");
+                    $this->ctrl->setCmdClass("adnmcquestiongui");
+                    $this->ctrl->setCmd("listMCQuestions");
                     break;
 
                 // number of questions per objective
                 case adnMainMenuGUI::ED_NQS:
-                    $ilCtrl->setCmdClass("adnquestiontargetnumbersgui");
-                    $ilCtrl->setCmd("listTargets");
+                    $this->ctrl->setCmdClass("adnquestiontargetnumbersgui");
+                    $this->ctrl->setCmd("listTargets");
                     break;
 
                 // goods in transit
                 case adnMainMenuGUI::ED_GTS:
-                    $ilCtrl->setCmdClass("adngoodintransitgui");
-                    $ilCtrl->setCmd("listGasGoods");
+                    $this->ctrl->setCmdClass("adngoodintransitgui");
+                    $this->ctrl->setCmd("listGasGoods");
                     break;
 
                 // cases
                 case adnMainMenuGUI::ED_CAS:
-                    $ilCtrl->setCmdClass("adncasegui");
-                    $ilCtrl->setCmd("editCase");
+                    $this->ctrl->setCmdClass("adncasegui");
+                    $this->ctrl->setCmd("editCase");
                     break;
 
                 // licenses
                 case adnMainMenuGUI::ED_LIC:
-                    $ilCtrl->setCmdClass("adnlicensegui");
-                    $ilCtrl->setCmd("listLicenses");
+                    $this->ctrl->setCmdClass("adnlicensegui");
+                    $this->ctrl->setCmd("listLicenses");
                     break;
             }
-            $next_class = $ilCtrl->getNextClass();
+            $next_class = $this->ctrl->getNextClass();
         } elseif ($next_class == "") {
             // If no next class is responsible for handling the
             // command, set the default class
 
             // default: objectives overview
-            $ilCtrl->setCmd("");
-            $ilCtrl->setCmdClass("adnobjectivegui");
-            $next_class = $ilCtrl->getNextClass();
+            $this->ctrl->setCmd("");
+            $this->ctrl->setCmdClass("adnobjectivegui");
+            $next_class = $this->ctrl->getNextClass();
         }
 
         // forward command to next gui class in control flow
@@ -88,46 +98,46 @@ class adnExaminationDefinitionGUI
             case "adnobjectivegui":
                 include_once("./Services/ADN/ED/classes/class.adnObjectiveGUI.php");
                 $ob_gui = new adnObjectiveGUI();
-                $ilCtrl->forwardCommand($ob_gui);
+                $this->ctrl->forwardCommand($ob_gui);
                 break;
 
             case "adnmcquestiongui":
                 include_once("./Services/ADN/ED/classes/class.adnMCQuestionGUI.php");
                 $mc_gui = new adnMCQuestionGUI();
-                $ilCtrl->forwardCommand($mc_gui);
+                $this->ctrl->forwardCommand($mc_gui);
                 break;
 
             case "adncasequestiongui":
                 include_once("./Services/ADN/ED/classes/class.adnCaseQuestionGUI.php");
                 $case_gui = new adnCaseQuestionGUI();
-                $ilCtrl->forwardCommand($case_gui);
+                $this->ctrl->forwardCommand($case_gui);
                 break;
 
             case "adngoodintransitgui":
                 include_once("./Services/ADN/ED/classes/class.adnGoodInTransitGUI.php");
                 $good_gui = new adnGoodInTransitGUI();
-                $ilCtrl->forwardCommand($good_gui);
+                $this->ctrl->forwardCommand($good_gui);
                 break;
 
             case "adnquestiontargetnumbersgui":
                 include_once("./Services/ADN/ED/classes/class.adnQuestionTargetNumbersGUI.php");
                 $tgt_gui = new adnQuestionTargetNumbersGUI();
-                $ilCtrl->forwardCommand($tgt_gui);
+                $this->ctrl->forwardCommand($tgt_gui);
                 break;
 
             case "adncasegui":
                 include_once("./Services/ADN/ED/classes/class.adnCaseGUI.php");
                 $case_gui = new adnCaseGUI();
-                $ilCtrl->forwardCommand($case_gui);
+                $this->ctrl->forwardCommand($case_gui);
                 break;
 
             case "adnlicensegui":
                 include_once("./Services/ADN/ED/classes/class.adnLicenseGUI.php");
                 $lic_gui = new adnLicenseGUI();
-                $ilCtrl->forwardCommand($lic_gui);
+                $this->ctrl->forwardCommand($lic_gui);
                 break;
         }
 
-        adnBaseGUI::setHelpButton($ilCtrl->getCmdClass());
+        adnBaseGUI::setHelpButton($this->ctrl->getCmdClass());
     }
 }

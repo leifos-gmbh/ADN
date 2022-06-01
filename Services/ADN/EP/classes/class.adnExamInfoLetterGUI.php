@@ -18,15 +18,23 @@ class adnExamInfoLetterGUI
     // current letter object
     protected ?adnExamInfoLetter $letter = null;
     
-    /**
-     * Constructor
-     */
+    protected ilCtrl $ctrl;
+    protected ilLanguage $lng;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilToolbarGUI $toolbar;
+    protected ilTabsGUI $tabs;
+
     public function __construct()
     {
-        global $ilCtrl;
+        global $DIC;
+        $this->ctrl = $DIC->ctrl();
+        $this->lng = $DIC->language();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->toolbar = $DIC->toolbar();
+        $this->tabs = $DIC->tabs();
 
         // save letter ID through requests
-        $ilCtrl->saveParameter($this, array("ilt_id"));
+        $this->ctrl->saveParameter($this, array("ilt_id"));
         
         $this->readLetter();
     }
@@ -36,18 +44,17 @@ class adnExamInfoLetterGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl, $lng, $tpl;
 
-        $tpl->setTitle($lng->txt("adn_ep") . " - " . $lng->txt("adn_ep_ils"));
+        $this->tpl->setTitle($this->lng->txt("adn_ep") . " - " . $this->lng->txt("adn_ep_ils"));
         
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
         
         // forward command to next gui class in control flow
         switch ($next_class) {
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("listLetters");
+                $cmd = $this->ctrl->getCmd("listLetters");
 
                 switch ($cmd) {
                     // commands that need read permission
@@ -88,20 +95,19 @@ class adnExamInfoLetterGUI
      */
     protected function listLetters()
     {
-        global $tpl, $lng, $ilCtrl, $ilToolbar;
         
         if (adnPerm::check(adnPerm::EP, adnPerm::WRITE)) {
             include_once("./Services/Form/classes/class.ilFileInputGUI.php");
-            $fi = new ilFileInputGUI($lng->txt("file"), "file");
-            $ilToolbar->addInputItem($fi, true);
-            $ilToolbar->setFormAction($ilCtrl->getFormAction($this, "saveLetter"), true);
-            $ilToolbar->addFormButton($lng->txt("adn_add_information_letter_application"), "saveLetter");
+            $fi = new ilFileInputGUI($this->lng->txt("file"), "file");
+            $this->toolbar->addInputItem($fi, true);
+            $this->toolbar->setFormAction($this->ctrl->getFormAction($this, "saveLetter"), true);
+            $this->toolbar->addFormButton($this->lng->txt("adn_add_information_letter_application"), "saveLetter");
         }
 
         include_once("./Services/ADN/EP/classes/class.adnExamInfoLetterTableGUI.php");
         $table = new adnExamInfoLetterTableGUI($this, "listLetters");
 
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
     
     /**
@@ -109,7 +115,6 @@ class adnExamInfoLetterGUI
      */
     protected function saveLetter()
     {
-        global $tpl, $lng, $ilCtrl;
 
         // check input
         if ($_FILES["file"]["tmp_name"]) {
@@ -121,13 +126,13 @@ class adnExamInfoLetterGUI
             
             if ($letter->save()) {
                 // show success message and return to list
-                ilUtil::sendSuccess($lng->txt("adn_information_letter_created"), true);
-                $ilCtrl->redirect($this, "listLetters");
+                ilUtil::sendSuccess($this->lng->txt("adn_information_letter_created"), true);
+                $this->ctrl->redirect($this, "listLetters");
             }
         }
 
         // input not valid: show form again
-        ilUtil::sendFailure($lng->txt("adn_missing_file"));
+        ilUtil::sendFailure($this->lng->txt("adn_missing_file"));
         $this->listLetters();
     }
     
@@ -136,25 +141,24 @@ class adnExamInfoLetterGUI
      */
     protected function confirmLettersDeletion()
     {
-        global $ilCtrl, $tpl, $lng, $ilTabs;
         
         // check whether at least one item has been seleced
         if (!is_array($_POST["letter_id"]) || count($_POST["letter_id"]) == 0) {
-            ilUtil::sendFailure($lng->txt("no_checkbox"), true);
-            $ilCtrl->redirect($this, "listLetters");
+            ilUtil::sendFailure($this->lng->txt("no_checkbox"), true);
+            $this->ctrl->redirect($this, "listLetters");
         } else {
-            $ilTabs->setBackTarget(
-                $lng->txt("back"),
-                $ilCtrl->getLinkTarget($this, "listLetters")
+            $this->tabs->setBackTarget(
+                $this->lng->txt("back"),
+                $this->ctrl->getLinkTarget($this, "listLetters")
             );
             
             // display confirmation message
             include_once("./Services/Utilities/classes/class.ilConfirmationGUI.php");
             $cgui = new ilConfirmationGUI();
-            $cgui->setFormAction($ilCtrl->getFormAction($this));
-            $cgui->setHeaderText($lng->txt("adn_sure_delete_information_letters"));
-            $cgui->setCancel($lng->txt("cancel"), "listLetters");
-            $cgui->setConfirm($lng->txt("delete"), "deleteLetters");
+            $cgui->setFormAction($this->ctrl->getFormAction($this));
+            $cgui->setHeaderText($this->lng->txt("adn_sure_delete_information_letters"));
+            $cgui->setCancel($this->lng->txt("cancel"), "listLetters");
+            $cgui->setConfirm($this->lng->txt("delete"), "deleteLetters");
 
             // list objects that should be deleted
             include_once("./Services/ADN/EP/classes/class.adnExamInfoLetter.php");
@@ -162,7 +166,7 @@ class adnExamInfoLetterGUI
                 $cgui->addItem("letter_id[]", $i, adnExamInfoLetter::lookupName($i));
             }
             
-            $tpl->setContent($cgui->getHTML());
+            $this->tpl->setContent($cgui->getHTML());
         }
     }
     
@@ -171,7 +175,6 @@ class adnExamInfoLetterGUI
      */
     protected function deleteLetters()
     {
-        global $ilCtrl, $lng;
         
         include_once("./Services/ADN/EP/classes/class.adnExamInfoLetter.php");
         
@@ -181,8 +184,8 @@ class adnExamInfoLetterGUI
                 $letter->delete();
             }
         }
-        ilUtil::sendSuccess($lng->txt("adn_information_letter_deleted"), true);
-        $ilCtrl->redirect($this, "listLetters");
+        ilUtil::sendSuccess($this->lng->txt("adn_information_letter_deleted"), true);
+        $this->ctrl->redirect($this, "listLetters");
     }
 
     /**
@@ -190,14 +193,13 @@ class adnExamInfoLetterGUI
      */
     protected function downloadFile()
     {
-        global $ilCtrl, $lng;
 
         $file = $this->letter->getFilePath() . $this->letter->getId();
         if (file_exists($file)) {
             ilUtil::deliverFile($file, $this->letter->getFileName());
         } else {
-            ilUtil::sendFailure($lng->txt("adn_file_corrupt"), true);
-            $ilCtrl->redirect($this, "listLetters");
+            ilUtil::sendFailure($this->lng->txt("adn_file_corrupt"), true);
+            $this->ctrl->redirect($this, "listLetters");
         }
     }
 }

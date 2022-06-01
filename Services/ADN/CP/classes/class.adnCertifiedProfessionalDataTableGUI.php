@@ -33,13 +33,12 @@ class adnCertifiedProfessionalDataTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd)
     {
-        global $ilCtrl, $lng;
 
         parent::__construct($a_parent_obj, $a_parent_cmd);
 
         $this->setId("adn_tbl_ctcpr");
 
-        $this->setTitle($lng->txt("adn_certified_professionals_data"));
+        $this->setTitle($this->lng->txt("adn_certified_professionals_data"));
 
         $this->addColumn($this->lng->txt("adn_last_name"), "last_name");
         $this->addColumn($this->lng->txt("adn_first_name"), "first_name");
@@ -58,7 +57,7 @@ class adnCertifiedProfessionalDataTableGUI extends ilTable2GUI
 
         $this->initFilter();
 
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.professional_row.html", "Services/ADN/CP");
 
         $this->importData();
@@ -97,13 +96,12 @@ class adnCertifiedProfessionalDataTableGUI extends ilTable2GUI
      */
     public function initFilter()
     {
-        global $lng;
 
         $name = $this->addFilterItemByMetaType(
             "name",
             self::FILTER_TEXT,
             false,
-            $lng->txt("adn_last_name")
+            $this->lng->txt("adn_last_name")
         );
         $name->readFromSession();
         $this->filter["last_name"] = $name->getValue();
@@ -112,9 +110,9 @@ class adnCertifiedProfessionalDataTableGUI extends ilTable2GUI
             "registered_by",
             self::FILTER_SELECT,
             false,
-            $lng->txt("adn_registered_by")
+            $this->lng->txt("adn_registered_by")
         );
-        $wsd->setOptions(array(0 => $lng->txt("adn_filter_all")) + $this->map["registered_by"]);
+        $wsd->setOptions(array(0 => $this->lng->txt("adn_filter_all")) + $this->map["registered_by"]);
         $wsd->readFromSession();
         $this->filter["registered_by"] = $wsd->getValue();
     }
@@ -126,23 +124,22 @@ class adnCertifiedProfessionalDataTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
 
         // actions...
 
         if (adnPerm::check(adnPerm::EP, adnPerm::WRITE)) {
-            $ilCtrl->setParameter($this->parent_obj, "ct_cpr", $a_set["id"]);
+            $this->ctrl->setParameter($this->parent_obj, "ct_cpr", $a_set["id"]);
 
             // edit
             $this->tpl->setCurrentBlock("action");
-            $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_edit_professional"));
+            $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_edit_professional"));
             $this->tpl->setVariable(
                 "HREF_CMD",
-                $ilCtrl->getLinkTarget($this->parent_obj, "editProfessional")
+                $this->ctrl->getLinkTarget($this->parent_obj, "editProfessional")
             );
             $this->tpl->parseCurrentBlock();
 
-            $ilCtrl->setParameter($this->parent_obj, "ct_cpr", "");
+            $this->ctrl->setParameter($this->parent_obj, "ct_cpr", "");
         }
 
         // properties

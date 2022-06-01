@@ -19,16 +19,29 @@ include_once("./Services/ADN/EC/classes/class.adnTest.php");
  */
 class adnELearningGUI
 {
+
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilCtrl $ctrl;
+    protected ilLanguage $lng;
+    protected ilToolbarGUI $toolbar;
+
+    public function __construct()
+    {
+        global $DIC;
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->ctrl = $DIC->ctrl();
+        $this->lng = $DIC->language();
+        $this->toolbar = $DIC->toolbar();
+    }
     /**
      * Execute command
      */
     public function executeCommand()
     {
-        global $ilCtrl, $lng, $tpl;
 
-        $tpl->setTitle($lng->txt("adn_elearning"));
+        $this->tpl->setTitle($this->lng->txt("adn_elearning"));
 
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
 
         // forward command to next gui class in control flow
         switch ($next_class) {
@@ -38,13 +51,13 @@ class adnELearningGUI
                     adnTestGUI::MODE_ELEARNING,
                     $_SESSION["sheet_questions"]
                 );
-                $ilCtrl->forwardCommand($test_gui);
+                $this->ctrl->forwardCommand($test_gui);
                 break;
 
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("showFrontPage");
+                $cmd = $this->ctrl->getCmd("showFrontPage");
 
                 switch ($cmd) {
                     // commands that need read permission
@@ -66,7 +79,6 @@ class adnELearningGUI
      */
     public function showFrontPage()
     {
-        global $tpl, $lng, $ilCtrl;
 
         $etpl = new ilTemplate(
             "tpl.front_page.html",
@@ -80,13 +92,13 @@ class adnELearningGUI
         foreach (adnSubjectArea::getAllAreas() as $k => $txt) {
             $etpl->setCurrentBlock("st_row");
             $etpl->setVariable("TXT_SUBJECT_AREA", $txt);
-            $etpl->setVariable("TXT_START_TEST", $lng->txt("adn_start_test"));
-            $ilCtrl->setParameter($this, "sa_id", $k);
+            $etpl->setVariable("TXT_START_TEST", $this->lng->txt("adn_start_test"));
+            $this->ctrl->setParameter($this, "sa_id", $k);
             $etpl->setVariable(
                 "HREF_START_TEST",
-                $ilCtrl->getLinkTarget($this, "startTest")
+                $this->ctrl->getLinkTarget($this, "startTest")
             );
-            $ilCtrl->setParameter($this, "sa_id", "");
+            $this->ctrl->setParameter($this, "sa_id", "");
             $etpl->parseCurrentBlock();
         }
 
@@ -96,19 +108,19 @@ class adnELearningGUI
         foreach ($letters as $k => $f) {
             $etpl->setCurrentBlock("il_row");
             $etpl->setVariable("TXT_INFO_LETTER", $f["file"]);
-            $etpl->setVariable("TXT_DOWNLOAD", $lng->txt("download"));
-            $ilCtrl->setParameter($this, "il_id", $f["id"]);
+            $etpl->setVariable("TXT_DOWNLOAD", $this->lng->txt("download"));
+            $this->ctrl->setParameter($this, "il_id", $f["id"]);
             $etpl->setVariable(
                 "HREF_DOWNLOAD",
-                $ilCtrl->getLinkTarget($this, "downloadInfoLetter")
+                $this->ctrl->getLinkTarget($this, "downloadInfoLetter")
             );
-            $ilCtrl->setParameter($this, "il_id", "");
+            $this->ctrl->setParameter($this, "il_id", "");
             $etpl->parseCurrentBlock();
         }
 
-        $etpl->setVariable("TXT_SELF_TEST", $lng->txt("adn_self_test"));
-        $etpl->setVariable("TXT_INFO_SHEETS", $lng->txt("adn_information_letters"));
-        $tpl->setContent($etpl->get());
+        $etpl->setVariable("TXT_SELF_TEST", $this->lng->txt("adn_self_test"));
+        $etpl->setVariable("TXT_INFO_SHEETS", $this->lng->txt("adn_information_letters"));
+        $this->tpl->setContent($etpl->get());
     }
 
     /**
@@ -116,7 +128,6 @@ class adnELearningGUI
      */
     public function downloadInfoLetter()
     {
-        global $lng, $ilCtrl;
 
         include_once("./Services/ADN/EP/classes/class.adnExamInfoLetter.php");
         $letter = new adnExamInfoLetter((int) $_GET["il_id"]);
@@ -124,8 +135,8 @@ class adnELearningGUI
         if (file_exists($file)) {
             ilUtil::deliverFile($file, $letter->getFileName());
         } else {
-            ilUtil::sendFailure($lng->txt("adn_file_corrupt"), true);
-            $ilCtrl->redirect($this, "showFrontPage");
+            ilUtil::sendFailure($this->lng->txt("adn_file_corrupt"), true);
+            $this->ctrl->redirect($this, "showFrontPage");
         }
     }
 
@@ -134,13 +145,12 @@ class adnELearningGUI
      */
     public function startTest()
     {
-        global $ilCtrl;
 
         include_once "./Services/ADN/ED/classes/class.adnQuestionTargetNumbers.php";
         $sheet_questions = adnQuestionTargetNumbers::generateMCSheet($_GET["sa_id"]);
         $_SESSION["sheet_questions"] = $sheet_questions;
         $_SESSION["given_answer"] = array();
-        $ilCtrl->redirectByClass("adntestgui", "");
+        $this->ctrl->redirectByClass("adntestgui", "");
     }
 
     /**
@@ -148,15 +158,14 @@ class adnELearningGUI
      */
     public function showResult()
     {
-        global $tpl, $lng, $ilToolbar, $ilCtrl;
 
-        $ilToolbar->addButton(
-            $lng->txt("adn_back_to_front_page"),
-            $ilCtrl->getLinkTarget($this, "showFrontPage")
+        $this->toolbar->addButton(
+            $this->lng->txt("adn_back_to_front_page"),
+            $this->ctrl->getLinkTarget($this, "showFrontPage")
         );
-        $ilToolbar->addButton(
-            $lng->txt("adn_download_solutions"),
-            $ilCtrl->getLinkTarget($this, "downloadSolutions")
+        $this->toolbar->addButton(
+            $this->lng->txt("adn_download_solutions"),
+            $this->ctrl->getLinkTarget($this, "downloadSolutions")
         );
 
         // show score
@@ -169,8 +178,8 @@ class adnELearningGUI
                 $score++;
             }
         }
-        ilUtil::sendInfo($lng->txt("adn_your_score") . ": " . $score . " " .
-            $lng->txt("adn_score_points"));
+        ilUtil::sendInfo($this->lng->txt("adn_your_score") . ": " . $score . " " .
+            $this->lng->txt("adn_score_points"));
 
         include_once("./Services/ADN/EL/classes/class.adnELResultTableGUI.php");
         $res_table = new adnELResultTableGUI(
@@ -180,7 +189,7 @@ class adnELearningGUI
             $_SESSION["given_answer"]
         );
 
-        $tpl->setContent($res_table->getHTML());
+        $this->tpl->setContent($res_table->getHTML());
     }
 
     /**
@@ -188,7 +197,6 @@ class adnELearningGUI
      */
     public function downloadSolutions()
     {
-        global $tpl, $ilCtrl;
 
         include_once './Services/ADN/Report/exceptions/class.adnReportException.php';
         try {
@@ -202,7 +210,7 @@ class adnELearningGUI
             );
         } catch (adnReportException $e) {
             ilUtil::sendFailure($e->getMessage(), true);
-            $ilCtrl->redirect($this, 'listEvents');
+            $this->ctrl->redirect($this, 'listEvents');
         }
     }
 }

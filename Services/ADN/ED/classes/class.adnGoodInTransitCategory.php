@@ -25,7 +25,6 @@ class adnGoodInTransitCategory extends adnDBBase
      */
     public function __construct($a_id = null)
     {
-        global $ilCtrl;
 
         if ($a_id) {
             $this->setId($a_id);
@@ -114,17 +113,16 @@ class adnGoodInTransitCategory extends adnDBBase
      */
     public function read()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if (!$id) {
             return;
         }
 
-        $res = $ilDB->query("SELECT name,type" .
+        $res = $this->db->query("SELECT name,type" .
             " FROM adn_ed_good_category" .
-            " WHERE id = " . $ilDB->quote($this->getId(), "integer"));
-        $set = $ilDB->fetchAssoc($res);
+            " WHERE id = " . $this->db->quote($this->getId(), "integer"));
+        $set = $this->db->fetchAssoc($res);
         $this->setName($set["name"]);
         $this->setType($set["type"]);
 
@@ -140,7 +138,7 @@ class adnGoodInTransitCategory extends adnDBBase
     {
         $fields = array("name" => array("text", $this->getName()),
             "type" => array("integer", $this->getType()));
-            
+
         return $fields;
     }
 
@@ -151,18 +149,17 @@ class adnGoodInTransitCategory extends adnDBBase
      */
     public function save()
     {
-        global $ilDB;
 
-        $this->setId($ilDB->nextId("adn_ed_good_category"));
+        $this->setId($this->db->nextId("adn_ed_good_category"));
         $id = $this->getId();
 
         $fields = $this->propertiesToFields();
         $fields["id"] = array("integer", $id);
-            
-        $ilDB->insert("adn_ed_good_category", $fields);
+
+        $this->db->insert("adn_ed_good_category", $fields);
 
         parent::_save($id, "adn_ed_good_category");
-        
+
         return $id;
     }
 
@@ -173,16 +170,15 @@ class adnGoodInTransitCategory extends adnDBBase
      */
     public function update()
     {
-        global $ilDB;
-        
+
         $id = $this->getId();
         if (!$id) {
             return;
         }
 
         $fields = $this->propertiesToFields();
-        
-        $ilDB->update("adn_ed_good_category", $fields, array("id" => array("integer", $id)));
+
+        $this->db->update("adn_ed_good_category", $fields, array("id" => array("integer", $id)));
 
         parent::_update($id, "adn_ed_good_category");
 
@@ -196,7 +192,6 @@ class adnGoodInTransitCategory extends adnDBBase
      */
     public function delete()
     {
-        global $ilDB;
 
         $id = $this->getId();
         if ($id) {
@@ -205,9 +200,9 @@ class adnGoodInTransitCategory extends adnDBBase
             if (sizeof(adnGoodInTransit::getGoodsSelect(false, $id))) {
                 return false;
             }
-            
-            $ilDB->manipulate("DELETE FROM adn_ed_good_category" .
-                " WHERE id = " . $ilDB->quote($id, "integer"));
+
+            $this->db->manipulate("DELETE FROM adn_ed_good_category" .
+                " WHERE id = " . $this->db->quote($id, "integer"));
             $this->setId(null);
             return true;
         }
@@ -222,7 +217,8 @@ class adnGoodInTransitCategory extends adnDBBase
      */
     public static function getAllCategories($a_type = false, $a_with_archived = false)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id,name,type" .
             " FROM adn_ed_good_category";
@@ -237,7 +233,7 @@ class adnGoodInTransitCategory extends adnDBBase
         if (sizeof($where)) {
             $sql .= " WHERE " . implode(" AND ", $where);
         }
-        
+
         $res = $ilDB->query($sql);
         $all = array();
         while ($row = $ilDB->fetchAssoc($res)) {
@@ -255,7 +251,8 @@ class adnGoodInTransitCategory extends adnDBBase
      */
     public static function getCategoriesSelect($a_type = false)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $sql = "SELECT id,name" .
             " FROM adn_ed_good_category" .
@@ -264,7 +261,7 @@ class adnGoodInTransitCategory extends adnDBBase
         if ($a_type && self::isValidType($a_type)) {
             $sql .= " AND type = " . $ilDB->quote($a_type, "integer");
         }
-        
+
         $res = $ilDB->query($sql);
         $all = array();
         while ($row = $ilDB->fetchAssoc($res)) {
@@ -283,7 +280,8 @@ class adnGoodInTransitCategory extends adnDBBase
      */
     protected static function lookupProperty($a_id, $a_prop)
     {
-        global $ilDB;
+        global $DIC;
+        $ilDB = $DIC->database();
 
         $set = $ilDB->query("SELECT " . $a_prop .
             " FROM adn_ed_good_category" .

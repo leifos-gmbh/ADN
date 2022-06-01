@@ -26,16 +26,24 @@ class adnPreparationCandidateGUI
     // cr-008 start
     protected string $mode = '';
     // cr-008 end
-    
-    /**
-     * Constructor
-     */
+
+    protected ilCtrl $ctrl;
+    protected ilLanguage $lng;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilToolbarGUI $toolbar;
+    protected ilTabsGUI $tabs;
+
     public function __construct()
     {
-        global $ilCtrl;
+        global $DIC;
+        $this->ctrl = $DIC->ctrl();
+        $this->lng = $DIC->language();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->toolbar = $DIC->toolbar();
+        $this->tabs = $DIC->tabs();
 
         // save candidate ID through requests, cr-008 added mode
-        $ilCtrl->saveParameter($this, array("cd_id", "mode"));
+        $this->ctrl->saveParameter($this, array("cd_id", "mode"));
 
         // cr-008 start
         $this->mode = $_GET["mode"];
@@ -49,24 +57,23 @@ class adnPreparationCandidateGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl, $lng, $tpl;
 
         // cr-008 start
         if ($this->mode == self::MODE_GENERAL) {
-            $tpl->setTitle($lng->txt("adn_ad_add_person"));
+            $this->tpl->setTitle($this->lng->txt("adn_ad_add_person"));
         } else {
-            $tpl->setTitle($lng->txt("adn_ep") . " - " . $lng->txt("adn_ep_ecs"));
+            $this->tpl->setTitle($this->lng->txt("adn_ep") . " - " . $this->lng->txt("adn_ep_ecs"));
         }
         // cr-008 end
         
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
 
         // forward command to next gui class in control flow
         switch ($next_class) {
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("listCandidates");
+                $cmd = $this->ctrl->getCmd("listCandidates");
                 
                 switch ($cmd) {
                     // commands that need read permission
@@ -139,7 +146,6 @@ class adnPreparationCandidateGUI
      */
     protected function listCandidates()
     {
-        global $tpl, $ilToolbar, $lng, $ilCtrl;
 
         // cr-008 start
         if ($this->mode == self::MODE_GENERAL) {
@@ -149,24 +155,24 @@ class adnPreparationCandidateGUI
 
         // professional / prospects toggles
         include_once "Services/Form/classes/class.ilPropertyFormGUI.php";
-        $checkbox = new ilCheckboxInputGUI($lng->txt("adn_show_certified_professionals"), "ct_cpr");
+        $checkbox = new ilCheckboxInputGUI($this->lng->txt("adn_show_certified_professionals"), "ct_cpr");
         if ($_SESSION["adn_cand_cpr"]) {
             $checkbox->setChecked(true);
         }
-        $ilToolbar->addInputItem($checkbox, true);
-        $checkbox = new ilCheckboxInputGUI($lng->txt("adn_show_prospects"), "ct_pro");
+        $this->toolbar->addInputItem($checkbox, true);
+        $checkbox = new ilCheckboxInputGUI($this->lng->txt("adn_show_prospects"), "ct_pro");
         if ($_SESSION["adn_cand_pro"]) {
             $checkbox->setChecked(true);
         }
-        $ilToolbar->addInputItem($checkbox, true);
-        $ilToolbar->addFormButton($lng->txt("adn_update_view"), "listCandidatesToggle");
-        $ilToolbar->setFormAction($ilCtrl->getFormAction($this), "listCandidatesToggle");
-        $ilToolbar->addSeparator();
+        $this->toolbar->addInputItem($checkbox, true);
+        $this->toolbar->addFormButton($this->lng->txt("adn_update_view"), "listCandidatesToggle");
+        $this->toolbar->setFormAction($this->ctrl->getFormAction($this), "listCandidatesToggle");
+        $this->toolbar->addSeparator();
 
         if (adnPerm::check(adnPerm::EP, adnPerm::WRITE)) {
-            $ilToolbar->addButton(
-                $lng->txt("adn_add_candidate"),
-                $ilCtrl->getLinkTarget($this, "createCandidate")
+            $this->toolbar->addButton(
+                $this->lng->txt("adn_add_candidate"),
+                $this->ctrl->getLinkTarget($this, "createCandidate")
             );
         }
 
@@ -180,7 +186,7 @@ class adnPreparationCandidateGUI
         );
         
         // output table
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -216,14 +222,13 @@ class adnPreparationCandidateGUI
      */
     protected function createCandidate(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $lng, $ilTabs, $ilCtrl;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listCandidates"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listCandidates"));
 
         if (!$a_form) {
             $a_form = $this->initCandidateForm("create");
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
     
     /**
@@ -233,14 +238,13 @@ class adnPreparationCandidateGUI
      */
     protected function editCandidate(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $lng, $ilTabs, $ilCtrl;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listCandidates"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listCandidates"));
 
         if (!$a_form) {
             $a_form = $this->initCandidateForm("edit");
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
 
     /**
@@ -251,29 +255,28 @@ class adnPreparationCandidateGUI
      */
     protected function initCandidateForm($a_mode = "create")
     {
-        global  $lng, $ilCtrl;
 
         include_once "Services/Form/classes/class.ilPropertyFormGUI.php";
         $form = new ilPropertyFormGUI();
-        $form->setFormAction($ilCtrl->getFormAction($this, "listCandidates"));
+        $form->setFormAction($this->ctrl->getFormAction($this, "listCandidates"));
 
-        $salutation = new ilSelectInputGUI($lng->txt("adn_salutation"), "salutation");
-        $salutation->setOptions(array("m" => $lng->txt("salutation_m"),
-                "f" => $lng->txt("salutation_f")));
+        $salutation = new ilSelectInputGUI($this->lng->txt("adn_salutation"), "salutation");
+        $salutation->setOptions(array("m" => $this->lng->txt("salutation_m"),
+                "f" => $this->lng->txt("salutation_f")));
         $salutation->setRequired(true);
         $form->addItem($salutation);
 
-        $name = new ilTextInputGUI($lng->txt("adn_last_name"), "last_name");
+        $name = new ilTextInputGUI($this->lng->txt("adn_last_name"), "last_name");
         $name->setMaxLength(50);
         $name->setRequired(true);
         $form->addItem($name);
 
-        $first_name = new ilTextInputGUI($lng->txt("adn_first_name"), "first_name");
+        $first_name = new ilTextInputGUI($this->lng->txt("adn_first_name"), "first_name");
         $first_name->setMaxLength(50);
         $first_name->setRequired(true);
         $form->addItem($first_name);
 
-        $birthdate = new ilDateTimeInputGUI($lng->txt("adn_birthdate"), "birthdate");
+        $birthdate = new ilDateTimeInputGUI($this->lng->txt("adn_birthdate"), "birthdate");
         $birthdate->setRequired(true);
         $birthdate->setStartYear(date("Y") - 100);
         $form->addItem($birthdate);
@@ -292,34 +295,34 @@ class adnPreparationCandidateGUI
         }
         $countries = adnCountry::getCountriesSelect($countries);
         
-        $citizenship = new ilSelectInputGUI($lng->txt("adn_citizenship"), "citizenship");
+        $citizenship = new ilSelectInputGUI($this->lng->txt("adn_citizenship"), "citizenship");
         $citizenship->setOptions($countries);
         $citizenship->setRequired(true);
         $form->addItem($citizenship);
 
-        $type = new ilSelectInputGUI($lng->txt("adn_type_of_examination"), "type");
+        $type = new ilSelectInputGUI($this->lng->txt("adn_type_of_examination"), "type");
         include_once "Services/ADN/ED/classes/class.adnSubjectArea.php";
-        $options = array("" => $lng->txt("adn_filter_none")) + adnSubjectArea::getAllAreas();
+        $options = array("" => $this->lng->txt("adn_filter_none")) + adnSubjectArea::getAllAreas();
         $type->setOptions($options);
         $form->addItem($type);
 
-        $registered = new ilCheckboxInputGUI($lng->txt("adn_applied_for_examination"), "applied");
+        $registered = new ilCheckboxInputGUI($this->lng->txt("adn_applied_for_examination"), "applied");
         $form->addItem($registered);
 
         if ($this->mode != self::MODE_GENERAL) {
-            $foreign = new ilCheckboxInputGUI($lng->txt("adn_foreign_certificate"), "foreign");
+            $foreign = new ilCheckboxInputGUI($this->lng->txt("adn_foreign_certificate"), "foreign");
             $form->addItem($foreign);
         }
 
-        $foreign_cert_handed_id = new ilCheckboxInputGUI($lng->txt("adn_foreign_cert_handed_in"), "foreign_cert_handed_in");
+        $foreign_cert_handed_id = new ilCheckboxInputGUI($this->lng->txt("adn_foreign_cert_handed_in"), "foreign_cert_handed_in");
         $form->addItem($foreign_cert_handed_id);
 
-        $phone = new ilTextInputGUI($lng->txt("adn_phone"), "phone");
+        $phone = new ilTextInputGUI($this->lng->txt("adn_phone"), "phone");
         $phone->setMaxLength(30);
         $phone->setSize(30);
         $form->addItem($phone);
 
-        $email = new ilEmailInputGUI($lng->txt("adn_email"), "email");
+        $email = new ilEmailInputGUI($this->lng->txt("adn_email"), "email");
         $form->addItem($email);
 
         // foreign key
@@ -333,20 +336,20 @@ class adnPreparationCandidateGUI
         }
         $wmos = adnWMO::getWMOsSelect($wmos);
 
-        $registered_by = new ilSelectInputGUI($lng->txt("adn_registered_by"), "registered_by");
+        $registered_by = new ilSelectInputGUI($this->lng->txt("adn_registered_by"), "registered_by");
         $registered_by->setOptions($wmos);
         $registered_by->setRequired(true);
         $form->addItem($registered_by);
 
-        $comment = new ilTextAreaInputGUI($lng->txt("adn_comment"), "comment");
+        $comment = new ilTextAreaInputGUI($this->lng->txt("adn_comment"), "comment");
         $comment->setCols(80);
         $comment->setRows(5);
         $form->addItem($comment);
 
-        $holdback = new ilCheckboxInputGUI($lng->txt("adn_holdback"), "holdback");
+        $holdback = new ilCheckboxInputGUI($this->lng->txt("adn_holdback"), "holdback");
         $form->addItem($holdback);
 
-        $holdback_by = new ilSelectInputGUI($lng->txt("adn_holdback_by"), "holdback_by");
+        $holdback_by = new ilSelectInputGUI($this->lng->txt("adn_holdback_by"), "holdback_by");
         $holdback_by->setOptions($wmos);
         $holdback->addSubItem($holdback_by);
 
@@ -354,37 +357,37 @@ class adnPreparationCandidateGUI
         $current_wmo = adnUser::lookupWmoId();
         $holdback_by->setValue($current_wmo);
 
-        $holdback_until = new ilDateTimeInputGUI($lng->txt("adn_holdback_until"), "holdback_until");
+        $holdback_until = new ilDateTimeInputGUI($this->lng->txt("adn_holdback_until"), "holdback_until");
         $holdback->addSubItem($holdback_until);
 
 
 
         $header = new ilFormSectionHeaderGUI();
-        $header->setTitle($lng->txt("adn_permanent_address"));
+        $header->setTitle($this->lng->txt("adn_permanent_address"));
         $form->addItem($header);
 
-        $country = new ilSelectInputGUI($lng->txt("adn_country"), "country");
+        $country = new ilSelectInputGUI($this->lng->txt("adn_country"), "country");
         $country->setOptions($countries);
         $country->setRequired(true);
         $form->addItem($country);
 
-        $zip = new ilTextInputGUI($lng->txt("adn_zip"), "zip");
+        $zip = new ilTextInputGUI($this->lng->txt("adn_zip"), "zip");
         $zip->setMaxLength(10);
         $zip->setSize(10);
         $zip->setRequired(true);
         $form->addItem($zip);
 
-        $city = new ilTextInputGUI($lng->txt("adn_city"), "city");
+        $city = new ilTextInputGUI($this->lng->txt("adn_city"), "city");
         $city->setMaxLength(50);
         $city->setRequired(true);
         $form->addItem($city);
 
-        $street = new ilTextInputGUI($lng->txt("adn_street"), "street");
+        $street = new ilTextInputGUI($this->lng->txt("adn_street"), "street");
         $street->setMaxLength(50);
         $street->setRequired(true);
         $form->addItem($street);
 
-        $hno = new ilTextInputGUI($lng->txt("adn_house_number"), "hno");
+        $hno = new ilTextInputGUI($this->lng->txt("adn_house_number"), "hno");
         $hno->setMaxLength(10);
         $hno->setSize(10);
         $hno->setRequired(true);
@@ -393,46 +396,46 @@ class adnPreparationCandidateGUI
 
 
         $header = new ilFormSectionHeaderGUI();
-        $header->setTitle($lng->txt("adn_shipping_address"));
+        $header->setTitle($this->lng->txt("adn_shipping_address"));
         $form->addItem($header);
 
-        $ssalutation = new ilSelectInputGUI($lng->txt("adn_salutation"), "ssalutation");
-        $ssalutation->setOptions(array("m" => $lng->txt("salutation_m"),
-            "f" => $lng->txt("salutation_f")));
+        $ssalutation = new ilSelectInputGUI($this->lng->txt("adn_salutation"), "ssalutation");
+        $ssalutation->setOptions(array("m" => $this->lng->txt("salutation_m"),
+            "f" => $this->lng->txt("salutation_f")));
         $form->addItem($ssalutation);
 
-        $sname = new ilTextInputGUI($lng->txt("adn_last_name"), "slast_name");
+        $sname = new ilTextInputGUI($this->lng->txt("adn_last_name"), "slast_name");
         $sname->setMaxLength(50);
         $form->addItem($sname);
 
-        $sfirst_name = new ilTextInputGUI($lng->txt("adn_first_name"), "sfirst_name");
+        $sfirst_name = new ilTextInputGUI($this->lng->txt("adn_first_name"), "sfirst_name");
         $sfirst_name->setMaxLength(50);
         $form->addItem($sfirst_name);
 
-        $scountry = new ilSelectInputGUI($lng->txt("adn_country"), "scountry");
+        $scountry = new ilSelectInputGUI($this->lng->txt("adn_country"), "scountry");
         $scountry->setOptions($countries);
         $form->addItem($scountry);
 
-        $szip = new ilTextInputGUI($lng->txt("adn_zip"), "szip");
+        $szip = new ilTextInputGUI($this->lng->txt("adn_zip"), "szip");
         $szip->setMaxLength(10);
         $szip->setSize(10);
         $form->addItem($szip);
 
-        $scity = new ilTextInputGUI($lng->txt("adn_city"), "scity");
+        $scity = new ilTextInputGUI($this->lng->txt("adn_city"), "scity");
         $scity->setMaxLength(50);
         $form->addItem($scity);
 
-        $sstreet = new ilTextInputGUI($lng->txt("adn_street"), "sstreet");
+        $sstreet = new ilTextInputGUI($this->lng->txt("adn_street"), "sstreet");
         $sstreet->setMaxLength(50);
         $form->addItem($sstreet);
 
-        $shno = new ilTextInputGUI($lng->txt("adn_house_number"), "shno");
+        $shno = new ilTextInputGUI($this->lng->txt("adn_house_number"), "shno");
         $shno->setMaxLength(10);
         $shno->setSize(10);
         $form->addItem($shno);
 
         $cb = new ilCheckboxInputGUI(
-            $lng->txt("adn_shipping_address_activated"),
+            $this->lng->txt("adn_shipping_address_activated"),
             "shipping_address_activated"
         );
         $form->addItem($cb);
@@ -448,23 +451,23 @@ class adnPreparationCandidateGUI
             if ($this->mode == self::MODE_GENERAL) {
                 $form->addCommandButton(
                     "saveCandidateAndListPersonData",
-                    $lng->txt("save")
+                    $this->lng->txt("save")
                 );
                 $form->addCommandButton(
                     "saveCandidateAndAddExtension",
-                    $lng->txt("adn_save_and_add_extension")
+                    $this->lng->txt("adn_save_and_add_extension")
                 );
-                $form->addCommandButton("listPersonData", $lng->txt("cancel"));
-                $form->setTitle($lng->txt("adn_ad_add_person"));
+                $form->addCommandButton("listPersonData", $this->lng->txt("cancel"));
+                $form->setTitle($this->lng->txt("adn_ad_add_person"));
             } else {
-                $form->addCommandButton("saveCandidate", $lng->txt("save"));
+                $form->addCommandButton("saveCandidate", $this->lng->txt("save"));
 
                 $form->addCommandButton(
                     "saveCandidateAndEditTraining",
-                    $lng->txt("adn_save_and_edit_training")
+                    $this->lng->txt("adn_save_and_edit_training")
                 );
-                $form->addCommandButton("listCandidates", $lng->txt("cancel"));
-                $form->setTitle($lng->txt("adn_add_candidate"));
+                $form->addCommandButton("listCandidates", $this->lng->txt("cancel"));
+                $form->setTitle($this->lng->txt("adn_add_candidate"));
             }
             // cr-008 end
         } else {
@@ -524,30 +527,30 @@ class adnPreparationCandidateGUI
                 $levent = new adnTrainingEvent($last_event);
                 
                 $header = new ilFormSectionHeaderGUI();
-                $header->setTitle($lng->txt("adn_current_training"));
+                $header->setTitle($this->lng->txt("adn_current_training"));
                 $form->addItem($header);
 
-                $provider = new ilNonEditableValueGUI($lng->txt("adn_training_provider"));
+                $provider = new ilNonEditableValueGUI($this->lng->txt("adn_training_provider"));
                 $provider->setValue(adnTrainingProvider::lookupName($levent->getProvider()));
                 $form->addItem($provider);
 
-                $training = new ilNonEditableValueGUI($lng->txt("adn_type_of_training"));
+                $training = new ilNonEditableValueGUI($this->lng->txt("adn_type_of_training"));
                 $training->setValue(adnTypesOfTraining::getTextRepresentation($levent->getType()));
                 $form->addItem($training);
 
-                $event = new ilNonEditableValueGUI($lng->txt("adn_training"));
+                $event = new ilNonEditableValueGUI($this->lng->txt("adn_training"));
                 $event->setValue(ilDatePresentation::formatDate($levent->getDateFrom()) . ", " .
                     adnTrainingFacility::lookupName($levent->getFacility()));
                 $form->addItem($event);
             }
 
-            $form->addCommandButton("updateCandidate", $lng->txt("save"));
+            $form->addCommandButton("updateCandidate", $this->lng->txt("save"));
             $form->addCommandButton(
                 "updateCandidateAndEditTraining",
-                $lng->txt("adn_save_and_edit_training")
+                $this->lng->txt("adn_save_and_edit_training")
             );
-            $form->addCommandButton("listCandidates", $lng->txt("cancel"));
-            $form->setTitle($lng->txt("adn_edit_candidate"));
+            $form->addCommandButton("listCandidates", $this->lng->txt("cancel"));
+            $form->setTitle($this->lng->txt("adn_edit_candidate"));
         }
 
         return $form;
@@ -560,15 +563,14 @@ class adnPreparationCandidateGUI
      */
     protected function saveCandidate($a_edit_training = false)
     {
-        global $tpl, $lng, $ilCtrl;
 
         $form = $this->initCandidateForm("create");
 
         // check input
         if ($form->checkInput()) {
             // #13
-            if ($ilCtrl->getCmd() == "saveCandidateAndAddExtension" && !$form->getInput("foreign_cert_handed_in")) {
-                ilUtil::sendFailure($lng->txt("adn_create_ext_only_if_for_cert"));
+            if ($this->ctrl->getCmd() == "saveCandidateAndAddExtension" && !$form->getInput("foreign_cert_handed_in")) {
+                ilUtil::sendFailure($this->lng->txt("adn_create_ext_only_if_for_cert"));
                 $form->setValuesByPost();
                 $this->createCandidate($form);
                 return;
@@ -621,18 +623,18 @@ class adnPreparationCandidateGUI
             if ($candidate->save()) {
                 if (!$a_edit_training) {
                     // show success message and return to list
-                    ilUtil::sendSuccess($lng->txt("adn_candidate_created"), true);
+                    ilUtil::sendSuccess($this->lng->txt("adn_candidate_created"), true);
 
                     // cr-008 start
                     if ($this->mode == self::MODE_GENERAL) {
                         $this->listPersonData();
                     } else {
-                        $ilCtrl->redirect($this, "listCandidates");
+                        $this->ctrl->redirect($this, "listCandidates");
                     }
                     // cr-008 end
                 } else {
                     $this->readCandidate($candidate->getId());
-                    $ilCtrl->setParameter($this, "cd_id", $this->candidate->getId());
+                    $this->ctrl->setParameter($this, "cd_id", $this->candidate->getId());
                     // cr-008 start
                     $this->cd_id = $this->candidate->getId();
                     // cr-008 end
@@ -653,7 +655,6 @@ class adnPreparationCandidateGUI
      */
     protected function updateCandidate($a_edit_training = false)
     {
-        global $tpl, $lng, $ilCtrl;
 
         $form = $this->initCandidateForm("edit");
 
@@ -712,8 +713,8 @@ class adnPreparationCandidateGUI
                     return $this->showProviderList();
                 } elseif (!$a_edit_training) {
                     // show success message and return to list
-                    ilUtil::sendSuccess($lng->txt("adn_candidate_updated"), true);
-                    $ilCtrl->redirect($this, "listCandidates");
+                    ilUtil::sendSuccess($this->lng->txt("adn_candidate_updated"), true);
+                    $this->ctrl->redirect($this, "listCandidates");
                 } else {
                     return true;
                 }
@@ -735,7 +736,6 @@ class adnPreparationCandidateGUI
      */
     protected function showDialog(ilPropertyFormGUI $a_form, $a_id = null, $a_edit_training = false)
     {
-        global $lng, $ilCtrl, $tpl;
 
         if ($a_id) {
             $cmd = "updateCandidate";
@@ -756,7 +756,7 @@ class adnPreparationCandidateGUI
             $done[] = $type;
             switch ($type) {
                 case "holdback":
-                    $confirmed = ($_POST["cmd"][$cmd] == $lng->txt("adn_allow_application"));
+                    $confirmed = ($_POST["cmd"][$cmd] == $this->lng->txt("adn_allow_application"));
                     if (!$confirmed) {
                         $_POST["applied"] = 0;
                     }
@@ -764,15 +764,15 @@ class adnPreparationCandidateGUI
 
                 case "unique":
                 case "foreign":
-                    $confirmed = ($_POST["cmd"][$cmd] == $lng->txt("yes"));
+                    $confirmed = ($_POST["cmd"][$cmd] == $this->lng->txt("yes"));
                     if (!$confirmed) {
-                        $ilCtrl->redirect($this, "listCandidates");
+                        $this->ctrl->redirect($this, "listCandidates");
                     }
                     break;
 
                 case "lastevent":
                     $this->last_event_dialog =
-                        ($_POST["cmd"][$cmd] == $lng->txt("adn_candidate_edit_last_event"));
+                        ($_POST["cmd"][$cmd] == $this->lng->txt("adn_candidate_edit_last_event"));
                     break;
             }
         }
@@ -784,9 +784,9 @@ class adnPreparationCandidateGUI
             $a_form->getInput("holdback")) {
             $date = $a_form->getInput("holdback_until");
             if ($date >= date("Y-m-d")) {
-                $message = $lng->txt("adn_exam_application_holdback");
-                $button_ok = $lng->txt("adn_allow_application");
-                $button_cancel = $lng->txt("adn_dismiss_application");
+                $message = $this->lng->txt("adn_exam_application_holdback");
+                $button_ok = $this->lng->txt("adn_allow_application");
+                $button_cancel = $this->lng->txt("adn_dismiss_application");
                 $types[] = "holdback";
             }
         }
@@ -802,9 +802,9 @@ class adnPreparationCandidateGUI
                 $a_id
             )) {
                 if (!$message) {
-                    $message = $lng->txt("adn_candidate_not_unique");
-                    $button_ok = $lng->txt("yes");
-                    $button_cancel = $lng->txt("no");
+                    $message = $this->lng->txt("adn_candidate_not_unique");
+                    $button_ok = $this->lng->txt("yes");
+                    $button_cancel = $this->lng->txt("no");
                 }
                 $types[] = "unique";
             }
@@ -822,9 +822,9 @@ class adnPreparationCandidateGUI
             }
             if (!$valid) {
                 if (!$message) {
-                    $message = $lng->txt("adn_foreign_certificate_missing");
-                    $button_ok = $lng->txt("yes");
-                    $button_cancel = $lng->txt("no");
+                    $message = $this->lng->txt("adn_foreign_certificate_missing");
+                    $button_ok = $this->lng->txt("yes");
+                    $button_cancel = $this->lng->txt("no");
                 }
                 $types[] = "foreign";
             }
@@ -838,9 +838,9 @@ class adnPreparationCandidateGUI
             
             if ($a_form->getInput("type") != $event->getType()) {
                 if (!$message) {
-                    $message = $lng->txt("adn_candidate_last_event_mismatch");
-                    $button_ok = $lng->txt("adn_candidate_edit_last_event");
-                    $button_cancel = $lng->txt("adn_candidate_reset_last_event");
+                    $message = $this->lng->txt("adn_candidate_last_event_mismatch");
+                    $button_ok = $this->lng->txt("adn_candidate_edit_last_event");
+                    $button_cancel = $this->lng->txt("adn_candidate_reset_last_event");
                 }
                 $types[] = "lastevent";
             }
@@ -850,7 +850,7 @@ class adnPreparationCandidateGUI
             // display confirmation dialog
             include_once("./Services/Utilities/classes/class.ilConfirmationGUI.php");
             $cgui = new ilConfirmationGUI();
-            $cgui->setFormAction($ilCtrl->getFormAction($this));
+            $cgui->setFormAction($this->ctrl->getFormAction($this));
             $cgui->setHeaderText($message);
             $cgui->setCancel($button_cancel, $cmd);
             $cgui->setConfirm($button_ok, $cmd);
@@ -901,7 +901,7 @@ class adnPreparationCandidateGUI
             $date = $a_form->getInput("holdback_until");
             $cgui->addHiddenItem("holdback_until", $date);
 
-            $tpl->setContent($cgui->getHTML());
+            $this->tpl->setContent($cgui->getHTML());
             return true;
         }
         return false;
@@ -932,32 +932,31 @@ class adnPreparationCandidateGUI
      */
     protected function showProviderList()
     {
-        global $tpl, $lng, $ilCtrl, $ilTabs;
 
         if (!$this->candidate) {
             return;
         }
 
-        $ilTabs->setBackTarget(
-            $lng->txt("back"),
-            $ilCtrl->getLinkTarget($this, "editCandidate")
+        $this->tabs->setBackTarget(
+            $this->lng->txt("back"),
+            $this->ctrl->getLinkTarget($this, "editCandidate")
         );
 
         include_once("Services/Form/classes/class.ilPropertyFormGUI.php");
         $form = new ilPropertyFormGUI();
-        $form->setTitle($lng->txt("adn_edit_last_training"));
-        $form->setFormAction($ilCtrl->getFormAction($this));
+        $form->setTitle($this->lng->txt("adn_edit_last_training"));
+        $form->setFormAction($this->ctrl->getFormAction($this));
 
         include_once "Services/ADN/TA/classes/class.adnTrainingProvider.php";
-        $provider = new ilSelectInputGUI($lng->txt("adn_training_provider"), "provider");
+        $provider = new ilSelectInputGUI($this->lng->txt("adn_training_provider"), "provider");
         $provider->setRequired(true);
         $provider->setOptions(adnTrainingProvider::getTrainingProvidersSelect());
         $form->addItem($provider);
 
-        $form->addCommandButton("showEventList", $lng->txt("btn_next"));
-        $form->addCommandButton("editCandidate", $lng->txt("cancel"));
+        $form->addCommandButton("showEventList", $this->lng->txt("btn_next"));
+        $form->addCommandButton("editCandidate", $this->lng->txt("cancel"));
 
-        $tpl->setContent($form->getHTML());
+        $this->tpl->setContent($form->getHTML());
     }
 
     /**
@@ -965,7 +964,6 @@ class adnPreparationCandidateGUI
      */
     protected function saveLastTraining()
     {
-        global $lng, $ilCtrl;
 
         if (!$this->candidate) {
             return;
@@ -975,11 +973,11 @@ class adnPreparationCandidateGUI
         if ($event_id) {
             $this->candidate->setLastEvent($event_id);
             if ($this->candidate->update()) {
-                ilUtil::sendSuccess($lng->txt("adn_training_attendance_saved"), true);
+                ilUtil::sendSuccess($this->lng->txt("adn_training_attendance_saved"), true);
             }
         }
 
-        $ilCtrl->redirect($this, "editCandidate");
+        $this->ctrl->redirect($this, "editCandidate");
     }
 
     /**
@@ -987,17 +985,16 @@ class adnPreparationCandidateGUI
      */
     protected function showEventList()
     {
-        global $tpl, $ilTabs, $ilCtrl, $lng;
 
         if (!$this->candidate) {
             return;
         }
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "editCandidate"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "editCandidate"));
 
         $provider_id = (int) $_REQUEST["provider"];
 
-        $ilCtrl->setParameter($this, "provider", $provider_id);
+        $this->ctrl->setParameter($this, "provider", $provider_id);
 
         // table of training events
         include_once("./Services/ADN/TA/classes/class.adnTrainingEventTableGUI.php");
@@ -1012,7 +1009,7 @@ class adnPreparationCandidateGUI
         );
 
         // output table
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -1074,22 +1071,21 @@ class adnPreparationCandidateGUI
      */
     protected function confirmCandidatesDeletion()
     {
-        global $ilCtrl, $tpl, $lng, $ilTabs;
 
         // check whether at least one item has been seleced
         if (!is_array($_POST["cand_id"]) || count($_POST["cand_id"]) == 0) {
-            ilUtil::sendFailure($lng->txt("no_checkbox"), true);
-            $ilCtrl->redirect($this, "listCandidates");
+            ilUtil::sendFailure($this->lng->txt("no_checkbox"), true);
+            $this->ctrl->redirect($this, "listCandidates");
         } else {
-            $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listCandidates"));
+            $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listCandidates"));
             
             // display confirmation message
             include_once("./Services/Utilities/classes/class.ilConfirmationGUI.php");
             $cgui = new ilConfirmationGUI();
-            $cgui->setFormAction($ilCtrl->getFormAction($this));
-            $cgui->setHeaderText($lng->txt("adn_sure_delete_candidates"));
-            $cgui->setCancel($lng->txt("cancel"), "listCandidates");
-            $cgui->setConfirm($lng->txt("delete"), "deleteCandidates");
+            $cgui->setFormAction($this->ctrl->getFormAction($this));
+            $cgui->setHeaderText($this->lng->txt("adn_sure_delete_candidates"));
+            $cgui->setCancel($this->lng->txt("cancel"), "listCandidates");
+            $cgui->setConfirm($this->lng->txt("delete"), "deleteCandidates");
 
             // list objects that should be deleted
             include_once("./Services/ADN/ES/classes/class.adnCertifiedProfessional.php");
@@ -1097,7 +1093,7 @@ class adnPreparationCandidateGUI
                 $cgui->addItem("cand_id[]", $i, adnCertifiedProfessional::lookupName($i));
             }
 
-            $tpl->setContent($cgui->getHTML());
+            $this->tpl->setContent($cgui->getHTML());
         }
     }
 
@@ -1106,7 +1102,6 @@ class adnPreparationCandidateGUI
      */
     protected function deleteCandidates()
     {
-        global $ilCtrl, $lng;
 
         include_once("./Services/ADN/ES/classes/class.adnCertifiedProfessional.php");
 
@@ -1116,8 +1111,8 @@ class adnPreparationCandidateGUI
                 $candidate->delete();
             }
         }
-        ilUtil::sendSuccess($lng->txt("adn_candidate_deleted"), true);
-        $ilCtrl->redirect($this, "listCandidates");
+        ilUtil::sendSuccess($this->lng->txt("adn_candidate_deleted"), true);
+        $this->ctrl->redirect($this, "listCandidates");
     }
 
     // cr-008 start
@@ -1126,10 +1121,8 @@ class adnPreparationCandidateGUI
      */
     public function listPersonData()
     {
-        global $ilCtrl;
 
-        $ilCtrl->redirectByClass(array("adnBaseGUI", "adncertifiedprofessionalgui", "adnCertifiedProfessionalDataGUI"), "listProfessionals");
-        //$ilCtrl->redirectByClass(array("adnBaseGUI", "adncertifiedprofessionalgui", "adnPersonalDataMaintenanceGUI"), "listPersonalData");
+        $this->ctrl->redirectByClass(array("adnBaseGUI", "adncertifiedprofessionalgui", "adnCertifiedProfessionalDataGUI"), "listProfessionals");
     }
 
     /**
@@ -1137,11 +1130,10 @@ class adnPreparationCandidateGUI
      */
     protected function saveCandidateAndAddExtension()
     {
-        global $ilCtrl;
 
         if ($this->saveCandidate(true)) {
-            $ilCtrl->setParameterByClass("adnCertificateGUI", "pid", $this->cd_id);
-            $ilCtrl->redirectByClass(array("adnBaseGUI", "adnCertifiedProfessionalGUI", "adnCertificateGUI"), "extendCertificate");
+            $this->ctrl->setParameterByClass("adnCertificateGUI", "pid", $this->cd_id);
+            $this->ctrl->redirectByClass(array("adnBaseGUI", "adnCertifiedProfessionalGUI", "adnCertificateGUI"), "extendCertificate");
         }
     }
 
@@ -1150,7 +1142,6 @@ class adnPreparationCandidateGUI
      */
     protected function saveCandidateAndListPersonData()
     {
-        global $ilCtrl;
 
         if ($this->saveCandidate(true)) {
             $this->listPersonData();

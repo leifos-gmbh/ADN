@@ -17,16 +17,27 @@ class adnWMOGUI
 {
     // current office object
     protected ?adnWMO $office = null;
+
+    protected ilCtrl $ctrl;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilToolbarGUI $toolbar;
+    protected ilLanguage $lng;
+    protected ilTabsGUI $tabs;
     
     /**
      * Constructor
      */
     public function __construct()
     {
-        global $ilCtrl;
+        global $DIC;
+        $this->ctrl = $DIC->ctrl();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->toolbar = $DIC->toolbar();
+        $this->lng = $DIC->language();
+        $this->tabs = $DIC->tabs();
         
         // save wmo ID through requests
-        $ilCtrl->saveParameter($this, array("wmo_id"));
+        $this->ctrl->saveParameter($this, array("wmo_id"));
         
         $this->readWMO();
     }
@@ -36,28 +47,27 @@ class adnWMOGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl;
         
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
 
         // forward command to next gui class in control flow
         switch ($next_class) {
             case "adncochairgui":
                 include_once "Services/ADN/MD/classes/class.adnCoChairGUI.php";
                 $gui = new adnCoChairGUI();
-                $ilCtrl->forwardCommand($gui);
+                $this->ctrl->forwardCommand($gui);
                 break;
 
             case "adnexamfacilitygui":
                 include_once "Services/ADN/MD/classes/class.adnExamFacilityGUI.php";
                 $gui = new adnExamFacilityGUI();
-                $ilCtrl->forwardCommand($gui);
+                $this->ctrl->forwardCommand($gui);
                 break;
 
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("listWMOs");
+                $cmd = $this->ctrl->getCmd("listWMOs");
 
                 switch ($cmd) {
                     // commands that need read permission
@@ -100,12 +110,11 @@ class adnWMOGUI
      */
     protected function listWMOs()
     {
-        global $tpl, $ilCtrl, $ilToolbar, $lng;
 
         if (adnPerm::check(adnPerm::MD, adnPerm::WRITE)) {
-            $ilToolbar->addButton(
-                $lng->txt("adn_add_wmo"),
-                $ilCtrl->getLinkTarget($this, "addWMO")
+            $this->toolbar->addButton(
+                $this->lng->txt("adn_add_wmo"),
+                $this->ctrl->getLinkTarget($this, "addWMO")
             );
         }
 
@@ -114,7 +123,7 @@ class adnWMOGUI
         $table = new adnWMOTableGUI($this, "listWMOs");
         
         // output table
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -124,14 +133,13 @@ class adnWMOGUI
      */
     protected function addWMO(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $lng, $ilTabs, $ilCtrl;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listWMOs"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listWMOs"));
 
         if (!$a_form) {
             $a_form = $this->initWMOForm(true);
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
 
     /**
@@ -139,7 +147,6 @@ class adnWMOGUI
      */
     protected function saveWMO()
     {
-        global $tpl, $lng, $ilCtrl;
 
         $form = $this->initWMOForm(true);
         if ($form->checkInput()) {
@@ -193,8 +200,8 @@ class adnWMOGUI
             );
 
             if ($office->save()) {
-                ilUtil::sendSuccess($lng->txt("adn_wmo_created"), true);
-                $ilCtrl->redirect($this, "listWMOs");
+                ilUtil::sendSuccess($this->lng->txt("adn_wmo_created"), true);
+                $this->ctrl->redirect($this, "listWMOs");
             }
         }
 
@@ -209,14 +216,13 @@ class adnWMOGUI
      */
     protected function editWMO(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $lng, $ilTabs, $ilCtrl;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listWMOs"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listWMOs"));
 
         if (!$a_form) {
             $a_form = $this->initWMOForm();
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
 
     /**
@@ -224,7 +230,6 @@ class adnWMOGUI
      */
     protected function updateWMO()
     {
-        global $tpl, $lng, $ilCtrl;
 
         $form = $this->initWMOForm();
         if ($form->checkInput()) {
@@ -287,8 +292,8 @@ class adnWMOGUI
         
 
             if ($this->office->update()) {
-                ilUtil::sendSuccess($lng->txt("adn_wmo_updated"), true);
-                $ilCtrl->redirect($this, "listWMOs");
+                ilUtil::sendSuccess($this->lng->txt("adn_wmo_updated"), true);
+                $this->ctrl->redirect($this, "listWMOs");
             }
         }
 
@@ -303,138 +308,137 @@ class adnWMOGUI
      */
     protected function initWMOForm($a_create = false)
     {
-        global  $lng, $ilCtrl;
 
         include_once "Services/Form/classes/class.ilPropertyFormGUI.php";
         $form = new ilPropertyFormGUI();
-        $form->setTitle($lng->txt("adn_wmo"));
-        $form->setFormAction($ilCtrl->getFormAction($this, "listWMOs"));
+        $form->setTitle($this->lng->txt("adn_wmo"));
+        $form->setFormAction($this->ctrl->getFormAction($this, "listWMOs"));
 
-        $name = new ilTextInputGUI($lng->txt("adn_name"), "name");
+        $name = new ilTextInputGUI($this->lng->txt("adn_name"), "name");
         $name->setRequired(true);
         $name->setMaxLength(100);
         $form->addItem($name);
 
-        $stitle = new ilTextInputGUI($lng->txt("adn_subtitle"), "subtitle");
+        $stitle = new ilTextInputGUI($this->lng->txt("adn_subtitle"), "subtitle");
         $stitle->setRequired(true);
         $stitle->setMaxLength(100);
         $form->addItem($stitle);
 
-        $code = new ilTextInputGUI($lng->txt("adn_wmo_code"), "code");
+        $code = new ilTextInputGUI($this->lng->txt("adn_wmo_code"), "code");
         $code->setRequired(true);
         $code->setMaxLength(10);
         $code->setSize(10);
         $form->addItem($code);
 
-        $fon = new ilTextInputGUI($lng->txt("adn_phone"), "fon");
+        $fon = new ilTextInputGUI($this->lng->txt("adn_phone"), "fon");
         $fon->setRequired(true);
         $fon->setMaxLength(30);
         $fon->setSize(30);
         $form->addItem($fon);
 
-        $fax = new ilTextInputGUI($lng->txt("adn_fax"), "fax");
+        $fax = new ilTextInputGUI($this->lng->txt("adn_fax"), "fax");
         $fax->setRequired(true);
         $fax->setMaxLength(30);
         $fax->setSize(30);
         $form->addItem($fax);
 
-        $mail = new ilTextInputGUI($lng->txt("adn_email"), "email");
+        $mail = new ilTextInputGUI($this->lng->txt("adn_email"), "email");
         $mail->setRequired(true);
         $mail->setMaxLength(50);
         $form->addItem($mail);
 
-        $mailnoti = new ilTextInputGUI($lng->txt("adn_email_noti"), "emailnoti");
+        $mailnoti = new ilTextInputGUI($this->lng->txt("adn_email_noti"), "emailnoti");
         $mailnoti->setRequired(true);
         $mailnoti->setMaxLength(50);
         $form->addItem($mailnoti);
 
-        $url = new ilTextInputGUI($lng->txt("adn_url"), "url");
+        $url = new ilTextInputGUI($this->lng->txt("adn_url"), "url");
         $url->setRequired(true);
         $url->setMaxLength(50);
         $form->addItem($url);
 
 
         $sub = new ilFormSectionHeaderGUI();
-        $sub->setTitle($lng->txt("adn_postal_address"));
+        $sub->setTitle($this->lng->txt("adn_postal_address"));
         $form->addItem($sub);
 
-        $pstreet = new ilTextInputGUI($lng->txt("adn_street"), "pstreet");
+        $pstreet = new ilTextInputGUI($this->lng->txt("adn_street"), "pstreet");
         $pstreet->setRequired(true);
         $pstreet->setMaxLength(50);
         $form->addItem($pstreet);
 
-        $pstreet_no = new ilTextInputGUI($lng->txt("adn_street_number"), "pstreetno");
+        $pstreet_no = new ilTextInputGUI($this->lng->txt("adn_street_number"), "pstreetno");
         $pstreet_no->setRequired(true);
         $pstreet_no->setMaxLength(10);
         $pstreet_no->setSize(10);
         $form->addItem($pstreet_no);
 
-        $pzip = new ilTextInputGUI($lng->txt("adn_zip"), "pzip");
+        $pzip = new ilTextInputGUI($this->lng->txt("adn_zip"), "pzip");
         $pzip->setRequired(true);
         $pzip->setMaxLength(10);
         $pzip->setSize(10);
         $form->addItem($pzip);
 
-        $pcity = new ilTextInputGUI($lng->txt("adn_city"), "pcity");
+        $pcity = new ilTextInputGUI($this->lng->txt("adn_city"), "pcity");
         $pcity->setRequired(true);
         $pcity->setMaxLength(50);
         $form->addItem($pcity);
 
 
-        $vcbox = new ilCheckboxInputGUI($lng->txt("adn_visitors_address"), "vcbox");
+        $vcbox = new ilCheckboxInputGUI($this->lng->txt("adn_visitors_address"), "vcbox");
         $form->addItem($vcbox);
 
-        $vstreet = new ilTextInputGUI($lng->txt("adn_street"), "vstreet");
+        $vstreet = new ilTextInputGUI($this->lng->txt("adn_street"), "vstreet");
         $vstreet->setMaxLength(50);
         $vcbox->addSubItem($vstreet);
 
-        $vstreet_no = new ilTextInputGUI($lng->txt("adn_street_number"), "vstreetno");
+        $vstreet_no = new ilTextInputGUI($this->lng->txt("adn_street_number"), "vstreetno");
         $vstreet_no->setMaxLength(10);
         $vstreet_no->setSize(10);
         $vcbox->addSubItem($vstreet_no);
 
-        $vzip = new ilTextInputGUI($lng->txt("adn_zip"), "vzip");
+        $vzip = new ilTextInputGUI($this->lng->txt("adn_zip"), "vzip");
         $vzip->setMaxLength(10);
         $vzip->setSize(10);
         $vcbox->addSubItem($vzip);
 
-        $vcity = new ilTextInputGUI($lng->txt("adn_city"), "vcity");
+        $vcity = new ilTextInputGUI($this->lng->txt("adn_city"), "vcity");
         $vcity->setMaxLength(50);
         $vcbox->addSubItem($vcity);
 
 
         $sub = new ilFormSectionHeaderGUI();
-        $sub->setTitle($lng->txt("adn_banking_details"));
+        $sub->setTitle($this->lng->txt("adn_banking_details"));
         $form->addItem($sub);
 
-        $bbank = new ilTextInputGUI($lng->txt("adn_bank"), "bbank");
+        $bbank = new ilTextInputGUI($this->lng->txt("adn_bank"), "bbank");
         $bbank->setRequired(true);
         $bbank->setMaxLength(64);
         $form->addItem($bbank);
 
         if (!$a_create) {
             if ($this->office->getBankCode()) {
-                $bcode = new ilNumberInputGUI($lng->txt("adn_bank_code"), "bcode");
+                $bcode = new ilNumberInputGUI($this->lng->txt("adn_bank_code"), "bcode");
                 $bcode->setMaxLength(20);
                 $bcode->setSize(20);
                 $form->addItem($bcode);
             }
 
             if ($this->office->getBankAccount()) {
-                $baccount = new ilNumberInputGUI($lng->txt("adn_bank_account"), "baccount");
+                $baccount = new ilNumberInputGUI($this->lng->txt("adn_bank_account"), "baccount");
                 $baccount->setMaxLength(20);
                 $baccount->setSize(20);
                 $form->addItem($baccount);
             }
         }
 
-        $biban = new ilTextInputGUI($lng->txt("adn_bank_iban"), "biban");
+        $biban = new ilTextInputGUI($this->lng->txt("adn_bank_iban"), "biban");
         $biban->setRequired(true);
         $biban->setMaxLength(34);
         $biban->setSize(20);
         $form->addItem($biban);
 
-        $bbic = new ilTextInputGUI($lng->txt("adn_bank_bic"), "bbic");
+        $bbic = new ilTextInputGUI($this->lng->txt("adn_bank_bic"), "bbic");
         $bbic->setRequired(true);
         $bbic->setMaxLength(20);
         $bbic->setSize(20);
@@ -442,22 +446,22 @@ class adnWMOGUI
 
 
         $sub = new ilFormSectionHeaderGUI();
-        $sub->setTitle($lng->txt("adn_wmo_cost_certificate"));
+        $sub->setTitle($this->lng->txt("adn_wmo_cost_certificate"));
         $form->addItem($sub);
 
-        $ccno = new ilTextInputGUI($lng->txt("adn_running_id"), "ccno");
+        $ccno = new ilTextInputGUI($this->lng->txt("adn_running_id"), "ccno");
         $ccno->setRequired(true);
         $ccno->setMaxLength(10);
         $ccno->setSize(10);
         $form->addItem($ccno);
 
-        $ccdesc = new ilTextAreaInputGUI($lng->txt("adn_description"), "ccdesc");
+        $ccdesc = new ilTextAreaInputGUI($this->lng->txt("adn_description"), "ccdesc");
         $ccdesc->setCols(80);
         $ccdesc->setRows(5);
         $ccdesc->setRequired(true);
         $form->addItem($ccdesc);
 
-        $ccval = new ilNumberInputGUI($lng->txt("adn_cost"), "ccval");
+        $ccval = new ilNumberInputGUI($this->lng->txt("adn_cost"), "ccval");
         $ccval->setRequired(true);
         $ccval->setDecimals(2);
         $ccval->setSize(10);
@@ -467,22 +471,22 @@ class adnWMOGUI
 
 
         $sub = new ilFormSectionHeaderGUI();
-        $sub->setTitle($lng->txt("adn_wmo_cost_duplicate"));
+        $sub->setTitle($this->lng->txt("adn_wmo_cost_duplicate"));
         $form->addItem($sub);
 
-        $cdno = new ilTextInputGUI($lng->txt("adn_running_id"), "cdno");
+        $cdno = new ilTextInputGUI($this->lng->txt("adn_running_id"), "cdno");
         $cdno->setRequired(true);
         $cdno->setMaxLength(10);
         $cdno->setSize(10);
         $form->addItem($cdno);
 
-        $cddesc = new ilTextAreaInputGUI($lng->txt("adn_description"), "cddesc");
+        $cddesc = new ilTextAreaInputGUI($this->lng->txt("adn_description"), "cddesc");
         $cddesc->setCols(80);
         $cddesc->setRows(5);
         $cddesc->setRequired(true);
         $form->addItem($cddesc);
 
-        $cdval = new ilNumberInputGUI($lng->txt("adn_cost"), "cdval");
+        $cdval = new ilNumberInputGUI($this->lng->txt("adn_cost"), "cdval");
         $cdval->setRequired(true);
         $cdval->setDecimals(2);
         $cdval->setSize(10);
@@ -492,22 +496,22 @@ class adnWMOGUI
 
 
         $sub = new ilFormSectionHeaderGUI();
-        $sub->setTitle($lng->txt("adn_wmo_cost_extension"));
+        $sub->setTitle($this->lng->txt("adn_wmo_cost_extension"));
         $form->addItem($sub);
 
-        $ceno = new ilTextInputGUI($lng->txt("adn_running_id"), "ceno");
+        $ceno = new ilTextInputGUI($this->lng->txt("adn_running_id"), "ceno");
         $ceno->setRequired(true);
         $ceno->setMaxLength(10);
         $ceno->setSize(10);
         $form->addItem($ceno);
 
-        $cedesc = new ilTextAreaInputGUI($lng->txt("adn_description"), "cedesc");
+        $cedesc = new ilTextAreaInputGUI($this->lng->txt("adn_description"), "cedesc");
         $cedesc->setCols(80);
         $cedesc->setRows(5);
         $cedesc->setRequired(true);
         $form->addItem($cedesc);
 
-        $ceval = new ilNumberInputGUI($lng->txt("adn_cost"), "ceval");
+        $ceval = new ilNumberInputGUI($this->lng->txt("adn_cost"), "ceval");
         $ceval->setRequired(true);
         $ceval->setDecimals(2);
         $ceval->setSize(10);
@@ -517,22 +521,22 @@ class adnWMOGUI
 
 
         $sub = new ilFormSectionHeaderGUI();
-        $sub->setTitle($lng->txt("adn_wmo_cost_exam"));
+        $sub->setTitle($this->lng->txt("adn_wmo_cost_exam"));
         $form->addItem($sub);
 
-        $cxno = new ilTextInputGUI($lng->txt("adn_running_id"), "cxno");
+        $cxno = new ilTextInputGUI($this->lng->txt("adn_running_id"), "cxno");
         $cxno->setRequired(true);
         $cxno->setMaxLength(10);
         $cxno->setSize(10);
         $form->addItem($cxno);
 
-        $cxdesc = new ilTextAreaInputGUI($lng->txt("adn_description"), "cxdesc");
+        $cxdesc = new ilTextAreaInputGUI($this->lng->txt("adn_description"), "cxdesc");
         $cxdesc->setCols(80);
         $cxdesc->setRows(5);
         $cxdesc->setRequired(true);
         $form->addItem($cxdesc);
 
-        $cxval = new ilNumberInputGUI($lng->txt("adn_cost"), "cxval");
+        $cxval = new ilNumberInputGUI($this->lng->txt("adn_cost"), "cxval");
         $cxval->setRequired(true);
         $cxval->setDecimals(2);
         $cxval->setSize(10);
@@ -541,22 +545,22 @@ class adnWMOGUI
         $form->addItem($cxval);
 
         $sub = new ilFormSectionHeaderGUI();
-        $sub->setTitle($lng->txt("adn_wmo_cost_exam_gas_chem"));
+        $sub->setTitle($this->lng->txt("adn_wmo_cost_exam_gas_chem"));
         $form->addItem($sub);
 
-        $cxgcno = new ilTextInputGUI($lng->txt("adn_running_id"), "cxgcno");
+        $cxgcno = new ilTextInputGUI($this->lng->txt("adn_running_id"), "cxgcno");
         $cxgcno->setRequired(true);
         $cxgcno->setMaxLength(10);
         $cxgcno->setSize(10);
         $form->addItem($cxgcno);
 
-        $cxgcdesc = new ilTextAreaInputGUI($lng->txt("adn_description"), "cxgcdesc");
+        $cxgcdesc = new ilTextAreaInputGUI($this->lng->txt("adn_description"), "cxgcdesc");
         $cxgcdesc->setCols(80);
         $cxgcdesc->setRows(5);
         $cxgcdesc->setRequired(true);
         $form->addItem($cxgcdesc);
 
-        $cxgcval = new ilNumberInputGUI($lng->txt("adn_cost"), "cxgcval");
+        $cxgcval = new ilNumberInputGUI($this->lng->txt("adn_cost"), "cxgcval");
         $cxgcval->setRequired(true);
         $cxgcval->setDecimals(2);
         $cxgcval->setSize(10);
@@ -566,7 +570,7 @@ class adnWMOGUI
 
 
         if ($a_create) {
-            $form->addCommandButton("saveWMO", $lng->txt("save"));
+            $form->addCommandButton("saveWMO", $this->lng->txt("save"));
         } else {
             $name->setValue($this->office->getName());
             $stitle->setValue($this->office->getSubtitle());
@@ -625,9 +629,9 @@ class adnWMOGUI
             $cxgcdesc->setValue($cost["desc"]);
             $cxgcval->setValue($cost["value"]);
 
-            $form->addCommandButton("updateWMO", $lng->txt("save"));
+            $form->addCommandButton("updateWMO", $this->lng->txt("save"));
         }
-        $form->addCommandButton("listWMOs", $lng->txt("cancel"));
+        $form->addCommandButton("listWMOs", $this->lng->txt("cancel"));
 
         return $form;
     }
@@ -637,25 +641,24 @@ class adnWMOGUI
      */
     public function confirmDeleteWMOs()
     {
-        global $ilCtrl, $tpl, $lng, $ilTabs;
 
         // check whether at least one item has been seleced
         if (!is_array($_POST["wmo_id"]) || count($_POST["wmo_id"]) == 0) {
-            ilUtil::sendFailure($lng->txt("no_checkbox"), true);
-            $ilCtrl->redirect($this, "listWMOs");
+            ilUtil::sendFailure($this->lng->txt("no_checkbox"), true);
+            $this->ctrl->redirect($this, "listWMOs");
         } else {
-            $ilTabs->setBackTarget(
-                $lng->txt("back"),
-                $ilCtrl->getLinkTarget($this, "listWMOs")
+            $this->tabs->setBackTarget(
+                $this->lng->txt("back"),
+                $this->ctrl->getLinkTarget($this, "listWMOs")
             );
 
             // display confirmation message
             include_once("./Services/Utilities/classes/class.ilConfirmationGUI.php");
             $cgui = new ilConfirmationGUI();
-            $cgui->setFormAction($ilCtrl->getFormAction($this));
-            $cgui->setHeaderText($lng->txt("adn_sure_delete_wmos"));
-            $cgui->setCancel($lng->txt("cancel"), "listWMOs");
-            $cgui->setConfirm($lng->txt("delete"), "deleteWMOs");
+            $cgui->setFormAction($this->ctrl->getFormAction($this));
+            $cgui->setHeaderText($this->lng->txt("adn_sure_delete_wmos"));
+            $cgui->setCancel($this->lng->txt("cancel"), "listWMOs");
+            $cgui->setConfirm($this->lng->txt("delete"), "deleteWMOs");
 
             include_once("./Services/ADN/MD/classes/class.adnWMO.php");
 
@@ -664,7 +667,7 @@ class adnWMOGUI
                 $cgui->addItem("wmo_id[]", $i, adnWMO::lookupName($i));
             }
 
-            $tpl->setContent($cgui->getHTML());
+            $this->tpl->setContent($cgui->getHTML());
         }
     }
 
@@ -673,7 +676,6 @@ class adnWMOGUI
      */
     protected function deleteWMOs()
     {
-        global $ilCtrl, $lng;
 
         include_once("./Services/ADN/MD/classes/class.adnWMO.php");
 
@@ -683,7 +685,7 @@ class adnWMOGUI
                 $wmo->delete();
             }
         }
-        ilUtil::sendSuccess($lng->txt("adn_wmo_deleted"), true);
-        $ilCtrl->redirect($this, "listWMOs");
+        ilUtil::sendSuccess($this->lng->txt("adn_wmo_deleted"), true);
+        $this->ctrl->redirect($this, "listWMOs");
     }
 }

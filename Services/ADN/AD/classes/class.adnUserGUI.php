@@ -15,21 +15,32 @@
  */
 class adnUserGUI
 {
+    protected ilCtrl $ctrl;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilLanguage $lng;
+
+    public function __construct()
+    {
+        global $DIC;
+
+        $this->ctrl = $DIC->ctrl();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->lng = $DIC->language();
+    }
     /**
      * Execute command
      */
     public function executeCommand()
     {
-        global $ilCtrl;
         
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
         
         // forward command to next gui class in control flow
         switch ($next_class) {
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("listUsers");
+                $cmd = $this->ctrl->getCmd("listUsers");
 
                 switch ($cmd) {
                     // commands that need read permission
@@ -56,14 +67,13 @@ class adnUserGUI
      */
     protected function listUsers()
     {
-        global $tpl;
 
         // table of countries
         include_once("./Services/ADN/AD/classes/class.adnUserTableGUI.php");
         $table = new adnUserTableGUI($this, "listUsers");
         
         // output table
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -71,7 +81,6 @@ class adnUserGUI
      */
     protected function saveUsers()
     {
-        global $lng, $ilCtrl;
 
         // get values directly from post as we have no form object
         if ($_POST["user"]) {
@@ -90,7 +99,7 @@ class adnUserGUI
             }
         }
 
-        ilUtil::sendSuccess($lng->txt("settings_saved"), true);
-        $ilCtrl->redirect($this, "listUsers");
+        ilUtil::sendSuccess($this->lng->txt("settings_saved"), true);
+        $this->ctrl->redirect($this, "listUsers");
     }
 }

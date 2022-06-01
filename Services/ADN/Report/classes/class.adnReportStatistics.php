@@ -214,9 +214,8 @@ class adnReportStatistics extends adnReport
      */
     protected function createExam($map)
     {
-        global $lng;
 
-        $map['stat_type'] = $lng->txt('adn_st_exs');
+        $map['stat_type'] = $this->lng->txt('adn_st_exs');
         $map['stat_type'] = $this->appendWmo($map['stat_type']);
 
         $num = 1;
@@ -238,9 +237,8 @@ class adnReportStatistics extends adnReport
      */
     protected function createExtensionExperience($map)
     {
-        global $lng;
 
-        $map['stat_type'] = $lng->txt('adn_report_type_extension_exp');
+        $map['stat_type'] = $this->lng->txt('adn_report_type_extension_exp');
         $map['stat_type'] = $this->appendWmo($map['stat_type']);
 
         $num = 1;
@@ -259,9 +257,8 @@ class adnReportStatistics extends adnReport
      */
     protected function createExtensionRefresh($map)
     {
-        global $lng;
 
-        $map['stat_type'] = $lng->txt('adn_report_type_extension_ref');
+        $map['stat_type'] = $this->lng->txt('adn_report_type_extension_ref');
         $map['stat_type'] = $this->appendWmo($map['stat_type']);
 
         $num = 1;
@@ -280,9 +277,8 @@ class adnReportStatistics extends adnReport
      */
     protected function createCertificatesOther($map)
     {
-        global $lng;
         
-        $map['stat_type'] = $lng->txt('adn_report_type_cert_others');
+        $map['stat_type'] = $this->lng->txt('adn_report_type_cert_others');
         $map['stat_type'] = $this->appendWmo($map['stat_type']);
 
         $num = 1;
@@ -301,9 +297,8 @@ class adnReportStatistics extends adnReport
      */
     protected function createCertificatesGC($map)
     {
-        global $lng;
 
-        $map['stat_type'] = $lng->txt('adn_report_type_cert_gc');
+        $map['stat_type'] = $this->lng->txt('adn_report_type_cert_gc');
         $map['stat_type'] = $this->appendWmo($map['stat_type']);
 
         $num = 1;
@@ -322,9 +317,8 @@ class adnReportStatistics extends adnReport
      */
     protected function createCertificatesSum($map)
     {
-        global $lng;
 
-        $map['stat_type'] = $lng->txt('adn_report_type_cert_sum');
+        $map['stat_type'] = $this->lng->txt('adn_report_type_cert_sum');
         $map['stat_type'] = $this->appendWmo($map['stat_type']);
 
         $sum = 0;
@@ -383,10 +377,9 @@ class adnReportStatistics extends adnReport
      */
     protected function buildHeader($map)
     {
-        global $lng;
         
         $map['date_period'] = sprintf(
-            $lng->txt('adn_report_stat_header'),
+            $this->lng->txt('adn_report_stat_header'),
             $this->getDurationFrom()->get(IL_CAL_FKT_DATE, 'd.m.Y'),
             $this->getDurationTo()->get(IL_CAL_FKT_DATE, 'd.m.Y')
         );

@@ -31,7 +31,8 @@ class adnGotoHandler
      */
     public static function _goto($a_target)
     {
-        global $ilCtrl;
+        global $DIC;
+        $ilCtrl = $DIC->ctrl();
 
         $ilCtrl->setTargetScript("ilias.php");
         $ilCtrl->initBaseClass("adnbasegui");

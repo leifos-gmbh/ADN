@@ -40,7 +40,6 @@ class adnCertifiedProfessionalDirectoryTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd, ilDate $a_date_from, ilDate $a_date_to, $a_wmo)
     {
-        global $ilCtrl, $lng;
         
         parent::__construct($a_parent_obj, $a_parent_cmd);
 
@@ -50,7 +49,7 @@ class adnCertifiedProfessionalDirectoryTableGUI extends ilTable2GUI
 
         $this->setId("adn_tbl_cpd");
         
-        $title = $lng->txt("adn_certified_professional_directory") . ": " .
+        $title = $this->lng->txt("adn_certified_professional_directory") . ": " .
             ilDatePresentation::formatDate($this->date_from) . " - " .
             ilDatePresentation::formatDate($this->date_to);
         if ($this->wmo) {
@@ -78,7 +77,7 @@ class adnCertifiedProfessionalDirectoryTableGUI extends ilTable2GUI
         include_once "Services/ADN/ES/classes/class.adnCertificate.php";
         $this->map["type"] = adnCertificate::getCertificateTypes();
 
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.directory_row.html", "Services/ADN/CP");
 
         $this->importData();
@@ -136,7 +135,6 @@ class adnCertifiedProfessionalDirectoryTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
 
         // properties
         $this->tpl->setVariable("VAL_ID", $a_set["id"]);

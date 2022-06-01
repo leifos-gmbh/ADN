@@ -23,21 +23,32 @@ class adnQuestionTargetNumbersGUI
 
     // current target object
     protected ?adnQuestionTargetNumbers $target = null;
+
+    protected ilCtrl $ctrl;
+    protected ilLanguage $lng;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilToolbarGUI $toolbar;
+    protected ilTabsGUI $tabs;
     
     /**
      * Constructor
      */
     public function __construct()
     {
-        global $ilCtrl;
+        global $DIC;
+        $this->ctrl = $DIC->ctrl();
+        $this->lng = $DIC->language();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->toolbar = $DIC->toolbar();
+        $this->tabs = $DIC->tabs();
 
         $this->area_id = (string) $_REQUEST["area_id"];
         $this->type = (string) $_REQUEST["type_id"];
 
         // save area, type and target ID through requests
-        $ilCtrl->saveParameter($this, array("area_id"));
-        $ilCtrl->saveParameter($this, array("type_id"));
-        $ilCtrl->saveParameter($this, array("tgt_id"));
+        $this->ctrl->saveParameter($this, array("area_id"));
+        $this->ctrl->saveParameter($this, array("type_id"));
+        $this->ctrl->saveParameter($this, array("tgt_id"));
         
         $this->readTarget();
     }
@@ -47,11 +58,10 @@ class adnQuestionTargetNumbersGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl, $lng, $tpl;
 
-        $tpl->setTitle($lng->txt("adn_ed") . " - " . $lng->txt("adn_ed_nqs"));
+        $this->tpl->setTitle($this->lng->txt("adn_ed") . " - " . $this->lng->txt("adn_ed_nqs"));
         
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
 
         $this->showTabs();
         
@@ -60,7 +70,7 @@ class adnQuestionTargetNumbersGUI
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("listTargets");
+                $cmd = $this->ctrl->getCmd("listTargets");
                 
                 switch ($cmd) {
                     // commands that need read permission
@@ -104,14 +114,13 @@ class adnQuestionTargetNumbersGUI
      */
     public function listTargets()
     {
-        global $tpl, $lng, $ilCtrl, $ilToolbar;
 
         include_once "Services/ADN/ED/classes/class.adnQuestionTargetNumbers.php";
         if ($this->type != adnQuestionTargetNumbers::TYPE_CASE) {
             if (adnPerm::check(adnPerm::ED, adnPerm::WRITE)) {
-                $ilToolbar->addButton(
-                    $lng->txt("adn_add_question_target_number"),
-                    $ilCtrl->getLinkTarget($this, "addTarget")
+                $this->toolbar->addButton(
+                    $this->lng->txt("adn_add_question_target_number"),
+                    $this->ctrl->getLinkTarget($this, "addTarget")
                 );
             }
 
@@ -137,33 +146,33 @@ class adnQuestionTargetNumbersGUI
             }
             $diff = abs($overall_value - $overall_current);
             if ($overall_value > $overall_current) {
-                ilUtil::sendInfo(sprintf($lng->txt("adn_overall_info_lower"), $diff));
+                ilUtil::sendInfo(sprintf($this->lng->txt("adn_overall_info_lower"), $diff));
             } elseif ($overall_value < $overall_current) {
-                ilUtil::sendInfo(sprintf($lng->txt("adn_overall_info_higher"), $diff));
+                ilUtil::sendInfo(sprintf($this->lng->txt("adn_overall_info_higher"), $diff));
             }
         }
 
         $toolbar = "";
         if (adnPerm::check(adnPerm::ED, adnPerm::WRITE)) {
             include_once("./Services/Form/classes/class.ilPropertyFormGUI.php");
-            $overall = new ilTextInputGUI($lng->txt("adn_overall"), "overall");
+            $overall = new ilTextInputGUI($this->lng->txt("adn_overall"), "overall");
             $overall->setSize(3);
             $overall->setMaxLength(2);
             $overall->setValue($overall_value);
 
             $toolbar = new ilToolbarGUI();
-            $toolbar->setFormAction($ilCtrl->getFormAction($this));
-            $toolbar->addInputItem($overall, $lng->txt("adn_overall"));
-            $toolbar->addFormButton($lng->txt("save"), "saveOverall");
+            $toolbar->setFormAction($this->ctrl->getFormAction($this));
+            $toolbar->addInputItem($overall, $this->lng->txt("adn_overall"));
+            $toolbar->addFormButton($this->lng->txt("save"), "saveOverall");
             $toolbar = $toolbar->getHTML();
         } else {
-            ilUtil::sendInfo($lng->txt("adn_overall") . ":  " . $overall_value);
+            ilUtil::sendInfo($this->lng->txt("adn_overall") . ":  " . $overall_value);
         }
 
         if ($this->type != adnQuestionTargetNumbers::TYPE_CASE) {
-            $tpl->setContent($table->getHTML() . "<br />" . $toolbar);
+            $this->tpl->setContent($table->getHTML() . "<br />" . $toolbar);
         } else {
-            $tpl->setContent($toolbar);
+            $this->tpl->setContent($toolbar);
         }
     }
 
@@ -172,18 +181,17 @@ class adnQuestionTargetNumbersGUI
      */
     protected function saveOverall()
     {
-        global $ilCtrl, $lng;
         
         $overall = (int) $_POST["overall"];
         if (!$overall) {
-            ilUtil::sendFailure($lng->txt("adn_overall_fail"), true);
+            ilUtil::sendFailure($this->lng->txt("adn_overall_fail"), true);
         } else {
             include_once("./Services/ADN/ED/classes/class.adnQuestionTargetNumbers.php");
             adnQuestionTargetNumbers::saveOverall($this->area_id, $this->type, $overall);
-            ilUtil::sendSuccess($lng->txt("adn_overall_saved"), true);
+            ilUtil::sendSuccess($this->lng->txt("adn_overall_saved"), true);
         }
 
-        $ilCtrl->redirect($this, "listTargets");
+        $this->ctrl->redirect($this, "listTargets");
     }
     
     /**
@@ -191,11 +199,10 @@ class adnQuestionTargetNumbersGUI
      */
     protected function addTarget()
     {
-        global $tpl, $ilTabs, $ilCtrl, $lng;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listTargets"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listTargets"));
 
-        $tpl->setContent($this->initTargetForm("create"));
+        $this->tpl->setContent($this->initTargetForm("create"));
     }
     
     /**
@@ -203,11 +210,10 @@ class adnQuestionTargetNumbersGUI
      */
     protected function editTarget()
     {
-        global $tpl, $ilTabs, $ilCtrl, $lng;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listTargets"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listTargets"));
 
-        $tpl->setContent($this->initTargetForm("edit"));
+        $this->tpl->setContent($this->initTargetForm("edit"));
     }
     
     /**
@@ -218,7 +224,6 @@ class adnQuestionTargetNumbersGUI
      */
     protected function initTargetForm($a_mode = "edit")
     {
-        global $lng, $ilCtrl, $tpl;
 
         include_once("./Services/ADN/ED/classes/class.adnQuestionTargetNumbersObjectiveTableGUI.php");
         $table = new adnQuestionTargetNumbersObjectiveTableGUI(
@@ -238,7 +243,6 @@ class adnQuestionTargetNumbersGUI
      */
     protected function saveTarget()
     {
-        global $tpl, $lng, $ilCtrl;
         
         $post = array("number" => (int) $_POST["number"],
             "single" => (bool) $_POST["single"],
@@ -269,16 +273,16 @@ class adnQuestionTargetNumbersGUI
             
             if ($target->save()) {
                 // show success message and return to list
-                ilUtil::sendSuccess($lng->txt("adn_question_target_number_created"), true);
-                $ilCtrl->redirect($this, "listTargets");
+                ilUtil::sendSuccess($this->lng->txt("adn_question_target_number_created"), true);
+                $this->ctrl->redirect($this, "listTargets");
             }
         } else {
             $mess = "";
             if (!$post["number"]) {
-                $mess .= $lng->txt("adn_question_target_invalid_number");
+                $mess .= $this->lng->txt("adn_question_target_invalid_number");
             }
             if (!$post["obj"] && !$post["sobj"]) {
-                $mess .= " " . $lng->txt("adn_question_target_invalid_objective");
+                $mess .= " " . $this->lng->txt("adn_question_target_invalid_objective");
             }
             ilUtil::sendFailure($mess);
         }
@@ -294,7 +298,6 @@ class adnQuestionTargetNumbersGUI
      */
     protected function updateTarget()
     {
-        global $lng, $ilCtrl, $tpl;
 
         $post = array("number" => (int) $_POST["number"],
             "single" => (bool) $_POST["single"],
@@ -321,16 +324,16 @@ class adnQuestionTargetNumbersGUI
             
             if ($this->target->update()) {
                 // show success message and return to list
-                ilUtil::sendSuccess($lng->txt("adn_question_target_number_updated"), true);
-                $ilCtrl->redirect($this, "listTargets");
+                ilUtil::sendSuccess($this->lng->txt("adn_question_target_number_updated"), true);
+                $this->ctrl->redirect($this, "listTargets");
             }
         } else {
             $mess = "";
             if (!$post["number"]) {
-                $mess .= $lng->txt("adn_question_target_invalid_number");
+                $mess .= $this->lng->txt("adn_question_target_invalid_number");
             }
             if (!$post["obj"] && !$post["sobj"]) {
-                $mess .= " " . $lng->txt("adn_question_target_invalid_objective");
+                $mess .= " " . $this->lng->txt("adn_question_target_invalid_objective");
             }
             ilUtil::sendFailure($mess);
         }
@@ -344,25 +347,24 @@ class adnQuestionTargetNumbersGUI
      */
     protected function confirmTargetsDeletion()
     {
-        global $ilCtrl, $tpl, $lng, $ilTabs;
         
         // check whether at least one item has been seleced
         if (!is_array($_POST["target_id"]) || count($_POST["target_id"]) == 0) {
-            ilUtil::sendFailure($lng->txt("no_checkbox"), true);
-            $ilCtrl->redirect($this, "listTargets");
+            ilUtil::sendFailure($this->lng->txt("no_checkbox"), true);
+            $this->ctrl->redirect($this, "listTargets");
         } else {
-            $ilTabs->setBackTarget(
-                $lng->txt("back"),
-                $ilCtrl->getLinkTarget($this, "listTargets")
+            $this->tabs->setBackTarget(
+                $this->lng->txt("back"),
+                $this->ctrl->getLinkTarget($this, "listTargets")
             );
 
             // display confirmation message
             include_once("./Services/Utilities/classes/class.ilConfirmationGUI.php");
             $cgui = new ilConfirmationGUI();
-            $cgui->setFormAction($ilCtrl->getFormAction($this));
-            $cgui->setHeaderText($lng->txt("adn_sure_delete_question_target_numbers"));
-            $cgui->setCancel($lng->txt("cancel"), "listTargets");
-            $cgui->setConfirm($lng->txt("delete"), "deleteTargets");
+            $cgui->setFormAction($this->ctrl->getFormAction($this));
+            $cgui->setHeaderText($this->lng->txt("adn_sure_delete_question_target_numbers"));
+            $cgui->setCancel($this->lng->txt("cancel"), "listTargets");
+            $cgui->setConfirm($this->lng->txt("delete"), "deleteTargets");
 
             // list objects that should be deleted
             include_once("./Services/ADN/ED/classes/class.adnQuestionTargetNumbers.php");
@@ -370,7 +372,7 @@ class adnQuestionTargetNumbersGUI
                 $cgui->addItem("target_id[]", $i, adnQuestionTargetNumbers::lookupName($i));
             }
             
-            $tpl->setContent($cgui->getHTML());
+            $this->tpl->setContent($cgui->getHTML());
         }
     }
     
@@ -379,7 +381,6 @@ class adnQuestionTargetNumbersGUI
      */
     protected function deleteTargets()
     {
-        global $ilCtrl, $lng;
         
         include_once("./Services/ADN/ED/classes/class.adnQuestionTargetNumbers.php");
         
@@ -389,8 +390,8 @@ class adnQuestionTargetNumbersGUI
                 $target->delete();
             }
         }
-        ilUtil::sendSuccess($lng->txt("adn_question_target_number_deleted"), true);
-        $ilCtrl->redirect($this, "listTargets");
+        ilUtil::sendSuccess($this->lng->txt("adn_question_target_number_deleted"), true);
+        $this->ctrl->redirect($this, "listTargets");
     }
 
     /**
@@ -398,7 +399,6 @@ class adnQuestionTargetNumbersGUI
      */
     protected function showTabs()
     {
-        global $ilCtrl, $lng, $ilTabs;
 
         // determin current area
         include_once("./Services/ADN/ED/classes/class.adnSubjectArea.php");
@@ -415,39 +415,39 @@ class adnQuestionTargetNumbersGUI
             adnSubjectArea::GAS))) {
             include_once("./Services/ADN/ED/classes/class.adnObjective.php");
 
-            $ilCtrl->setParameter($this, "type_id", adnObjective::TYPE_MC);
-            $ilTabs->addSubtab(
+            $this->ctrl->setParameter($this, "type_id", adnObjective::TYPE_MC);
+            $this->tabs->addSubtab(
                 "type_" . adnObjective::TYPE_MC,
-                $lng->txt("adn_mc_part"),
-                $ilCtrl->getLinkTarget($this, "listTargets")
+                $this->lng->txt("adn_mc_part"),
+                $this->ctrl->getLinkTarget($this, "listTargets")
             );
 
-            $ilCtrl->setParameter($this, "type_id", adnObjective::TYPE_CASE);
-            $ilTabs->addSubtab(
+            $this->ctrl->setParameter($this, "type_id", adnObjective::TYPE_CASE);
+            $this->tabs->addSubtab(
                 "type_" . adnObjective::TYPE_CASE,
-                $lng->txt("adn_case_part"),
-                $ilCtrl->getLinkTarget($this, "listTargets")
+                $this->lng->txt("adn_case_part"),
+                $this->ctrl->getLinkTarget($this, "listTargets")
             );
 
-            $ilCtrl->setParameter($this, "type_id", $this->type);
+            $this->ctrl->setParameter($this, "type_id", $this->type);
 
             if (!$this->type) {
-                $ilTabs->activateSubtab("type_" . adnObjective::TYPE_MC);
+                $this->tabs->activateSubtab("type_" . adnObjective::TYPE_MC);
                 $this->type = 1;
             } else {
-                $ilTabs->activateSubtab("type_" . $this->type);
+                $this->tabs->activateSubtab("type_" . $this->type);
             }
         } else {
             $this->type = null;
-            $ilCtrl->setParameter($this, "type_id", "");
+            $this->ctrl->setParameter($this, "type_id", "");
         }
 
         // tabs
         foreach ($all_areas as $k => $v) {
-            $ilCtrl->setParameter($this, "area_id", $k);
-            $ilTabs->addTab("area_" . $k, $v, $ilCtrl->getLinkTarget($this, "listTargets"));
+            $this->ctrl->setParameter($this, "area_id", $k);
+            $this->tabs->addTab("area_" . $k, $v, $this->ctrl->getLinkTarget($this, "listTargets"));
         }
-        $ilCtrl->setParameter($this, "area_id", $this->area_id);
-        $ilTabs->activateTab("area_" . $c_area);
+        $this->ctrl->setParameter($this, "area_id", $this->area_id);
+        $this->tabs->activateTab("area_" . $c_area);
     }
 }

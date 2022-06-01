@@ -52,7 +52,6 @@ class adnExaminationEventTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd, $a_mode, $a_archived = false)
     {
-        global $ilCtrl, $lng;
 
         parent::__construct($a_parent_obj, $a_parent_cmd);
 
@@ -61,11 +60,11 @@ class adnExaminationEventTableGUI extends ilTable2GUI
 
         $this->setId("adn_tbl_evt_" . $this->mode . "_" . $this->archived);
 
-        $this->setTitle($lng->txt("adn_examination_events"));
+        $this->setTitle($this->lng->txt("adn_examination_events"));
 
         if (adnPerm::check(adnPerm::EP, adnPerm::WRITE) && !$this->archived) {
             if ($this->mode == self::MODE_PREPARATION) {
-                $this->addMultiCommand("confirmEventsDeletion", $lng->txt("delete"));
+                $this->addMultiCommand("confirmEventsDeletion", $this->lng->txt("delete"));
                 $this->addColumn("", "", 1);
             }
         }
@@ -97,7 +96,7 @@ class adnExaminationEventTableGUI extends ilTable2GUI
         $this->setDefaultOrderField("date");
         $this->setDefaultOrderDirection("asc");
 
-        $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.event_row.html", "Services/ADN/ES");
         
         $this->importData();
@@ -163,18 +162,17 @@ class adnExaminationEventTableGUI extends ilTable2GUI
      */
     public function initFilter()
     {
-        global $lng;
 
         // types of exam
         $types = $this->addFilterItemByMetaType(
             "type",
             self::FILTER_SELECT,
             false,
-            $lng->txt("adn_type_of_exam")
+            $this->lng->txt("adn_type_of_exam")
         );
         include_once "Services/ADN/ED/classes/class.adnSubjectArea.php";
         $this->filter_options["type"] = adnSubjectArea::getAllAreas();
-        $all = array('' => $lng->txt('adn_filter_all')) + $this->filter_options["type"];
+        $all = array('' => $this->lng->txt('adn_filter_all')) + $this->filter_options["type"];
         $types->setOptions($all);
         $types->readFromSession();
         $this->filter["type"] = $types->getValue();
@@ -184,7 +182,7 @@ class adnExaminationEventTableGUI extends ilTable2GUI
             "date",
             self::FILTER_DATE_RANGE,
             false,
-            $lng->txt("adn_date")
+            $this->lng->txt("adn_date")
         );
         $date->readFromSession();
         $this->filter["date"] = $date->getDate();
@@ -194,11 +192,11 @@ class adnExaminationEventTableGUI extends ilTable2GUI
             "facility",
             self::FILTER_SELECT,
             false,
-            $lng->txt("adn_facility")
+            $this->lng->txt("adn_facility")
         );
         include_once "Services/ADN/MD/classes/class.adnExamFacility.php";
         $this->filter_options["facility"] = adnExamFacility::getFacilitiesSelect();
-        $all = array('' => $lng->txt('adn_filter_all')) + $this->filter_options["facility"];
+        $all = array('' => $this->lng->txt('adn_filter_all')) + $this->filter_options["facility"];
         $facility->setOptions($all);
         $facility->readFromSession();
         $this->filter["facility"] = $facility->getValue();
@@ -211,20 +209,19 @@ class adnExaminationEventTableGUI extends ilTable2GUI
      */
     protected function fillRow($a_set)
     {
-        global $lng, $ilCtrl;
 
         // actions...
         
-        $ilCtrl->setParameter($this->parent_obj, "ev_id", $a_set["id"]);
+        $this->ctrl->setParameter($this->parent_obj, "ev_id", $a_set["id"]);
 
         switch ($this->mode) {
             // list candidates
             case self::MODE_SCORING:
                 $this->tpl->setCurrentBlock("action");
-                $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_examination_attendees"));
+                $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_examination_attendees"));
                 $this->tpl->setVariable(
                     "HREF_CMD",
-                    $ilCtrl->getLinkTarget($this->parent_obj, "listCandidates")
+                    $this->ctrl->getLinkTarget($this->parent_obj, "listCandidates")
                 );
                 $this->tpl->parseCurrentBlock();
                 break;
@@ -232,10 +229,10 @@ class adnExaminationEventTableGUI extends ilTable2GUI
             // list candidates
             case self::MODE_CERTIFICATE:
                 $this->tpl->setCurrentBlock("action");
-                $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_examination_attendees"));
+                $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_examination_attendees"));
                 $this->tpl->setVariable(
                     "HREF_CMD",
-                    $ilCtrl->getLinkTarget($this->parent_obj, "listCandidates")
+                    $this->ctrl->getLinkTarget($this->parent_obj, "listCandidates")
                 );
                 $this->tpl->parseCurrentBlock();
                 break;
@@ -248,18 +245,18 @@ class adnExaminationEventTableGUI extends ilTable2GUI
                     $this->tpl->parseCurrentBlock();
 
                     $this->tpl->setCurrentBlock("action");
-                    $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_edit"));
+                    $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_edit"));
                     $this->tpl->setVariable(
                         "HREF_CMD",
-                        $ilCtrl->getLinkTarget($this->parent_obj, "editEvent")
+                        $this->ctrl->getLinkTarget($this->parent_obj, "editEvent")
                     );
                     $this->tpl->parseCurrentBlock();
                 } elseif (adnPerm::check(adnPerm::EP, adnPerm::READ)) {
                     $this->tpl->setCurrentBlock("action");
-                    $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_show_details"));
+                    $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_show_details"));
                     $this->tpl->setVariable(
                         "HREF_CMD",
-                        $ilCtrl->getLinkTarget($this->parent_obj, "showEvent")
+                        $this->ctrl->getLinkTarget($this->parent_obj, "showEvent")
                     );
                     $this->tpl->parseCurrentBlock();
                 }
@@ -269,16 +266,16 @@ class adnExaminationEventTableGUI extends ilTable2GUI
             case self::MODE_ASSIGNMENT:
                 $caption = false;
                 if (adnPerm::check(adnPerm::EP, adnPerm::WRITE) && !$this->archived) {
-                    $caption = $lng->txt("adn_assign_candidates");
+                    $caption = $this->lng->txt("adn_assign_candidates");
                 } elseif (adnPerm::check(adnPerm::EP, adnPerm::READ) && $a_set["assigned"]) {
-                    $caption = $lng->txt("adn_show_candidates");
+                    $caption = $this->lng->txt("adn_show_candidates");
                 }
                 if ($caption) {
                     $this->tpl->setCurrentBlock("action");
                     $this->tpl->setVariable("TXT_CMD", $caption);
                     $this->tpl->setVariable(
                         "HREF_CMD",
-                        $ilCtrl->getLinkTarget($this->parent_obj, "assignCandidates")
+                        $this->ctrl->getLinkTarget($this->parent_obj, "assignCandidates")
                     );
                     $this->tpl->parseCurrentBlock();
                 }
@@ -288,10 +285,10 @@ class adnExaminationEventTableGUI extends ilTable2GUI
             case self::MODE_SHEET:
                 if (adnPerm::check(adnPerm::EP, adnPerm::READ)) {
                     $this->tpl->setCurrentBlock("action");
-                    $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_answer_sheets"));
+                    $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_answer_sheets"));
                     $this->tpl->setVariable(
                         "HREF_CMD",
-                        $ilCtrl->getLinkTarget($this->parent_obj, "listSheets")
+                        $this->ctrl->getLinkTarget($this->parent_obj, "listSheets")
                     );
                     $this->tpl->parseCurrentBlock();
                 }
@@ -301,10 +298,10 @@ class adnExaminationEventTableGUI extends ilTable2GUI
             case self::MODE_INVITATION:
                 if (adnPerm::check(adnPerm::EP, adnPerm::WRITE)) {
                     $this->tpl->setCurrentBlock("action");
-                    $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_generate_invitations"));
+                    $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_generate_invitations"));
                     $this->tpl->setVariable(
                         "HREF_CMD",
-                        $ilCtrl->getLinkTarget($this->parent_obj, "listCandidates")
+                        $this->ctrl->getLinkTarget($this->parent_obj, "listCandidates")
                     );
                     $this->tpl->parseCurrentBlock();
                 }
@@ -314,10 +311,10 @@ class adnExaminationEventTableGUI extends ilTable2GUI
             case self::MODE_ATTENDANCE:
                 if (adnPerm::check(adnPerm::EP, adnPerm::WRITE)) {
                     $this->tpl->setCurrentBlock("action");
-                    $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_create_attendance_list"));
+                    $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_create_attendance_list"));
                     $this->tpl->setVariable(
                         "HREF_CMD",
-                        $ilCtrl->getLinkTarget($this->parent_obj, "createList")
+                        $this->ctrl->getLinkTarget($this->parent_obj, "createList")
                     );
                     $this->tpl->parseCurrentBlock();
                 }
@@ -325,10 +322,10 @@ class adnExaminationEventTableGUI extends ilTable2GUI
                 if (adnReportAttendanceList::lookupLastFile($a_set['id'])) {
                     if (adnPerm::check(adnPerm::EP, adnPerm::READ)) {
                         $this->tpl->setCurrentBlock("action");
-                        $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_download_attendance_list"));
+                        $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_download_attendance_list"));
                         $this->tpl->setVariable(
                             "HREF_CMD",
-                            $ilCtrl->getLinkTarget($this->parent_obj, "downloadList")
+                            $this->ctrl->getLinkTarget($this->parent_obj, "downloadList")
                         );
                         $this->tpl->parseCurrentBlock();
                     }
@@ -339,10 +336,10 @@ class adnExaminationEventTableGUI extends ilTable2GUI
             case self::MODE_NOTIFICATION:
                 if (adnPerm::check(adnPerm::EP, adnPerm::READ)) {
                     $this->tpl->setCurrentBlock("action");
-                    $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_score_notification_letters"));
+                    $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_score_notification_letters"));
                     $this->tpl->setVariable(
                         "HREF_CMD",
-                        $ilCtrl->getLinkTarget($this->parent_obj, "listParticipants")
+                        $this->ctrl->getLinkTarget($this->parent_obj, "listParticipants")
                     );
                     $this->tpl->parseCurrentBlock();
                 }
@@ -351,10 +348,10 @@ class adnExaminationEventTableGUI extends ilTable2GUI
             // test preparation
             case self::MODE_TEST_PREP:
                 $this->tpl->setCurrentBlock("action");
-                $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_list_access_codes"));
+                $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_list_access_codes"));
                 $this->tpl->setVariable(
                     "HREF_CMD",
-                    $ilCtrl->getLinkTarget($this->parent_obj, "listAccessCodes")
+                    $this->ctrl->getLinkTarget($this->parent_obj, "listAccessCodes")
                 );
                 $this->tpl->parseCurrentBlock();
                 break;
@@ -362,17 +359,17 @@ class adnExaminationEventTableGUI extends ilTable2GUI
             // online answer sheets
             case self::MODE_ONLINE:
                 $this->tpl->setCurrentBlock("action");
-                $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_online_answer_sheets"));
+                $this->tpl->setVariable("TXT_CMD", $this->lng->txt("adn_online_answer_sheets"));
                 $this->tpl->setVariable(
                     "HREF_CMD",
-                    $ilCtrl->getLinkTarget($this->parent_obj, "downloadSheets")
+                    $this->ctrl->getLinkTarget($this->parent_obj, "downloadSheets")
                 );
                 $this->tpl->parseCurrentBlock();
                 break;
 
         }
         
-        $ilCtrl->setParameter($this->parent_obj, "ev_id", "");
+        $this->ctrl->setParameter($this->parent_obj, "ev_id", "");
         
         
         // properties

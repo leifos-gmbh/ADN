@@ -11,9 +11,9 @@
 class adnReportFileUtils
 {
     protected const PDF_PATH = '/Services/ADN/Report/templates/pdf';
-    protected const TPL_REPORT_CERTIFICATE = 'adn_report_certificate.pdf';
+    public const TPL_REPORT_CERTIFICATE = 'adn_report_certificate.pdf';
     // CR008: no text "Ersatzausfertigung" so REPORT and REPORT_CERTIFICATE are identic.
-    protected const TPL_REPORT_CERTIFICATE_DUPLICATE = 'adn_report_certificate.pdf';
+    public const TPL_REPORT_CERTIFICATE_DUPLICATE = 'adn_report_certificate.pdf';
     
     public const TPL_REPORT_INVITATION_GAS = 'adn_report_invitation_gas.pdf';
     public const TPL_REPORT_INVITATION_CHEM = 'adn_report_invitation_chem.pdf';

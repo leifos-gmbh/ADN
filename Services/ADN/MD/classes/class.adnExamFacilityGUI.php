@@ -20,19 +20,30 @@ class adnExamFacilityGUI
 
     // current facility object
     protected ?adnExamFacility $facility = null;
+
+    protected ilCtrl $ctrl;
+    protected ilGlobalTemplateInterface $tpl;
+    protected ilToolbarGUI $toolbar;
+    protected ilLanguage $lng;
+    protected ilTabsGUI $tabs;
     
     /**
      * Constructor
      */
     public function __construct()
     {
-        global $ilCtrl;
+        global $DIC;
+        $this->ctrl = $DIC->ctrl();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->toolbar = $DIC->toolbar();
+        $this->lng = $DIC->language();
+        $this->tabs = $DIC->tabs();
 
         $this->wmo_id = (int) $_REQUEST["wmo_id"];
         
         // save office and facility ID through requests
-        $ilCtrl->saveParameter($this, array("wmo_id"));
-        $ilCtrl->saveParameter($this, array("ef_id"));
+        $this->ctrl->saveParameter($this, array("wmo_id"));
+        $this->ctrl->saveParameter($this, array("ef_id"));
         
         $this->readExamFacility();
     }
@@ -42,16 +53,15 @@ class adnExamFacilityGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl;
         
-        $next_class = $ilCtrl->getNextClass();
+        $next_class = $this->ctrl->getNextClass();
         
         // forward command to next gui class in control flow
         switch ($next_class) {
             // no next class:
             // this class is responsible to process the command
             default:
-                $cmd = $ilCtrl->getCmd("listExamFacilities");
+                $cmd = $this->ctrl->getCmd("listExamFacilities");
 
                 switch ($cmd) {
                     // commands that need read permission
@@ -94,14 +104,13 @@ class adnExamFacilityGUI
      */
     protected function listExamFacilities()
     {
-        global $tpl, $ilCtrl, $ilToolbar, $lng, $ilTabs;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTargetByClass("adnWMOGUI", "listWMOs"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTargetByClass("adnWMOGUI", "listWMOs"));
 
         if (adnPerm::check(adnPerm::MD, adnPerm::WRITE)) {
-            $ilToolbar->addButton(
-                $lng->txt("adn_add_exam_facility"),
-                $ilCtrl->getLinkTarget($this, "addExamFacility")
+            $this->toolbar->addButton(
+                $this->lng->txt("adn_add_exam_facility"),
+                $this->ctrl->getLinkTarget($this, "addExamFacility")
             );
         }
 
@@ -110,7 +119,7 @@ class adnExamFacilityGUI
         $table = new adnExamFacilityTableGUI($this, "listExamFacilities", $this->wmo_id);
         
         // output table
-        $tpl->setContent($table->getHTML());
+        $this->tpl->setContent($table->getHTML());
     }
 
     /**
@@ -120,14 +129,13 @@ class adnExamFacilityGUI
      */
     protected function addExamFacility(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $lng, $ilTabs, $ilCtrl;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listExamFacilities"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listExamFacilities"));
 
         if (!$a_form) {
             $a_form = $this->initExamFacilityForm(true);
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
 
     /**
@@ -135,7 +143,6 @@ class adnExamFacilityGUI
      */
     protected function saveExamFacility()
     {
-        global $tpl, $lng, $ilCtrl;
 
         $form = $this->initExamFacilityForm(true);
         if ($form->checkInput()) {
@@ -148,8 +155,8 @@ class adnExamFacilityGUI
             $facility->setZip($form->getInput("zip"));
             $facility->setCity($form->getInput("city"));
             if ($facility->save()) {
-                ilUtil::sendSuccess($lng->txt("adn_exam_facility_created"), true);
-                $ilCtrl->redirect($this, "listExamFacilities");
+                ilUtil::sendSuccess($this->lng->txt("adn_exam_facility_created"), true);
+                $this->ctrl->redirect($this, "listExamFacilities");
             }
         }
         
@@ -164,14 +171,13 @@ class adnExamFacilityGUI
      */
     protected function editExamFacility(ilPropertyFormGUI $a_form = null)
     {
-        global $tpl, $lng, $ilTabs, $ilCtrl;
 
-        $ilTabs->setBackTarget($lng->txt("back"), $ilCtrl->getLinkTarget($this, "listExamFacilities"));
+        $this->tabs->setBackTarget($this->lng->txt("back"), $this->ctrl->getLinkTarget($this, "listExamFacilities"));
 
         if (!$a_form) {
             $a_form = $this->initExamFacilityForm();
         }
-        $tpl->setContent($a_form->getHTML());
+        $this->tpl->setContent($a_form->getHTML());
     }
 
     /**
@@ -179,7 +185,6 @@ class adnExamFacilityGUI
      */
     protected function updateExamFacility()
     {
-        global $tpl, $lng, $ilCtrl;
 
         $form = $this->initExamFacilityForm();
         if ($form->checkInput()) {
@@ -190,8 +195,8 @@ class adnExamFacilityGUI
             $this->facility->setCity($form->getInput("city"));
 
             if ($this->facility->update()) {
-                ilUtil::sendSuccess($lng->txt("adn_exam_facility_updated"), true);
-                $ilCtrl->redirect($this, "listExamFacilities");
+                ilUtil::sendSuccess($this->lng->txt("adn_exam_facility_updated"), true);
+                $this->ctrl->redirect($this, "listExamFacilities");
             }
         }
 
@@ -205,44 +210,43 @@ class adnExamFacilityGUI
      */
     protected function initExamFacilityForm($a_create = false)
     {
-        global  $lng, $ilCtrl;
 
         include_once "Services/Form/classes/class.ilPropertyFormGUI.php";
         $form = new ilPropertyFormGUI();
-        $form->setFormAction($ilCtrl->getFormAction($this, "listExamFacilities"));
+        $form->setFormAction($this->ctrl->getFormAction($this, "listExamFacilities"));
 
         include_once "Services/ADN/MD/classes/class.adnWMO.php";
-        $form->setTitle($lng->txt("adn_exam_facility") . ": " . adnWMO::lookupName($this->wmo_id));
+        $form->setTitle($this->lng->txt("adn_exam_facility") . ": " . adnWMO::lookupName($this->wmo_id));
 
-        $name = new ilTextInputGUI($lng->txt("adn_exam_facility_name"), "name");
+        $name = new ilTextInputGUI($this->lng->txt("adn_exam_facility_name"), "name");
         $name->setRequired(true);
         $name->setMaxLength(50);
         $form->addItem($name);
 
-        $street = new ilTextInputGUI($lng->txt("adn_street"), "street");
+        $street = new ilTextInputGUI($this->lng->txt("adn_street"), "street");
         $street->setRequired(true);
         $street->setMaxLength(50);
         $form->addItem($street);
 
-        $street_no = new ilTextInputGUI($lng->txt("adn_street_number"), "streetno");
+        $street_no = new ilTextInputGUI($this->lng->txt("adn_street_number"), "streetno");
         $street_no->setRequired(true);
         $street_no->setMaxLength(10);
         $street_no->setSize(10);
         $form->addItem($street_no);
 
-        $zip = new ilTextInputGUI($lng->txt("adn_zip"), "zip");
+        $zip = new ilTextInputGUI($this->lng->txt("adn_zip"), "zip");
         $zip->setRequired(true);
         $zip->setMaxLength(10);
         $zip->setSize(10);
         $form->addItem($zip);
 
-        $city = new ilTextInputGUI($lng->txt("adn_city"), "city");
+        $city = new ilTextInputGUI($this->lng->txt("adn_city"), "city");
         $city->setRequired(true);
         $city->setMaxLength(50);
         $form->addItem($city);
 
         if ($a_create) {
-            $form->addCommandButton("saveExamFacility", $lng->txt("save"));
+            $form->addCommandButton("saveExamFacility", $this->lng->txt("save"));
         } else {
             $name->setValue($this->facility->getName());
             $street->setValue($this->facility->getStreet());
@@ -250,9 +254,9 @@ class adnExamFacilityGUI
             $zip->setValue($this->facility->getZip());
             $city->setValue($this->facility->getCity());
 
-            $form->addCommandButton("updateExamFacility", $lng->txt("save"));
+            $form->addCommandButton("updateExamFacility", $this->lng->txt("save"));
         }
-        $form->addCommandButton("listExamFacilities", $lng->txt("cancel"));
+        $form->addCommandButton("listExamFacilities", $this->lng->txt("cancel"));
 
         return $form;
     }
@@ -262,25 +266,24 @@ class adnExamFacilityGUI
      */
     public function confirmDeleteExamFacilities()
     {
-        global $ilCtrl, $tpl, $lng, $ilTabs;
 
         // check whether at least one item has been seleced
         if (!is_array($_POST["ef_id"]) || count($_POST["ef_id"]) == 0) {
-            ilUtil::sendFailure($lng->txt("no_checkbox"), true);
-            $ilCtrl->redirect($this, "listExamFacilities");
+            ilUtil::sendFailure($this->lng->txt("no_checkbox"), true);
+            $this->ctrl->redirect($this, "listExamFacilities");
         } else {
-            $ilTabs->setBackTarget(
-                $lng->txt("back"),
-                $ilCtrl->getLinkTarget($this, "listExamFacilities")
+            $this->tabs->setBackTarget(
+                $this->lng->txt("back"),
+                $this->ctrl->getLinkTarget($this, "listExamFacilities")
             );
 
             // display confirmation message
             include_once("./Services/Utilities/classes/class.ilConfirmationGUI.php");
             $cgui = new ilConfirmationGUI();
-            $cgui->setFormAction($ilCtrl->getFormAction($this));
-            $cgui->setHeaderText($lng->txt("adn_sure_delete_exam_facilities"));
-            $cgui->setCancel($lng->txt("cancel"), "listExamFacilities");
-            $cgui->setConfirm($lng->txt("delete"), "deleteExamFacilities");
+            $cgui->setFormAction($this->ctrl->getFormAction($this));
+            $cgui->setHeaderText($this->lng->txt("adn_sure_delete_exam_facilities"));
+            $cgui->setCancel($this->lng->txt("cancel"), "listExamFacilities");
+            $cgui->setConfirm($this->lng->txt("delete"), "deleteExamFacilities");
 
             include_once("./Services/ADN/MD/classes/class.adnExamFacility.php");
 
@@ -289,7 +292,7 @@ class adnExamFacilityGUI
                 $cgui->addItem("ef_id[]", $i, adnExamFacility::lookupName($i));
             }
 
-            $tpl->setContent($cgui->getHTML());
+            $this->tpl->setContent($cgui->getHTML());
         }
     }
 
@@ -298,7 +301,6 @@ class adnExamFacilityGUI
      */
     protected function deleteExamFacilities()
     {
-        global $ilCtrl, $lng;
 
         include_once("./Services/ADN/MD/classes/class.adnExamFacility.php");
 
@@ -308,7 +310,7 @@ class adnExamFacilityGUI
                 $facility->delete();
             }
         }
-        ilUtil::sendSuccess($lng->txt("adn_exam_facility_deleted"), true);
-        $ilCtrl->redirect($this, "listExamFacilities");
+        ilUtil::sendSuccess($this->lng->txt("adn_exam_facility_deleted"), true);
+        $this->ctrl->redirect($this, "listExamFacilities");
     }
 }
