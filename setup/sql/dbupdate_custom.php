@@ -165,7 +165,6 @@ try {
     $ilDB->dropForeignKey('adn_ep_exam_event', 'fk3');
     $ilDB->dropForeignKey('adn_ep_exam_event', 'fk4');
 } catch (ilDatabaseException $e) {
-    throw $e;
 }
 ?>
 
