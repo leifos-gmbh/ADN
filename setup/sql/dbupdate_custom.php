@@ -167,4 +167,14 @@ try {
 } catch (ilDatabaseException $e) {
 }
 ?>
-
+<#16>
+<?php
+$query = 'SELECT login, usr_id from usr_data WHERE ' . $ilDB->like('login', ilDBConstants::T_TEXT, 'pruefkand_%');
+$res = $ilDB->query($query);
+while ($row = $res->fetchRow(ilDBConstants::FETCHMODE_OBJECT)) {
+    [$prefix, $candidate_id] = explode('_', $row->login);
+    $update = 'update usr_data set login = ' . $ilDB->quote('Kandidat' . $candidate_id, ilDBConstants::T_TEXT) .
+        'WHERE login = ' . $ilDB->quote($row->login, ilDBConstants::T_TEXT);
+    $ilDB->manipulate($update);
+}
+?>
