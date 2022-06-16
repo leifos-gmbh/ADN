@@ -13,6 +13,8 @@
  */
 class adnCertifiedProfessional extends adnDBBase
 {
+    private const ONLINE_CANDIDATE_LOGIN_PREFIX = 'Kandidat';
+
     protected $id; // [int]
     protected $salutation; // [string]
     protected $last_name; // [string]
@@ -1323,7 +1325,7 @@ class adnCertifiedProfessional extends adnDBBase
             // create ilias user for professional candidate
             $user = new ilObjUser();
             $user->setGender("m");
-            $user->setLogin("ADN" . $a_cp_id);
+            $user->setLogin(self::ONLINE_CANDIDATE_LOGIN_PREFIX . $a_cp_id);
             $user->setFirstname("Prüfungskandidat");
             $user->setLastname($a_cp_id);
             $user->setActive(true);
