@@ -177,8 +177,7 @@ class adnReportOnlineExam extends adnReport
         }
         if (!$sheet instanceof adnAnswerSheet) {
             throw new adnReportException(
-                "Dieser Prüfung sind keine Antwortbögen zugeordnet.",
-                $a_code
+                "Dieser Prüfung sind keine Antwortbögen zugeordnet."
             );
         }
 
@@ -188,10 +187,9 @@ class adnReportOnlineExam extends adnReport
                 "event_id" => $this->event_id),
             array()
         );
-        if (!sizeof($assignments)) {
+        if (!count($assignments)) {
             throw new adnReportException(
-                "Dieser Prüfung sind keine Kandidaten zugeordnet.",
-                $a_code
+                "Dieser Prüfung sind keine Kandidaten zugeordnet."
             );
         }
 
@@ -221,23 +219,23 @@ class adnReportOnlineExam extends adnReport
                 $pro->getId(),
                 $this->event_id
             );
-            if (!sizeof($cand_sheets)) {
+            if (!count($cand_sheets)) {
                 throw new adnReportException(
-                    "Einem Kandidaten (" . $header . ") sind keine Prüfungsbögen zugeordnet.",
-                    $a_code
+                    "Einem Kandidaten (" . $header . ") sind keine Prüfungsbögen zugeordnet."
                 );
             }
             
             foreach ($cand_sheets as $cand_sheet) {
-                if (!sizeof($questions[$cand_sheet['ep_answer_sheet_id']])) {
+                if (
+                    !isset($questions[$cand_sheet['ep_answer_sheet_id']]) ||
+                    !is_array($questions[$cand_sheet['ep_answer_sheet_id']])
+                ) {
                     throw new adnReportException(
-                        "Es fehlen Fragen zu einen Prüfungsbogen.",
-                        $a_code
+                        "Es fehlen Fragen zu einen Prüfungsbogen."
                     );
                 }
-
                 // add questions for current sheet
-                foreach ((array) $questions[$cand_sheet['ep_answer_sheet_id']] as $qst) {
+                foreach ($questions[$cand_sheet['ep_answer_sheet_id']] as $qst) {
                     $qstid = $qst['id'];
                     
                     $xml->xmlElement(
