@@ -417,7 +417,12 @@ class ilInitialisation
         $f = new \ILIAS\Data\Factory();
         $uri = $f->uri(ilUtil::removeTrailingPathSeparators($iliasHttpPath));
 
-        return define('ILIAS_HTTP_PATH', $uri->getBaseURI());
+        // begin-patch adn 
+        $proxy_uri = '';
+        if (getenv('ADN_PROXY_URI')) {
+            $proxy_uri = getenv('ADN_PROXY_URI');
+        }
+        return define('ILIAS_HTTP_PATH', $uri->getBaseURI() . $proxy_uri);
     }
 
     /**
