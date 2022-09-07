@@ -1350,6 +1350,8 @@ class ilStartUpGUI
         $tosWithdrawalGui = new ilTermsOfServiceWithdrawalGUIHelper($user);
         $tosWithdrawalGui->handleWithdrawalLogoutRequest($this->httpRequest, $this);
 
+        $had_external_authentication = ilSession::get('used_external_auth');
+
         ilSession::setClosingContext(ilSession::SESSION_CLOSE_USER);
         $GLOBALS['DIC']['ilAuthSession']->logout();
 
@@ -1361,7 +1363,7 @@ class ilStartUpGUI
             )
         );
 
-        if ((int) $this->user->getAuthMode(true) == AUTH_SAML && ilSession::get('used_external_auth')) {
+        if ((int) $this->user->getAuthMode(true) == AUTH_SAML && $had_external_authentication) {
             $this->ctrl->redirectToURL('saml.php?action=logout&logout_url=' . urlencode(ILIAS_HTTP_PATH . '/login.php'));
         }
 
@@ -2191,7 +2193,12 @@ class ilStartUpGUI
 
         $_POST['auth_mode'] = AUTH_SAML . '_' . $idpId;
 
-        $credentials = new ilAuthFrontendCredentialsSaml($auth);
+        $this->logger->debug(sprintf(
+            'Retrieved "target" parameter: %s',
+            print_r($_GET['target'], true)
+        ));
+
+        $credentials = new ilAuthFrontendCredentialsSaml($auth, $request);
         $credentials->initFromRequest();
 
         $provider_factory = new ilAuthProviderFactory();
