@@ -692,7 +692,7 @@ class adnReportAnswerSheet extends adnReport
         );
 
         if ($sheet->getType() == adnAnswerSheet::TYPE_MC) {
-            foreach ($sheet->getQuestions() as $qst_id) {
+            foreach ($sheet->getQuestionsInObjectiveOrder(true) as $qst_id) {
                 $qst = new adnMCQuestion($qst_id);
                 $path = $qst->getFilePath();
                 
