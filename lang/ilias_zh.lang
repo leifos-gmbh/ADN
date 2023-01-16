@@ -1,16 +1,17 @@
+/* Copyright (c) 1998-2015 ILIAS open source e-Learning e.V., Extended GPL, see docs/LICENSE */
+/**
+* ILIAS language file
 *
-* @author 			李翔 (Shine Li) <shinesoft@163.com>
 * @module		    language file simplied Chinese
 * @modulegroup		language
+* @author 			李翔 (Shine Li) <shinesoft@163.com>
 * @version
-* ILIAS language file
 */
-/**
-// Language file names refer to ISO 639, see: http://www.oasis-open.org/cover/iso639a.html
 // The language file starts beyond the HTML-comment below. DO NOT modify this line!
 // To edit your language file with a spreadsheet (i.e. Excel or StarCalc) remove all lines
 // from the first line to the HTML-comment. After editing paste the lines in place again.
 // to the corresponding mode!
+// Language file names refer to ISO 639, see: http://www.oasis-open.org/cover/iso639a.html
 <!-- language file start -->
 acc#:#acc_access_key#:#Access Key
 acc#:#acc_access_keys#:#Access Keys
@@ -890,6 +891,7 @@ assessment#:#log_wrong_test_password_entered#:#Participant entered wrong test pa
 assessment#:#longmenu#:#Longmenu###10 11 2018 new variable
 assessment#:#longmenu_text#:#Long Menu Text###30 08 2015 new variable
 assessment#:#mailnottype#:#甚至当用户完成一个测试时也发送通知
+assessment#:#mailnottype_desc#:#Notify the owner of the test <strong>even if</strong> the number of test attempts has not been limited.###09 11 2022 new variable
 assessment#:#maintenance#:#Maintenance维护
 assessment#:#manscoring#:#Manual Scoring手动评分
 assessment#:#manscoring_done#:#Scored Participants评分参加者
@@ -970,6 +972,7 @@ assessment#:#oq_btn_use_order_pictures#:#Use answer pictures###22 01 2014 new va
 assessment#:#oq_btn_use_order_terms#:#Use answer terms###22 01 2014 new variable
 assessment#:#oq_header_ordering_elements#:#Ordering Elements###22 01 2014 new variable
 assessment#:#or#:#或
+assessment#:#order#:#Order###09 11 2022 new variable
 assessment#:#ordering_answer_sequence_info#:#您定义在这里的答案序列将被视为正确的方案序列。
 assessment#:#ordertext#:#文本排序
 assessment#:#ordertext_info#:#请输入水平排序的文本。这个排序文本将被空白标志分隔开。如果您需要一个不同的分隔方式，您可以使用分隔器 %s 去分隔您的文本单元。
@@ -1291,10 +1294,10 @@ assessment#:#tst_activate_skill_service_desc#:#A new tab 'Competences' will be d
 assessment#:#tst_activation_limited_visibility_info#:#如果已选择，测试是可见的，即使超出了给定的可用性之外。
 assessment#:#tst_activation_online_info#:#如果离线，仅管理员能看和编辑测试。
 assessment#:#tst_add_quest_cont_edit_mode#:#Editing Mode for additional Question Content###24 10 2013 new variable
+assessment#:#tst_add_quest_cont_edit_mode_IPE#:#Additional Content Editing with Page Object Editor###24 10 2013 new variable
 assessment#:#tst_add_quest_cont_edit_mode_IPE_info#:#No formatting of text in question and answers. No use of LaTex either. But feedback and hints can be reused when question is embedded in ILIAS learning module.###30 04 2021 new variable
+assessment#:#tst_add_quest_cont_edit_mode_RTE#:#Default Editing Mode for Additional Question Content###24 10 2013 new variable
 assessment#:#tst_add_quest_cont_edit_mode_RTE_info#:#Allows text formatting of questions, answers, feedbacks and hints. But feedback and hints cannot be reused when question is embedded in ILIAS learning module.###30 04 2021 new variable
-assessment#:#tst_add_quest_cont_edit_mode_default#:#Default Editing Mode for Additional Question Content###24 10 2013 new variable
-assessment#:#tst_add_quest_cont_edit_mode_page_object#:#Additional Content Editing with Page Object Editor###24 10 2013 new variable
 assessment#:#tst_addit_passes_blocked_after_passed_msg#:#You have passed the test. The test cannot be started again.###07 02 2020 new variable
 assessment#:#tst_all_test_competences#:#All Test Competence###26 09 2014 new variable
 assessment#:#tst_all_user_data_deleted#:#此次测试的所有用户数据已全部删除！
@@ -1630,6 +1633,7 @@ assessment#:#tst_pass_details#:#展示细节
 assessment#:#tst_pass_details_header_lo_initial#:#Initial Test Results for the Learning Objectives<br />%s - %s###30 08 2015 new variable
 assessment#:#tst_pass_details_header_lo_qualifying#:#Qualifying Test Results for the Learning Objectives<br />%s - %s###30 08 2015 new variable
 assessment#:#tst_pass_details_overview_table_title#:#Detailed Overview for Pass %s###26 09 2014 new variable
+assessment#:#tst_pass_finished#:#Test pass finished###24 11 2022 new variable
 assessment#:#tst_pass_finished_on#:#Test pass finished on###08 10 2015 new variable
 assessment#:#tst_pass_last_pass#:#最后一个通过考试的用户的得分
 assessment#:#tst_pass_last_pass_desc#:#The last pass of a participant will be scored.###27 01 2015 new variable
@@ -1651,6 +1655,7 @@ assessment#:#tst_password_entered_wrong_password#:#您不能开始测试，因�
 assessment#:#tst_password_form#:#Enter Test Password###26 09 2014 new variable
 assessment#:#tst_password_introduction#:#这个测试只能通过输入一个测试密码才能访问。请输入这个测试的密码开始测试。
 assessment#:#tst_percent_solved#:#已完成的百分比
+assessment#:#tst_player_answer_saved_and_locked#:#Answer is saved and locked and can no longer be changed###21 12 2022 new variable
 assessment#:#tst_please_select_target_for_pool_derives#:#Please select a target conatainer.###25 10 2016 new variable
 assessment#:#tst_position#:#Question %s of %s问题的
 assessment#:#tst_position_without_total#:#Question %s###23 12 2015 new variable
@@ -1707,6 +1712,7 @@ assessment#:#tst_question_hints_ordering_clipboard_resetted#:#排序剪贴板已
 assessment#:#tst_question_hints_paste_after_success_msg#:#提示 %s 已被粘贴，在提示 %s 之前。
 assessment#:#tst_question_hints_paste_before_success_msg#:#提示 %s 已被粘贴，在提示 %s 成功之前。
 assessment#:#tst_question_hints_request_confirmation#:#您真的想请求提示 %s ？这个提示 %s 分数(point)已被扣除。
+assessment#:#tst_question_hints_request_confirmation_no_deduction#:#No points will be deducted for this hint.###09 11 2022 new variable
 assessment#:#tst_question_hints_requested_hint_count_header#:#请求提示
 assessment#:#tst_question_hints_save_order_success_msg#:#提示的顺序已保存成功。
 assessment#:#tst_question_hints_tab#:#提示
@@ -3138,14 +3144,16 @@ cmix#:#conf_own_window#:#Own Window###07 02 2020 new variable
 cmix#:#conf_own_window_info#:#The content is opened in the same window and replaces the ILIAS Screen. When leaving the content the user returns to ILIAS.###07 02 2020 new variable
 cmix#:#conf_privacy_comment_default#:#Indication to user###07 02 2020 new variable
 cmix#:#conf_privacy_ident#:#User identification###30 04 2021 new variable
-cmix#:#conf_privacy_ident_il_uuid_SHA256#:#Hash combined with a unique ILIAS platform id formatted as an E-Mail address###29 07 2022 new variable
-cmix#:#conf_privacy_ident_il_uuid_SHA256_info#:#This is identical to each call, but does not permit any direct conclusions about the ILIAS user.###29 07 2022 new variable
 cmix#:#conf_privacy_ident_il_uuid_ext_account#:#External User Id combined with a unique ILIAS platform id formatted as an E-Mail adress###30 04 2021 new variable
 cmix#:#conf_privacy_ident_il_uuid_ext_account_info#:#This is identical to each call, but may allow a direct conclusion about the user.###30 04 2021 new variable
 cmix#:#conf_privacy_ident_il_uuid_login#:#ILIAS Login combined with a unique ILIAS platform id formatted as an E-Mail adress###30 04 2021 new variable
 cmix#:#conf_privacy_ident_il_uuid_login_info#:#This is identical to each call, but may allow a direct conclusion about the ILIAS user.###30 04 2021 new variable
 cmix#:#conf_privacy_ident_il_uuid_random#:#Random ID combined with a unique ILIAS platform ID formatted as an E-Mail address###30 04 2021 new variable
 cmix#:#conf_privacy_ident_il_uuid_random_info#:#For each ILIAS object and ILIAS user a random ID is generated which remains identical for each call. Conclusions about a user are very limited because it is practically impossible to create user profiles across objects.###30 04 2021 new variable
+cmix#:#conf_privacy_ident_il_uuid_sha256#:#Hash combined with a unique ILIAS platform id formatted as an E-Mail address###26 09 2022 new variable
+cmix#:#conf_privacy_ident_il_uuid_sha256_info#:#This is identical to each call, but does not permit any direct conclusions about the ILIAS user.###26 09 2022 new variable
+cmix#:#conf_privacy_ident_il_uuid_sha256url#:#Hash combined with the ILIAS Domain formatted as an E-Mail address###26 09 2022 new variable
+cmix#:#conf_privacy_ident_il_uuid_sha256url_info#:#This is identical to each call, with with a maximum of 80 characters significantly shorter than the variant with the ILIAS platform ID and allows only very limited conclusions about the ILIAS user.###26 09 2022 new variable
 cmix#:#conf_privacy_ident_il_uuid_user_id#:#ILIAS user id combined with a unique ILIAS platform id formatted as an E-Mail adress###30 04 2021 new variable
 cmix#:#conf_privacy_ident_il_uuid_user_id_info#:#This is identical to each call, but doesn't allow a direct conclusion about the ILIAS user.###30 04 2021 new variable
 cmix#:#conf_privacy_ident_info#:#Standard is frequently the email address. The unique ILIAS platform id is:###30 04 2021 new variable
@@ -3377,6 +3385,7 @@ common#:#HH#:#HH:MM
 common#:#absolute_path#:#绝对路径
 common#:#accept_usr_agreement#:#接受用户协议？
 common#:#accept_usr_agreement_btn#:#Accept###30 04 2021 new variable
+common#:#accept_usr_agreement_intro#:#There are new terms of service. You need to accept them before proceeding with the use of ILIAS. Read the following document carefully and give your consent or dissent at the bottom of the page.###24 11 2022 new variable
 common#:#access#:#访问
 common#:#accessFree#:#解除访问限制
 common#:#accessRestrict#:#设置访问限制
@@ -5793,6 +5802,7 @@ common#:#usr_account_inactive#:#非活跃账号
 common#:#usr_active_only#:#仅活跃用户
 common#:#usr_add#:#增加用户
 common#:#usr_agreement#:#用户协议
+common#:#usr_agreement_footer_intro#:#You have declared your consent to these terms of service.###24 11 2022 new variable
 common#:#usr_edit#:#编辑用户
 common#:#usr_filter_coursemember#:#课程的成员
 common#:#usr_filter_groupmember#:#组成员
@@ -5978,6 +5988,7 @@ cont#:#cont_skill_do_not_set#:#Do not set###31 08 2017 new variable
 cont#:#cont_skill_members#:#Members###31 08 2017 new variable
 cont#:#cont_skill_no_profile_selected#:#Please select a profile.###30 04 2021 new variable
 cont#:#cont_skill_no_skill#:#No value (Reset)###31 08 2017 new variable
+cont#:#cont_skill_no_skills_selected#:#No competences have been selected yet. Please add at least one competence first under "Competence Selection".###09 11 2022 new variable
 cont#:#cont_skill_profile#:#Profile###30 04 2021 new variable
 cont#:#cont_skill_profiles#:#Assigned Profiles of Members###30 04 2021 new variable
 cont#:#cont_skill_publish#:#Publish###31 08 2017 new variable
@@ -7779,9 +7790,11 @@ crs#:#crs_view_timing#:#定时视图
 crs#:#crs_view_timing_absolute#:#Absolute Dates###07 02 2020 new variable
 crs#:#crs_view_timing_relative#:#Relative Dates###07 02 2020 new variable
 crs#:#crs_view_timings#:#Timings View Type###07 02 2020 new variable
+crs#:#crs_visibility#:#Visibility###24 11 2022 new variable
 crs#:#crs_visibility_limitless#:#可见(无限制)
 crs#:#crs_visibility_until#:#可见 (从 ... 直到)
 crs#:#crs_visibility_until_info#:#The course will be visible to it's members in a specific period of time.###23 12 2015 new variable
+crs#:#crs_visibility_unvisible#:#The course is not visible.###24 11 2022 new variable
 crs#:#crs_wait_info#:#如果已启用，并且已超过最大用户数，新的注册将被放置在一个等待名单中。
 crs#:#crs_waiting_list#:#等待名单
 crs#:#crs_waiting_list_autofill#:#With Auto-Fill###30 08 2015 new variable
@@ -9267,6 +9280,7 @@ exc#:#exc_team_log#:#团队日志
 exc#:#exc_team_log_add_file#:#已添加文件 %s。
 exc#:#exc_team_log_add_member#:#已添加成员 %s。
 exc#:#exc_team_log_create_team#:#团队已创建。
+exc#:#exc_team_log_remove_file#:#Removed file %s.###21 12 2022 new variable
 exc#:#exc_team_log_remove_member#:#移除成员 %s。
 exc#:#exc_team_management_tutor#:#Team Management by Tutors###30 08 2015 new variable
 exc#:#exc_team_management_tutor_info#:#If activated participants cannot organize teams themselves.###30 08 2015 new variable
@@ -10345,12 +10359,14 @@ lti#:#activity_id#:#Activity ID###07 02 2020 new variable
 lti#:#activity_id_info#:#This Activity ID is used by the LTI Provider to identify Statements.###07 02 2020 new variable
 lti#:#auth_lti#:#LTI Auth###31 08 2017 new variable
 lti#:#conf_privacy_ident#:#User identification###30 04 2021 new variable
-lti#:#conf_privacy_ident_il_uuid_SHA256#:#Hash combined with a unique ILIAS platform id formatted as an E-Mail address###29 07 2022 new variable
-lti#:#conf_privacy_ident_il_uuid_SHA256_info#:#This is identical to each call, but does not permit any direct conclusions about the ILIAS user.###29 07 2022 new variable
 lti#:#conf_privacy_ident_il_uuid_ext_account#:#External User Id combined with a unique ILIAS platform id formated as an email adress.###30 04 2021 new variable
 lti#:#conf_privacy_ident_il_uuid_ext_account_info#:#This is identical to each call, but may allow a direct conclusion about the user.###30 04 2021 new variable
 lti#:#conf_privacy_ident_il_uuid_login#:#ILIAS Login combined with a unique ILIAS platform id formated as an email adress.###30 04 2021 new variable
 lti#:#conf_privacy_ident_il_uuid_login_info#:#This is identical to each call, but may allow a direct conclusion about the ILIAS user.###30 04 2021 new variable
+lti#:#conf_privacy_ident_il_uuid_sha256#:#Hash combined with a unique ILIAS platform id formatted as an E-Mail address###26 09 2022 new variable
+lti#:#conf_privacy_ident_il_uuid_sha256_info#:#This is identical to each call, but does not permit any direct conclusions about the ILIAS user.###26 09 2022 new variable
+lti#:#conf_privacy_ident_il_uuid_sha256url#:#Hash combined with the ILIAS Domain formatted as an E-Mail address###26 09 2022 new variable
+lti#:#conf_privacy_ident_il_uuid_sha256url_info#:#This is identical to each call, with a maximum of 80 characters significantly shorter than the variant with the ILIAS platform ID and allows only very limited conclusions about the ILIAS user.###26 09 2022 new variable
 lti#:#conf_privacy_ident_il_uuid_user_id#:#ILIAS user id combined with a unique ILIAS platform id formated as an email adress.###30 04 2021 new variable
 lti#:#conf_privacy_ident_il_uuid_user_id_info#:#This is identical to each call, but doesn't allow a direct conclusion about the ILIAS user.###30 04 2021 new variable
 lti#:#conf_privacy_ident_info#:#Standard is frequently the email address. The unique ILIAS platform id is:###30 04 2021 new variable
@@ -13841,9 +13857,11 @@ rep#:#rep_add_to_favourites#:#Add to Favourites###07 02 2020 new variable
 rep#:#rep_added_rec_content#:#Recommended content has been added.###07 02 2020 new variable
 rep#:#rep_added_to_favourites#:#The item has been added to your favourites.###07 02 2020 new variable
 rep#:#rep_breadcr_crs#:#Breadcrumb starts with course###10 11 2018 new variable
+rep#:#rep_breadcr_crs_config#:#Configuration###24 11 2022 new variable
 rep#:#rep_breadcr_crs_overwrite#:#Setting is changeable on course level###10 11 2018 new variable
 rep#:#rep_breadcr_crs_overwrite_not#:#Setting is not changeable on course level###10 11 2018 new variable
 rep#:#rep_configure#:#Configure###07 02 2020 new variable
+rep#:#rep_crs_default_shortened#:#Default: Breadcrumbs Shortened###24 11 2022 new variable
 rep#:#rep_custom_icons#:#Custom Icons###24 10 2013 new variable
 rep#:#rep_default#:#Default###10 11 2018 new variable
 rep#:#rep_dependencies#:#依赖关系
@@ -14557,6 +14575,7 @@ skmg#:#skmg_new_sktr#:#新技能模板参考
 skmg#:#skmg_next_step#:#下一步
 skmg#:#skmg_no_nodes_selectable#:#Currently there are no competences selectable.###30 12 2013 new variable
 skmg#:#skmg_no_skills#:#没有技能
+skmg#:#skmg_no_skills_selected_info#:#You have not selected or fulfilled any competences yet. Click on the "Add Competence"-button to select a competence. You can add any number of competences. If you fulfill competences by editing learning materials, they will be automatically listed here.###09 11 2022 new variable
 skmg#:#skmg_no_trigger#:#没有触发器
 skmg#:#skmg_nr#:#Nr
 skmg#:#skmg_number#:#Number###30 12 2013 new variable
@@ -14599,6 +14618,8 @@ skmg#:#skmg_skill_levels#:#技能级别
 skmg#:#skmg_skill_management_deactivated#:#技能管理当前已停用。
 skmg#:#skmg_skill_needs_impr_no_res#:#You need to improve this competence. Unfortunately there are currently no learning resources available providing learning material aligned to your target competence level.###24 10 2013 new variable
 skmg#:#skmg_skill_needs_impr_res#:#You need to improve this competence. The following resources provide learning material aligned to your target competence level.###24 10 2013 new variable
+skmg#:#skmg_skill_needs_self_eval#:#Please conduct a self-evaluation first to see your competence target.###09 11 2022 new variable
+skmg#:#skmg_skill_needs_self_eval_box#:#Please note that you have not conducted a self-evaluation for at least one competence in this profile. You will not see the competence target for the affected competences until a self-evaluation is done.###09 11 2022 new variable
 skmg#:#skmg_skill_no_needs_impr#:#Your competence level is sufficient for the selected profile.###24 10 2013 new variable
 skmg#:#skmg_skill_profiles#:#Profiles###24 10 2013 new variable
 skmg#:#skmg_skill_template#:#技能模板
@@ -16680,4 +16701,3 @@ wsp#:#wsp_type_scov#:#Certificate: SCORM###30 12 2013 new variable
 wsp#:#wsp_type_tstv#:#验证:测试
 wsp#:#wsp_type_webr#:#web链接
 wsp#:#wsp_type_wfld#:#文件夹
-﻿/* Copyright (c) 1998-2015 ILIAS open source e-Learning e.V., Extended GPL, see docs/LICENSE */

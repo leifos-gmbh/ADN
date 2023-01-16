@@ -1,31 +1,31 @@
+/**
+* This file is part of ILIAS, a powerful learning management system
+* published by ILIAS open source e-Learning e.V.
 *
+* ILIAS is licensed with the GPL-3.0,
+* see https://www.gnu.org/licenses/gpl-3.0.en.html
+* You should have received a copy of said license along with the
+* source code, too.
 *
+* If this is not the case or you just want to try ILIAS, you'll find
+* us at:
+* https://www.ilias.de
+* https://github.com/ILIAS-eLearning
 *
+/**
+* ILIAS language file (All entries)
 *
-* @author			Matthias Kunkel <mkunkel@me.com>
 * @module			language file German
 * @modulegroup		language
+* @author			Matthias Kunkel <mkunkel@me.com>
 * @version			$Id$
-* ILIAS is licensed with the GPL-3.0,
-* ILIAS language file (All entries)
-* If this is not the case or you just want to try ILIAS, you'll find
-* This file is part of ILIAS, a powerful learning management system
-* You should have received a copy of said license along with the
-* https://github.com/ILIAS-eLearning
-* https://www.ilias.de
-* published by ILIAS open source e-Learning e.V.
-* see https://www.gnu.org/licenses/gpl-3.0.en.html
-* source code, too.
-* us at:
 */
-/**
-/**
-// Language file names refer to ISO 639, see: http://www.oasis-open.org/cover/iso639a.html
-// NOTICE: Character coding of all ILIAS lang files is UTF-8! Please set your editor
 // The language file starts beyond the HTML-comment below. DO NOT modify this line!
 // To edit your language file with a spreadsheet (i.e. Excel or StarCalc) remove all lines
 // from the first line to the HTML-comment. After editing paste the lines in place again.
+// NOTICE: Character coding of all ILIAS lang files is UTF-8! Please set your editor
 // to the corresponding mode!
+// Language file names refer to ISO 639, see: http://www.oasis-open.org/cover/iso639a.html
 <!-- language file start -->
 acc#:#acc_access_key#:#Access-Key
 acc#:#acc_access_keys#:#Access-Keys
@@ -905,6 +905,7 @@ assessment#:#log_wrong_test_password_entered#:#Teilnehmer hat falsches Testpassw
 assessment#:#longmenu#:#Longmenu
 assessment#:#longmenu_text#:#‘Long Menu’-Text
 assessment#:#mailnottype#:#Ein Versand findet auch beim Beenden einzelner Testdurchläufe statt
+assessment#:#mailnottype_desc#:#Der Besitzer des Tests wird auch dann benachrichtigt, wenn die Anzahl Durchläufe nicht beschränkt ist.
 assessment#:#maintenance#:#Wartung
 assessment#:#manscoring#:#Manuelle Bewertung
 assessment#:#manscoring_done#:#Bereits bewertete Teilnehmer
@@ -985,6 +986,7 @@ assessment#:#oq_btn_use_order_pictures#:#Verwende Antwort mit Bildern
 assessment#:#oq_btn_use_order_terms#:#Verwende Antwort mit Termen
 assessment#:#oq_header_ordering_elements#:#Anordnungs-Elemente
 assessment#:#or#:#oder
+assessment#:#order#:#Sortierung
 assessment#:#ordering_answer_sequence_info#:#Die hier definierte Reihenfolge der Antworten wird als korrekte Lösungsreihenfolge verwendet.
 assessment#:#ordertext#:#Anzuordnender Text
 assessment#:#ordertext_info#:#Bitte geben Sie den Text in der Reihenfolge ein, in der er horizontal angeordnet werden soll. Die einzelnen Bestandteile werden durch Leerzeichen getrennt. Wenn Sie eine abweichende Trennung benötigen, verwenden Sie bitte stattdessen den Trenner %s anstelle der Leerzeichen.
@@ -1306,10 +1308,10 @@ assessment#:#tst_activate_skill_service_desc#:#Erlaubt die Zuordnung von Fragen 
 assessment#:#tst_activation_limited_visibility_info#:#Außerhalb des angegebenen Zeitraums wird der Testtitel angezeigt. Der Test kann aber nicht gestartet werden. Der weitere Zugriff, auch auf bereits laufende Tests, wird zum Ende des Zeitraums unterbunden.
 assessment#:#tst_activation_online_info#:#Nur wenn der Test online geschaltet ist, können Benutzer am Test teilnehmen.
 assessment#:#tst_add_quest_cont_edit_mode#:#Editor
+assessment#:#tst_add_quest_cont_edit_mode_IPE#:#Unformatierter Text für Fragen und Antworten und ILIAS-Seiteneditor für Rückmeldungen und Lösungshinweise
 assessment#:#tst_add_quest_cont_edit_mode_IPE_info#:#Bietet keine Formatierung von Text in Fragen und Antworten, erlaubt aber Gestaltung der Rückmeldungen und Lösungshinweise mit ILIAS-Seiteneditor und Wiederverwendung bei Fragen in ILIAS-Lernmodulen.
+assessment#:#tst_add_quest_cont_edit_mode_RTE#:#Rich-Text-Editor (TinyMCE) für das Editieren der Fragen, Antworten, Rückmeldungen und Lösungshinweisen
 assessment#:#tst_add_quest_cont_edit_mode_RTE_info#:#Erlaubt formatierten Text für Fragen, Antworten, Rückmeldungen und Lösungshinweise. Rückmeldungen und Lösungshinweise werden aber beim Einbinden von Fragen in ILIAS-Lernmodule nicht übernommen.
-assessment#:#tst_add_quest_cont_edit_mode_default#:#Rich-Text-Editor (TinyMCE) für das Editieren der Fragen, Antworten, Rückmeldungen und Lösungshinweisen
-assessment#:#tst_add_quest_cont_edit_mode_page_object#:#Unformatierter Text für Fragen und Antworten und ILIAS-Seiteneditor für Rückmeldungen und Lösungshinweise
 assessment#:#tst_addit_passes_blocked_after_passed_msg#:#Sie haben den Test bestanden. Der Test kann nicht noch einmal gestartet werden.
 assessment#:#tst_all_test_competences#:#Alle Test-Kompetenzen
 assessment#:#tst_all_user_data_deleted#:#Die Daten aller Testteilnehmer wurden gelöscht!
@@ -1645,6 +1647,7 @@ assessment#:#tst_pass_details#:#Detaillierte Ergebnisse
 assessment#:#tst_pass_details_header_lo_initial#:#Einstiegsergebnisse zu den Lernzielen<br />%s - %s
 assessment#:#tst_pass_details_header_lo_qualifying#:#Qualifizierende Ergebnisse zu den Lernzielen<br />%s - %s
 assessment#:#tst_pass_details_overview_table_title#:#Detaillierte Testergebnisse für Testdurchlauf %s
+assessment#:#tst_pass_finished#:#Testdurchlauf wurde beendet
 assessment#:#tst_pass_finished_on#:#Testdurchlauf beendet am
 assessment#:#tst_pass_last_pass#:#Letzten Testdurchlauf bewerten
 assessment#:#tst_pass_last_pass_desc#:#Es wird immer der letzte Testdurchlauf eines Teilnehmers bewertet.
@@ -1666,6 +1669,7 @@ assessment#:#tst_password_entered_wrong_password#:#Sie können den Test nicht st
 assessment#:#tst_password_form#:#Eingabe Testpasswort
 assessment#:#tst_password_introduction#:#Dieser Test kann nur mit einem Testpasswort gestartet bzw. fortgeführt werden. Bitte tragen Sie das Passwort hier ein.
 assessment#:#tst_percent_solved#:#Prozent gelöst
+assessment#:#tst_player_answer_saved_and_locked#:#Antwort wird gespeichert und gesperrt. Dadurch kann die Antwort nicht mehr geändert werden.
 assessment#:#tst_please_select_target_for_pool_derives#:#Bitte wählen Sie einen Zielcontainer aus.
 assessment#:#tst_position#:#Frage %s von %s
 assessment#:#tst_position_without_total#:#Frage %s
@@ -1722,6 +1726,7 @@ assessment#:#tst_question_hints_ordering_clipboard_resetted#:#Die Sortierungszwi
 assessment#:#tst_question_hints_paste_after_success_msg#:#Der Lösungshinweis %s wurde nach dem Lösungshinweis %s erfolgreich eingefügt.
 assessment#:#tst_question_hints_paste_before_success_msg#:#Der Lösungshinweis %s wurde vor dem Lösungshinweis %s erfolgreich eingefügt.
 assessment#:#tst_question_hints_request_confirmation#:#Wollen Sie den %s. Lösungshinweis wirklich anfordern? Es wird/werden für diesen Lösungshinweis %s Punkt(e) abgezogen.
+assessment#:#tst_question_hints_request_confirmation_no_deduction#:#Für diesen Hinweis gibt es keinen Punktabzug.
 assessment#:#tst_question_hints_requested_hint_count_header#:#Angeforderte Lösungshinweise
 assessment#:#tst_question_hints_save_order_success_msg#:#Die Reihenfolge der Lösungshinweise wurde erfolgreich gespeichert.
 assessment#:#tst_question_hints_tab#:#Lösungshinweise
@@ -3153,14 +3158,16 @@ cmix#:#conf_own_window#:#Gleiches Fenster
 cmix#:#conf_own_window_info#:#Der Inhalt wird im gleichen Fenster geöffnet und ersetzt den ILIAS-Bildschirm. Beim Verlassen des Inhalts kehrt der Benutzer zu ILIAS zurück.
 cmix#:#conf_privacy_comment_default#:#Anzeige an den Benutzer
 cmix#:#conf_privacy_ident#:#Benutzeridentifikation
-cmix#:#conf_privacy_ident_il_uuid_SHA256#:#Hash kombiniert mit einer eindeutigen ILIAS-Plattform-ID, die als E-Mail-Adresse formatiert ist
-cmix#:#conf_privacy_ident_il_uuid_SHA256_info#:#Dies ist identisch mit jedem Aufruf, erlaubt aber keine direkten Rückschlüsse auf den ILIAS-Benutzer.
 cmix#:#conf_privacy_ident_il_uuid_ext_account#:#Externe Benutzer-ID kombiniert mit einer eindeutigen ILIAS-Plattform-ID, die als E-Mail-Adresse formatiert ist
 cmix#:#conf_privacy_ident_il_uuid_ext_account_info#:#Dies ist identisch mit jedem Aufruf, kann aber eine direkte Rückschlüsse auf den Benutzer zulassen.
-cmix#:#conf_privacy_ident_il_uuid_login#:#ILIAS-Login kombiniert mit einer eindeutigen ILIAS-Plattform-ID, die als E-Mail-Adresse formatiert ist
+cmix#:#conf_privacy_ident_il_uuid_login#:#ILIAS-Login als E-Mail-Adresse, bei Bedarf kombiniert mit einer eindeutigen ILIAS-Plattform-ID
 cmix#:#conf_privacy_ident_il_uuid_login_info#:#Sendet den Benutzernamen. Dies ist identisch mit jedem Aufruf, kann aber eine direkte Rückschlüsse auf den ILIAS-Benutzer zulassen.
 cmix#:#conf_privacy_ident_il_uuid_random#:#Zufalls-ID kombiniert mit einer eindeutigen ILIAS-Plattform-ID, die als E-Mail-Adresse formatiert ist
 cmix#:#conf_privacy_ident_il_uuid_random_info#:#Pro ILIAS-Objekt und ILIAS-Benutzer wird eine Zufalls-ID erzeugt, die bei jedem Aufruf identisch bleibt. Rückschlüsse auf einen Benutzer sind sehr eingeschränkt, da Objekt-übergreifende Nutzerprofile praktisch nicht erstellt werden können.
+cmix#:#conf_privacy_ident_il_uuid_sha256#:#Hash kombiniert mit einer eindeutigen ILIAS-Plattform-ID, die als E-Mail-Adresse formatiert ist
+cmix#:#conf_privacy_ident_il_uuid_sha256_info#:#Dies ist identisch mit jedem Aufruf, erlaubt aber keine direkten Rückschlüsse auf den ILIAS-Benutzer.
+cmix#:#conf_privacy_ident_il_uuid_sha256url#:#Hash kombiniert mit der ILIAS-Domain, die als E-Mail-Adresse formatiert ist
+cmix#:#conf_privacy_ident_il_uuid_sha256url_info#:#Dies ist identisch mit jedem Aufruf, mit maximal 80 Zeichen deutlich kürzer als die Variante mit der ILIAS-Plattform-ID und ermöglicht nur sehr eingeschränkte Rückschlüsse auf den ILIAS-Benutzer.
 cmix#:#conf_privacy_ident_il_uuid_user_id#:#ILIAS-Benutzer-ID kombiniert mit einer eindeutigen ILIAS-Plattform-ID, die als E-Mail-Adresse formatiert ist
 cmix#:#conf_privacy_ident_il_uuid_user_id_info#:#Sendet die interne numerische Benutzer-Id. Dies ist identisch mit jedem Aufruf, ermöglicht aber Rückschlüsse auf den ILIAS-Benutzer.
 cmix#:#conf_privacy_ident_info#:#Standard ist häufig die E-Mail-Adresse. Die eindeutige ILIAS-Plattform-ID lautet:
@@ -3392,6 +3399,7 @@ common#:#HH#:#SS:MM
 common#:#absolute_path#:#Absoluter Pfad
 common#:#accept_usr_agreement#:#Nutzungsvereinbarung akzeptieren?
 common#:#accept_usr_agreement_btn#:#Zustimmen
+common#:#accept_usr_agreement_intro#:#Es liegen neue Nutzungsbedingungen vor. Sie müssen sie akzeptieren, bevor Sie mit der Nutzung von ILIAS fortfahren können. Lesen Sie das folgende Dokument sorgfältig durch und geben Sie unten auf der Seite Ihre Zustimmung oder Ablehnung.
 common#:#access#:#Zugriff
 common#:#accessFree#:#Befristung des Zugriffs aufheben
 common#:#accessRestrict#:#Zugriff befristen
@@ -4604,7 +4612,7 @@ common#:#mm_favorites#:#Favoriten
 common#:#mm_learning_history#:#Lernverlauf
 common#:#mm_learning_progress#:#Lernfortschritt
 common#:#mm_mail#:#Mail
-common#:#mm_news#:#News
+common#:#mm_news#:#Neuigkeiten
 common#:#mm_notes#:#Notizen
 common#:#mm_organisation#:#Organisation
 common#:#mm_personal_and_shared_r#:#Persönliche und geteilte Ressourcen
@@ -5715,6 +5723,7 @@ common#:#udf_delete_sure#:#Sind Sie sicher, dass Sie diese Feld und alle zugehö
 common#:#udf_duplicate_entries#:#Die Werte müssen eindeutig sein.
 common#:#udf_field_deleted#:#Das Feld wurde gelöscht.
 common#:#udf_name_already_exists#:#Ein Feld mit diesem Namen existiert bereits. Bitte wählen Sie einen anderen Feldnamen.
+common#:#udf_required_and_visible_requires_changeable#:#Wenn die Einstellungen "Erforderliche Angabe" und "Sichtbar in den persönlichen Daten" aktiviert sind, muss auch "Kann durch Benutzer selbst im Profil geändert werden" aktiviert sein
 common#:#udf_required_requires_visib_reg#:#Die Einstellung "Erforderliche Angabe" erfordert die Einstellung "Sichtbar im Registrierungsformular"
 common#:#udf_type_date#:#Datum
 common#:#udf_type_datetime#:#Datum und Uhrzeit
@@ -5808,6 +5817,7 @@ common#:#usr_account_inactive#:#Inaktiver Benutzer
 common#:#usr_active_only#:#Nur aktive Benutzer
 common#:#usr_add#:#Neuer Benutzer
 common#:#usr_agreement#:#Nutzungsvereinbarung
+common#:#usr_agreement_footer_intro#:#Zu dieser Nutzungsvereinbarung haben Sie ihr Einverständnis erklärt.
 common#:#usr_edit#:#Benutzer bearbeiten
 common#:#usr_filter_coursemember#:#Mitglied eines Kurses
 common#:#usr_filter_groupmember#:#Mitglied einer Gruppe
@@ -5993,6 +6003,7 @@ cont#:#cont_skill_do_not_set#:#Nicht setzen
 cont#:#cont_skill_members#:#Mitglieder
 cont#:#cont_skill_no_profile_selected#:#Bitte wählen Sie ein Profil aus.
 cont#:#cont_skill_no_skill#:#Kein Wert (zurücksetzen)
+cont#:#cont_skill_no_skills_selected#:#Es wurden noch keine Kompetenzen ausgewählt. Bitte fügen Sie zunächst mindestens eine Kompetenz hinzu unter "Kompetenzauswahl".
 cont#:#cont_skill_profile#:#Profil
 cont#:#cont_skill_profiles#:#Profile der Mitglieder
 cont#:#cont_skill_publish#:#Veröffentlichung
@@ -6567,17 +6578,17 @@ content#:#cont_list_outdent#:#Liste ausrücken
 content#:#cont_list_properties#:#Listen-Eigenschaften
 content#:#cont_lists#:#Listen
 content#:#cont_lk_chapter#:#Kapitel
-content#:#cont_lk_chapter_new#:#Kapitel (Neuer Frame)
+content#:#cont_lk_chapter_new#:#Kapitel in neuem Tab
 content#:#cont_lk_file#:#Datei/Dokument
-content#:#cont_lk_media_faq#:#Medienobjekt (FAQ Frame)
+content#:#cont_lk_media_faq#:#Medienobjekt in FAQ Tool
 content#:#cont_lk_media_inline#:#Medienobjekt (Inline)
-content#:#cont_lk_media_media#:#Medienobjekt (Media Frame)
-content#:#cont_lk_media_new#:#Medienobjekt (Neuer Frame)
+content#:#cont_lk_media_media#:#Medienobjekt in Media Tool
+content#:#cont_lk_media_new#:#Medienobjekt in neuem Tab
 content#:#cont_lk_page#:#Seite
-content#:#cont_lk_page_faq#:#Seite (FAQ Frame)
-content#:#cont_lk_page_new#:#Seite (Neuer Frame)
+content#:#cont_lk_page_faq#:#Seite in FAQ Tool
+content#:#cont_lk_page_new#:#Seite in neuem Tab
 content#:#cont_lk_term#:#Glossarbegriff
-content#:#cont_lk_term_new#:#Glossarbegriff (Neuer Frame)
+content#:#cont_lk_term_new#:#Glossarbegriff in neuem Tab
 content#:#cont_lm_comments_desc#:#Erlaubt es Benutzern öffentliche Kommentare auf allen Lernmodulseiten hinzuzufügen.
 content#:#cont_lm_default_layout#:#Standardlayout des Lernmoduls
 content#:#cont_lm_mail_permanent_link#:#Klicken Sie auf den folgenden Link um das Lernmodul aufzurufen:
@@ -7794,9 +7805,11 @@ crs#:#crs_view_timing#:#Lernplanungsansicht
 crs#:#crs_view_timing_absolute#:#Absolutes Datum
 crs#:#crs_view_timing_relative#:#Relatives Datum
 crs#:#crs_view_timings#:#Lernplanungstyp
+crs#:#crs_visibility#:#Sichtbarkeit
 crs#:#crs_visibility_limitless#:#Unbegrenzt – wenn online geschaltet
 crs#:#crs_visibility_until#:#Zeitlich begrenzte Verfügbarkeit
 crs#:#crs_visibility_until_info#:#Der Kurs wird seinen Mitgliedern nur für einen bestimmten Zeitraum angezeigt.
+crs#:#crs_visibility_unvisible#:#Der Kurs ist nicht sichtbar.
 crs#:#crs_wait_info#:#Ist die maximale Mitgliederanzahl erreicht, können sich weitere Benutzer auf eine Warteliste setzen lassen.
 crs#:#crs_waiting_list#:#Warteliste
 crs#:#crs_waiting_list_autofill#:#Mit automatischem Aufrücken
@@ -8411,7 +8424,7 @@ dcl#:#dcl_err_formula_field_not_found#:#Feld mit dem Titel '%s' existiert nicht
 dcl#:#dcl_error_parsing_expression#:#Fehler beim Evaluieren des Ausdrucks
 dcl#:#dcl_export_enabled#:#Tabelle exportieren
 dcl#:#dcl_export_enabled_desc#:#Alle Benutzer können die Daten der Tabelle selber exportieren. Dazu müssen in der Übersicht "Felder der ausgewählten Tabelle" die Felder einzeln als exportierbar ausgewählt werden.
-dcl#:#dcl_export_finished#:#Export Abgeschlossen
+dcl#:#dcl_export_finished#:#Export abgeschlossen
 dcl#:#dcl_export_started#:#Asynchroner Export gestartet
 dcl#:#dcl_field_datatype#:#Feld Datentyp
 dcl#:#dcl_field_description#:#Beschreibung
@@ -8451,7 +8464,7 @@ dcl#:#dcl_last_update_description#:#Das Datum, an dem dieser Eintrag zuletzt ge�
 dcl#:#dcl_learning_progress#:#Lernfortschritt anzeigen
 dcl#:#dcl_legend_placeholders#:#Platzhalter
 dcl#:#dcl_length#:#Länge
-dcl#:#dcl_length_info#:#Maximale Anzahl von Zeichen, die ein Benutzer eingeben kann. Bei mehr als 200 Zeichen aktivieren Sie zusätzlich die Option "Mehrzeiliges Texteingabefeld".
+dcl#:#dcl_length_info#:#Anzahl von Zeichen, die ein Benutzer eingeben kann (Maximal 4000). Bei mehr als 200 Zeichen aktivieren Sie zusätzlich die Option "Mehrzeiliges Texteingabefeld".
 dcl#:#dcl_limit_end#:#Ende
 dcl#:#dcl_limit_start#:#Start
 dcl#:#dcl_limited#:#Zeitlich begrenzte Bearbeitung
@@ -9282,6 +9295,7 @@ exc#:#exc_team_log#:#Team Log
 exc#:#exc_team_log_add_file#:#Datei %s hinzugefügt.
 exc#:#exc_team_log_add_member#:#Mitglied %s hinzugefügt.
 exc#:#exc_team_log_create_team#:#Team erstellt.
+exc#:#exc_team_log_remove_file#:#Datei %s entfernt.
 exc#:#exc_team_log_remove_member#:#Mitglied %s entfernt.
 exc#:#exc_team_management_tutor#:#Team-Management durch Tutoren
 exc#:#exc_team_management_tutor_info#:#Bei Aktivierung dieser Option können Teilnehmer ihre Teams nicht selbst organisieren.
@@ -10285,7 +10299,7 @@ lso#:#lso_header_delete_members#:#Sie möchten folgende Mitglieder aus der Lerns
 lso#:#lso_header_edit_members#:#Mitglieder bearbeiten
 lso#:#lso_mail_admission_new_bod#:#Sie sind in Lernsequenz "%s" als Mitglied aufgenommen worden.
 lso#:#lso_mail_admission_new_sub#:#Mitgliedschaft in Lernsequenz "%s"
-lso#:#lso_mail_dismiss_bod#:#hre Mitgliedschaft in Lernsequenz "%s" wurde beendet.
+lso#:#lso_mail_dismiss_bod#:#Ihre Mitgliedschaft in Lernsequenz "%s" wurde beendet.
 lso#:#lso_mail_dismiss_sub#:#Mitgliedschaft in Lernsequenz "%s" beendet
 lso#:#lso_mail_notification_reg_bod#:#%s hat einen Aufnahmeantrag für die Lernsequenz "%s" gestellt.
 lso#:#lso_mail_notification_reg_req_bod#:#%s hat einen Aufnahmeantrag für die Lernsequenz "%s" gestellt.
@@ -10360,12 +10374,14 @@ lti#:#activity_id#:#Activity-ID
 lti#:#activity_id_info#:#Diese Activity-ID wird vom LTI-Provider verwendet, um Statements zu identifizieren.
 lti#:#auth_lti#:#LTI Auth
 lti#:#conf_privacy_ident#:#Benutzeridentifikation
-lti#:#conf_privacy_ident_il_uuid_SHA256#:#Hash kombiniert mit einer eindeutigen ILIAS-Plattform-ID, die als E-Mail-Adresse formatiert ist
-lti#:#conf_privacy_ident_il_uuid_SHA256_info#:#Dies ist identisch mit jedem Aufruf, erlaubt aber keine direkten Rückschlüsse auf den ILIAS-Benutzer.
 lti#:#conf_privacy_ident_il_uuid_ext_account#:#Externe Benutzer-ID kombiniert mit einer eindeutigen ILIAS-Plattform-ID, die als E-Mail-Adresse formatiert ist
 lti#:#conf_privacy_ident_il_uuid_ext_account_info#:#Dies ist identisch mit jedem Aufruf, kann aber direkte Rückschlüsse auf den Benutzer zulassen.
-lti#:#conf_privacy_ident_il_uuid_login#:#ILIAS-Login kombiniert mit einer eindeutigen ILIAS-Plattform-ID, die als E-Mail-Adresse formatiert ist
+lti#:#conf_privacy_ident_il_uuid_login#:#ILIAS-Login als E-Mail-Adresse, bei Bedarf kombiniert mit einer eindeutigen ILIAS-Plattform-ID
 lti#:#conf_privacy_ident_il_uuid_login_info#:#Sendet den Benutzernamen. Dies ist identisch mit jedem Aufruf, kann aber direkte Rückschlüsse auf den ILIAS-Benutzer zulassen.
+lti#:#conf_privacy_ident_il_uuid_sha256#:#Hash kombiniert mit einer eindeutigen ILIAS-Plattform-ID, die als E-Mail-Adresse formatiert ist
+lti#:#conf_privacy_ident_il_uuid_sha256_info#:#Dies ist identisch mit jedem Aufruf, erlaubt aber keine direkten Rückschlüsse auf den ILIAS-Benutzer.
+lti#:#conf_privacy_ident_il_uuid_sha256url#:#Hash kombiniert mit der ILIAS-Domain, die als E-Mail-Adresse formatiert ist
+lti#:#conf_privacy_ident_il_uuid_sha256url_info#:#Dies ist identisch mit jedem Aufruf, mit maximal 80 Zeichen deutlich kürzer als die Variante mit der ILIAS-Plattform-ID und ermöglicht nur sehr eingeschränkte Rückschlüsse auf den ILIAS-Benutzer.
 lti#:#conf_privacy_ident_il_uuid_user_id#:#ILIAS-Benutzer-ID kombiniert mit einer eindeutigen ILIAS-Plattform-ID, die als E-Mail-Adresse formatiert ist
 lti#:#conf_privacy_ident_il_uuid_user_id_info#:#Sendet die interne numerische Benutzer-Id. Dies ist identisch mit jedem Aufruf, ermöglicht aber Rückschlüsse auf den ILIAS-Benutzer.
 lti#:#conf_privacy_ident_info#:#Standard ist häufig die E-Mail-Adresse. Die eindeutige ILIAS-Plattform-ID lautet:
@@ -10862,7 +10878,7 @@ mathjax#:#mathjax_limiter#:#Trennzeichen
 mathjax#:#mathjax_limiter_info#:#Wählen Sie die Trennzeichen, wie Sie in Ihrer MathJax-Installation konfiguriert sind.
 mathjax#:#mathjax_mathjax#:#MathJax
 mathjax#:#mathjax_path_to_mathjax#:#URL zu MathJax
-mathjax#:#mathjax_path_to_mathjax_desc#:#Zum Beispiel: https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML oder eine URL zu Ihrer lokalen Installation. ILIAS 6 und 7 unterstützt MathJax 2.7, noch nicht MathJax 3.
+mathjax#:#mathjax_path_to_mathjax_desc#:#Zum Beispiel: https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML,Safe oder eine URL zu Ihrer lokalen Installation. ILIAS 6 und 7 unterstützt MathJax 2.7, noch nicht MathJax 3. Bitte beachten Sie das angehänge "Safe". Andernfalls wird ILIAS über MathJax-Code mit JavaScript anfällig für XSS-Angriffe.
 mathjax#:#mathjax_server_address#:#Server-Adresse
 mathjax#:#mathjax_server_address_info#:#z.B. http://localhost:8003
 mathjax#:#mathjax_server_cache_cleared#:#Der MathJax-Cache wurde geleert.
@@ -11065,7 +11081,9 @@ meta#:#md_adv_record_lng_table_lng#:#Sprache
 meta#:#md_adv_records#:#Enthaltene Datensätze
 meta#:#md_adv_records_exported#:#Eine neue Exportdatei wurde angelegt.
 meta#:#md_adv_scope#:#Gültigkeitsbereich
+meta#:#md_adv_scope_info#:#Die Nutzung dieses benutzerdefinierten Metadatensatzes wird auf Teilbereiche des Magazins beschränkt.
 meta#:#md_adv_scope_list_header#:#Beschränkt auf:
+meta#:#md_adv_scope_objects#:#Datensatz wirksam ab
 meta#:#md_adv_searchable#:#Durchsuchbar
 meta#:#md_adv_select_one_file#:#Bitte wählen Sie eine Datei aus.
 meta#:#md_adv_show#:#Anzeigen
@@ -13763,6 +13781,7 @@ registration#:#reg_confirmation_hash_life_time#:#Gültigkeitsdauer
 registration#:#reg_confirmation_hash_life_time_expired#:#Der Bestätigungslink ist nicht mehr gültig. Bitte registrieren Sie sich erneut!
 registration#:#reg_confirmation_hash_life_time_info#:#Geben Sie die Gültigkeitsdauer des Bestätigungslinks (in Sekunden) an. Empfohlener Wert sind 1800 Sekunden.
 registration#:#reg_confirmation_hash_not_found#:#Dieser Bestätigungslink passt zu keinem Benutzerkonto.
+registration#:#reg_confirmation_hash_not_passed#:#Der Bestätigungslink ist unvollständig.
 registration#:#reg_confirmation_link_successful#:#Sie haben sich erfolgreich bei ILIAS registriert. Jetzt müssen Sie noch Ihr Benutzerkonto aktivieren. Dazu wurde Ihnen soeben eine E-Mail mit einem Bestätigungslink geschickt. Bitte klicken Sie innerhalb der nächsten Minuten auf den Bestätigungslink, um Ihr Benutzerkonto zu aktivieren. Danach können Sie sich in ILIAS einloggen.
 registration#:#reg_default#:#Standard
 registration#:#reg_deleted_assignment#:#Die Zuordnungen wurde(n) gelöscht.
@@ -13856,9 +13875,11 @@ rep#:#rep_add_to_favourites#:#Zu Favoriten hinzufügen
 rep#:#rep_added_rec_content#:#Empfohlener Inhalt wurde hinzugefügt.
 rep#:#rep_added_to_favourites#:#Das Objekt wurden den Favoriten hinzugefügt.
 rep#:#rep_breadcr_crs#:#Brotkrumennavigation beginnt mit Kurs
+rep#:#rep_breadcr_crs_config#:#Konfiguration
 rep#:#rep_breadcr_crs_overwrite#:#Brotkrumendarstellung kann im Kurs konfiguriert werden.
 rep#:#rep_breadcr_crs_overwrite_not#:#Brotkrumendarstellung kann im Kurs nicht konfiguriert werden.
 rep#:#rep_configure#:#Konfigurieren
+rep#:#rep_crs_default_shortened#:#Standardvorgabe: Gekürzte Brotkrumen
 rep#:#rep_custom_icons#:#Angepasste Icons
 rep#:#rep_default#:#Standardwert
 rep#:#rep_dependencies#:#Abhängigkeiten
@@ -14572,6 +14593,7 @@ skmg#:#skmg_new_sktr#:#Neue Vorlagenreferenz
 skmg#:#skmg_next_step#:#Nächster Schritt
 skmg#:#skmg_no_nodes_selectable#:#Zur Zeit sind keine Kompetenzen auswählbar.
 skmg#:#skmg_no_skills#:#Keine Kompetenz
+skmg#:#skmg_no_skills_selected_info#:#Sie haben noch keine Kompetenzen ausgewählt oder erworben. Klicken Sie auf den Button "Kompetenz hinzufügen" um eine Kompetenz auszuwählen. Sie können beliebig viele Kompetenzen hinzufügen. Wenn Sie Kompetenzen durch das Bearbeiten von Lerninhalten erwerben, werden diese automatisch hier aufgelistet.
 skmg#:#skmg_no_trigger#:#Kein Auslöser
 skmg#:#skmg_nr#:#Nr
 skmg#:#skmg_number#:#Nummmer
@@ -14614,6 +14636,8 @@ skmg#:#skmg_skill_levels#:#Kompetenzausprägungen
 skmg#:#skmg_skill_management_deactivated#:#Das Kompetenzmanagement ist momentan deaktiviert.
 skmg#:#skmg_skill_needs_impr_no_res#:#Sie müssen diese Kompetenz verbessern. Leider gibt es momentan kein passendes Lernmaterial welches Ihrer Ziel-Kompetenzausprägung entspricht.
 skmg#:#skmg_skill_needs_impr_res#:#Sie müssen diese Kompetenz verbessern. Die folgenden Ressourcen bieten Lernmaterial welches Ihrer Ziel-Kompetenzausprägung entspricht.
+skmg#:#skmg_skill_needs_self_eval#:#Bitte führen Sie zunächst eine Selbsteinschätzung durch, damit Ihr Kompetenzziel angezeigt wird.
+skmg#:#skmg_skill_needs_self_eval_box#:#Bitte beachten Sie, dass für mindestens eine Kompetenz in diesem Profil noch keine Selbsteinschätzung durchgeführt wurde. Ihnen wird das Kompetenzziel für die betroffenen Kompetenzen angezeigt, sobald eine Selbsteinschätzung durchgeführt wurde.
 skmg#:#skmg_skill_no_needs_impr#:#Ihre Kompetenzausprägungen sind für dieses Profil ausreichend.
 skmg#:#skmg_skill_profiles#:#Kompetenzprofile
 skmg#:#skmg_skill_template#:#Vorlage
@@ -16045,7 +16069,7 @@ trac#:#trac_in_progress#:#In Bearbeitung
 trac#:#trac_info_edited#:#Wenn Sie der Meinung sind, dass Sie alle Inhalte bearbeitet haben, können Sie hier den Status Ihres Lernfortschrittes ändern.
 trac#:#trac_last_access#:#Letzter Zugriff
 trac#:#trac_last_aggregation#:#Stand
-trac#:#trac_last_maxed_out_sessions#:#Letze Vollast
+trac#:#trac_last_maxed_out_sessions#:#Letze Volllast
 trac#:#trac_learning_progress#:#Lernfortschritt
 trac#:#trac_learning_progress_of#:#Lernfortschritt von %s
 trac#:#trac_learning_progress_settings_info#:#Erweiterte Daten aktivieren
