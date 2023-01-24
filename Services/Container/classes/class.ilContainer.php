@@ -832,7 +832,7 @@ class ilContainer extends ilObject
         // TODO: check this
         // get items attached to a session
         include_once './Modules/Session/classes/class.ilEventItems.php';
-        $event_items = ilEventItems::_getItemsOfContainer($this->getRefId());
+        //$event_items = ilEventItems::_getItemsOfContainer($this->getRefId());
 
         $classification_filter_active = $this->isClassificationFilterActive();
         foreach ($objects as $key => $object) {
@@ -869,9 +869,10 @@ class ilContainer extends ilObject
             }
             
             // filter out items that are attached to an event
-            if (in_array($object['ref_id'], $event_items) && !$classification_filter_active) {
+            // no, see #34701
+            /*if (in_array($object['ref_id'], $event_items) && !$classification_filter_active) {
                 continue;
-            }
+            }*/
             
             // filter side block items
             if (!$a_include_side_block && $objDefinition->isSideBlock($object['type'])) {
@@ -1107,7 +1108,7 @@ class ilContainer extends ilObject
         // using long descriptions?
         $short_desc = $ilSetting->get("rep_shorten_description");
         $short_desc_max_length = $ilSetting->get("rep_shorten_description_length");
-        if (!$short_desc || $short_desc_max_length != ilObject::DESC_LENGTH) {
+        if (!$short_desc || $short_desc_max_length > 0) {
             // using (part of) shortened description
             if ($short_desc && $short_desc_max_length && $short_desc_max_length < ilObject::DESC_LENGTH) {
                 foreach ($objects as $key => $object) {
@@ -1367,8 +1368,11 @@ class ilContainer extends ilObject
                 } else {        // advanced metadata search
                     $field = ilAdvancedMDFieldDefinition::getInstance($field_id);
 
-                    $field_form = ilADTFactory::getInstance()->getSearchBridgeForDefinitionInstance($field->getADTDefinition(),
-                        true, false);
+                    $field_form = ilADTFactory::getInstance()->getSearchBridgeForDefinitionInstance(
+                        $field->getADTDefinition(),
+                        true,
+                        false
+                    );
                     $field_form->setElementId("query[" . $key . "]");
                     $field_form->validate();
 

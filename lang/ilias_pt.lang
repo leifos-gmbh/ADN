@@ -1,18 +1,18 @@
-*
-* @author			Juergen Busch <jurgen@elearneasy.net>
-* @module			language file Portuguese
-* @modulegroup		language
-* @version			$Id$
-* ILIAS language file (Local changes merged into the global language file)
-*/
 /* Copyright (c) 1998-2020 ILIAS open source e-Learning e.V., Extended GPL, see docs/LICENSE */
 /**
-// Language file names refer to ISO 639, see: http://www.oasis-open.org/cover/iso639a.html
-// NOTICE: Character coding of all ILIAS lang files is UTF-8! Please set your editor
+* ILIAS language file (Local changes merged into the global language file)
+*
+* @module			language file Portuguese
+* @modulegroup		language
+* @author			Juergen Busch <jurgen@elearneasy.net>
+* @version			$Id$
+*/
 // The language file starts beyond the HTML-comment below. DO NOT modify this line!
 // To edit your language file with a spreadsheet (i.e. Excel or StarCalc) remove all lines
 // from the first line to the HTML-comment. After editing paste the lines in place again.
+// NOTICE: Character coding of all ILIAS lang files is UTF-8! Please set your editor
 // to the corresponding mode!
+// Language file names refer to ISO 639, see: http://www.oasis-open.org/cover/iso639a.html
 <!-- language file start -->
 acc#:#acc_access_key#:#Chave de acesso
 acc#:#acc_access_keys#:#Chaves de acesso
@@ -892,6 +892,7 @@ assessment#:#log_wrong_test_password_entered#:#O participante introduziu uma pal
 assessment#:#longmenu#:#Menu comprido
 assessment#:#longmenu_text#:#Texto de menu comprido
 assessment#:#mailnottype#:#Enviar notificação mesmo que um utilizador termine uma tentativa de teste
+assessment#:#mailnottype_desc#:#Notify the owner of the test <strong>even if</strong> the number of test attempts has not been limited.###09 11 2022 new variable
 assessment#:#maintenance#:#Manutenção
 assessment#:#manscoring#:#Pontuação manual
 assessment#:#manscoring_done#:#Participantes pontuados
@@ -972,6 +973,7 @@ assessment#:#oq_btn_use_order_pictures#:#Usar fotografias de resposta
 assessment#:#oq_btn_use_order_terms#:#Usar termos de resposta
 assessment#:#oq_header_ordering_elements#:#Ordenação elementos
 assessment#:#or#:#ou
+assessment#:#order#:#Order###09 11 2022 new variable
 assessment#:#ordering_answer_sequence_info#:#A sequência de respostas que define aqui será assumida como a sequência de solução correta.
 assessment#:#ordertext#:#Ordenação texto
 assessment#:#ordertext_info#:#Introduza o texto que deve ser ordenado na horizontal. O texto de ordenação será separado pelos sinais de espaço em branco no texto. Se precisar de uma separação diferente, pode usar o separador %s para separar as suas unidades de texto.
@@ -1293,10 +1295,10 @@ assessment#:#tst_activate_skill_service_desc#:#Suporta a atribuição de pergunt
 assessment#:#tst_activation_limited_visibility_info#:#Antes e depois do período indicado, aparece somente o título do teste. Os participantes não podem fazer o teste.
 assessment#:#tst_activation_online_info#:#Se estiverem online, os participantes podem fazer o teste.
 assessment#:#tst_add_quest_cont_edit_mode#:#Editor para feedback e sugestões
+assessment#:#tst_add_quest_cont_edit_mode_IPE#:#Usar editor de páginas ILIAS para editar feedback e sugestões
 assessment#:#tst_add_quest_cont_edit_mode_IPE_info#:#No formatting of text in question and answers. No use of LaTex either. But feedback and hints can be reused when question is embedded in ILIAS learning module.###30 04 2021 new variable
+assessment#:#tst_add_quest_cont_edit_mode_RTE#:#Usar editor de Rich-Text para editar feedback e sugestões
 assessment#:#tst_add_quest_cont_edit_mode_RTE_info#:#Allows text formatting of questions, answers, feedbacks and hints. But feedback and hints cannot be reused when question is embedded in ILIAS learning module.###30 04 2021 new variable
-assessment#:#tst_add_quest_cont_edit_mode_default#:#Usar editor de Rich-Text para editar feedback e sugestões
-assessment#:#tst_add_quest_cont_edit_mode_page_object#:#Usar editor de páginas ILIAS para editar feedback e sugestões
 assessment#:#tst_addit_passes_blocked_after_passed_msg#:#You have passed the test. The test cannot be started again.###07 02 2020 new variable
 assessment#:#tst_all_test_competences#:#Todas as competências do teste
 assessment#:#tst_all_user_data_deleted#:#Todos os dados de utilizador deste teste foram removidos!
@@ -1632,6 +1634,7 @@ assessment#:#tst_pass_details#:#Pergunta(s) inserida(s)!
 assessment#:#tst_pass_details_header_lo_initial#:#Resultados de teste iniciais para os objetivos de aprendizagem<br />%s - %s
 assessment#:#tst_pass_details_header_lo_qualifying#:#Resultados de teste que se qualificam para os objetivos de aprendizagem<br />%s - %s
 assessment#:#tst_pass_details_overview_table_title#:#Vista geral detalhada para tentativa %s
+assessment#:#tst_pass_finished#:#Test pass finished###24 11 2022 new variable
 assessment#:#tst_pass_finished_on#:#Tentativa de teste concluída a
 assessment#:#tst_pass_last_pass#:#Pergunta(s) removida(s)!
 assessment#:#tst_pass_last_pass_desc#:#Será pontuada a última tentativa de um participante.
@@ -1653,6 +1656,7 @@ assessment#:#tst_password_entered_wrong_password#:#Não pode iniciar o teste por
 assessment#:#tst_password_form#:#Inserir palavra-passe de teste
 assessment#:#tst_password_introduction#:#Os participantes podem rever o processar apenas por um período de tempo especificado. O tempo começa a contar a partir do momento que um utilizador inicia o teste pela primeira vez. Suspender o teste não para o relógio. Se houver um número limitado de possíveis tentativas do teste, aparece uma função adicional para garantir tempo extra aos participantes no separador 'Participantes'.
 assessment#:#tst_percent_solved#:#Todas as perguntas, exceto as que forem respondidas corretamente
+assessment#:#tst_player_answer_saved_and_locked#:#Answer is saved and locked and can no longer be changed###21 12 2022 new variable
 assessment#:#tst_please_select_target_for_pool_derives#:#Selecione um destinatário.
 assessment#:#tst_position#:#Pergunta %s de %s
 assessment#:#tst_position_without_total#:#Pergunta %s
@@ -1709,6 +1713,7 @@ assessment#:#tst_question_hints_ordering_clipboard_resetted#:#Repor duração pa
 assessment#:#tst_question_hints_paste_after_success_msg#:#A sugestão %s foi colada após a sugestão %s com sucesso.
 assessment#:#tst_question_hints_paste_before_success_msg#:#A sugestão %s foi colada antes da sugestão %s com sucesso.
 assessment#:#tst_question_hints_request_confirmation#:#Tem a certeza que quer pedir uma sugestão %s? Para esta sugestão será/serão deduzido(s) %s ponto(s).
+assessment#:#tst_question_hints_request_confirmation_no_deduction#:#No points will be deducted for this hint.###09 11 2022 new variable
 assessment#:#tst_question_hints_requested_hint_count_header#:#Sugestões pedidas
 assessment#:#tst_question_hints_save_order_success_msg#:#A ordem das sugestões foi guardada com sucesso.
 assessment#:#tst_question_hints_tab#:#Sugestões
@@ -3140,14 +3145,16 @@ cmix#:#conf_own_window#:#Own Window###07 02 2020 new variable
 cmix#:#conf_own_window_info#:#The content is opened in the same window and replaces the ILIAS Screen. When leaving the content the user returns to ILIAS.###07 02 2020 new variable
 cmix#:#conf_privacy_comment_default#:#Indication to user###07 02 2020 new variable
 cmix#:#conf_privacy_ident#:#User identification###30 04 2021 new variable
-cmix#:#conf_privacy_ident_il_uuid_SHA256#:#Hash combined with a unique ILIAS platform id formatted as an E-Mail address###29 07 2022 new variable
-cmix#:#conf_privacy_ident_il_uuid_SHA256_info#:#This is identical to each call, but does not permit any direct conclusions about the ILIAS user.###29 07 2022 new variable
 cmix#:#conf_privacy_ident_il_uuid_ext_account#:#External User Id combined with a unique ILIAS platform id formatted as an E-Mail adress###30 04 2021 new variable
 cmix#:#conf_privacy_ident_il_uuid_ext_account_info#:#This is identical to each call, but may allow a direct conclusion about the user.###30 04 2021 new variable
 cmix#:#conf_privacy_ident_il_uuid_login#:#ILIAS Login combined with a unique ILIAS platform id formatted as an E-Mail adress###30 04 2021 new variable
 cmix#:#conf_privacy_ident_il_uuid_login_info#:#This is identical to each call, but may allow a direct conclusion about the ILIAS user.###30 04 2021 new variable
 cmix#:#conf_privacy_ident_il_uuid_random#:#Random ID combined with a unique ILIAS platform ID formatted as an E-Mail address###30 04 2021 new variable
 cmix#:#conf_privacy_ident_il_uuid_random_info#:#For each ILIAS object and ILIAS user a random ID is generated which remains identical for each call. Conclusions about a user are very limited because it is practically impossible to create user profiles across objects.###30 04 2021 new variable
+cmix#:#conf_privacy_ident_il_uuid_sha256#:#Hash combined with a unique ILIAS platform id formatted as an E-Mail address###26 09 2022 new variable
+cmix#:#conf_privacy_ident_il_uuid_sha256_info#:#This is identical to each call, but does not permit any direct conclusions about the ILIAS user.###26 09 2022 new variable
+cmix#:#conf_privacy_ident_il_uuid_sha256url#:#Hash combined with the ILIAS Domain formatted as an E-Mail address###26 09 2022 new variable
+cmix#:#conf_privacy_ident_il_uuid_sha256url_info#:#This is identical to each call, with with a maximum of 80 characters significantly shorter than the variant with the ILIAS platform ID and allows only very limited conclusions about the ILIAS user.###26 09 2022 new variable
 cmix#:#conf_privacy_ident_il_uuid_user_id#:#ILIAS user id combined with a unique ILIAS platform id formatted as an E-Mail adress###30 04 2021 new variable
 cmix#:#conf_privacy_ident_il_uuid_user_id_info#:#This is identical to each call, but doesn't allow a direct conclusion about the ILIAS user.###30 04 2021 new variable
 cmix#:#conf_privacy_ident_info#:#Standard is frequently the email address. The unique ILIAS platform id is:###30 04 2021 new variable
@@ -3379,6 +3386,7 @@ common#:#HH#:#HH:MM
 common#:#absolute_path#:#Caminho absoluto
 common#:#accept_usr_agreement#:#Copiar
 common#:#accept_usr_agreement_btn#:#Accept###30 04 2021 new variable
+common#:#accept_usr_agreement_intro#:#There are new terms of service. You need to accept them before proceeding with the use of ILIAS. Read the following document carefully and give your consent or dissent at the bottom of the page.###24 11 2022 new variable
 common#:#access#:#Contar
 common#:#accessFree#:#País (entrada de texto livre
 common#:#accessRestrict#:#Curso
@@ -5795,6 +5803,7 @@ common#:#usr_account_inactive#:#Conta inativa
 common#:#usr_active_only#:#Apenas utilizadores ativos
 common#:#usr_add#:#Reduz problemas com a apresentação de módulos de aprendizagem SCORM mais antigos que foram otimizados para o Internet Explorer. Se o modo de compatibilidade estiver desligado em versões mais recentes do Internet Explorer, esta definição não é eficaz.
 common#:#usr_agreement#:#Forçar Internet Explorer para processar novamente
+common#:#usr_agreement_footer_intro#:#You have declared your consent to these terms of service.###24 11 2022 new variable
 common#:#usr_edit#:#Os módulos de aprendizagem com muitos enquadramentos ou iFrames serão apresentados corretamente depois de processar o conteúdo mais uma vez.
 common#:#usr_filter_coursemember#:#Membro do curso
 common#:#usr_filter_groupmember#:#Membro do grupo
@@ -5980,6 +5989,7 @@ cont#:#cont_skill_do_not_set#:#Não definir
 cont#:#cont_skill_members#:#Membros
 cont#:#cont_skill_no_profile_selected#:#Please select a profile.###30 04 2021 new variable
 cont#:#cont_skill_no_skill#:#Nenhum valor (repor)
+cont#:#cont_skill_no_skills_selected#:#No competences have been selected yet. Please add at least one competence first under "Competence Selection".###09 11 2022 new variable
 cont#:#cont_skill_profile#:#Profile###30 04 2021 new variable
 cont#:#cont_skill_profiles#:#Assigned Profiles of Members###30 04 2021 new variable
 cont#:#cont_skill_publish#:#Publicar
@@ -7781,9 +7791,11 @@ crs#:#crs_view_timing#:#Vista das temporizações
 crs#:#crs_view_timing_absolute#:#Abrir numa nova janela
 crs#:#crs_view_timing_relative#:#Criar nova versão de ficheiro. As versões anteriores não serão modificadas.
 crs#:#crs_view_timings#:#Define o número máximo de web feeds externos que os utilizadores podem adicionar ao seu computador pessoal. Os feeds existentes não são apagados, se a opção estiver definida para um valor inferior. ‘0‘ desativa completamente a função.
+crs#:#crs_visibility#:#Visibility###24 11 2022 new variable
 crs#:#crs_visibility_limitless#:#Todas as versões de ficheiro anteriores serão apagadas.
 crs#:#crs_visibility_until#:#Se estiver ativada, a cota do disco do magazine será verificada para cada utilizador e serão enviados, opcionalmente, e-mails aos administradores e utilizadores.
 crs#:#crs_visibility_until_info#:#O curso fica visível aos seus membros num determinado período de tempo.
+crs#:#crs_visibility_unvisible#:#The course is not visible.###24 11 2022 new variable
 crs#:#crs_wait_info#:#Introduza o tamanho máximo do ficheiro permitido para ficheiros descarregados em mebibyte.
 crs#:#crs_waiting_list#:#Lista de espera
 crs#:#crs_waiting_list_autofill#:#Com autopreenchimento
@@ -9269,6 +9281,7 @@ exc#:#exc_team_log#:#Registo da equipa
 exc#:#exc_team_log_add_file#:#Ficheiro adicionado %s.
 exc#:#exc_team_log_add_member#:#Membro adicionado %s.
 exc#:#exc_team_log_create_team#:#Equipa criada.
+exc#:#exc_team_log_remove_file#:#Removed file %s.###21 12 2022 new variable
 exc#:#exc_team_log_remove_member#:#Membro removido %s.
 exc#:#exc_team_management_tutor#:#Gestão de equipas por tutores
 exc#:#exc_team_management_tutor_info#:#Se estiver ativado, os próprios participantes não podem organizar equipas.
@@ -10347,12 +10360,14 @@ lti#:#activity_id#:#Activity ID###07 02 2020 new variable
 lti#:#activity_id_info#:#This Activity ID is used by the LTI Provider to identify Statements.###07 02 2020 new variable
 lti#:#auth_lti#:#LTI Aut
 lti#:#conf_privacy_ident#:#User identification###30 04 2021 new variable
-lti#:#conf_privacy_ident_il_uuid_SHA256#:#Hash combined with a unique ILIAS platform id formatted as an E-Mail address###29 07 2022 new variable
-lti#:#conf_privacy_ident_il_uuid_SHA256_info#:#This is identical to each call, but does not permit any direct conclusions about the ILIAS user.###29 07 2022 new variable
 lti#:#conf_privacy_ident_il_uuid_ext_account#:#External User Id combined with a unique ILIAS platform id formated as an email adress.###30 04 2021 new variable
 lti#:#conf_privacy_ident_il_uuid_ext_account_info#:#This is identical to each call, but may allow a direct conclusion about the user.###30 04 2021 new variable
 lti#:#conf_privacy_ident_il_uuid_login#:#ILIAS Login combined with a unique ILIAS platform id formated as an email adress.###30 04 2021 new variable
 lti#:#conf_privacy_ident_il_uuid_login_info#:#This is identical to each call, but may allow a direct conclusion about the ILIAS user.###30 04 2021 new variable
+lti#:#conf_privacy_ident_il_uuid_sha256#:#Hash combined with a unique ILIAS platform id formatted as an E-Mail address###26 09 2022 new variable
+lti#:#conf_privacy_ident_il_uuid_sha256_info#:#This is identical to each call, but does not permit any direct conclusions about the ILIAS user.###26 09 2022 new variable
+lti#:#conf_privacy_ident_il_uuid_sha256url#:#Hash combined with the ILIAS Domain formatted as an E-Mail address###26 09 2022 new variable
+lti#:#conf_privacy_ident_il_uuid_sha256url_info#:#This is identical to each call, with a maximum of 80 characters significantly shorter than the variant with the ILIAS platform ID and allows only very limited conclusions about the ILIAS user.###26 09 2022 new variable
 lti#:#conf_privacy_ident_il_uuid_user_id#:#ILIAS user id combined with a unique ILIAS platform id formated as an email adress.###30 04 2021 new variable
 lti#:#conf_privacy_ident_il_uuid_user_id_info#:#This is identical to each call, but doesn't allow a direct conclusion about the ILIAS user.###30 04 2021 new variable
 lti#:#conf_privacy_ident_info#:#Standard is frequently the email address. The unique ILIAS platform id is:###30 04 2021 new variable
@@ -13843,9 +13858,11 @@ rep#:#rep_add_to_favourites#:#Add to Favourites###07 02 2020 new variable
 rep#:#rep_added_rec_content#:#Recommended content has been added.###07 02 2020 new variable
 rep#:#rep_added_to_favourites#:#The item has been added to your favourites.###07 02 2020 new variable
 rep#:#rep_breadcr_crs#:#Breadcrumb iniciar o curso
+rep#:#rep_breadcr_crs_config#:#Configuration###24 11 2022 new variable
 rep#:#rep_breadcr_crs_overwrite#:#Definição é alterável ao nível do curso
 rep#:#rep_breadcr_crs_overwrite_not#:#Definição não é alterável ao nível do curso
 rep#:#rep_configure#:#Configure###07 02 2020 new variable
+rep#:#rep_crs_default_shortened#:#Default: Breadcrumbs Shortened###24 11 2022 new variable
 rep#:#rep_custom_icons#:#Ícones personalizados
 rep#:#rep_default#:#Predefinição
 rep#:#rep_dependencies#:#Dependências
@@ -14559,6 +14576,7 @@ skmg#:#skmg_new_sktr#:#New Skill Template Reference
 skmg#:#skmg_next_step#:#Próximo passo
 skmg#:#skmg_no_nodes_selectable#:#Atualmente não há competências selecionáveis.
 skmg#:#skmg_no_skills#:#No Skills
+skmg#:#skmg_no_skills_selected_info#:#You have not selected or fulfilled any competences yet. Click on the "Add Competence"-button to select a competence. You can add any number of competences. If you fulfill competences by editing learning materials, they will be automatically listed here.###09 11 2022 new variable
 skmg#:#skmg_no_trigger#:#Nenhum acionador
 skmg#:#skmg_nr#:#N.º
 skmg#:#skmg_number#:#Número
@@ -14601,6 +14619,8 @@ skmg#:#skmg_skill_levels#:#Skill Levels
 skmg#:#skmg_skill_management_deactivated#:#Skill Management is currently deaktivated.
 skmg#:#skmg_skill_needs_impr_no_res#:#Tem de melhorar esta competência. Infelizmente não existem atualmente recursos de aprendizagem disponíveis que fornecem material de aprendizagem alinhado com o seu nível de competência pretendido.
 skmg#:#skmg_skill_needs_impr_res#:#Tem de melhorar esta competência. Os seguintes recursos fornecem material de aprendizagem alinhado com o seu nível de competência pretendido.
+skmg#:#skmg_skill_needs_self_eval#:#Please conduct a self-evaluation first to see your competence target.###09 11 2022 new variable
+skmg#:#skmg_skill_needs_self_eval_box#:#Please note that you have not conducted a self-evaluation for at least one competence in this profile. You will not see the competence target for the affected competences until a self-evaluation is done.###09 11 2022 new variable
 skmg#:#skmg_skill_no_needs_impr#:#O seu nível de competência é suficiente para o perfil selecionado.
 skmg#:#skmg_skill_profiles#:#Perfis
 skmg#:#skmg_skill_template#:#Skill Template

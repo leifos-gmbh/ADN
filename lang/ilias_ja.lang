@@ -1,18 +1,18 @@
-*
-* @author       Shiro Tamoto <tamoto@chic.ocn.ne.jp>
-* @module       language file Japanese
-* @modulegroup  language
-* @version      $Id:
-* ILIAS language file (All entries)
-*/
 /* Copyright (c) 1998-2019 ILIAS open source e-Learning e.V., Extended GPL, see docs/LICENSE */
 /**
-// Language file names refer to ISO 639, see: http://www.oasis-open.org/cover/iso639a.html
-// NOTICE: Character coding of all ILIAS lang files is UTF-8! Please set your editor
+* ILIAS language file (All entries)
+*
+* @module       language file Japanese
+* @modulegroup  language
+* @author       Shiro Tamoto <tamoto@chic.ocn.ne.jp>
+* @version      $Id:
+*/
 // The language file starts beyond the HTML-comment below. DO NOT modify this line!
 // To edit your language file with a spreadsheet (i.e. Excel or StarCalc) remove all lines
 // from the first line to the HTML-comment. After editing paste the lines in place again.
+// NOTICE: Character coding of all ILIAS lang files is UTF-8! Please set your editor
 // to the corresponding mode!
+// Language file names refer to ISO 639, see: http://www.oasis-open.org/cover/iso639a.html
 <!-- language file start -->
 acc#:#acc_access_key#:#アクセスキー
 acc#:#acc_access_keys#:#アクセスキー
@@ -892,6 +892,7 @@ assessment#:#log_wrong_test_password_entered#:#受講者は間違ったテスト
 assessment#:#longmenu#:#Longmenu
 assessment#:#longmenu_text#:#長いメニューテキスト
 assessment#:#mailnottype#:#ユーザがテスト終了しても通知を送る
+assessment#:#mailnottype_desc#:#Notify the owner of the test <strong>even if</strong> the number of test attempts has not been limited.###09 11 2022 new variable
 assessment#:#maintenance#:#メンテナンス
 assessment#:#manscoring#:#手動採点
 assessment#:#manscoring_done#:#採点済み受講者
@@ -972,6 +973,7 @@ assessment#:#oq_btn_use_order_pictures#:#解答図を使用する
 assessment#:#oq_btn_use_order_terms#:#解答用語を使用する
 assessment#:#oq_header_ordering_elements#:#要素順
 assessment#:#or#:#または
+assessment#:#order#:#Order###09 11 2022 new variable
 assessment#:#ordering_answer_sequence_info#:#ここで定義する解答順序は正解として使用されます。
 assessment#:#ordertext#:#整列するテキスト
 assessment#:#ordertext_info#:#水平方向にそろえるテキストを入力してください。整列するテキストはテキストの空白記号で区切られます。別の区切りが必要な場合は、%s の区切り記号を使用してテキストの単位を区切る事ができます。
@@ -1293,10 +1295,10 @@ assessment#:#tst_activate_skill_service_desc#:#新規タブ'能力'が表示さ�
 assessment#:#tst_activation_limited_visibility_info#:#表示期間前後にテストのタイトルのみが表示されます。受験者はテスト受験できません。
 assessment#:#tst_activation_online_info#:#オンラインの場合に受験者はテスト受験できます。
 assessment#:#tst_add_quest_cont_edit_mode#:#追加問題コンテンツのモード編集
+assessment#:#tst_add_quest_cont_edit_mode_IPE#:#ページオブジェクトエディタ付の追加コンテンツ編集
 assessment#:#tst_add_quest_cont_edit_mode_IPE_info#:#問題と回答に書式設定がありません。LaTexにもありません。ただし、ｄフィードバックとヒントはILIAS学習モジュールへ問題が埋め込まれ時に再利用できます。
+assessment#:#tst_add_quest_cont_edit_mode_RTE#:#追加問題コンテンツの初期モード編集
 assessment#:#tst_add_quest_cont_edit_mode_RTE_info#:#ヒント、フィードバック、回答、問題の書式設定を許可。ただし、フィードバックとヒントはILIAS学習モジュールへ問題が埋め込まれた時には再利用できません。
-assessment#:#tst_add_quest_cont_edit_mode_default#:#追加問題コンテンツの初期モード編集
-assessment#:#tst_add_quest_cont_edit_mode_page_object#:#ページオブジェクトエディタ付の追加コンテンツ編集
 assessment#:#tst_addit_passes_blocked_after_passed_msg#:#試験に合格です。試験は再開できません。
 assessment#:#tst_all_test_competences#:#全テスト能力
 assessment#:#tst_all_user_data_deleted#:#このテストの全ユーザデータは削除されました!
@@ -1632,6 +1634,7 @@ assessment#:#tst_pass_details#:#試験詳細
 assessment#:#tst_pass_details_header_lo_initial#:#学習目標に対する最初のテスト結果<br />%s - %s
 assessment#:#tst_pass_details_header_lo_qualifying#:#学習目標に対する資格テスト結果<br />%s - %s
 assessment#:#tst_pass_details_overview_table_title#:#テスト%sの詳細全体像
+assessment#:#tst_pass_finished#:#Test pass finished###24 11 2022 new variable
 assessment#:#tst_pass_finished_on#:#テスト受験終了日
 assessment#:#tst_pass_last_pass#:#最終試験成績
 assessment#:#tst_pass_last_pass_desc#:#受験者の最終合格が採点されます。
@@ -1653,6 +1656,7 @@ assessment#:#tst_password_entered_wrong_password#:#入力したパスワード�
 assessment#:#tst_password_form#:#テストパスワードを入力
 assessment#:#tst_password_introduction#:#テストのパスワードがないとテストにはアクセスできません。テストを開始するためにテストのパスワードを入力してください。
 assessment#:#tst_percent_solved#:#正解率
+assessment#:#tst_player_answer_saved_and_locked#:#Answer is saved and locked and can no longer be changed###21 12 2022 new variable
 assessment#:#tst_please_select_target_for_pool_derives#:#目標のコンテナを選択してください。
 assessment#:#tst_position#:#問題 %s の%s
 assessment#:#tst_position_without_total#:#問題 %s
@@ -1709,6 +1713,7 @@ assessment#:#tst_question_hints_ordering_clipboard_resetted#:#順番クリップ
 assessment#:#tst_question_hints_paste_after_success_msg#:#ヒント%sはヒント%sより後に正しく貼りつけられました。
 assessment#:#tst_question_hints_paste_before_success_msg#:#ヒント%sはヒント%sより前に正しく貼りつけられました。
 assessment#:#tst_question_hints_request_confirmation#:#ヒント%sを本当に要求しますか?　このヒント%sの点数は控除されます。
+assessment#:#tst_question_hints_request_confirmation_no_deduction#:#No points will be deducted for this hint.###09 11 2022 new variable
 assessment#:#tst_question_hints_requested_hint_count_header#:#リクエストのヒント
 assessment#:#tst_question_hints_save_order_success_msg#:#ヒントの順番が正しく保存されました。
 assessment#:#tst_question_hints_tab#:#ヒント
@@ -3140,14 +3145,16 @@ cmix#:#conf_own_window#:#Own Window
 cmix#:#conf_own_window_info#:#コンテンツを同一Windowで開きILIAS画面と置き換えます。コンテンツを離れるとユーザはILIASへ戻ります。
 cmix#:#conf_privacy_comment_default#:#ユーザへ表示
 cmix#:#conf_privacy_ident#:#ユーザID
-cmix#:#conf_privacy_ident_il_uuid_SHA256#:#メールアドレスでフォーマットされたユニークなILIASプラットフォームidでハッシュを結合
-cmix#:#conf_privacy_ident_il_uuid_SHA256_info#:#これはコール毎に同一ですが、ILIASユーザについて直接結論は許可されません。
 cmix#:#conf_privacy_ident_il_uuid_ext_account#:#メールアドレスとしてフォーマットされたユニークなILIASプラットフォームIDで結合された外部ユーザID
 cmix#:#conf_privacy_ident_il_uuid_ext_account_info#:#これはコール毎に別々ですがILIASユーザに関して直接的な結論は許容する可能性があります。
 cmix#:#conf_privacy_ident_il_uuid_login#:#メールアドレスとしてフォーマットされたユニークなILIASプラットフォームIDで結合されたILIAS Login
 cmix#:#conf_privacy_ident_il_uuid_login_info#:#これはコール毎に別々ですがILIASユーザに関して直接的な結論は許容する可能性があります。
 cmix#:#conf_privacy_ident_il_uuid_random#:#メールアドレスとしてフォーマットされたユニークなILIASプラットフォームIDで結合されたランダムID
 cmix#:#conf_privacy_ident_il_uuid_random_info#:#各ILIASオブジェクトとILIASユーザランダムIDは各コール毎に識別されて生成されます。ユーザに関する結論は、オブジェクトを横断するユーザプロファイルの作成が困難なので極めて限定的です。
+cmix#:#conf_privacy_ident_il_uuid_sha256#:#Hash combined with a unique ILIAS platform id formatted as an E-Mail address###26 09 2022 new variable
+cmix#:#conf_privacy_ident_il_uuid_sha256_info#:#This is identical to each call, but does not permit any direct conclusions about the ILIAS user.###26 09 2022 new variable
+cmix#:#conf_privacy_ident_il_uuid_sha256url#:#Hash combined with the ILIAS Domain formatted as an E-Mail address###26 09 2022 new variable
+cmix#:#conf_privacy_ident_il_uuid_sha256url_info#:#This is identical to each call, with with a maximum of 80 characters significantly shorter than the variant with the ILIAS platform ID and allows only very limited conclusions about the ILIAS user.###26 09 2022 new variable
 cmix#:#conf_privacy_ident_il_uuid_user_id#:#メールアドレスとしてIDフォーマットされたユニークなILIASプラットフォームでILIASユーザIDは結合されます。
 cmix#:#conf_privacy_ident_il_uuid_user_id_info#:#これはコール毎に別々ですがILIASユーザに関して直接的な結論は許容しません。
 cmix#:#conf_privacy_ident_info#:#標準はメールアドレスを利用するのが一般的です。ユニークなILIASプラットフォームID:
@@ -3379,6 +3386,7 @@ common#:#HH#:#HH:MM
 common#:#absolute_path#:#絶対Path
 common#:#accept_usr_agreement#:#使用許諾書を承諾しますか?
 common#:#accept_usr_agreement_btn#:#承諾
+common#:#accept_usr_agreement_intro#:#There are new terms of service. You need to accept them before proceeding with the use of ILIAS. Read the following document carefully and give your consent or dissent at the bottom of the page.###24 11 2022 new variable
 common#:#access#:#アクセス
 common#:#accessFree#:#アクセス制限を解除
 common#:#accessRestrict#:#アクセス制限を設定
@@ -5795,6 +5803,7 @@ common#:#usr_account_inactive#:#アクティブ化されていないアカウン
 common#:#usr_active_only#:#アクティブユーザのみ
 common#:#usr_add#:#ユーザを追加
 common#:#usr_agreement#:#使用許諾書
+common#:#usr_agreement_footer_intro#:#You have declared your consent to these terms of service.###24 11 2022 new variable
 common#:#usr_edit#:#ユーザを編集
 common#:#usr_filter_coursemember#:#コースメンバー
 common#:#usr_filter_groupmember#:#グループメンバー
@@ -5980,6 +5989,7 @@ cont#:#cont_skill_do_not_set#:#セットしてはいけません
 cont#:#cont_skill_members#:#メンバー
 cont#:#cont_skill_no_profile_selected#:#プロファイルを選択してください。
 cont#:#cont_skill_no_skill#:#値がありません(リセット)
+cont#:#cont_skill_no_skills_selected#:#No competences have been selected yet. Please add at least one competence first under "Competence Selection".###09 11 2022 new variable
 cont#:#cont_skill_profile#:#プロファイル
 cont#:#cont_skill_profiles#:#メンバーの割当てプロファイル
 cont#:#cont_skill_publish#:#公開
@@ -7781,9 +7791,11 @@ crs#:#crs_view_timing#:#タイミングビュー
 crs#:#crs_view_timing_absolute#:#絶対日付
 crs#:#crs_view_timing_relative#:#総体日付
 crs#:#crs_view_timings#:#期間表示タイプ
+crs#:#crs_visibility#:#Visibility###24 11 2022 new variable
 crs#:#crs_visibility_limitless#:#期限なし
 crs#:#crs_visibility_until#:#利用期間限定
 crs#:#crs_visibility_until_info#:#コースは一定の期間そのメンバーへ表示されます。
+crs#:#crs_visibility_unvisible#:#The course is not visible.###24 11 2022 new variable
 crs#:#crs_wait_info#:#有効にしてユーザ最大数を超えると、新しい登録が待ちリストに載せられます。
 crs#:#crs_waiting_list#:#待ちリスト
 crs#:#crs_waiting_list_autofill#:#自動-挿入あり
@@ -9269,6 +9281,7 @@ exc#:#exc_team_log#:#チームログ
 exc#:#exc_team_log_add_file#:#ファイル%sを追加しました。
 exc#:#exc_team_log_add_member#:#メンバ%sを追加しました。
 exc#:#exc_team_log_create_team#:#チームを作成しました。
+exc#:#exc_team_log_remove_file#:#Removed file %s.###21 12 2022 new variable
 exc#:#exc_team_log_remove_member#:#メンバ%sを削除しました。
 exc#:#exc_team_management_tutor#:#指導教員によるチーム管理
 exc#:#exc_team_management_tutor_info#:#有効にすると受験者は自分でチーム組織化できなくなります。
@@ -10347,12 +10360,14 @@ lti#:#activity_id#:#アクティビティID
 lti#:#activity_id_info#:#このアクティビティIDはステートメント識別用にLTIプロバイダが使用します。
 lti#:#auth_lti#:#LTI Auth
 lti#:#conf_privacy_ident#:#ユーザID
-lti#:#conf_privacy_ident_il_uuid_SHA256#:#メールアドレスでフォーマットされたユニークなILIASプラットフォームidでハッシュを結合
-lti#:#conf_privacy_ident_il_uuid_SHA256_info#:#これはコール毎に同一ですが、ILIASユーザについて直接結論は許可されません。
 lti#:#conf_privacy_ident_il_uuid_ext_account#:#メールアドレスとしてユニークなILIASプラットフォームIDでフォーマットされて結合された外部ユーザID
 lti#:#conf_privacy_ident_il_uuid_ext_account_info#:#これはコール毎に区別されますがILIASユーザに関して直接結論を許可する可能性があります。
 lti#:#conf_privacy_ident_il_uuid_login#:#メールアドレスとしてユニークなILIASプラットフォームIDでフォーマットされて結合されたILIAS Login
 lti#:#conf_privacy_ident_il_uuid_login_info#:#これはコール毎に区別されますがILIASユーザに関して直接結論を許可する可能性があります。
+lti#:#conf_privacy_ident_il_uuid_sha256#:#Hash combined with a unique ILIAS platform id formatted as an E-Mail address###26 09 2022 new variable
+lti#:#conf_privacy_ident_il_uuid_sha256_info#:#This is identical to each call, but does not permit any direct conclusions about the ILIAS user.###26 09 2022 new variable
+lti#:#conf_privacy_ident_il_uuid_sha256url#:#Hash combined with the ILIAS Domain formatted as an E-Mail address###26 09 2022 new variable
+lti#:#conf_privacy_ident_il_uuid_sha256url_info#:#This is identical to each call, with a maximum of 80 characters significantly shorter than the variant with the ILIAS platform ID and allows only very limited conclusions about the ILIAS user.###26 09 2022 new variable
 lti#:#conf_privacy_ident_il_uuid_user_id#:#メールアドレスとしてユニークなILIASプラットフォームでフォーマットされて結合されたILIASユーザID
 lti#:#conf_privacy_ident_il_uuid_user_id_info#:#これはコール毎に区別されますがILIASユーザに関して直接結論は許可しません。
 lti#:#conf_privacy_ident_info#:#標準はメールアドレスが使用されます。ユニークなILIASプラットフォームid:
@@ -13843,9 +13858,11 @@ rep#:#rep_add_to_favourites#:#お気に入りへ追加
 rep#:#rep_added_rec_content#:#推奨コンテンツが追加されました。
 rep#:#rep_added_to_favourites#:#アイテムがお気に入りへ追加されました。
 rep#:#rep_breadcr_crs#:#コースのパンくずステータス
+rep#:#rep_breadcr_crs_config#:#Configuration###24 11 2022 new variable
 rep#:#rep_breadcr_crs_overwrite#:#設定はコースレベル上で変更可能です
 rep#:#rep_breadcr_crs_overwrite_not#:#設定はコースレベル上で変更不可です
 rep#:#rep_configure#:#構成
+rep#:#rep_crs_default_shortened#:#Default: Breadcrumbs Shortened###24 11 2022 new variable
 rep#:#rep_custom_icons#:#カスタムアイコン
 rep#:#rep_default#:#Default
 rep#:#rep_dependencies#:#依存性
@@ -14559,6 +14576,7 @@ skmg#:#skmg_new_sktr#:#新規能力テンプレートレファレンス
 skmg#:#skmg_next_step#:#次のステップ
 skmg#:#skmg_no_nodes_selectable#:#現在選択可能な能力がありません。
 skmg#:#skmg_no_skills#:#能力未記入
+skmg#:#skmg_no_skills_selected_info#:#You have not selected or fulfilled any competences yet. Click on the "Add Competence"-button to select a competence. You can add any number of competences. If you fulfill competences by editing learning materials, they will be automatically listed here.###09 11 2022 new variable
 skmg#:#skmg_no_trigger#:#トリガーがありません
 skmg#:#skmg_nr#:#Nr
 skmg#:#skmg_number#:#数字
@@ -14601,6 +14619,8 @@ skmg#:#skmg_skill_levels#:#能力レベル
 skmg#:#skmg_skill_management_deactivated#:#能力管理は現在動作していません。
 skmg#:#skmg_skill_needs_impr_no_res#:#この能力を向上する必要があります。目標としている能力レベルに沿うような提供された学習教材の現在学習リソースがありません。
 skmg#:#skmg_skill_needs_impr_res#:#この能力を向上する必要があります。次のリソースは目標の能力レベルに沿う学習教材を提供します。
+skmg#:#skmg_skill_needs_self_eval#:#Please conduct a self-evaluation first to see your competence target.###09 11 2022 new variable
+skmg#:#skmg_skill_needs_self_eval_box#:#Please note that you have not conducted a self-evaluation for at least one competence in this profile. You will not see the competence target for the affected competences until a self-evaluation is done.###09 11 2022 new variable
 skmg#:#skmg_skill_no_needs_impr#:#能力レベルは選択したプロファイルに適合します。
 skmg#:#skmg_skill_profiles#:#プロファイル
 skmg#:#skmg_skill_template#:#能力テンプレート
