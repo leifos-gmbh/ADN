@@ -34,6 +34,11 @@ class ilHTTPS
     {
         global $ilSetting, $ilIliasIniFile;
 
+        // begin-patch adn
+        if (!$ilSetting instanceof ilSetting) {
+            return;
+        }
+
         if ($this->enabled = (bool) $ilSetting->get('https')) {
             $this->__readProtectedScripts();
             $this->__readProtectedClasses();

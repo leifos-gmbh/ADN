@@ -188,16 +188,8 @@ class adnPersonalDataNotification extends ilCronJob
                 "&target=adn_certd_" . $wmo->getId() . "<br />";
         }
         $message = str_replace("{USER}", $user_str, $message);
-
-        // #10044
-        include_once("./Services/Mail/classes/class.ilMail.php");
-        $mail = new ilMail(ANONYMOUS_USER_ID);
-        $mail->enableSOAP(false); // #10410
-        //	echo "-$a_wmo_id-$mail_adress-";
-
         $log->notice("sending to:" . $mail_adress);
         $log->notice("subject:" . $subject);
-
         include_once './Services/Mail/classes/class.ilMimeMail.php';
 
         /** @var ilMailMimeSenderFactory $senderFactory */
