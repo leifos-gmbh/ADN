@@ -1,8 +1,8 @@
--- MySQL dump 10.19  Distrib 10.3.34-MariaDB, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.19  Distrib 10.3.36-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: ilias_release
 -- ------------------------------------------------------
--- Server version	10.3.34-MariaDB-0+deb10u1
+-- Server version	10.3.36-MariaDB-0+deb10u2
 
 --
 -- Table structure for table `acc_access_key`
@@ -7312,7 +7312,8 @@ CREATE TABLE `il_dcl_field_prop` (
   `field_id` bigint(20) NOT NULL DEFAULT 0,
   `name` varchar(4000) NOT NULL DEFAULT '',
   `value` varchar(4000) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `i1_idx` (`id`,`field_id`)
 ) ;
 
 --
@@ -7802,7 +7803,8 @@ CREATE TABLE `il_dcl_tview_set` (
   `visible_edit` tinyint(4) NOT NULL DEFAULT 1,
   `required_edit` tinyint(4) NOT NULL DEFAULT 0,
   `locked_edit` tinyint(4) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `i1_idx` (`tableview_id`)
 ) ;
 
 --
@@ -13408,7 +13410,7 @@ CREATE TABLE `object_reference_ws_seq` (
 
 CREATE TABLE `object_translation` (
   `obj_id` int(11) NOT NULL DEFAULT 0,
-  `title` varchar(128) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
   `description` varchar(4000) DEFAULT NULL,
   `lang_code` char(2) NOT NULL DEFAULT '',
   `lang_default` tinyint(4) NOT NULL DEFAULT 0,
@@ -20353,7 +20355,7 @@ INSERT INTO `settings` VALUES ('lucene_adv_search','lom_structure','0');
 INSERT INTO `settings` VALUES ('lucene_adv_search','lom_taxon','0');
 INSERT INTO `settings` VALUES ('lucene_adv_search','lom_user_role','0');
 INSERT INTO `settings` VALUES ('lucene_adv_search','lom_version','0');
-INSERT INTO `settings` VALUES ('MathJax','path_to_mathjax','https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML,Safe');
+INSERT INTO `settings` VALUES ('MathJax','path_to_mathjax','https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML,Safe');
 INSERT INTO `settings` VALUES ('mobs','file_manager_always','');
 INSERT INTO `settings` VALUES ('mobs','mep_activate_pages','1');
 INSERT INTO `settings` VALUES ('mobs','restricted_file_types','');
@@ -20412,7 +20414,7 @@ INSERT INTO `settings` VALUES ('common','soap_connect_timeout','0');
 INSERT INTO `settings` VALUES ('common','rpc_server_host','');
 INSERT INTO `settings` VALUES ('common','rpc_server_port','0');
 INSERT INTO `settings` VALUES ('common','inst_id','0');
-INSERT INTO `settings` VALUES ('common','db_hotfixes_7','92');
+INSERT INTO `settings` VALUES ('common','db_hotfixes_7','95');
 INSERT INTO `settings` VALUES ('adve','autosave','30');
 INSERT INTO `settings` VALUES ('common','rep_favourites','1');
 
@@ -25024,4 +25026,4 @@ CREATE TABLE `xmlvalue_seq` (
 
 
 
--- Dump completed on 2022-12-21 17:21:59
+-- Dump completed on 2023-03-16 12:57:13
