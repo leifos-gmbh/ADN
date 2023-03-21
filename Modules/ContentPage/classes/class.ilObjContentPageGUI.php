@@ -271,7 +271,6 @@ class ilObjContentPageGUI extends ilObject2GUI implements ilContentPageObjectCon
                 $isMediaRequest = in_array(strtolower($cmd), array_map('strtolower', [
                     self::UI_CMD_COPAGE_DOWNLOAD_FILE,
                     self::UI_CMD_COPAGE_DISPLAY_FULLSCREEN,
-                    self::UI_CMD_COPAGE_DISPLAY_MEDIA,
                     self::UI_CMD_COPAGE_DOWNLOAD_PARAGRAPH,
                 ]), true);
                 if ($isMediaRequest) {

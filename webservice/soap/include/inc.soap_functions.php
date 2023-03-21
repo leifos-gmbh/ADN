@@ -896,18 +896,13 @@ class ilSoapFunctions
      */
     public static function buildHTTPPath()
     {
-        // begin-patch adn
-        include_once './Services/Http/classes/class.ilHTTPS.php';
-        $https = new ilHTTPS();
-
-        if ($https->isDetected()) {
+        if ($_SERVER["HTTPS"] == "on") {
             $protocol = 'https://';
         } else {
             $protocol = 'http://';
         }
-        // end-patch adn
-
         $host = $_SERVER['HTTP_HOST'];
+
         $path = dirname($_SERVER['REQUEST_URI']);
 
         //dirname cuts the last directory from a directory path e.g content/classes return content

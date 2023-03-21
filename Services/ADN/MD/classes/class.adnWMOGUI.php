@@ -316,7 +316,7 @@ class adnWMOGUI
         $form->addItem($name);
 
         $stitle = new ilTextInputGUI($lng->txt("adn_subtitle"), "subtitle");
-        $stitle->setRequired(false);
+        $stitle->setRequired(true);
         $stitle->setMaxLength(100);
         $form->addItem($stitle);
 

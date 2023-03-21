@@ -38,7 +38,6 @@ class assErrorTextGUITest extends assBaseTestCase
         $this->setGlobalVariable('ilias', $this->getIliasMock());
         $this->setGlobalVariable('tpl', $this->getGlobalTemplateMock());
         $this->setGlobalVariable('ilDB', $this->getDatabaseMock());
-        $this->setGlobalVariable('http', $this->getHttpMock());
     }
 
     public function test_instantiateObject_shouldReturnInstance()

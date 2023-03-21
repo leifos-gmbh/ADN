@@ -39,9 +39,10 @@ class assOrderingQuestionDatabaseRepository
         );
         $atom_query->run();
     }
-
+    
     protected function buildOrderingList(
-        int $question_id
+        int $question_id,
+        array $elements = []
     ) : \ilAssOrderingElementList {
         $elements = $this->getOrderingElementsForList($question_id);
         return new \ilAssOrderingElementList($question_id, $elements);

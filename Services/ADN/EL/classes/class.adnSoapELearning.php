@@ -18,7 +18,17 @@ include_once './webservice/soap/classes/class.ilSoapAdministration.php';
  */
 class adnSoapELearning extends ilSoapAdministration
 {
-
+    /**
+     * Constructor
+     *
+     * @param
+     * @return
+     */
+    public function __construct()
+    {
+    }
+    
+    
     /**
      * Get subject areas
      *

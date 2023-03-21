@@ -280,13 +280,8 @@ class ilFSStorageExercise extends ilFileSystemStorage
     public function getFeedbackFiles($a_user_id)
     {
         $files = array();
-
-        if ($a_user_id === "t") {   // team assignment without team, see #36253
-            return[];
-        }
-
+    
         $dir = $this->getFeedbackPath($a_user_id);
-
         if (@is_dir($dir)) {
             $dp = opendir($dir);
             while ($file = readdir($dp)) {
@@ -295,6 +290,7 @@ class ilFSStorageExercise extends ilFileSystemStorage
                 }
             }
         }
+        
         return $files;
     }
     

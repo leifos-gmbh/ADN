@@ -529,7 +529,6 @@ class ilDclRecordListGUI
         $list = new ilDclRecordListTableGUI($this, "listRecords", $table_obj, $this->tableview_id, $this->mode);
         if ($use_tableview_filter) {
             $list->initFilter();
-            $list->resetOffset();
             $list->resetFilter();
             $list->initFilterFromTableView();
         } else {

@@ -82,9 +82,6 @@ il.COPagePres =
 		$("a.ilc_marker_Marker").mouseout(this.outMarker);
 		$("a.ilc_marker_Marker").click(this.clickMarker);
 
-		$(document).on("il.accordion.start-opening", function (ev, el) {
-			il.COPagePres.fixMarkerPositions();
-		});
 	},
 	
 	/**

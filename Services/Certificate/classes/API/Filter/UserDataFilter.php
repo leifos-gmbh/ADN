@@ -13,7 +13,6 @@ class UserDataFilter
     const SORT_FIELD_USR_LASTNAME = 3;
     const SORT_FIELD_USR_FIRSTNAME = 4;
     const SORT_FIELD_OBJ_TITLE = 5;
-    const SORT_FIELD_USR_EMAIL = 6;
     const SORT_DIRECTION_ASC = 1;
     const SORT_DIRECTION_DESC = 2;
 
@@ -41,9 +40,6 @@ class UserDataFilter
     /** @var string|null */
     private $userEmail;
 
-    /** @var string|null */
-    private $userIdentification;
-
     /** @var int[] */
     private $userIds = [];
 
@@ -61,9 +57,6 @@ class UserDataFilter
 
     /** @var bool */
     private $shouldIncludeDeletedObjects = true;
-
-    /** @var int[] */
-    private $orgUnitIds = [];
 
     /**
      *
@@ -88,16 +81,6 @@ class UserDataFilter
     private function ensureValidUniqueObjIds(array $objIds) : void
     {
         array_walk($objIds, function (int $objId) {
-            // Do nothing, use this for type safety of array values
-        });
-    }
-
-    /**
-     * @param int[] $orgUnitIds
-     */
-    private function ensureValidUniqueOrgUnitIds(array $orgUnitIds): void
-    {
-        array_walk($orgUnitIds, function (int $orgUnitId) {
             // Do nothing, use this for type safety of array values
         });
     }
@@ -158,18 +141,6 @@ class UserDataFilter
     {
         $clone = clone $this;
         $clone->userEmail = $emailAddress;
-
-        return $clone;
-    }
-
-    /**
-     * @param string|null $userIdentification
-     * @return $this
-     */
-    public function withUserIdentification(?string $userIdentification): self
-    {
-        $clone = clone $this;
-        $clone->userIdentification = $userIdentification;
 
         return $clone;
     }
@@ -269,36 +240,6 @@ class UserDataFilter
     }
 
     /**
-     * @param int[] $orgUnitIds
-     *
-     * @return $this
-     */
-    public function withOrgUnitIds(array $orgUnitIds): self
-    {
-        $this->ensureValidUniqueOrgUnitIds($orgUnitIds);
-
-        $clone = clone $this;
-        $clone->orgUnitIds = array_unique($orgUnitIds);
-
-        return $clone;
-    }
-
-    /**
-     * @param int[] $orgUnitIds
-     *
-     * @return $this
-     */
-    public function withAdditionalOrgUnitIds(array $orgUnitIds): self
-    {
-        $this->ensureValidUniqueOrgUnitIds($orgUnitIds);
-
-        $clone = clone $this;
-        $clone->orgUnitIds = array_unique(array_merge($clone->orgUnitIds, $orgUnitIds));
-
-        return $clone;
-    }
-
-    /**
      * @return string
      */
     public function getObjectTitle() : ?string
@@ -363,14 +304,6 @@ class UserDataFilter
     }
 
     /**
-     * @return string
-     */
-    public function getUserIdentification(): ?string
-    {
-        return $this->userIdentification;
-    }
-
-    /**
      * @return int[]
      */
     public function getUserIds() : array
@@ -384,14 +317,6 @@ class UserDataFilter
     public function getObjIds() : array
     {
         return $this->objIds;
-    }
-
-    /**
-     * @return int[]
-     */
-    public function getOrgUnitIds(): array
-    {
-        return $this->orgUnitIds;
     }
 
     /**
@@ -455,19 +380,6 @@ class UserDataFilter
     {
         $clone = clone $this;
         $clone->sorts[] = [self::SORT_FIELD_ISSUE_TIMESTAMP, $direction];
-
-        return $clone;
-    }
-
-    /**
-     * @param int $direction
-     *
-     * @return $this
-     */
-    public function withSortedEmails(int $direction = self::SORT_DIRECTION_ASC): self
-    {
-        $clone = clone $this;
-        $clone->sorts[] = [self::SORT_FIELD_USR_EMAIL, $direction];
 
         return $clone;
     }

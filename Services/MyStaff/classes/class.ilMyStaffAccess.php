@@ -23,13 +23,8 @@ class ilMyStaffAccess extends ilObjectAccess
     const TMP_DEFAULT_TABLE_NAME_PREFIX_CRS_MEMBERS = 'tmp_crs_members';
     const TMP_DEFAULT_TABLE_NAME_PREFIX_ORGU_MEMBERS = 'tmp_orgu_members';
     const TMP_DEFAULT_TABLE_NAME_PREFIX_IL_OBJ_USER_MATRIX = 'tmp_obj_user_matr';
-    const ACCESS_ENROLMENTS_ORG_UNIT_OPERATION = ilOrgUnitOperation::OP_ACCESS_ENROLMENTS;
-    const COURSE_CONTEXT = ilOrgUnitOperationContext::CONTEXT_CRS;
-    const EXERCISE_CONTEXT = ilOrgUnitOperationContext::CONTEXT_EXC;
-    const GROUP_CONTEXT = ilOrgUnitOperationContext::CONTEXT_GRP;
-    const SURVEY_CONTEXT = ilOrgUnitOperationContext::CONTEXT_SVY;
-    const TEST_CONTEXT = ilOrgUnitOperationContext::CONTEXT_TST;
-
+    const DEFAULT_ORG_UNIT_OPERATION = ilOrgUnitOperation::OP_ACCESS_ENROLMENTS;
+    const DEFAULT_CONTEXT = 'crs';
     /**
      * @var self
      */
@@ -50,16 +45,16 @@ class ilMyStaffAccess extends ilObjectAccess
         if (self::$instance === null) {
             self::$instance = new self();
 
-            self::$instance->dropTempTable(self::TMP_DEFAULT_TABLE_NAME_PREFIX_IL_OBJ_SPEC_PERMISSIONS . "_" . self::ACCESS_ENROLMENTS_ORG_UNIT_OPERATION . "_"
-                . self::COURSE_CONTEXT);
-            self::$instance->dropTempTable(self::TMP_DEFAULT_TABLE_NAME_PREFIX_IL_OBJ_DEFAULT_PERMISSIONS . "_" . self::ACCESS_ENROLMENTS_ORG_UNIT_OPERATION
-                . "_" . self::COURSE_CONTEXT);
-            self::$instance->dropTempTable(self::TMP_DEFAULT_TABLE_NAME_PREFIX_IL_ORGU_DEFAULT_PERMISSIONS . "_" . self::ACCESS_ENROLMENTS_ORG_UNIT_OPERATION
-                . "_" . self::COURSE_CONTEXT);
+            self::$instance->dropTempTable(self::TMP_DEFAULT_TABLE_NAME_PREFIX_IL_OBJ_SPEC_PERMISSIONS . "_" . self::DEFAULT_ORG_UNIT_OPERATION . "_"
+                . self::DEFAULT_CONTEXT);
+            self::$instance->dropTempTable(self::TMP_DEFAULT_TABLE_NAME_PREFIX_IL_OBJ_DEFAULT_PERMISSIONS . "_" . self::DEFAULT_ORG_UNIT_OPERATION
+                . "_" . self::DEFAULT_CONTEXT);
+            self::$instance->dropTempTable(self::TMP_DEFAULT_TABLE_NAME_PREFIX_IL_ORGU_DEFAULT_PERMISSIONS . "_" . self::DEFAULT_ORG_UNIT_OPERATION
+                . "_" . self::DEFAULT_CONTEXT);
             self::$instance->dropTempTable(self::TMP_DEFAULT_TABLE_NAME_PREFIX_CRS_MEMBERS . "_user_id_" . $DIC->user()->getId());
             self::$instance->dropTempTable(self::TMP_DEFAULT_TABLE_NAME_PREFIX_ORGU_MEMBERS . "_user_id_" . $DIC->user()->getId());
-            self::$instance->dropTempTable(self::TMP_DEFAULT_TABLE_NAME_PREFIX_IL_OBJ_USER_MATRIX . "_" . self::ACCESS_ENROLMENTS_ORG_UNIT_OPERATION . "_"
-                . self::COURSE_CONTEXT);
+            self::$instance->dropTempTable(self::TMP_DEFAULT_TABLE_NAME_PREFIX_IL_OBJ_USER_MATRIX . "_" . self::DEFAULT_ORG_UNIT_OPERATION . "_"
+                . self::DEFAULT_CONTEXT);
         }
 
         return self::$instance;
@@ -81,6 +76,10 @@ class ilMyStaffAccess extends ilObjectAccess
     {
         global $DIC;
 
+        if ($DIC->rbac()->system()->checkAccess('visible', SYSTEM_FOLDER_ID)) {
+            return true;
+        }
+
         if (!$DIC->settings()->get("enable_my_staff")) {
             return false;
         }
@@ -89,7 +88,13 @@ class ilMyStaffAccess extends ilObjectAccess
             return true;
         }
 
-        if ($this->hasCurrentUserAccessToCourseMemberships()) {
+        if ($this->countOrgusOfUserWithOperationAndContext($DIC->user()->getId(), ilOrgUnitOperation::OP_ACCESS_ENROLMENTS, self::DEFAULT_CONTEXT)
+            > 0
+        ) {
+            return true;
+        }
+
+        if ($this->hasCurrentUserAccessToCourseLearningProgressForAtLeastOneUser()) {
             return true;
         }
 
@@ -98,7 +103,7 @@ class ilMyStaffAccess extends ilObjectAccess
         }
 
         if ($this->hasCurrentUserAccessToCompetences()) {
-            return true;
+            true;
         }
 
         return false;
@@ -116,19 +121,7 @@ class ilMyStaffAccess extends ilObjectAccess
             return false;
         }
 
-        if ($this->countOrgusOfUserWithOperationAndContext($DIC->user()->getId(), ilOrgUnitOperation::OP_VIEW_CERTIFICATES, self::COURSE_CONTEXT)
-            > 0
-        ) {
-            return true;
-        }
-
-        if ($this->countOrgusOfUserWithOperationAndContext($DIC->user()->getId(), ilOrgUnitOperation::OP_VIEW_CERTIFICATES, self::EXERCISE_CONTEXT)
-            > 0
-        ) {
-            return true;
-        }
-
-        if ($this->countOrgusOfUserWithOperationAndContext($DIC->user()->getId(), ilOrgUnitOperation::OP_VIEW_CERTIFICATES, self::TEST_CONTEXT)
+        if ($this->countOrgusOfUserWithOperationAndContext($DIC->user()->getId(), ilOrgUnitOperation::OP_VIEW_CERTIFICATES, self::DEFAULT_CONTEXT)
             > 0
         ) {
             return true;
@@ -149,25 +142,7 @@ class ilMyStaffAccess extends ilObjectAccess
             return false;
         }
 
-        if ($this->countOrgusOfUserWithOperationAndContext($DIC->user()->getId(), ilOrgUnitOperation::OP_VIEW_COMPETENCES, self::COURSE_CONTEXT)
-            > 0
-        ) {
-            return true;
-        }
-
-        if ($this->countOrgusOfUserWithOperationAndContext($DIC->user()->getId(), ilOrgUnitOperation::OP_VIEW_COMPETENCES, self::GROUP_CONTEXT)
-            > 0
-        ) {
-            return true;
-        }
-
-        if ($this->countOrgusOfUserWithOperationAndContext($DIC->user()->getId(), ilOrgUnitOperation::OP_VIEW_COMPETENCES, self::SURVEY_CONTEXT)
-            > 0
-        ) {
-            return true;
-        }
-
-        if ($this->countOrgusOfUserWithOperationAndContext($DIC->user()->getId(), ilOrgUnitOperation::OP_VIEW_COMPETENCES, self::TEST_CONTEXT)
+        if ($this->countOrgusOfUserWithOperationAndContext($DIC->user()->getId(), ilOrgUnitOperation::OP_VIEW_COMPETENCES, self::DEFAULT_CONTEXT)
             > 0
         ) {
             return true;
@@ -176,22 +151,6 @@ class ilMyStaffAccess extends ilObjectAccess
         return false;
     }
 
-    public function hasCurrentUserAccessToCourseMemberships() : bool
-    {
-        global $DIC;
-
-        if (!$DIC->settings()->get("enable_my_staff")) {
-            return false;
-        }
-
-        if ($this->countOrgusOfUserWithOperationAndContext($DIC->user()->getId(), self::ACCESS_ENROLMENTS_ORG_UNIT_OPERATION, self::COURSE_CONTEXT)
-            > 0
-        ) {
-            return true;
-        }
-
-        return false;
-    }
 
     /**
      * @param int $usr_id
@@ -202,15 +161,7 @@ class ilMyStaffAccess extends ilObjectAccess
     {
         global $DIC;
 
-        if (!$DIC->settings()->get("enable_my_staff")) {
-            return false;
-        }
-
         $arr_users = $this->getUsersForUser($DIC->user()->getId());
-        if (count($arr_users) > 0 && $usr_id === 0) {
-            return true;
-        }
-
         if (count($arr_users) > 0 && in_array($usr_id, $arr_users)) {
             return true;
         }
@@ -240,7 +191,7 @@ class ilMyStaffAccess extends ilObjectAccess
         global $DIC;
 
         $arr_usr_id = $this->getUsersForUserOperationAndContext($DIC->user()
-            ->getId(), ilOrgUnitOperation::OP_READ_LEARNING_PROGRESS, self::COURSE_CONTEXT);
+            ->getId(), ilOrgUnitOperation::OP_READ_LEARNING_PROGRESS, self::DEFAULT_CONTEXT);
         if (count($arr_usr_id) > 0) {
             return true;
         }
@@ -277,7 +228,7 @@ class ilMyStaffAccess extends ilObjectAccess
      *
      * @return int
      */
-    public function countOrgusOfUserWithOperationAndContext($user_id, $org_unit_operation_string, $context)
+    public function countOrgusOfUserWithOperationAndContext($user_id, $org_unit_operation_string = self::DEFAULT_ORG_UNIT_OPERATION, $context = self::DEFAULT_CONTEXT)
     {
         global $DIC;
 
@@ -310,8 +261,8 @@ class ilMyStaffAccess extends ilObjectAccess
      */
     public function getUsersForUserOperationAndContext(
         $user_id,
-        $org_unit_operation_string,
-        $context,
+        $org_unit_operation_string = self::DEFAULT_ORG_UNIT_OPERATION,
+        $context = self::DEFAULT_CONTEXT,
         $tmp_table_name_prefix = self::TMP_DEFAULT_TABLE_NAME_PREFIX_IL_OBJ_USER_MATRIX
     ) {
         global $DIC;
@@ -536,7 +487,7 @@ class ilMyStaffAccess extends ilObjectAccess
      *
      * @return array
      */
-    public function getIlobjectsAndUsersForUserOperationAndContext($user_id, $org_unit_operation_string, $context)
+    public function getIlobjectsAndUsersForUserOperationAndContext($user_id, $org_unit_operation_string = self::DEFAULT_ORG_UNIT_OPERATION, $context = self::DEFAULT_CONTEXT)
     {
         global $DIC;
 
@@ -573,8 +524,8 @@ class ilMyStaffAccess extends ilObjectAccess
      */
     public function buildTempTableIlobjectsUserMatrixForUserOperationAndContext(
         $user_id,
-        $org_unit_operation_string,
-        $context,
+        $org_unit_operation_string = self::DEFAULT_ORG_UNIT_OPERATION,
+        $context = self::DEFAULT_CONTEXT,
         $temporary_table_name_prefix = self::TMP_DEFAULT_TABLE_NAME_PREFIX_IL_OBJ_USER_MATRIX
     ) {
         global $DIC;
@@ -612,8 +563,8 @@ class ilMyStaffAccess extends ilObjectAccess
 
         $tmp_table_orgu_member_path = $this->buildTempTableOrguMemberships('tmp_orgu_members_path', $all_users_for_user);
 
-        if ($temporary_table_name != self::TMP_DEFAULT_TABLE_NAME_PREFIX_IL_OBJ_USER_MATRIX . "_" . self::ACCESS_ENROLMENTS_ORG_UNIT_OPERATION . "_"
-            . self::COURSE_CONTEXT
+        if ($temporary_table_name != self::TMP_DEFAULT_TABLE_NAME_PREFIX_IL_OBJ_USER_MATRIX . "_" . self::DEFAULT_ORG_UNIT_OPERATION . "_"
+            . self::DEFAULT_CONTEXT
         ) {
             $this->dropTempTable($temporary_table_name);
         }
@@ -708,8 +659,8 @@ class ilMyStaffAccess extends ilObjectAccess
      * @return string
      */
     public function buildTempTableIlobjectsSpecificPermissionSetForOperationAndContext(
-        $org_unit_operation_string,
-        $context,
+        $org_unit_operation_string = self::DEFAULT_ORG_UNIT_OPERATION,
+        $context = self::DEFAULT_CONTEXT,
         $temporary_table_name_prefix = self::TMP_DEFAULT_TABLE_NAME_PREFIX_IL_OBJ_SPEC_PERMISSIONS
     ) {
         global $DIC;
@@ -721,8 +672,8 @@ class ilMyStaffAccess extends ilObjectAccess
          */
         $operation = ilOrgUnitOperationQueries::findByOperationString($org_unit_operation_string, $context);
 
-        if ($temporary_table_name != self::TMP_DEFAULT_TABLE_NAME_PREFIX_IL_OBJ_SPEC_PERMISSIONS . "_" . self::ACCESS_ENROLMENTS_ORG_UNIT_OPERATION . "_"
-            . self::COURSE_CONTEXT
+        if ($temporary_table_name != self::TMP_DEFAULT_TABLE_NAME_PREFIX_IL_OBJ_SPEC_PERMISSIONS . "_" . self::DEFAULT_ORG_UNIT_OPERATION . "_"
+            . self::DEFAULT_CONTEXT
         ) {
             $this->dropTempTable($temporary_table_name);
         }
@@ -762,8 +713,8 @@ class ilMyStaffAccess extends ilObjectAccess
      * @return string
      */
     public function buildTempTableIlobjectsDefaultPermissionSetForOperationAndContext(
-        $org_unit_operation_string,
-        $context,
+        $org_unit_operation_string = ilOrgUnitOperation::OP_ACCESS_ENROLMENTS,
+        $context = self::DEFAULT_CONTEXT,
         $temporary_table_name_prefix = self::TMP_DEFAULT_TABLE_NAME_PREFIX_IL_OBJ_DEFAULT_PERMISSIONS
     ) {
         global $DIC;
@@ -775,8 +726,8 @@ class ilMyStaffAccess extends ilObjectAccess
          */
         $operation = ilOrgUnitOperationQueries::findByOperationString($org_unit_operation_string, $context);
 
-        if ($temporary_table_name != self::TMP_DEFAULT_TABLE_NAME_PREFIX_IL_OBJ_DEFAULT_PERMISSIONS . "_" . self::ACCESS_ENROLMENTS_ORG_UNIT_OPERATION . "_"
-            . self::COURSE_CONTEXT
+        if ($temporary_table_name != self::TMP_DEFAULT_TABLE_NAME_PREFIX_IL_OBJ_DEFAULT_PERMISSIONS . "_" . self::DEFAULT_ORG_UNIT_OPERATION . "_"
+            . self::DEFAULT_CONTEXT
         ) {
             $this->dropTempTable($temporary_table_name);
         }
@@ -826,8 +777,8 @@ class ilMyStaffAccess extends ilObjectAccess
      * @return string
      */
     public function buildTempTableIlorgunitDefaultPermissionSetForOperationAndContext(
-        $org_unit_operation_string,
-        $context,
+        $org_unit_operation_string = self::DEFAULT_ORG_UNIT_OPERATION,
+        $context = self::DEFAULT_CONTEXT,
         $temporary_table_name_prefix = self::TMP_DEFAULT_TABLE_NAME_PREFIX_IL_ORGU_DEFAULT_PERMISSIONS
     ) {
         global $DIC;
@@ -838,8 +789,8 @@ class ilMyStaffAccess extends ilObjectAccess
          */
         $operation = ilOrgUnitOperationQueries::findByOperationString($org_unit_operation_string, $context);
 
-        if ($temporary_table_name != self::TMP_DEFAULT_TABLE_NAME_PREFIX_IL_ORGU_DEFAULT_PERMISSIONS . "_" . self::ACCESS_ENROLMENTS_ORG_UNIT_OPERATION . "_"
-            . self::COURSE_CONTEXT
+        if ($temporary_table_name != self::TMP_DEFAULT_TABLE_NAME_PREFIX_IL_ORGU_DEFAULT_PERMISSIONS . "_" . self::DEFAULT_ORG_UNIT_OPERATION . "_"
+            . self::DEFAULT_CONTEXT
         ) {
             $this->dropTempTable($temporary_table_name);
         }
@@ -892,7 +843,7 @@ class ilMyStaffAccess extends ilObjectAccess
 		AS (
 					SELECT crs_members_crs_ref.ref_id, crs_members.usr_id, orgu_ua.position_id, orgu_ua.orgu_id
 						FROM (
-							SELECT obj_id, usr_id FROM obj_members WHERE admin > 0 OR tutor > 0 OR member > 0
+							SELECT obj_id, usr_id FROM obj_members WHERE member = 1
 							AND " . $DIC->database()->in('obj_members.usr_id', $only_courses_of_user_ids, false, 'integer') . " 
 						UNION
 							SELECT obj_id, usr_id FROM crs_waiting_list

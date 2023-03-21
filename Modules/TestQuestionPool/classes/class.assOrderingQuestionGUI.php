@@ -158,7 +158,7 @@ class assOrderingQuestionGUI extends assQuestionGUI implements ilGuiQuestionScor
     public function writeQuestionSpecificPostData(ilPropertyFormGUI $form)
     {
         $post = $_POST;
-        $thumb_geometry = (int) ($post["thumb_geometry"] ?? $this->object->getThumbGeometry());
+        $thumb_geometry = max(20, (int) $post["thumb_geometry"]);
         $this->object->setThumbGeometry($thumb_geometry);
 
         $this->object->setPoints((int) $post["points"]);
@@ -315,8 +315,6 @@ class assOrderingQuestionGUI extends assQuestionGUI implements ilGuiQuestionScor
     {
         $this->renderEditForm($this->buildNestingForm());
         $this->addEditSubtabs(self::TAB_EDIT_NESTING);
-        $this->tpl->addCss(ilObjStyleSheet::getContentStylePath(0));
-        $this->tpl->addCss(ilObjStyleSheet::getSyntaxStylePath());
     }
 
 

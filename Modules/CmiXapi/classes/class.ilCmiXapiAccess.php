@@ -104,7 +104,7 @@ class ilCmiXapiAccess
             return true;
         }
         
-        return false;
+        return $this->hasOutcomesAccess();
     }
     
     /**
@@ -116,7 +116,7 @@ class ilCmiXapiAccess
             return true;
         }
         
-        return false;
+        return $this->hasOutcomesAccess();
     }
     
     /**

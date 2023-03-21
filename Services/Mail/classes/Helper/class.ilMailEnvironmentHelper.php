@@ -22,8 +22,8 @@ class ilMailEnvironmentHelper
     public function getClientId() : string
     {
         $clientId = '';
-        if (defined('CLIENT_ID')) {
-            $clientId = CLIENT_ID;
+        if (defined('CLIENT_NAME')) {
+            $clientId = CLIENT_NAME;
         }
         
         return $clientId;

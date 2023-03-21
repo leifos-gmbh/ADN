@@ -455,8 +455,8 @@ It is recommended to suppress these header informations to prevent detection and
 
 ```
 <IfModule mod_headers.c>
-    Header unset Server
-    Header always unset Server
+    Headers unset Server
+    Headers always unset Server
 </IfModule>
 ```
 

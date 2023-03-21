@@ -891,8 +891,6 @@ abstract class ilAssQuestionFeedback
      */
     final protected function duplicatePageObject($pageObjectType, $originalPageObjectId, $duplicatePageObjectId, $duplicatePageObjectParentId)
     {
-        $this->ensurePageObjectExists($pageObjectType, $originalPageObjectId);
-
         $cl = $this->getClassNameByType($pageObjectType);
         require_once 'Modules/TestQuestionPool/classes/feedback/class.' . $cl . '.php';
 

@@ -782,13 +782,13 @@ class ilMailFolderGUI
         $form->addItem($to);
 
         if ($mailData['rcp_cc']) {
-            $cc = new ilCustomInputGUI($this->lng->txt('mail_cc') . ':');
+            $cc = new ilCustomInputGUI($this->lng->txt('cc') . ':');
             $cc->setHtml(ilUtil::htmlencodePlainString($this->umail->formatNamesForOutput((string) $mailData['rcp_cc']), false));
             $form->addItem($cc);
         }
 
         if ($mailData['rcp_bcc']) {
-            $bcc = new ilCustomInputGUI($this->lng->txt('mail_bcc') . ':');
+            $bcc = new ilCustomInputGUI($this->lng->txt('bc') . ':');
             $bcc->setHtml(ilUtil::htmlencodePlainString(
                 $this->umail->formatNamesForOutput((string) $mailData['rcp_bcc']),
                 false
@@ -926,14 +926,14 @@ class ilMailFolderGUI
 
         if ($mailData['rcp_cc']) {
             $tplprint->setCurrentBlock('cc');
-            $tplprint->setVariable('TXT_CC', $this->lng->txt('mail_cc'));
+            $tplprint->setVariable('TXT_CC', $this->lng->txt('cc'));
             $tplprint->setVariable('CC', $mailData['rcp_cc']);
             $tplprint->parseCurrentBlock();
         }
 
         if ($mailData['rcp_bcc']) {
             $tplprint->setCurrentBlock('bcc');
-            $tplprint->setVariable('TXT_BCC', $this->lng->txt('mail_bcc'));
+            $tplprint->setVariable('TXT_BCC', $this->lng->txt('bc'));
             $tplprint->setVariable('BCC', $mailData['rcp_bcc']);
             $tplprint->parseCurrentBlock();
         }

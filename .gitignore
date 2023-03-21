@@ -368,7 +368,7 @@
 /setup/sql/*.bak
 /setup/sql/ilDBTemplate
 virtual-data
-#/libs/composer/vendor
+/libs/composer/vendor
 
 # /dicto
 /dicto/results/*

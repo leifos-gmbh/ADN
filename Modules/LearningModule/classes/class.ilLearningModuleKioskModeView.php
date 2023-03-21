@@ -19,10 +19,6 @@ use Psr\Http\Message\ServerRequestInterface;
 class ilLearningModuleKioskModeView extends ilKioskModeView
 {
     const CMD_TOGGLE_LEARNING_PROGRESS = 'toggleManualLearningProgress';
-    /**
-     * @var array
-     */
-    protected $menu_entries = null;
 
     /** @var \ilObjLearningModule */
     protected $lm;
@@ -185,12 +181,16 @@ class ilLearningModuleKioskModeView extends ilKioskModeView
         $builder = $this->maybeBuildLearningProgressToggleControl($builder);
 
         // menu
-        foreach ($this->getMenuEntries() as $entry) {
+        $menu = new \ILIAS\LearningModule\Menu\ilLMMenuGUI($this->lm_pres_service);
+        foreach ($menu->getEntries() as $entry) {
             if (is_object($entry["signal"])) {
                 $builder = $builder->genericWithSignal(
                     $entry["label"],
                     $entry["signal"]
                 );
+            }
+            if (is_object($entry["modal"])) {
+                $this->additional_content[] = $entry["modal"];
             }
             if ($entry["on_load"] != "") {
                 $main_tpl->addOnLoadCode($entry["on_load"]);
@@ -202,20 +202,6 @@ class ilLearningModuleKioskModeView extends ilKioskModeView
         return $builder;
     }
 
-    /**
-     *
-     *
-     * @param
-     * @return
-     */
-    protected function getMenuEntries() : array
-    {
-        if (is_null($this->menu_entries)) {
-            $menu = new \ILIAS\LearningModule\Menu\ilLMMenuGUI($this->lm_pres_service);
-            $this->menu_entries = $menu->getEntries();
-        }
-        return $this->menu_entries;
-    }
 
     /**
      * @param ControlBuilder $builder
@@ -280,18 +266,10 @@ class ilLearningModuleKioskModeView extends ilKioskModeView
         array $post = null
     ) : Component {
         $this->initLMService($state->getValueFor("current_page"));
-
-        $additional_content = [];
-        foreach ($this->getMenuEntries() as $entry) {
-            if (is_object($entry["modal"])) {
-                $additional_content[] = $entry["modal"];
-            }
-        }
-
         $this->ctrl->setParameterByClass("illmpresentationgui", 'ref_id', $this->lm->getRefId());
         $content = $this->uiRenderer->render($this->messages);
         $content .= $this->ctrl->getHTML($this->lm_pres, ["cmd" => "layout"], ["illmpresentationgui"]);
-        $content .= $this->uiRenderer->render($additional_content);
+        $content .= $this->uiRenderer->render($this->additional_content);
         return $factory->legacy($content);
     }
 

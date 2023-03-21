@@ -82,6 +82,7 @@ class ilCalendarAppointmentGUI
                 $this->$cmd();
                 break;
         }
+
     }
     
     /**
@@ -642,6 +643,7 @@ class ilCalendarAppointmentGUI
 
         if ($_REQUEST['rexl']) {
             $GLOBALS['DIC']['ilCtrl']->setParameter($this, 'rexl', 1);
+
             // Calculate new appointment time
             $duration = $this->getAppointment()->getEnd()->get(IL_CAL_UNIX) - $this->getAppointment()->getStart()->get(IL_CAL_UNIX);
             include_once './Services/Calendar/classes/class.ilCalendarRecurrenceCalculator.php';
@@ -787,6 +789,7 @@ class ilCalendarAppointmentGUI
         $single_editing = ($_REQUEST['rexl'] ? true : false);
         
         $this->load('edit', $this->app->isMilestone());
+        
         if ($this->app->validate() and $this->notification->validate()) {
             if (!(int) $_POST['calendar']) {
                 $cat_id = $this->createDefaultCalendar();
@@ -879,6 +882,7 @@ class ilCalendarAppointmentGUI
             $confirm->setConfirm($this->lng->txt('delete'), 'delete');
             $this->tpl->setContent($confirm->getHTML());
         } else {
+
             $table = new ilCalendarRecurrenceTableGUI(
                 $this->app,
                 $this,

@@ -358,31 +358,20 @@ class ilPublicUserProfileGUI
             if (!$ref_url) {
                 $ref_url = basename($_SERVER['REQUEST_URI']);
             }
-
-            $mail_url = '';
-            if ($DIC->rbac()->system()->checkAccess('internal_mail', ilMailGlobalServices::getMailObjectRefId())) {
-                $mail_url = ilMailFormCall::getLinkTarget(
+            
+            $tpl->setCurrentBlock("mail");
+            $tpl->setVariable("TXT_MAIL", $lng->txt("send_mail"));
+            require_once 'Services/Mail/classes/class.ilMailFormCall.php';
+            $tpl->setVariable(
+                'HREF_MAIL',
+                ilMailFormCall::getLinkTarget(
                     $ref_url,
                     '',
-                    [],
-                    [
-                        'type' => 'new',
-                        'rcp_to' => $user->getLogin()
-                    ]
-                );
-            } elseif ($user->getPref('public_profile') === 'g' ||
-                (!$ilUser->isAnonymous() && $user->getPref('public_profile') === 'y') &&
-                $user->getPref('public_email') &&
-                $user->getEmail() !== '') {
-                $mail_url = 'mailto:' . $user->getEmail();
-            }
-
-            if ($mail_url !== '') {
-                $tpl->setCurrentBlock("mail");
-                $tpl->setVariable("TXT_MAIL", $lng->txt("send_mail"));
-                $tpl->setVariable('HREF_MAIL', $mail_url);
-                $tpl->parseCurrentBlock();
-            }
+                    array(),
+                    array('type' => 'new', 'rcp_to' => $user->getLogin())
+                )
+            );
+            $tpl->parseCurrentBlock();
         }
 
 

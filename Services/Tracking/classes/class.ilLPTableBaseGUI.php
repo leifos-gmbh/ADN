@@ -489,7 +489,7 @@ class ilLPTableBaseGUI extends ilTable2GUI
 
             case "status":
                 $icons = ilLPStatusIcons::getInstance($this->getIconVariant());
-                $value = $icons->renderIconForStatus((int) $value);
+                $value = $icons->renderIconForStatus($value);
                 break;
 
             case "language":

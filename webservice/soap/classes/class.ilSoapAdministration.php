@@ -112,8 +112,6 @@ class ilSoapAdministration
             $this->__setMessageCode('Server');
             return false;
         }
-        // begin-patch adn
-        return true;
 
         if ($this->soap_check) {
             $set = new ilSetting();

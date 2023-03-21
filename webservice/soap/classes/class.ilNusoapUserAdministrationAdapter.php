@@ -59,19 +59,6 @@ class ilNusoapUserAdministrationAdapter
 
     public function __construct($a_use_wsdl = true)
     {
-        // begin-patch adn
-        $_SERVER['HTTPS'] = 'on';
-        $proxy_uri = '';
-        if (getenv('ADN_PROXY_URI')) {
-            $proxy_uri = getenv('ADN_PROXY_URI');
-        }
-        $_SERVER['PHP_SELF'] = str_replace(
-            '/webservice/soap',
-            $proxy_uri . '/webservice/soap',
-            $_SERVER['PHP_SELF']
-        );
-        // end-patch adn
-
         define('SERVICE_NAME', 'ILIASSoapWebservice');
         define('SERVICE_NAMESPACE', 'urn:ilUserAdministration');
         define('SERVICE_STYLE', 'rpc');

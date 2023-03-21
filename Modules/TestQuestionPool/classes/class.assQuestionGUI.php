@@ -1,9 +1,6 @@
 <?php
 /* Copyright (c) 1998-2013 ILIAS open source, Extended GPL, see docs/LICENSE */
 
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ServerRequestInterface;
-
 require_once './Modules/Test/classes/inc.AssessmentConstants.php';
 require_once 'Modules/Test/classes/class.ilTestExpressPage.php';
 require_once 'Modules/TestQuestionPool/exceptions/class.ilTestQuestionPoolException.php';
@@ -46,11 +43,6 @@ abstract class assQuestionGUI
     public $lng;
     public $error;
     public $errormessage;
-
-    /**
-     * @var RequestInterface|ServerRequestInterface
-     */
-    public $request;
 
     /**
      * sequence number in test
@@ -140,7 +132,6 @@ abstract class assQuestionGUI
         $this->lng = &$lng;
         $this->tpl = &$tpl;
         $this->ctrl = &$ilCtrl;
-        $this->request = $DIC->http()->request();
 
         $this->ctrl->saveParameter($this, "q_id");
         $this->ctrl->saveParameter($this, "prev_qid");
