@@ -46,6 +46,7 @@
 	<crons>
 		<cron id="adn_pd_notification" class="adnPersonalDataNotification" />
 	</crons>
+	<logging />
 </service>
 
 

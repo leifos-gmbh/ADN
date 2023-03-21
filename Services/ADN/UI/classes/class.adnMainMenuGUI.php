@@ -74,6 +74,7 @@ class adnMainMenuGUI
     const AD_USR = "ad_usr";	// user
     const AD_MCX = "ad_mcx";	// export mc questions
     const AD_ICP = "ad_icp";	// import professionals
+    const AD_CARD = 'ad_card';  // card administration settings
 
     // cr-008 start
     const CP_PDM = "cp_pdm";	// maintenance personal data

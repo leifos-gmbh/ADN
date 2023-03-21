@@ -12,7 +12,7 @@
  * @ingroup ServicesADN
  *
  * @ilCtrl_Calls adnAdministrationGUI: adnMaintenanceGUI, adnCharacterGUI, adnMCQuestionExportGUI
- * @ilCtrl_Calls adnAdministrationGUI: adnUserGUI, adnProfessionalImportGUI
+ * @ilCtrl_Calls adnAdministrationGUI: adnUserGUI, adnProfessionalImportGUI, adnCardAdministrationGUI
  */
 class adnAdministrationGUI
 {
@@ -64,6 +64,10 @@ class adnAdministrationGUI
                     $ilCtrl->setCmd("importFile");
                     break;
 
+                case adnMainMenuGUI::AD_CARD:
+                    $ilCtrl->setCmdClass(adnCardAdministrationGUI::class);
+                    $ilCtrl->setCmd('settings');
+                    break;
             }
             $next_class = $ilCtrl->getNextClass();
         }
@@ -109,6 +113,10 @@ class adnAdministrationGUI
                 $ilCtrl->forwardCommand($pro_gui);
                 break;
 
+            case strtolower(adnCardAdministrationGUI::class):
+                $card = new adnCardAdministrationGUI();
+                $ilCtrl->forwardCommand($card);
+                break;
         }
 
         adnBaseGUI::setHelpButton($ilCtrl->getCmdClass());

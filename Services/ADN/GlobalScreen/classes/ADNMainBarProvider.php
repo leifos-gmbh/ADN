@@ -71,6 +71,7 @@ class ADNMainBarProvider extends AbstractStaticMainMenuProvider
     const AD_USR = "ad_usr";	// user
     const AD_MCX = "ad_mcx";	// export mc questions
     const AD_ICP = "ad_icp";	// import professionals
+    const AD_CARD = 'ad_card';  // certification card settings
 
     // cr-008 start
     const CP_PDM = "cp_pdm";	// maintenance personal data
@@ -166,7 +167,7 @@ class ADNMainBarProvider extends AbstractStaticMainMenuProvider
             if (in_array($sub, [self::MD_WOS, self::MD_CNS])) {
                 return (\adnPerm::check(\adnPerm::MD, \adnPerm::READ));
             }
-            if (in_array($sub, [self::AD_MNT, self::AD_CHR, self::AD_USR, self::AD_MCX, self::AD_ICP])) {
+            if (in_array($sub, [self::AD_MNT, self::AD_CHR, self::AD_USR, self::AD_MCX, self::AD_ICP, self::AD_CARD])) {
                 return (\adnPerm::check(\adnPerm::AD, \adnPerm::READ));
             }
             return false;
@@ -239,6 +240,7 @@ class ADNMainBarProvider extends AbstractStaticMainMenuProvider
         $items[self::MD][] = self::AD_USR;
         $items[self::MD][] = self::AD_MCX;
         $items[self::MD][] = self::AD_ICP;
+        $items[self::MD][] = self::AD_CARD;
 
         return $items;
     }
