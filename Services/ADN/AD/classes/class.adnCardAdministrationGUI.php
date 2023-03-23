@@ -1,6 +1,8 @@
 <?php
 /* Copyright (c) 2010 Leifos, GPL, see docs/LICENSE */
 
+use ILIAS\UI\Factory as UiFactory;
+
 /**
  * Card administration settings gui
  *
@@ -15,6 +17,7 @@ class adnCardAdministrationGUI
     private $main_template;
     private ilLanguage $lng;
     private ilLogger $logger;
+    private ilToolbarGUI $toolbar;
 
     private const ACCESS_READ = 'read';
     private const ACCESS_WRITE = 'write';
@@ -23,6 +26,7 @@ class adnCardAdministrationGUI
     private string $access = self::ACCESS_NONE;
 
     private adnCardSettings $settings;
+    private UiFactory $ui_factory;
 
     public function __construct()
     {
@@ -32,6 +36,8 @@ class adnCardAdministrationGUI
         $this->main_template = $DIC->ui()->mainTemplate();
         $this->lng = $DIC->language();
         $this->logger = $DIC->logger()->adn();
+        $this->toolbar = $DIC->toolbar();
+        $this->ui_factory = $DIC->ui()->factory();
 
         if (adnPerm::check(adnPerm::AD, adnPerm::READ)) {
             $this->access = self::ACCESS_READ;
@@ -71,6 +77,7 @@ class adnCardAdministrationGUI
 
     protected function settings(ilPropertyFormGUI $form = null) : void
     {
+        $this->showToolbar();
         if (!$form instanceof ilPropertyFormGUI) {
             $form = $this->initSettingsForm();
         }
@@ -127,6 +134,46 @@ class adnCardAdministrationGUI
         }
 
         return $form;
+    }
+
+    protected function validateNfcSettings() : void
+    {
+        $verification = new adnHidVerification('dummy', 'dummy');
+        $response = null;
+        try {
+            $response = $verification->verify();
+        } catch (\Hid\Verification\ApiException $e) {
+            ilUtil::sendFailure($e->getMessage());
+            $this->settings();
+            return;
+        }
+        $error = false;
+        if ($response->getCode() === '0002') {
+            ilUtil::sendFailure($this->lng->txt('adn_card_hid_error_pwd'));
+            $error = true;
+        }
+        if ($response->getCode() === '0003') {
+            ilUtil::sendFailure($this->lng->txt('adn_card_hid_error_username'));
+            $error = true;
+        }
+
+        if (!$error) {
+            ilUtil::sendSuccess('adn_card_hid_success');
+        }
+        $this->settings();
+    }
+
+    protected function showToolbar()
+    {
+        if ($this->settings->hasNfCSettings()) {
+            $this->toolbar->setFormAction($this->ctrl->getFormAction($this));
+
+            $validation_button = $this->ui_factory->button()->standard(
+                $this->lng->txt('adn_card_nfc_btn_validation'),
+                $this->ctrl->getLinkTarget($this, 'validateNfcSettings')
+            );
+            $this->toolbar->addComponent($validation_button);
+        }
     }
 
 }

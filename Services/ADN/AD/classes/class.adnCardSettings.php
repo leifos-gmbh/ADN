@@ -82,4 +82,12 @@ class adnCardSettings
         $this->nfc_service_url = $nfc_service_url;
     }
 
+    public function hasNfCSettings() : bool
+    {
+        if ($this->getNfcServiceUrl() !== '') {
+            return true;
+        }
+        return false;
+    }
+
 }
