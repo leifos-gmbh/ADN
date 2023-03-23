@@ -30,6 +30,9 @@ class ilRestServer extends Slim\App
         $this->get('/fileStorage', array($callback_obj,'getFile'));
         $this->post('/fileStorage', array($callback_obj,'createFile'));
 
+        // begin-patch adn
+        $adn_rest_test = new adnHidRestConnector();
+        $this->post('/testHidVerification', [$adn_rest_test, 'verify']);
 
         $callback_obj->deleteDeprecated();
     }
