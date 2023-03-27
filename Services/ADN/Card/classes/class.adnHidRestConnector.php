@@ -34,20 +34,34 @@ class adnHidRestConnector
         $json_response->response = 'true';
         $json_response->code = '0000';
         $json_response->description = 'TAC was authenticated';
-
         $json_request = json_decode($request->getBody());
-
-
+        $this->logger->dump($json_request);
         $user = $json_request->systemUserName;
         if ($user !== 'adn') {
             $json_response->code = '0003';
         }
-        if ($json_request->systemPassword !== 'adn') {
+        elseif ($json_request->systemPassword !== 'adn') {
             $json_response->code = '0002';
+        }
+        elseif (strlen($json_request->tac) !== 3) {
+            $json_response->code = '0006';
+        }
+        elseif ($json_request->tac !== 'adn') {
+            $json_response->code = '0001';
+        }
+        elseif ($json_request->tagID !== 'adn') {
+            $json_response->code = '0005';
         }
         return $response
             ->withHeader('ContentType', 'application/json')
             ->withJson($json_response);
+    }
+
+    public function verifyOrder(Request $request, Response $response)
+    {
+        return $response
+            ->withHeader('ContentType', 'text/plain')
+            ->withStatus(200, 'Ok');
     }
 
 }

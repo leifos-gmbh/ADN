@@ -14,14 +14,13 @@ class adnHidVerification
 {
     public const CURL_CONNECTTIMEOUT = 3;
 
-    public const VERIFICATION_CONNECT = 1;
-    public const VERIFICATION_USER = 2;
-    public const VERIFICATION_PASS = 3;
-    public const VERIFICATION_PARAMETER = 4;
-    public const VERIFCATION_TAG_ID = 5;
-    public const VERIFICATION_TAC_LENGTH = 6;
-
+    public const CODE_PASSED = '0000';
+    public const CODE_TAC_FAIL = '0001';
+    public const CODE_PASSWORD_INVALID = '0002';
     public const CODE_USER_NOT_FOUND = '0003';
+    public const CODE_TAG_INVALID = '0005';
+    public const CODE_TAC_INVALID = '0006';
+    public const CODE_OTHER = '0100';
 
     protected ilLogger $logger;
     protected adnCardSettings $settings;
@@ -47,6 +46,8 @@ class adnHidVerification
             $api = $this->initApi();
             $request = $this->initRequest();
             $response = $api->testHidVerificationPost($request);
+            $this->logger->dump($request);
+            $this->logger->dump($response);
             return $response;
         } catch (\Hid\Verification\ApiException $e) {
             $this->logger->error($e->getMessage());
@@ -58,8 +59,8 @@ class adnHidVerification
     {
         $config = new \Hid\Verification\Configuration();
         $config->setHost($this->settings->getNfcServiceUrl());
-        $config->setDebug(false);
-        //$config->setDebugFile('/srv/www/hal/log/slim.log');
+        $config->setDebug(true);
+        $config->setDebugFile('/srv/www/hal/log/slim.log');
 
         $api = new Hid\Verification\Api\DefaultApi(null, $config);
         return $api;

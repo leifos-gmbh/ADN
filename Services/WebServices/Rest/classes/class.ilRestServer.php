@@ -33,6 +33,7 @@ class ilRestServer extends Slim\App
         // begin-patch adn
         $adn_rest_test = new adnHidRestConnector();
         $this->post('/testHidVerification', [$adn_rest_test, 'verify']);
+        #$this->post('/services/65/prod/v1', [$adn_rest_test, 'verifyOrder']);
 
         $callback_obj->deleteDeprecated();
     }

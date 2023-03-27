@@ -21,6 +21,9 @@ class adnCardSettings
     private string $nfc_user = '';
     private string $nfc_pass = '';
     private string $nfc_service_url = '';
+    private string $plc_user = '';
+    private string $plc_pass = '';
+    private string $plc_service_url = '';
 
     protected function __construct()
     {
@@ -43,6 +46,9 @@ class adnCardSettings
         $this->setNfcUser($this->storage->get('nfc_user', $this->getNfcUser()));
         $this->setNfcPass($this->storage->get('nfc_pass', $this->getNfcPass()));
         $this->setNfcServiceUrl($this->storage->get('nfc_service_url', $this->getNfcServiceUrl()));
+        $this->setPlcUser($this->storage->get('plc_user', $this->getPlcUser()));
+        $this->setPlcPass($this->storage->get('plc_pass', $this->getPlcPass()));
+        $this->setPlcServiceUrl($this->storage->get('plc_service_url', $this->getPlcServiceUrl()));
     }
 
     public function update()
@@ -50,6 +56,9 @@ class adnCardSettings
         $this->storage->set('nfc_user', $this->getNfcUser());
         $this->storage->set('nfc_pass', $this->getNfcPass());
         $this->storage->set('nfc_service_url', $this->getNfcServiceUrl());
+        $this->storage->set('plc_user', $this->getPlcUser());
+        $this->storage->set('plc_pass', $this->getPlcPass());
+        $this->storage->set('plc_service_url', $this->getPlcServiceUrl());
     }
 
     public function getNfcUser() : string
@@ -88,6 +97,44 @@ class adnCardSettings
             return true;
         }
         return false;
+    }
+
+    public function hasPlcSettings() : bool
+    {
+        if ($this->getPlcServiceUrl() !== '') {
+            return true;
+        }
+        return false;
+    }
+
+    public function getPlcUser() : string
+    {
+        return $this->plc_user;
+    }
+
+    public function setPlcUser(string $plc_user) : void
+    {
+        $this->plc_user = $plc_user;
+    }
+
+    public function getPlcPass() : string
+    {
+        return $this->plc_pass;
+    }
+
+    public function setPlcPass(string $plc_pass) : void
+    {
+        $this->plc_pass = $plc_pass;
+    }
+
+    public function getPlcServiceUrl() : string
+    {
+        return $this->plc_service_url;
+    }
+
+    public function setPlcServiceUrl(string $plc_service_url) : void
+    {
+        $this->plc_service_url = $plc_service_url;
     }
 
 }

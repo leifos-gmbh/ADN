@@ -831,7 +831,20 @@ adn#:#adn_oex_examination_info#:#Prüfungsdaten
 adn#:#adn_oex_professional_info#:#Benutzerzugangsdaten
 adn#:#adn_ad_card#:#Kartendruck
 adn#:#adn_card_settings_form#:#Einstellungen zum Kartendruck
-adn#:#adn_card_nfc_settings#:#HID - "Trusted Tag Service"
+adn#:#adn_card_plc_settings#:#Kartendruck-Service
+adn#:#adn_card_plc_user#:#Benutzername
+adn#:#adn_card_plc_pass#:#Passwort
+adn#:#adn_card_plc_service#:#Service-Url
+adn#:#adn_card_nfc_settings#:#HID "Trusted Tag Service"
 adn#:#adn_card_nfc_user#:#Benutzername
 adn#:#adn_card_nfc_pass#:#Passwort
 adn#:#adn_card_nfc_service#:#Service-Url
+adn#:#adn_card_plc_button_validation#:#Überprüfung Kartendruck-Service
+adn#:#adn_card_nfc_button_validation#:#Überprüfung "Trusted-Tag-Service"
+adn#:#adn_card_hid_success#:#Es konnte kein Fehler festgestellt werden. Die Einstellungen sind korrekt.
+adn#:#adn_card_hid_error_pwd#:#Benutzername oder Passwort sind nicht korrekt. Bitte überprüfen Sie die Eingaben.
+adn#:#adn_card_hid_error_username#:#Der Benutzername ist nicht korrekt. Bitte überprüfen Sie die Eingabe.
+adn#:#adn_card_verify_error_code#:#Fehlercode %s
+adn#:#adn_card_verify_generic#:#Die Gültigkeit der ADN-Bescheinigung konnte nicht bestätigt werden!
+adn#:#adn_card_verify_success#:#Die Gültigkeit der ADN-Bescheinigung konnte bestätigt werden.
+adn#:#adn_card_verify_success_info#:#Bitte überprüfen Sie die Personendaten und das Gültigkeitsdatum.

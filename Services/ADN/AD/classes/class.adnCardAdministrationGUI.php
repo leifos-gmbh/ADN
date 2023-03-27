@@ -96,6 +96,9 @@ class adnCardAdministrationGUI
         $this->settings->setNfcUser($form->getInput('user'));
         $this->settings->setNfcPass($form->getInput('pass'));
         $this->settings->setNfcServiceUrl($form->getInput('service'));
+        $this->settings->setPlcUser($form->getInput('plc_user'));
+        $this->settings->setPlcPass($form->getInput('plc_pass'));
+        $this->settings->setPlcServiceUrl($form->getInput('plc_service'));
         $this->settings->update();
         ilUtil::sendSuccess($this->lng->txt('settings_saved'), true);
         $this->ctrl->redirect($this, 'settings');
@@ -107,6 +110,30 @@ class adnCardAdministrationGUI
         $form->setFormAction($this->ctrl->getFormAction($this));
         $form->setTitle($this->lng->txt('adn_card_settings_form'));
 
+        // plasticard service
+        $plc = new ilFormSectionHeaderGUI();
+        $plc->setTitle($this->lng->txt('adn_card_plc_user'));
+        $form->addItem($plc);
+
+        $plc_user = new ilTextInputGUI($this->lng->txt('adn_card_plc_user'),'plc_user');
+        $plc_user->setValue($this->settings->getPlcUser());
+        $plc_user->setRequired(true);
+        $form->addItem($plc_user);
+
+        $plc_pass = new ilPasswordInputGUI($this->lng->txt('adn_card_plc_pass'), 'plc_pass');
+        $plc_pass->setValue($this->settings->getPlcPass());
+        $plc_pass->setRequired(true);
+        $plc_pass->setRetype(false);
+        $plc_pass->setDisableHtmlAutoComplete(true);
+        $plc_pass->setSkipSyntaxCheck(true);
+        $form->addItem($plc_pass);
+
+        $plc_service = new ilTextInputGUI($this->lng->txt('adn_card_plc_service'), 'plc_service');
+        $plc_service->setValue($this->settings->getPlcServiceUrl());
+        $plc_service->setRequired(true);
+        $form->addItem($plc_service);
+
+        // hid service
         $nfc = new ilFormSectionHeaderGUI();
         $nfc->setTitle($this->lng->txt('adn_card_nfc_settings'));
         $form->addItem($nfc);
@@ -148,28 +175,51 @@ class adnCardAdministrationGUI
             return;
         }
         $error = false;
-        if ($response->getCode() === '0002') {
+        if ($response->getCode() === adnHidVerification::CODE_PASSWORD_INVALID) {
             ilUtil::sendFailure($this->lng->txt('adn_card_hid_error_pwd'));
             $error = true;
         }
-        if ($response->getCode() === '0003') {
+        if ($response->getCode() === adnHidVerification::CODE_USER_NOT_FOUND) {
             ilUtil::sendFailure($this->lng->txt('adn_card_hid_error_username'));
             $error = true;
         }
-
         if (!$error) {
             ilUtil::sendSuccess('adn_card_hid_success');
         }
         $this->settings();
     }
 
+    protected function validatePlcSettings() : void
+    {
+        $verification = new adnPlcVerification();
+        $repsonse = null;
+        try {
+            $response = $verification->verify();
+        } catch (Exception $e) {
+            ilUtil::sendFailure($e->getMessage());
+            $this->settings();
+            return;
+        }
+        $error = false;
+        if (!$error) {
+            ilUtil::sendSuccess('adn_card_plc_success');
+        }
+        $this->settings();
+    }
+
     protected function showToolbar()
     {
+        $this->toolbar->setFormAction($this->ctrl->getFormAction($this));
         if ($this->settings->hasNfCSettings()) {
-            $this->toolbar->setFormAction($this->ctrl->getFormAction($this));
-
             $validation_button = $this->ui_factory->button()->standard(
-                $this->lng->txt('adn_card_nfc_btn_validation'),
+                $this->lng->txt('adn_card_plc_button_validation'),
+                $this->ctrl->getLinkTarget($this, 'validatePlcSettings')
+            );
+            $this->toolbar->addComponent($validation_button);
+        }
+        if ($this->settings->hasNfCSettings()) {
+            $validation_button = $this->ui_factory->button()->standard(
+                $this->lng->txt('adn_card_nfc_button_validation'),
                 $this->ctrl->getLinkTarget($this, 'validateNfcSettings')
             );
             $this->toolbar->addComponent($validation_button);
