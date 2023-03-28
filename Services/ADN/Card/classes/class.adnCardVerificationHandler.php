@@ -97,15 +97,19 @@ class adnCardVerificationHandler
 
     protected function fillCertificate(ilTemplate $tpl)
     {
+        $candidate = new adnCertifiedProfessional(1);
+
+
         $tpl->setCurrentBlock('has_card');
         $tpl->setVariable('TXT_BESCHEINIGUNGSNUMMER', '1-005-2020');
-        $tpl->setVariable('TXT_NAME', 'Bourne');
-        $tpl->setVariable('TXT_VORNAME', 'Jason');
-        $tpl->setVariable('TXT_GEBURTSDATUM', '01-01-1971');
-        $tpl->setVariable('TXT_STAATSANGEHOERIGKEIT', 'deutsch');
+        $tpl->setVariable('TXT_NAME', $candidate->getLastName());
+        $tpl->setVariable('TXT_VORNAME', $candidate->getFirstName());
+        $tpl->setVariable('TXT_GEBURTSDATUM', $candidate->getBirthdate()->get(IL_CAL_FKT_DATE, 'Y-m-D'));
+        $tpl->setVariable('TXT_STAATSANGEHOERIGKEIT', $candidate->getPostalCountry());
         $tpl->setVariable('TXT_BEHOERDE', 'GDWS Ost-Südsüd-West');
         $tpl->setVariable('TXT_GUELTIGKEIT', '10-10-2023');
         $tpl->setVariable('TXT_LISTEBESCHEINIGUNGEN_LINE', '8.2.1.3 (Trockengüterschiffe)');
+        $tpl->setVariable('PERSONAL_ICON', $candidate->getImageHandler()->getAbsolutePath());
         $tpl->parseCurrentBlock();
     }
 

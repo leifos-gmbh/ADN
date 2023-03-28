@@ -1,6 +1,9 @@
 <?php
 /* Copyright (c) 2010 Leifos, GPL, see docs/LICENSE */
 
+use ILIAS\FileUpload\FileUpload;
+use ILIAS\FileUpload\Exception\IllegalStateException;
+
 /**
  * Candidate GUI class (preparation context)
  *
@@ -29,13 +32,18 @@ class adnPreparationCandidateGUI
      */
     protected $mode = "";
     // cr-008 end
+
+    protected ilLogger $logger;
     
     /**
      * Constructor
      */
     public function __construct()
     {
+        global $DIC;
         global $ilCtrl;
+
+        $this->logger = $DIC->logger()->adn();
 
         // save candidate ID through requests, cr-008 added mode
         $ilCtrl->saveParameter($this, array("cd_id", "mode"));
@@ -275,6 +283,12 @@ class adnPreparationCandidateGUI
         $first_name->setMaxLength(50);
         $first_name->setRequired(true);
         $form->addItem($first_name);
+
+        $pic = new ilImageFileInputGUI($lng->txt('adn_card_form_photo'), 'card_photo');
+        $pic->setALlowDeletion(true);
+        $pic->setUseCache(false);
+        $pic->setImage($this->candidate->getImageHandler()->getAbsolutePath() ?? '');
+        $form->addItem($pic);
 
         $birthdate = new ilDateTimeInputGUI($lng->txt("adn_birthdate"), "birthdate");
         $birthdate->setRequired(true);
@@ -563,7 +577,7 @@ class adnPreparationCandidateGUI
      */
     protected function saveCandidate($a_edit_training = false)
     {
-        global $tpl, $lng, $ilCtrl;
+        global $DIC, $tpl, $lng, $ilCtrl;
 
         $form = $this->initCandidateForm("create");
 
@@ -622,6 +636,15 @@ class adnPreparationCandidateGUI
             }
 
             if ($candidate->save()) {
+                $upload = $form->getItemByPostVar('card_photo');
+                if ($upload->getDeletionFlag()) {
+                    $this->candidate->getImageHandler()->delete();
+                }
+                $this->candidate->getImageHandler()->handleUpload(
+                    $DIC->upload(),
+                    $_FILES['card_photo']['tmp_name']
+                );
+
                 if (!$a_edit_training) {
                     // show success message and return to list
                     ilUtil::sendSuccess($lng->txt("adn_candidate_created"), true);
@@ -656,7 +679,7 @@ class adnPreparationCandidateGUI
      */
     protected function updateCandidate($a_edit_training = false)
     {
-        global $tpl, $lng, $ilCtrl;
+        global $DIC, $tpl, $lng, $ilCtrl;
 
         $form = $this->initCandidateForm("edit");
 
@@ -711,6 +734,16 @@ class adnPreparationCandidateGUI
             }
 
             if ($this->candidate->update()) {
+
+                $upload = $form->getItemByPostVar('card_photo');
+                if ($upload->getDeletionFlag()) {
+                    $this->candidate->getImageHandler()->delete();
+                }
+                $this->candidate->getImageHandler()->handleUpload(
+                    $DIC->upload(),
+                    $_FILES['card_photo']['tmp_name']
+                );
+
                 if ($this->last_event_dialog === true) {
                     return $this->showProviderList();
                 } elseif (!$a_edit_training) {
