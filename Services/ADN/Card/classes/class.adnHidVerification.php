@@ -59,8 +59,8 @@ class adnHidVerification
     {
         $config = new \Hid\Verification\Configuration();
         $config->setHost($this->settings->getNfcServiceUrl());
-        $config->setDebug(true);
-        $config->setDebugFile('/srv/www/hal/log/slim.log');
+        $config->setDebug(false);
+        //$config->setDebugFile('/srv/www/hal/log/slim.log');
 
         $api = new Hid\Verification\Api\DefaultApi(null, $config);
         return $api;

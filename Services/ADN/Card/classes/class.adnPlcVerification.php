@@ -38,8 +38,8 @@ class adnPlcVerification
         $config->setHost($this->settings->getPlcServiceUrl());
         $config->setUsername($this->settings->getPlcUser());
         $config->setPassword($this->settings->getPlcPass());
-        $config->setDebug(true);
-        $config->setDebugFile('/srv/www/hal/log/slim.log');
+        $config->setDebug(false);
+        //$config->setDebugFile('/srv/www/hal/log/slim.log');
 
         $api = new PLZFTApi(null, $config);
         return $api;
