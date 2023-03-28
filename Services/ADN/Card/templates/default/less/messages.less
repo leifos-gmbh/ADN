@@ -1,0 +1,28 @@
+.MessageBox {
+    .MessageBoxIcon {
+        width: 40px;
+    }
+    .MessageBoxContent {
+        margin: 0 0 10px 10px;
+        font-size: 0.75rem;
+        h1 {
+            font-size: 1.25rem;
+        }
+    }
+    .FailureMessage {
+        display: flex;
+        background-color: lighten(@warning-color,30);
+        padding: 15px;
+        border: 1px solid @warning-color;
+        border-radius: 15px;
+        margin: 60px 0;
+    }
+    .SuccessMessage {
+        display: flex;
+        background-color: lighten(@success-color,25);
+        padding: 15px;
+        border: 1px solid @success-color;
+        border-radius: 15px;
+        margin: 60px 0;
+    }
+}
