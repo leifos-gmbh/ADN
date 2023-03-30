@@ -29,6 +29,8 @@ class UserMetaBarProvider extends AbstractStaticMetaBarProvider
         };
 
         $children = array();
+        // begin-patch adn
+        /*
         $children[] = $mb->linkItem($id('personal_profile'))
             ->withAction("ilias.php?baseClass=ilDashboardGUI&cmd=jumpToProfile")
             ->withTitle($txt("personal_profile"))
@@ -40,6 +42,8 @@ class UserMetaBarProvider extends AbstractStaticMetaBarProvider
             ->withTitle($txt("personal_settings"))
             ->withPosition(2)
             ->withSymbol($f->symbol()->icon()->custom(ilUtil::getImagePath("icon_personal_settings.svg"), $txt("personal_settings")));
+        */
+        // end-patch adn
 
         $children[] = $mb->linkItem($id('logout'))
             ->withAction("logout.php?lang=" . $this->dic->user()->getCurrentLanguage())
