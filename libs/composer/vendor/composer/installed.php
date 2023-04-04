@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../../../',
         'aliases' => array(),
-        'reference' => '5cda7a7c4322fb8843972d1a29c707ebb76a5b93',
+        'reference' => '4373280777f675367c0d15902a39f5c3ec403164',
         'name' => 'ilias/ilias',
         'dev' => false,
     ),
@@ -115,7 +115,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../../../',
             'aliases' => array(),
-            'reference' => '5cda7a7c4322fb8843972d1a29c707ebb76a5b93',
+            'reference' => '4373280777f675367c0d15902a39f5c3ec403164',
             'dev_requirement' => false,
         ),
         'imsglobal/lti' => array(
