@@ -287,7 +287,9 @@ class adnPreparationCandidateGUI
         $pic = new ilImageFileInputGUI($lng->txt('adn_card_form_photo'), 'card_photo');
         $pic->setALlowDeletion(true);
         $pic->setUseCache(false);
-        $pic->setImage($this->candidate->getImageHandler()->getAbsolutePath() ?? '');
+        if ($this->candidate instanceof adnCertifiedProfessional) {
+            $pic->setImage($this->candidate->getImageHandler()->getAbsolutePath() ?? '');
+        }
         $form->addItem($pic);
 
         $birthdate = new ilDateTimeInputGUI($lng->txt("adn_birthdate"), "birthdate");

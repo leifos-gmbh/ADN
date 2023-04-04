@@ -98,7 +98,7 @@ class adnCardVerificationHandler
     protected function fillCertificate(ilTemplate $tpl)
     {
         $candidate = new adnCertifiedProfessional((int) $this->certificate_id);
-        
+
         $tpl->setCurrentBlock('has_card');
         $tpl->setVariable('TXT_BESCHEINIGUNGSNUMMER', '1-005-2020');
         $tpl->setVariable('TXT_NAME', $candidate->getLastName());
