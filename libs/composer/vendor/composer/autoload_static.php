@@ -5478,6 +5478,7 @@ class ComposerStaticInitb5f5712d99d3923d2fd4fa598ecfb7b6
         'adnBaseGUI' => __DIR__ . '/../../../..' . '/Services/ADN/Base/classes/class.adnBaseGUI.php',
         'adnCandidateTableGUI' => __DIR__ . '/../../../..' . '/Services/ADN/ES/classes/class.adnCandidateTableGUI.php',
         'adnCardAdministrationGUI' => __DIR__ . '/../../../..' . '/Services/ADN/AD/classes/class.adnCardAdministrationGUI.php',
+        'adnCardCertificateIdentification' => __DIR__ . '/../../../..' . '/Services/ADN/Card/classes/class.adnCardCertificateIdentification.php',
         'adnCardSettings' => __DIR__ . '/../../../..' . '/Services/ADN/AD/classes/class.adnCardSettings.php',
         'adnCardVerificationHandler' => __DIR__ . '/../../../..' . '/Services/ADN/Card/classes/class.adnCardVerificationHandler.php',
         'adnCase' => __DIR__ . '/../../../..' . '/Services/ADN/ED/classes/class.adnCase.php',

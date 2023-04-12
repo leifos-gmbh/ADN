@@ -4858,6 +4858,7 @@ return array(
     'adnBaseGUI' => $baseDir . '/Services/ADN/Base/classes/class.adnBaseGUI.php',
     'adnCandidateTableGUI' => $baseDir . '/Services/ADN/ES/classes/class.adnCandidateTableGUI.php',
     'adnCardAdministrationGUI' => $baseDir . '/Services/ADN/AD/classes/class.adnCardAdministrationGUI.php',
+    'adnCardCertificateIdentification' => $baseDir . '/Services/ADN/Card/classes/class.adnCardCertificateIdentification.php',
     'adnCardSettings' => $baseDir . '/Services/ADN/AD/classes/class.adnCardSettings.php',
     'adnCardVerificationHandler' => $baseDir . '/Services/ADN/Card/classes/class.adnCardVerificationHandler.php',
     'adnCase' => $baseDir . '/Services/ADN/ED/classes/class.adnCase.php',
