@@ -3298,6 +3298,8 @@ class ComposerStaticInitb5f5712d99d3923d2fd4fa598ecfb7b6
         'Plasticard\\PLZFT\\Model\\Order' => __DIR__ . '/../../../..' . '/Services/ADN/Card/lib/orderConnector/Model/Order.php',
         'Plasticard\\PLZFT\\Model\\OrderPlzftCertificate' => __DIR__ . '/../../../..' . '/Services/ADN/Card/lib/orderConnector/Model/OrderPlzftCertificate.php',
         'Plasticard\\PLZFT\\Model\\OrderPlzftCertificatePlzftCertificateTypes' => __DIR__ . '/../../../..' . '/Services/ADN/Card/lib/orderConnector/Model/OrderPlzftCertificatePlzftCertificateTypes.php',
+        'Plasticard\\PLZFT\\Model\\OrderPlzftCertificatePlzftPostalAddress' => __DIR__ . '/../../../..' . '/Services/ADN/Card/lib/orderConnector/Model/OrderPlzftCertificatePlzftPostalAddress.php',
+        'Plasticard\\PLZFT\\Model\\OrderPlzftCertificatePlzftReturnAddress' => __DIR__ . '/../../../..' . '/Services/ADN/Card/lib/orderConnector/Model/OrderPlzftCertificatePlzftReturnAddress.php',
         'Plasticard\\PLZFT\\ObjectSerializer' => __DIR__ . '/../../../..' . '/Services/ADN/Card/lib/orderConnector/ObjectSerializer.php',
         'ProxyConnectableCondition' => __DIR__ . '/../../../..' . '/Services/Http/classes/Setup/Condition/ProxyConnectableCondition.php',
         'Psr\\Container\\ContainerExceptionInterface' => __DIR__ . '/..' . '/psr/container/src/ContainerExceptionInterface.php',

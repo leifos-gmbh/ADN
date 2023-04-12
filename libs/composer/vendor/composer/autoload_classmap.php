@@ -2678,6 +2678,8 @@ return array(
     'Plasticard\\PLZFT\\Model\\Order' => $baseDir . '/Services/ADN/Card/lib/orderConnector/Model/Order.php',
     'Plasticard\\PLZFT\\Model\\OrderPlzftCertificate' => $baseDir . '/Services/ADN/Card/lib/orderConnector/Model/OrderPlzftCertificate.php',
     'Plasticard\\PLZFT\\Model\\OrderPlzftCertificatePlzftCertificateTypes' => $baseDir . '/Services/ADN/Card/lib/orderConnector/Model/OrderPlzftCertificatePlzftCertificateTypes.php',
+    'Plasticard\\PLZFT\\Model\\OrderPlzftCertificatePlzftPostalAddress' => $baseDir . '/Services/ADN/Card/lib/orderConnector/Model/OrderPlzftCertificatePlzftPostalAddress.php',
+    'Plasticard\\PLZFT\\Model\\OrderPlzftCertificatePlzftReturnAddress' => $baseDir . '/Services/ADN/Card/lib/orderConnector/Model/OrderPlzftCertificatePlzftReturnAddress.php',
     'Plasticard\\PLZFT\\ObjectSerializer' => $baseDir . '/Services/ADN/Card/lib/orderConnector/ObjectSerializer.php',
     'ProxyConnectableCondition' => $baseDir . '/Services/Http/classes/Setup/Condition/ProxyConnectableCondition.php',
     'Psr\\Container\\ContainerExceptionInterface' => $vendorDir . '/psr/container/src/ContainerExceptionInterface.php',
