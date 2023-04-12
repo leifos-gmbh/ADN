@@ -116,15 +116,9 @@ class ilObjLanguageDBAccess
     {
         // avoid flushing the whole cache (see mantis #28818)
         ilCachedLanguage::getInstance($this->key)->deleteInCache();
-<<<<<<< HEAD:Services/Language/classes/ilObjLanguageDBAccess.php
-
-        // begin-patch adn
-        $query = "REPLACE INTO lng_modules (module, lang_key, lang_array) VALUES ";
-=======
     
         $query = "INSERT INTO lng_modules (module, lang_key, lang_array) VALUES ";
         $modules_to_delete = [];
->>>>>>> ilias/release_7:Services/Language/classes/class.ilObjLanguageDBAccess.php
         foreach ($lang_array as $module => $lang_arr) {
             if ($this->scope === "local") {
                 $q = "SELECT * FROM lng_modules WHERE " .

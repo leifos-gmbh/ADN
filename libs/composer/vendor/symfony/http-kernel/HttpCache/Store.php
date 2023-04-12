@@ -27,9 +27,16 @@ class Store implements StoreInterface
     protected $root;
     private $keyCache;
     private $locks = [];
-    private $options = [];
+    private $options;
 
     /**
+     * Constructor.
+     *
+     * The available options are:
+     *
+     *   * private_headers  Set of response headers that should not be stored
+     *                      when a response is cached. (default: Set-Cookie)
+     *
      * @throws \RuntimeException
      */
     public function __construct(string $root, array $options = [])
