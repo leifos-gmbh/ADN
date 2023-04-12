@@ -44,6 +44,7 @@ class adnCertificateCandidateTableGUI extends ilTable2GUI
         $this->addColumn($this->lng->txt("adn_first_name"), "first_name");
         $this->addColumn($this->lng->txt("adn_birthdate"), "birthdate");
         $this->addColumn($this->lng->txt("adn_certificate issued_on"), "issued_on");
+        $this->addColumn($this->lng->txt('adn_certificate_type'), 'certificate_type');
         $this->addColumn($this->lng->txt("actions"));
     
         $this->setDefaultOrderField("last_name");
@@ -107,6 +108,18 @@ class adnCertificateCandidateTableGUI extends ilTable2GUI
                     $certificate->getIssuedOn()
                 )
             );
+            if ($certificate->getUuid() !== '') {
+                $this->tpl->setVariable(
+                    'VAL_CERTIFICATE_TYPE',
+                    $this->lng->txt('adn_certificate_type_paper')
+                );
+            } else {
+                $this->tpl->setVariable(
+                    'VAL_CERTIFICATE_TYPE',
+                    $this->lng->txt('adn_certificate_type_card')
+                );
+
+            }
         } else {
             // create link
             if (adnPerm::check(adnPerm::ES, adnPerm::WRITE)) {

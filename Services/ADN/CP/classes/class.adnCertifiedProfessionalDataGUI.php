@@ -346,7 +346,7 @@ class adnCertifiedProfessionalDataGUI
         $shno->setMaxLength(10);
         $shno->setSize(10);
         $cb->addSubItem($shno);
-        
+
         $salutation->setValue($this->professional->getSalutation());
         $name->setValue($this->professional->getLastName());
         $first_name->setValue($this->professional->getFirstName());
