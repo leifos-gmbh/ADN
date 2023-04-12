@@ -523,6 +523,7 @@ class adnCertificateScoringGUI
 
             // create new certificate
             $cert = new adnCertificate();
+            $cert->initUuid();
 
             // certified professional
             $cert->setCertifiedProfessionalId($candidate_id);
@@ -586,7 +587,6 @@ class adnCertificateScoringGUI
                 $issued_date->getDate()
             )
         );
-
         $this->createCertificate($form);
     }
 
@@ -642,7 +642,7 @@ class adnCertificateScoringGUI
             $cert->update();
 
             // show success message and return to list
-            ilUtil::sendSuccess($lng->txt("adn_certificate_updated"), true);
+            ilUtil::sendSuccess($lng->txt("adn_certificate_updated") . $cert->getUUid(), true);
             $ilCtrl->redirect($this, "listCandidates");
         }
 

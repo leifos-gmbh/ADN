@@ -178,3 +178,16 @@ while ($row = $res->fetchRow(ilDBConstants::FETCHMODE_OBJECT)) {
     $ilDB->manipulate($update);
 }
 ?>
+<#17>
+<?php
+if (!$ilDB->tableColumnExists('adn_es_certificate', 'uuid'))
+{
+    $ilDB->addTableColumn('adn_es_certificate', 'uuid', array(
+        "notnull" => false
+        ,"length" => 50
+        ,"default" => ""
+        ,"fixed" => false
+        ,"type" => "text"
+    ));
+}
+?>

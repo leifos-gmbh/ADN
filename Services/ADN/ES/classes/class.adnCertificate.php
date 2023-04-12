@@ -32,6 +32,7 @@ class adnCertificate extends adnDBBase
     const STATUS_INVALID = 1;
 
     protected $id; // [int]
+    protected string $uuid = '';
     protected $number = 0; // [int]
     protected $cert_prof_id = 0; // [int]
     protected $exam_id = null; // [int]
@@ -71,6 +72,22 @@ class adnCertificate extends adnDBBase
             $this->setId($a_id);
             $this->read();
         }
+    }
+
+    public function initUuid() : void
+    {
+        $uuid_factory = new adnCardCertificateIdentification();
+        $this->uuid = $uuid_factory->identificator();
+    }
+
+    public function getUuid() : string
+    {
+        return $this->uuid;
+    }
+
+    public function setUuid(string $uuid) : void
+    {
+        $this->uuid = $uuid;
     }
 
     /**
@@ -430,6 +447,7 @@ class adnCertificate extends adnDBBase
             " WHERE id = " . $ilDB->quote($this->getId(), "integer"));
         if ($rec = $ilDB->fetchAssoc($set)) {
             $this->setNumber($rec["nr"]);
+            $this->setUuid((string) $rec['uuid']);
             $this->setCertifiedProfessionalId($rec["cp_professional_id"]);
             $this->setExaminationId($rec["ep_exam_id"]);
             $this->setValidUntil(new ilDate($rec["valid_until"], IL_CAL_DATE));
@@ -466,6 +484,7 @@ class adnCertificate extends adnDBBase
     {
         $fields = array(
             "cp_professional_id" => array("integer", $this->getCertifiedProfessionalId()),
+            'uuid' => ['text', $this->getUuid()],
             "ep_exam_id" => array("integer", $this->getExaminationId()),
             "nr" => array("integer", $this->getNumber()),
             "signed_by" => array("text", $this->getSignedBy()),
