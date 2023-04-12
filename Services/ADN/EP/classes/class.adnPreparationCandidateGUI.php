@@ -415,46 +415,54 @@ class adnPreparationCandidateGUI
         $header->setTitle($lng->txt("adn_shipping_address"));
         $form->addItem($header);
 
-        $ssalutation = new ilSelectInputGUI($lng->txt("adn_salutation"), "ssalutation");
-        $ssalutation->setOptions(array("m" => $lng->txt("salutation_m"),
-            "f" => $lng->txt("salutation_f")));
-        $form->addItem($ssalutation);
-
-        $sname = new ilTextInputGUI($lng->txt("adn_last_name"), "slast_name");
-        $sname->setMaxLength(50);
-        $form->addItem($sname);
-
-        $sfirst_name = new ilTextInputGUI($lng->txt("adn_first_name"), "sfirst_name");
-        $sfirst_name->setMaxLength(50);
-        $form->addItem($sfirst_name);
-
-        $scountry = new ilSelectInputGUI($lng->txt("adn_country"), "scountry");
-        $scountry->setOptions($countries);
-        $form->addItem($scountry);
-
-        $szip = new ilTextInputGUI($lng->txt("adn_zip"), "szip");
-        $szip->setMaxLength(10);
-        $szip->setSize(10);
-        $form->addItem($szip);
-
-        $scity = new ilTextInputGUI($lng->txt("adn_city"), "scity");
-        $scity->setMaxLength(50);
-        $form->addItem($scity);
-
-        $sstreet = new ilTextInputGUI($lng->txt("adn_street"), "sstreet");
-        $sstreet->setMaxLength(50);
-        $form->addItem($sstreet);
-
-        $shno = new ilTextInputGUI($lng->txt("adn_house_number"), "shno");
-        $shno->setMaxLength(10);
-        $shno->setSize(10);
-        $form->addItem($shno);
-
         $cb = new ilCheckboxInputGUI(
             $lng->txt("adn_shipping_address_activated"),
             "shipping_address_activated"
         );
         $form->addItem($cb);
+
+        $ssalutation = new ilSelectInputGUI($lng->txt("adn_salutation"), "ssalutation");
+        $ssalutation->setRequired(true);
+        $ssalutation->setOptions(array("m" => $lng->txt("salutation_m"),
+            "f" => $lng->txt("salutation_f")));
+        $cb->addSubItem($ssalutation);
+
+        $sname = new ilTextInputGUI($lng->txt("adn_last_name"), "slast_name");
+        $sname->setRequired(true);
+        $sname->setMaxLength(50);
+        $cb->addSubItem($sname);
+
+        $sfirst_name = new ilTextInputGUI($lng->txt("adn_first_name"), "sfirst_name");
+        $sfirst_name->setRequired(true);
+        $sfirst_name->setMaxLength(50);
+        $cb->addSubItem($sfirst_name);
+
+        $scountry = new ilSelectInputGUI($lng->txt("adn_country"), "scountry");
+        $scountry->setRequired(true);
+        $scountry->setOptions($countries);
+        $cb->addSubItem($scountry);
+
+        $szip = new ilTextInputGUI($lng->txt("adn_zip"), "szip");
+        $szip->setRequired(true);
+        $szip->setMaxLength(10);
+        $szip->setSize(10);
+        $cb->addSubItem($szip);
+
+        $scity = new ilTextInputGUI($lng->txt("adn_city"), "scity");
+        $scity->setRequired(true);
+        $scity->setMaxLength(50);
+        $cb->addSubItem($scity);
+
+        $sstreet = new ilTextInputGUI($lng->txt("adn_street"), "sstreet");
+        $sstreet->setRequired(true);
+        $sstreet->setMaxLength(50);
+        $cb->addSubItem($sstreet);
+
+        $shno = new ilTextInputGUI($lng->txt("adn_house_number"), "shno");
+        $shno->setRequired(true);
+        $shno->setMaxLength(10);
+        $shno->setSize(10);
+        $cb->addSubItem($shno);
 
         if ($a_mode == "create") {
             // preset: wmo of current user
