@@ -67,7 +67,9 @@ class OrderPlzftCertificate implements ModelInterface, ArrayAccess, \JsonSeriali
         'plzft_issued_by' => 'string',
         'plzft_valid_until' => '\DateTime',
         'plzft_certificate_types' => '\Plasticard\PLZFT\Model\OrderPlzftCertificatePlzftCertificateTypes',
-        'plzft_photo' => 'string'
+        'plzft_photo' => 'string',
+        'plzft_postal_address' => '\Plasticard\PLZFT\Model\OrderPlzftCertificatePlzftPostalAddress',
+        'plzft_return_address' => '\Plasticard\PLZFT\Model\OrderPlzftCertificatePlzftReturnAddress'
     ];
 
     /**
@@ -87,7 +89,9 @@ class OrderPlzftCertificate implements ModelInterface, ArrayAccess, \JsonSeriali
         'plzft_issued_by' => null,
         'plzft_valid_until' => 'date',
         'plzft_certificate_types' => null,
-        'plzft_photo' => null
+        'plzft_photo' => null,
+        'plzft_postal_address' => null,
+        'plzft_return_address' => null
     ];
 
     /**
@@ -105,7 +109,9 @@ class OrderPlzftCertificate implements ModelInterface, ArrayAccess, \JsonSeriali
 		'plzft_issued_by' => false,
 		'plzft_valid_until' => false,
 		'plzft_certificate_types' => false,
-		'plzft_photo' => false
+		'plzft_photo' => false,
+		'plzft_postal_address' => false,
+		'plzft_return_address' => false
     ];
 
     /**
@@ -203,7 +209,9 @@ class OrderPlzftCertificate implements ModelInterface, ArrayAccess, \JsonSeriali
         'plzft_issued_by' => 'plzft:IssuedBy',
         'plzft_valid_until' => 'plzft:ValidUntil',
         'plzft_certificate_types' => 'plzft:CertificateTypes',
-        'plzft_photo' => 'plzft:Photo'
+        'plzft_photo' => 'plzft:Photo',
+        'plzft_postal_address' => 'plzft:PostalAddress',
+        'plzft_return_address' => 'plzft:ReturnAddress'
     ];
 
     /**
@@ -221,7 +229,9 @@ class OrderPlzftCertificate implements ModelInterface, ArrayAccess, \JsonSeriali
         'plzft_issued_by' => 'setPlzftIssuedBy',
         'plzft_valid_until' => 'setPlzftValidUntil',
         'plzft_certificate_types' => 'setPlzftCertificateTypes',
-        'plzft_photo' => 'setPlzftPhoto'
+        'plzft_photo' => 'setPlzftPhoto',
+        'plzft_postal_address' => 'setPlzftPostalAddress',
+        'plzft_return_address' => 'setPlzftReturnAddress'
     ];
 
     /**
@@ -239,7 +249,9 @@ class OrderPlzftCertificate implements ModelInterface, ArrayAccess, \JsonSeriali
         'plzft_issued_by' => 'getPlzftIssuedBy',
         'plzft_valid_until' => 'getPlzftValidUntil',
         'plzft_certificate_types' => 'getPlzftCertificateTypes',
-        'plzft_photo' => 'getPlzftPhoto'
+        'plzft_photo' => 'getPlzftPhoto',
+        'plzft_postal_address' => 'getPlzftPostalAddress',
+        'plzft_return_address' => 'getPlzftReturnAddress'
     ];
 
     /**
@@ -309,6 +321,8 @@ class OrderPlzftCertificate implements ModelInterface, ArrayAccess, \JsonSeriali
         $this->setIfExists('plzft_valid_until', $data ?? [], null);
         $this->setIfExists('plzft_certificate_types', $data ?? [], null);
         $this->setIfExists('plzft_photo', $data ?? [], null);
+        $this->setIfExists('plzft_postal_address', $data ?? [], null);
+        $this->setIfExists('plzft_return_address', $data ?? [], null);
     }
 
     /**
@@ -619,6 +633,60 @@ class OrderPlzftCertificate implements ModelInterface, ArrayAccess, \JsonSeriali
             throw new \InvalidArgumentException('non-nullable plzft_photo cannot be null');
         }
         $this->container['plzft_photo'] = $plzft_photo;
+
+        return $this;
+    }
+
+    /**
+     * Gets plzft_postal_address
+     *
+     * @return \Plasticard\PLZFT\Model\OrderPlzftCertificatePlzftPostalAddress|null
+     */
+    public function getPlzftPostalAddress()
+    {
+        return $this->container['plzft_postal_address'];
+    }
+
+    /**
+     * Sets plzft_postal_address
+     *
+     * @param \Plasticard\PLZFT\Model\OrderPlzftCertificatePlzftPostalAddress|null $plzft_postal_address plzft_postal_address
+     *
+     * @return self
+     */
+    public function setPlzftPostalAddress($plzft_postal_address)
+    {
+        if (is_null($plzft_postal_address)) {
+            throw new \InvalidArgumentException('non-nullable plzft_postal_address cannot be null');
+        }
+        $this->container['plzft_postal_address'] = $plzft_postal_address;
+
+        return $this;
+    }
+
+    /**
+     * Gets plzft_return_address
+     *
+     * @return \Plasticard\PLZFT\Model\OrderPlzftCertificatePlzftReturnAddress|null
+     */
+    public function getPlzftReturnAddress()
+    {
+        return $this->container['plzft_return_address'];
+    }
+
+    /**
+     * Sets plzft_return_address
+     *
+     * @param \Plasticard\PLZFT\Model\OrderPlzftCertificatePlzftReturnAddress|null $plzft_return_address plzft_return_address
+     *
+     * @return self
+     */
+    public function setPlzftReturnAddress($plzft_return_address)
+    {
+        if (is_null($plzft_return_address)) {
+            throw new \InvalidArgumentException('non-nullable plzft_return_address cannot be null');
+        }
+        $this->container['plzft_return_address'] = $plzft_return_address;
 
         return $this;
     }

@@ -114,6 +114,42 @@ components:
                     example: 8.2.2.3.1.3 Nur Tankschiffe
             plzft:Photo:
               type: string
+            plzft:PostalAddress:
+              type: object
+              properties:
+                plzft:AddressName:
+                  type: string
+                  example: Max Mustermann
+                plzft:AddressStreet:
+                  type: string
+                  example: Musterstrasse 1
+                plzft:AddressPostalCode:
+                  type: string
+                  example: 12345
+                plzft:AddressCity:
+                  type: string
+                  example: Musterstadt
+                plzft:AddressCountry:
+                  type: string
+                  example: Deutschland
+            plzft:ReturnAddress:
+              type: object
+              properties:
+                plzft:AddressName:
+                  type: string
+                  example: GDWS Süd
+                plzft:AddressStreet:
+                  type: string
+                  example: Hafenstrasse 1
+                plzft:AddressPostalCode:
+                  type: string
+                  example: 12346
+                plzft:AddressCity:
+                  type: string
+                  example: Lübeck
+                plzft:AddressCountry:
+                  type: string
+                  example: Deutschland
       xml:
         name: plzft:root
     ApiResponse404:
