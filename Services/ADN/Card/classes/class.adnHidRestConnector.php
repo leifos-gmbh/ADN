@@ -59,6 +59,9 @@ class adnHidRestConnector
 
     public function verifyOrder(Request $request, Response $response)
     {
+        $json_request = json_decode($request->getBody());
+        $this->logger->dump($json_request);
+
         return $response
             ->withHeader('ContentType', 'text/plain')
             ->withStatus(200, 'Ok');

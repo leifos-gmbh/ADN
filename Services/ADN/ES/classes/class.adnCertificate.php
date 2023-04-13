@@ -426,6 +426,10 @@ class adnCertificate extends adnDBBase
      */
     public static function _getFullCertificateNumber($a_wmo_id, $a_number, $a_issued_on)
     {
+        if (!$a_issued_on instanceof ilDate) {
+            return '';
+        }
+
         $year = substr($a_issued_on->get(IL_CAL_DATE), 0, 4);
         include_once("./Services/ADN/MD/classes/class.adnWMO.php");
         $number_str = adnWMO::lookupCode($a_wmo_id) . "-" .
@@ -756,6 +760,10 @@ class adnCertificate extends adnDBBase
     public static function _determineNextNumber($a_issued_by_wmo, $a_issued_on)
     {
         global $ilDB;
+
+        if (!$a_issued_on instanceof ilDate) {
+            return 0;
+        }
 
         $year = substr($a_issued_on->get(IL_CAL_DATE), 0, 4);
         $from = $year . "-01-01 00:00:00";

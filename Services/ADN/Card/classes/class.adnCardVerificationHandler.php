@@ -103,7 +103,7 @@ class adnCardVerificationHandler
         $tpl->setVariable('TXT_BESCHEINIGUNGSNUMMER', '1-005-2020');
         $tpl->setVariable('TXT_NAME', $candidate->getLastName());
         $tpl->setVariable('TXT_VORNAME', $candidate->getFirstName());
-        $tpl->setVariable('TXT_GEBURTSDATUM', $candidate->getBirthdate()->get(IL_CAL_FKT_DATE, 'Y-m-D'));
+        $tpl->setVariable('TXT_GEBURTSDATUM', $candidate->getBirthdate()->get(IL_CAL_FKT_DATE, 'Y-m-d'));
         $tpl->setVariable('TXT_STAATSANGEHOERIGKEIT', $candidate->getPostalCountry());
         $tpl->setVariable('TXT_BEHOERDE', 'GDWS Ost-Südsüd-West');
         $tpl->setVariable('TXT_GUELTIGKEIT', '10-10-2023');

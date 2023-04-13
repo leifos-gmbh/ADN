@@ -848,3 +848,13 @@ adn#:#adn_card_verify_error_code#:#Fehlercode %s
 adn#:#adn_card_verify_generic#:#Die Gültigkeit der ADN-Bescheinigung konnte nicht bestätigt werden!
 adn#:#adn_card_verify_success#:#Die Gültigkeit der ADN-Bescheinigung konnte bestätigt werden.
 adn#:#adn_card_verify_success_info#:#Bitte überprüfen Sie die Personendaten und das Gültigkeitsdatum.
+adn#:#adn_certificate_type_paper#:#Bescheinigung
+adn#:#adn_certificate_type_card#:#Karte
+adn#:#adn_certificate_type#:#Art der Bescheinigung
+adn#:#adn_certificate_pa#:#Zustelladresse
+adn#:#adn_certificate_pa_name#:#Name
+adn#:#adn_certificate_pa_street#:#Straße
+adn#:#adn_certificate_pa_city#:#Ort
+adn#:#adn_certificate_pa_country#:#Land
+adn#:#adn_card_form_photo#:#Ausweisbild
+adn#:#adn_card_missing_photo_info#:#Bitte ordnen Sie der/dem Sachkundigen ein Ausweisbild zu.

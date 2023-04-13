@@ -4872,6 +4872,7 @@ return array(
     'adnCandidateTableGUI' => $baseDir . '/Services/ADN/ES/classes/class.adnCandidateTableGUI.php',
     'adnCardAdministrationGUI' => $baseDir . '/Services/ADN/AD/classes/class.adnCardAdministrationGUI.php',
     'adnCardCertificateIdentification' => $baseDir . '/Services/ADN/Card/classes/class.adnCardCertificateIdentification.php',
+    'adnCardCertificateOrderHandler' => $baseDir . '/Services/ADN/Card/classes/class.adnCardCertificateOrderHandler.php',
     'adnCardSettings' => $baseDir . '/Services/ADN/AD/classes/class.adnCardSettings.php',
     'adnCardVerificationHandler' => $baseDir . '/Services/ADN/Card/classes/class.adnCardVerificationHandler.php',
     'adnCase' => $baseDir . '/Services/ADN/ED/classes/class.adnCase.php',

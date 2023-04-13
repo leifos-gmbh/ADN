@@ -82,18 +82,6 @@ class adnCertificateCandidateTableGUI extends ilTable2GUI
             $a_set["cp_professional_id"],
             $a_set["ep_exam_event_id"]
         )) {
-            // edit link
-            if (adnPerm::check(adnPerm::ES, adnPerm::WRITE)) {
-                $ilCtrl->setParameter($this->parent_obj, "ct_id", $ct_id);
-                $this->tpl->setCurrentBlock("action");
-                $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_edit_certificate"));
-                $this->tpl->setVariable(
-                    "HREF_CMD",
-                    $ilCtrl->getLinkTarget($this->parent_obj, "editCertificate")
-                );
-                $this->tpl->parseCurrentBlock();
-                $ilCtrl->setParameter($this->parent_obj, "ct_id", "");
-            }
 
             // checkbox
             $this->tpl->setCurrentBlock("cb");
@@ -109,6 +97,19 @@ class adnCertificateCandidateTableGUI extends ilTable2GUI
                 )
             );
             if ($certificate->getUuid() !== '') {
+                // edit link
+                if (adnPerm::check(adnPerm::ES, adnPerm::WRITE)) {
+                    $ilCtrl->setParameter($this->parent_obj, "ct_id", $ct_id);
+                    $this->tpl->setCurrentBlock("action");
+                    $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_edit_certificate"));
+                    $this->tpl->setVariable(
+                        "HREF_CMD",
+                        $ilCtrl->getLinkTarget($this->parent_obj, "editCertificate")
+                    );
+                    $this->tpl->parseCurrentBlock();
+                    $ilCtrl->setParameter($this->parent_obj, "ct_id", "");
+                }
+
                 $this->tpl->setVariable(
                     'VAL_CERTIFICATE_TYPE',
                     $this->lng->txt('adn_certificate_type_paper')
