@@ -72,6 +72,7 @@ class adnCertificateGUI
                     case 'resetFilter':
                     case 'confirmSaveExtension':
                     case 'afterExtension':
+                    case 'showCard':
                         if (adnPerm::check(adnPerm::CP, adnPerm::READ)) {
                             $this->$cmd();
                         }
@@ -161,6 +162,46 @@ class adnCertificateGUI
         $table->resetFilter();
 
         $this->listCertificates();
+    }
+
+    protected function showCard()
+    {
+        global $DIC;
+
+        $tabs = $DIC->tabs();
+        $lng = $DIC->language();
+        $ctrl = $DIC->ctrl();
+        $tpl = $DIC->ui()->mainTemplate();
+
+
+        $tabs->setBackTarget(
+            $lng->txt('back'),
+            $ctrl->getLinkTarget($this, 'listCertificates')
+        );
+
+        $tpl->addCss('Services/ADN/Card/templates/default/checkcard.css');
+        $card = new ilTemplate('tpl.checkcard_inline.html', true, true, 'Services/ADN/Card');
+
+        $certificate = new adnCertificate((int) $_GET['ct_id']);
+        $professional = new adnCertifiedProfessional($certificate->getCertifiedProfessionalId());
+
+        $card->setVariable('TXT_BESCHEINIGUNGSNUMMER', $certificate->getFullCertificateNumber());
+        $card->setVariable('TXT_NAME', $professional->getLastName());
+        $card->setVariable('TXT_VORNAME', $professional->getFirstName());
+        if ($professional->getBirthdate() instanceof ilDate) {
+            $card->setVariable('TXT_GEBURTSDATUM', $professional->getBirthdate()->get(IL_CAL_FKT_DATE, 'Y-m-d'));
+        }
+        $country = new adnCountry($professional->getCitizenship());
+        $card->setVariable('TXT_STAATSANGEHOERIGKEIT', $country->getName());
+        $wmo = new adnWMO($certificate->getIssuedByWmo());
+        $card->setVariable('TXT_BEHOERDE', $wmo->getName());
+        if ($certificate->getValidUntil() instanceof ilDate) {
+            $card->setVariable('TXT_GUELTIGKEIT', $certificate->getValidUntil()->get(IL_CAL_FKT_DATE, 'Y-m-d'));
+        }
+        if ($professional->getImageHandler() instanceof adnCertifiedProfessionalImageHandler) {
+            $card->setVariable('PERSONAL_ICON', $professional->getImageHandler()->getAbsolutePath());
+        }
+        $tpl->setContent($card->get());
     }
     
     /**

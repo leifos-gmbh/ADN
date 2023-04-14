@@ -148,13 +148,20 @@ class adnCertificateTableGUI extends ilTable2GUI
         // actions...
         $ilCtrl->setParameter($this->parent_obj, "ct_id", $a_set["id"]);
 
+        $cert = new adnCertificate($a_set['id']);
+
         // details
         $this->tpl->setCurrentBlock("action");
         $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_show_details"));
-        if ($this->cp_id == 0) {
+        if ($this->cp_id == 0 && $cert->getUuid() === '') {
             $this->tpl->setVariable(
                 "HREF_CMD",
                 $ilCtrl->getLinkTarget($this->parent_obj, "showCertificate")
+            );
+        } elseif ($this->cp_id == 0 && $cert->getUuid() !== '') {
+            $this->tpl->setVariable(
+                'HREF_CMD',
+                $ilCtrl->getLinkTarget($this->parent_obj, 'showCard')
             );
         } else {
             $this->tpl->setVariable(
@@ -235,7 +242,7 @@ class adnCertificateTableGUI extends ilTable2GUI
             }
 
             // download duplicate
-            if (adnCertificate::isDuplicate($a_set['id'])) {
+            if (adnCertificate::isDuplicate($a_set['id']) && adnReportCertificate::hasCertificate($a_set['id'])) {
                 $this->tpl->setCurrentBlock("action");
                 $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_download_duplicate"));
                 $this->tpl->setVariable(
