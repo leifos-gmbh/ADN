@@ -36,19 +36,23 @@ class adnVerificationRestHandler
      * @param Request  $request
      * @param Response $response
      */
-    public function verify(Request $request, Response $response)
+    public function verify(Request $request, Response $response, array $arguments) : Response
     {
+        $this->logger->dump($arguments);
         $handler = new adnCardVerificationHandler(
-            $request->getQueryParams()['tac'] ?? '',
-            $request->getQueryParams()['tagID'] ?? '',
-            $request->getQueryParams()['certificateID'] ?? ''
+            $arguments['TAC'] ?? '',
+            $arguments['TAG_ID'] ?? '',
+            $arguments['CERTIFICATE_ID'] ?? ''
         );
+
         $html = $handler->handleRequest();
 
-        $body = $response
-            ->withHeader('ContentType', 'text/html')
-            ->withStatus(200)
-            ->getBody();
-        $body->write($html);
+        $body = new stdClass();
+        $body->validation_result = $html;
+
+        return $response
+            ->withHeader('ContentType', 'application/json')
+            ->withStatus(200, '')
+            ->withJson($body);
     }
 }

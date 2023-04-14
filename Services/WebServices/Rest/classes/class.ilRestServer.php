@@ -25,10 +25,11 @@ class ilRestServer extends Slim\App
      */
     public function init()
     {
-        $callback_obj = new ilRestFileStorage();
+
+        #$callback_obj = new ilRestFileStorage();
         
-        $this->get('/fileStorage', array($callback_obj,'getFile'));
-        $this->post('/fileStorage', array($callback_obj,'createFile'));
+        #$this->get('/fileStorage', array($callback_obj,'getFile'));
+        #$this->post('/fileStorage', array($callback_obj,'createFile'));
 
         // begin-patch adn
         $adn_rest_test = new adnHidRestConnector();
@@ -36,8 +37,8 @@ class ilRestServer extends Slim\App
         $this->post('/services/65/prod/v1', [$adn_rest_test, 'verifyOrder']);
 
         $adn_rest_verification = new adnVerificationRestHandler();
-        $this->get('/v1/verify', [$adn_rest_verification, 'verify']);
+        $this->get('/verification/{TAC}/{TAG_ID}/{CERTIFICATE_ID}', [$adn_rest_verification, 'verify']);
 
-        $callback_obj->deleteDeprecated();
+        #$callback_obj->deleteDeprecated();
     }
 }

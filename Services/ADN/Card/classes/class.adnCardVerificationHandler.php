@@ -28,6 +28,7 @@ class adnCardVerificationHandler
 {
     protected const SUCCESS = '0000';
     protected const ERROR_CONNECT = '0200';
+    protected const ERROR_INVALID_CERTIFICATE = '0300';
 
     private ilLogger $logger;
     private ilLanguage $lng;
@@ -88,6 +89,7 @@ class adnCardVerificationHandler
         $tpl->parseCurrentBlock();
 
         $this->fillCertificate($tpl);
+        $this->logger->dump($tpl->get());
 
         return $tpl->get();
 
@@ -95,19 +97,31 @@ class adnCardVerificationHandler
 
     protected function fillCertificate(ilTemplate $tpl)
     {
-        $candidate = new adnCertifiedProfessional((int) $this->certificate_id);
+        $certificate_id = adnCertificate::lookupIdByUuid($this->certificate_id);
+        if ($certificate_id === 0) {
+            return $this->handleError(self::ERROR_INVALID_CERTIFICATE);
+        }
 
-        $tpl->setCurrentBlock('has_card');
-        $tpl->setVariable('TXT_BESCHEINIGUNGSNUMMER', '1-005-2020');
-        $tpl->setVariable('TXT_NAME', $candidate->getLastName());
-        $tpl->setVariable('TXT_VORNAME', $candidate->getFirstName());
-        $tpl->setVariable('TXT_GEBURTSDATUM', $candidate->getBirthdate()->get(IL_CAL_FKT_DATE, 'Y-m-d'));
-        $tpl->setVariable('TXT_STAATSANGEHOERIGKEIT', $candidate->getPostalCountry());
-        $tpl->setVariable('TXT_BEHOERDE', 'GDWS Ost-Südsüd-West');
-        $tpl->setVariable('TXT_GUELTIGKEIT', '10-10-2023');
-        $tpl->setVariable('TXT_LISTEBESCHEINIGUNGEN_LINE', '8.2.1.3 (Trockengüterschiffe)');
-        $tpl->setVariable('PERSONAL_ICON', $candidate->getImageHandler()->getAbsolutePath());
-        $tpl->parseCurrentBlock();
+        $certificate = new adnCertificate((int) $certificate_id);
+        $professional = new adnCertifiedProfessional($certificate->getCertifiedProfessionalId());
+
+        $tpl->setVariable('TXT_BESCHEINIGUNGSNUMMER', $certificate->getFullCertificateNumber());
+        $tpl->setVariable('TXT_NAME', $professional->getLastName());
+        $tpl->setVariable('TXT_VORNAME', $professional->getFirstName());
+        if ($professional->getBirthdate() instanceof ilDate) {
+            $tpl->setVariable('TXT_GEBURTSDATUM', $professional->getBirthdate()->get(IL_CAL_FKT_DATE, 'Y-m-d'));
+        }
+        $country = new adnCountry($professional->getCitizenship());
+        $tpl->setVariable('TXT_STAATSANGEHOERIGKEIT', $country->getName());
+        $wmo = new adnWMO($certificate->getIssuedByWmo());
+        $tpl->setVariable('TXT_BEHOERDE', $wmo->getName());
+        if ($certificate->getValidUntil() instanceof ilDate) {
+            $tpl->setVariable('TXT_GUELTIGKEIT', $certificate->getValidUntil()->get(IL_CAL_FKT_DATE, 'Y-m-d'));
+        }
+        if ($professional->getImageHandler() instanceof adnCertifiedProfessionalImageHandler) {
+            $image = 'data:image/jpeg;base64,' . base64_encode(file_get_contents($professional->getImageHandler()->getAbsolutePath()));
+            $tpl->setVariable('PERSONAL_ICON', $image);
+        }
     }
 
     protected function handleError(string $error_code) : string

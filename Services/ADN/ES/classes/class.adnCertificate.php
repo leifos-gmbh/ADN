@@ -74,6 +74,20 @@ class adnCertificate extends adnDBBase
         }
     }
 
+    public static function lookupIdByUuid(string $uuid) : int
+    {
+        global $DIC;
+
+        $db = $DIC->database();
+        $query = 'select id from adn_es_certificate ' .
+            'where uuid = ' . $db->quote($uuid, ilDBConstants::T_TEXT);
+        $res = $db->query($query);
+        while ($row = $res->fetchRow(ilDBConstants::FETCHMODE_OBJECT)) {
+            return (int) $row->id;
+        }
+        return 0;
+    }
+
     public function initUuid() : void
     {
         $uuid_factory = new adnCardCertificateIdentification();
