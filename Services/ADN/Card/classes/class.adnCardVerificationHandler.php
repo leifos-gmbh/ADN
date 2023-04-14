@@ -83,23 +83,30 @@ class adnCardVerificationHandler
             true,
             'Services/ADN/Card'
         );
-        $tpl->setCurrentBlock('success');
-        $tpl->setVariable('SUCCESS_MESSAGE_HEADING', $this->lng->txt('adn_card_verify_success'));
-        $tpl->setVariable('TXT_ADN_CHECKCARD_SUCCESS', $this->lng->txt('adn_card_verify_success_info'));
-        $tpl->parseCurrentBlock();
 
-        $this->fillCertificate($tpl);
-        $this->logger->dump($tpl->get());
+        $status = $this->fillCertificate($tpl);
 
+        if ($status === self::SUCCESS) {
+            $tpl->setCurrentBlock('success');
+            $tpl->setVariable('SUCCESS_MESSAGE_HEADING', $this->lng->txt('adn_card_verify_success'));
+            $tpl->setVariable('TXT_ADN_CHECKCARD_SUCCESS', $this->lng->txt('adn_card_verify_success_info'));
+            $tpl->parseCurrentBlock();
+        } else {
+            $tpl->setCurrentBlock('warning');
+            $tpl->setVariable('FAIL_MESSAGE_HEADING', sprintf($this->lng->txt('adn_card_verify_error_code'), $status));
+            $tpl->setVariable('TXT_ADN_CHECKCARD_FAILED', $this->lng->txt('adn_card_verify_generic'));
+            $tpl->parseCurrentBlock();
+
+        }
         return $tpl->get();
 
     }
 
-    protected function fillCertificate(ilTemplate $tpl)
+    protected function fillCertificate(ilTemplate $tpl) : string
     {
         $certificate_id = adnCertificate::lookupIdByUuid($this->certificate_id);
         if ($certificate_id === 0) {
-            return $this->handleError(self::ERROR_INVALID_CERTIFICATE);
+            return self::ERROR_INVALID_CERTIFICATE;
         }
 
         $certificate = new adnCertificate((int) $certificate_id);
@@ -122,6 +129,7 @@ class adnCardVerificationHandler
             $image = 'data:image/jpeg;base64,' . base64_encode(file_get_contents($professional->getImageHandler()->getAbsolutePath()));
             $tpl->setVariable('PERSONAL_ICON', $image);
         }
+        return self::SUCCESS;
     }
 
     protected function handleError(string $error_code) : string
