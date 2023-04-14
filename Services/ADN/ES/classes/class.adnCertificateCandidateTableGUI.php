@@ -83,11 +83,6 @@ class adnCertificateCandidateTableGUI extends ilTable2GUI
             $a_set["ep_exam_event_id"]
         )) {
 
-            // checkbox
-            $this->tpl->setCurrentBlock("cb");
-            $this->tpl->setVariable("CID", $ct_id);
-            $this->tpl->parseCurrentBlock();
-
             // issued on date
             $certificate = new adnCertificate($ct_id);
             $this->tpl->setVariable(
@@ -96,7 +91,12 @@ class adnCertificateCandidateTableGUI extends ilTable2GUI
                     $certificate->getIssuedOn()
                 )
             );
-            if ($certificate->getUuid() !== '') {
+            if ($certificate->getUuid() === '') {
+                // checkbox only for certificate type "paper"
+                $this->tpl->setCurrentBlock("cb");
+                $this->tpl->setVariable("CID", $ct_id);
+                $this->tpl->parseCurrentBlock();
+
                 // edit link
                 if (adnPerm::check(adnPerm::ES, adnPerm::WRITE)) {
                     $ilCtrl->setParameter($this->parent_obj, "ct_id", $ct_id);
@@ -115,11 +115,11 @@ class adnCertificateCandidateTableGUI extends ilTable2GUI
                     $this->lng->txt('adn_certificate_type_paper')
                 );
             } else {
+
                 $this->tpl->setVariable(
                     'VAL_CERTIFICATE_TYPE',
                     $this->lng->txt('adn_certificate_type_card')
                 );
-
             }
         } else {
             // create link

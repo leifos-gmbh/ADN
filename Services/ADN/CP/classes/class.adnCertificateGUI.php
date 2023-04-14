@@ -765,21 +765,10 @@ class adnCertificateGUI
             }
             $this->certificate->update();
             $this->certificate->createExtension();
-            
-            include_once './Services/ADN/Report/exceptions/class.adnReportException.php';
-            try {
-                include_once("./Services/ADN/Report/classes/class.adnReportCertificate.php");
-                $report = new adnReportCertificate();
-                $report->createExtension($this->certificate->getId());
-                
-                ilUtil::sendSuccess($lng->txt('adn_extension_created'), true);
-                $this->afterExtension();
-            } catch (adnReportException $e) {
-                ilUtil::sendFailure($e->getMessage(), true);
-                $this->afterExtension();
-            }
+            ilUtil::sendSuccess($lng->txt('adn_extension_created'), true);
+            $this->afterExtension();
+            return;
         }
-
         // input not valid: show form again
         $form->setValuesByPost();
 
