@@ -5644,6 +5644,7 @@ class ComposerStaticInitb5f5712d99d3923d2fd4fa598ecfb7b6
         'adnUser' => __DIR__ . '/../../../..' . '/Services/ADN/AD/classes/class.adnUser.php',
         'adnUserGUI' => __DIR__ . '/../../../..' . '/Services/ADN/AD/classes/class.adnUserGUI.php',
         'adnUserTableGUI' => __DIR__ . '/../../../..' . '/Services/ADN/AD/classes/class.adnUserTableGUI.php',
+        'adnVerificationRestHandler' => __DIR__ . '/../../../..' . '/Services/ADN/Card/classes/class.adnVerificationRestHandler.php',
         'adnWMO' => __DIR__ . '/../../../..' . '/Services/ADN/MD/classes/class.adnWMO.php',
         'adnWMOGUI' => __DIR__ . '/../../../..' . '/Services/ADN/MD/classes/class.adnWMOGUI.php',
         'adnWMOTableGUI' => __DIR__ . '/../../../..' . '/Services/ADN/MD/classes/class.adnWMOTableGUI.php',

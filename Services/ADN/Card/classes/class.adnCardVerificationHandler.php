@@ -29,10 +29,6 @@ class adnCardVerificationHandler
     protected const SUCCESS = '0000';
     protected const ERROR_CONNECT = '0200';
 
-    /**
-     * @var \Psr\Http\Message\RequestInterface|\Psr\Http\Message\ServerRequestInterface
-     */
-    private $http_request;
     private ilLogger $logger;
     private ilLanguage $lng;
 
@@ -40,28 +36,30 @@ class adnCardVerificationHandler
     private string $hid_tag_id = '';
     private string $certificate_id = '';
 
-    public function __construct()
+    public function __construct(string $hid_tac, string $hid_tag_id, string $certificate_id)
     {
-    }
+        global $DIC;
 
-    public function initRequest() : void
-    {
-        $this->initIlias();
-        $this->initEnvironment();
+        $this->logger = $DIC->logger()->adn();
+        $this->lng = $DIC->language();
+        $this->lng->loadLanguageModule('adn');
+
+        $this->hid_tac = $hid_tac;
+        $this->hid_tag_id = $hid_tag_id;
+        $this->certificate_id = $certificate_id;
     }
 
     /**
      * Handle Request
      * @return
      */
-    public function handleRequest() : void
+    public function handleRequest() : string
     {
         $error_code = $this->verifyHidToken();
         if ($error_code !== self::SUCCESS) {
-            $this->handleError($error_code);
-            return;
+            return $this->handleError($error_code);
         }
-        $this->handleSuccess();
+        return $this->handleSuccess();
     }
 
     protected function verifyHidToken() : string
@@ -76,7 +74,7 @@ class adnCardVerificationHandler
         return $response->getCode();
     }
 
-    protected function handleSuccess() : void
+    protected function handleSuccess() : string
     {
         $tpl = new ilTemplate(
             'tpl.checkcard.html',
@@ -91,7 +89,7 @@ class adnCardVerificationHandler
 
         $this->fillCertificate($tpl);
 
-        echo $tpl->get();
+        return $tpl->get();
 
     }
 
@@ -112,7 +110,7 @@ class adnCardVerificationHandler
         $tpl->parseCurrentBlock();
     }
 
-    protected function handleError(string $error_code) : void
+    protected function handleError(string $error_code) : string
     {
         $tpl = new ilTemplate(
             'tpl.checkcard.html',
@@ -125,19 +123,9 @@ class adnCardVerificationHandler
         $tpl->setVariable('TXT_ADN_CHECKCARD_FAILED', $this->lng->txt('adn_card_verify_generic'));
         $tpl->parseCurrentBlock();
 
-        echo $tpl->get();
+        return $tpl->get();
     }
 
-    protected function initIlias()
-    {
-        $_COOKIE['ilClientId'] = $_GET['client_id'] = 'adn';
-
-        include_once "Services/Context/classes/class.ilContext.php";
-        ilContext::init(ilContext::CONTEXT_REST);
-
-        require_once("Services/Init/classes/class.ilInitialisation.php");
-        ilInitialisation::initILIAS();
-    }
 
     protected function initEnvironment() : void
     {

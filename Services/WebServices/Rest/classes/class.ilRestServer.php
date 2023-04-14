@@ -35,6 +35,9 @@ class ilRestServer extends Slim\App
         $this->post('/testHidVerification', [$adn_rest_test, 'verify']);
         $this->post('/services/65/prod/v1', [$adn_rest_test, 'verifyOrder']);
 
+        $adn_rest_verification = new adnVerificationRestHandler();
+        $this->get('/v1/verify', [$adn_rest_verification, 'verify']);
+
         $callback_obj->deleteDeprecated();
     }
 }

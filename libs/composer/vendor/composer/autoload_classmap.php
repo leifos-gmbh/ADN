@@ -5019,6 +5019,7 @@ return array(
     'adnUser' => $baseDir . '/Services/ADN/AD/classes/class.adnUser.php',
     'adnUserGUI' => $baseDir . '/Services/ADN/AD/classes/class.adnUserGUI.php',
     'adnUserTableGUI' => $baseDir . '/Services/ADN/AD/classes/class.adnUserTableGUI.php',
+    'adnVerificationRestHandler' => $baseDir . '/Services/ADN/Card/classes/class.adnVerificationRestHandler.php',
     'adnWMO' => $baseDir . '/Services/ADN/MD/classes/class.adnWMO.php',
     'adnWMOGUI' => $baseDir . '/Services/ADN/MD/classes/class.adnWMOGUI.php',
     'adnWMOTableGUI' => $baseDir . '/Services/ADN/MD/classes/class.adnWMOTableGUI.php',
