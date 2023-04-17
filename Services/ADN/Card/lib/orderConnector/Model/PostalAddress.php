@@ -1,6 +1,6 @@
 <?php
 /**
- * Order
+ * PostalAddress
  *
  * PHP version 7.4
  *
@@ -33,7 +33,7 @@ use \ArrayAccess;
 use \Plasticard\PLZFT\ObjectSerializer;
 
 /**
- * Order Class Doc Comment
+ * PostalAddress Class Doc Comment
  *
  * @category Class
  * @package  Plasticard\PLZFT
@@ -41,7 +41,7 @@ use \Plasticard\PLZFT\ObjectSerializer;
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class Order implements ModelInterface, ArrayAccess, \JsonSerializable
+class PostalAddress implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -50,7 +50,7 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
       *
       * @var string
       */
-    protected static $openAPIModelName = 'Order';
+    protected static $openAPIModelName = 'PostalAddress';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -58,7 +58,11 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'plzft_certificate' => '\Plasticard\PLZFT\Model\OrderPlzftCertificate'
+        'address_name' => 'string',
+        'address_street' => 'string',
+        'address_postal_code' => 'string',
+        'address_city' => 'string',
+        'address_country' => 'string'
     ];
 
     /**
@@ -69,7 +73,11 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'plzft_certificate' => null
+        'address_name' => null,
+        'address_street' => null,
+        'address_postal_code' => null,
+        'address_city' => null,
+        'address_country' => null
     ];
 
     /**
@@ -78,7 +86,11 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'plzft_certificate' => false
+        'address_name' => false,
+		'address_street' => false,
+		'address_postal_code' => false,
+		'address_city' => false,
+		'address_country' => false
     ];
 
     /**
@@ -167,7 +179,11 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $attributeMap = [
-        'plzft_certificate' => 'plzft:Certificate'
+        'address_name' => 'AddressName',
+        'address_street' => 'AddressStreet',
+        'address_postal_code' => 'AddressPostalCode',
+        'address_city' => 'AddressCity',
+        'address_country' => 'AddressCountry'
     ];
 
     /**
@@ -176,7 +192,11 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $setters = [
-        'plzft_certificate' => 'setPlzftCertificate'
+        'address_name' => 'setAddressName',
+        'address_street' => 'setAddressStreet',
+        'address_postal_code' => 'setAddressPostalCode',
+        'address_city' => 'setAddressCity',
+        'address_country' => 'setAddressCountry'
     ];
 
     /**
@@ -185,7 +205,11 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $getters = [
-        'plzft_certificate' => 'getPlzftCertificate'
+        'address_name' => 'getAddressName',
+        'address_street' => 'getAddressStreet',
+        'address_postal_code' => 'getAddressPostalCode',
+        'address_city' => 'getAddressCity',
+        'address_country' => 'getAddressCountry'
     ];
 
     /**
@@ -245,7 +269,11 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(array $data = null)
     {
-        $this->setIfExists('plzft_certificate', $data ?? [], null);
+        $this->setIfExists('address_name', $data ?? [], null);
+        $this->setIfExists('address_street', $data ?? [], null);
+        $this->setIfExists('address_postal_code', $data ?? [], null);
+        $this->setIfExists('address_city', $data ?? [], null);
+        $this->setIfExists('address_country', $data ?? [], null);
     }
 
     /**
@@ -275,6 +303,37 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         $invalidProperties = [];
 
+        if ($this->container['address_name'] === null) {
+            $invalidProperties[] = "'address_name' can't be null";
+        }
+        if ((mb_strlen($this->container['address_name']) > 50)) {
+            $invalidProperties[] = "invalid value for 'address_name', the character length must be smaller than or equal to 50.";
+        }
+
+        if ($this->container['address_street'] === null) {
+            $invalidProperties[] = "'address_street' can't be null";
+        }
+        if ($this->container['address_postal_code'] === null) {
+            $invalidProperties[] = "'address_postal_code' can't be null";
+        }
+        if ((mb_strlen($this->container['address_postal_code']) > 50)) {
+            $invalidProperties[] = "invalid value for 'address_postal_code', the character length must be smaller than or equal to 50.";
+        }
+
+        if ($this->container['address_city'] === null) {
+            $invalidProperties[] = "'address_city' can't be null";
+        }
+        if ((mb_strlen($this->container['address_city']) > 50)) {
+            $invalidProperties[] = "invalid value for 'address_city', the character length must be smaller than or equal to 50.";
+        }
+
+        if ($this->container['address_country'] === null) {
+            $invalidProperties[] = "'address_country' can't be null";
+        }
+        if ((mb_strlen($this->container['address_country']) > 50)) {
+            $invalidProperties[] = "invalid value for 'address_country', the character length must be smaller than or equal to 50.";
+        }
+
         return $invalidProperties;
     }
 
@@ -291,28 +350,152 @@ class Order implements ModelInterface, ArrayAccess, \JsonSerializable
 
 
     /**
-     * Gets plzft_certificate
+     * Gets address_name
      *
-     * @return \Plasticard\PLZFT\Model\OrderPlzftCertificate|null
+     * @return string
      */
-    public function getPlzftCertificate()
+    public function getAddressName()
     {
-        return $this->container['plzft_certificate'];
+        return $this->container['address_name'];
     }
 
     /**
-     * Sets plzft_certificate
+     * Sets address_name
      *
-     * @param \Plasticard\PLZFT\Model\OrderPlzftCertificate|null $plzft_certificate plzft_certificate
+     * @param string $address_name 
      *
      * @return self
      */
-    public function setPlzftCertificate($plzft_certificate)
+    public function setAddressName($address_name)
     {
-        if (is_null($plzft_certificate)) {
-            throw new \InvalidArgumentException('non-nullable plzft_certificate cannot be null');
+        if (is_null($address_name)) {
+            throw new \InvalidArgumentException('non-nullable address_name cannot be null');
         }
-        $this->container['plzft_certificate'] = $plzft_certificate;
+        if ((mb_strlen($address_name) > 50)) {
+            throw new \InvalidArgumentException('invalid length for $address_name when calling PostalAddress., must be smaller than or equal to 50.');
+        }
+
+        $this->container['address_name'] = $address_name;
+
+        return $this;
+    }
+
+    /**
+     * Gets address_street
+     *
+     * @return string
+     */
+    public function getAddressStreet()
+    {
+        return $this->container['address_street'];
+    }
+
+    /**
+     * Sets address_street
+     *
+     * @param string $address_street 
+     *
+     * @return self
+     */
+    public function setAddressStreet($address_street)
+    {
+        if (is_null($address_street)) {
+            throw new \InvalidArgumentException('non-nullable address_street cannot be null');
+        }
+        $this->container['address_street'] = $address_street;
+
+        return $this;
+    }
+
+    /**
+     * Gets address_postal_code
+     *
+     * @return string
+     */
+    public function getAddressPostalCode()
+    {
+        return $this->container['address_postal_code'];
+    }
+
+    /**
+     * Sets address_postal_code
+     *
+     * @param string $address_postal_code 
+     *
+     * @return self
+     */
+    public function setAddressPostalCode($address_postal_code)
+    {
+        if (is_null($address_postal_code)) {
+            throw new \InvalidArgumentException('non-nullable address_postal_code cannot be null');
+        }
+        if ((mb_strlen($address_postal_code) > 50)) {
+            throw new \InvalidArgumentException('invalid length for $address_postal_code when calling PostalAddress., must be smaller than or equal to 50.');
+        }
+
+        $this->container['address_postal_code'] = $address_postal_code;
+
+        return $this;
+    }
+
+    /**
+     * Gets address_city
+     *
+     * @return string
+     */
+    public function getAddressCity()
+    {
+        return $this->container['address_city'];
+    }
+
+    /**
+     * Sets address_city
+     *
+     * @param string $address_city 
+     *
+     * @return self
+     */
+    public function setAddressCity($address_city)
+    {
+        if (is_null($address_city)) {
+            throw new \InvalidArgumentException('non-nullable address_city cannot be null');
+        }
+        if ((mb_strlen($address_city) > 50)) {
+            throw new \InvalidArgumentException('invalid length for $address_city when calling PostalAddress., must be smaller than or equal to 50.');
+        }
+
+        $this->container['address_city'] = $address_city;
+
+        return $this;
+    }
+
+    /**
+     * Gets address_country
+     *
+     * @return string
+     */
+    public function getAddressCountry()
+    {
+        return $this->container['address_country'];
+    }
+
+    /**
+     * Sets address_country
+     *
+     * @param string $address_country 
+     *
+     * @return self
+     */
+    public function setAddressCountry($address_country)
+    {
+        if (is_null($address_country)) {
+            throw new \InvalidArgumentException('non-nullable address_country cannot be null');
+        }
+        if ((mb_strlen($address_country) > 50)) {
+            throw new \InvalidArgumentException('invalid length for $address_country when calling PostalAddress., must be smaller than or equal to 50.');
+        }
+
+        $this->container['address_country'] = $address_country;
 
         return $this;
     }

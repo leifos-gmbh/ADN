@@ -1,6 +1,6 @@
 <?php
 /**
- * OrderPlzftCertificatePlzftReturnAddress
+ * Certificates
  *
  * PHP version 7.4
  *
@@ -33,15 +33,16 @@ use \ArrayAccess;
 use \Plasticard\PLZFT\ObjectSerializer;
 
 /**
- * OrderPlzftCertificatePlzftReturnAddress Class Doc Comment
+ * Certificates Class Doc Comment
  *
  * @category Class
+ * @description Certificates type definition
  * @package  Plasticard\PLZFT
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class OrderPlzftCertificatePlzftReturnAddress implements ModelInterface, ArrayAccess, \JsonSerializable
+class Certificates implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -50,7 +51,7 @@ class OrderPlzftCertificatePlzftReturnAddress implements ModelInterface, ArrayAc
       *
       * @var string
       */
-    protected static $openAPIModelName = 'Order_plzft_Certificate_plzft_ReturnAddress';
+    protected static $openAPIModelName = 'Certificates';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -58,11 +59,7 @@ class OrderPlzftCertificatePlzftReturnAddress implements ModelInterface, ArrayAc
       * @var string[]
       */
     protected static $openAPITypes = [
-        'plzft_address_name' => 'string',
-        'plzft_address_street' => 'string',
-        'plzft_address_postal_code' => 'string',
-        'plzft_address_city' => 'string',
-        'plzft_address_country' => 'string'
+        'certificates' => '\Plasticard\PLZFT\Model\Certificate[]'
     ];
 
     /**
@@ -73,11 +70,7 @@ class OrderPlzftCertificatePlzftReturnAddress implements ModelInterface, ArrayAc
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'plzft_address_name' => null,
-        'plzft_address_street' => null,
-        'plzft_address_postal_code' => null,
-        'plzft_address_city' => null,
-        'plzft_address_country' => null
+        'certificates' => null
     ];
 
     /**
@@ -86,11 +79,7 @@ class OrderPlzftCertificatePlzftReturnAddress implements ModelInterface, ArrayAc
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'plzft_address_name' => false,
-		'plzft_address_street' => false,
-		'plzft_address_postal_code' => false,
-		'plzft_address_city' => false,
-		'plzft_address_country' => false
+        'certificates' => false
     ];
 
     /**
@@ -179,11 +168,7 @@ class OrderPlzftCertificatePlzftReturnAddress implements ModelInterface, ArrayAc
      * @var string[]
      */
     protected static $attributeMap = [
-        'plzft_address_name' => 'plzft:AddressName',
-        'plzft_address_street' => 'plzft:AddressStreet',
-        'plzft_address_postal_code' => 'plzft:AddressPostalCode',
-        'plzft_address_city' => 'plzft:AddressCity',
-        'plzft_address_country' => 'plzft:AddressCountry'
+        'certificates' => 'certificates'
     ];
 
     /**
@@ -192,11 +177,7 @@ class OrderPlzftCertificatePlzftReturnAddress implements ModelInterface, ArrayAc
      * @var string[]
      */
     protected static $setters = [
-        'plzft_address_name' => 'setPlzftAddressName',
-        'plzft_address_street' => 'setPlzftAddressStreet',
-        'plzft_address_postal_code' => 'setPlzftAddressPostalCode',
-        'plzft_address_city' => 'setPlzftAddressCity',
-        'plzft_address_country' => 'setPlzftAddressCountry'
+        'certificates' => 'setCertificates'
     ];
 
     /**
@@ -205,11 +186,7 @@ class OrderPlzftCertificatePlzftReturnAddress implements ModelInterface, ArrayAc
      * @var string[]
      */
     protected static $getters = [
-        'plzft_address_name' => 'getPlzftAddressName',
-        'plzft_address_street' => 'getPlzftAddressStreet',
-        'plzft_address_postal_code' => 'getPlzftAddressPostalCode',
-        'plzft_address_city' => 'getPlzftAddressCity',
-        'plzft_address_country' => 'getPlzftAddressCountry'
+        'certificates' => 'getCertificates'
     ];
 
     /**
@@ -269,11 +246,7 @@ class OrderPlzftCertificatePlzftReturnAddress implements ModelInterface, ArrayAc
      */
     public function __construct(array $data = null)
     {
-        $this->setIfExists('plzft_address_name', $data ?? [], null);
-        $this->setIfExists('plzft_address_street', $data ?? [], null);
-        $this->setIfExists('plzft_address_postal_code', $data ?? [], null);
-        $this->setIfExists('plzft_address_city', $data ?? [], null);
-        $this->setIfExists('plzft_address_country', $data ?? [], null);
+        $this->setIfExists('certificates', $data ?? [], null);
     }
 
     /**
@@ -303,6 +276,9 @@ class OrderPlzftCertificatePlzftReturnAddress implements ModelInterface, ArrayAc
     {
         $invalidProperties = [];
 
+        if ($this->container['certificates'] === null) {
+            $invalidProperties[] = "'certificates' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -319,136 +295,28 @@ class OrderPlzftCertificatePlzftReturnAddress implements ModelInterface, ArrayAc
 
 
     /**
-     * Gets plzft_address_name
+     * Gets certificates
      *
-     * @return string|null
+     * @return \Plasticard\PLZFT\Model\Certificate[]
      */
-    public function getPlzftAddressName()
+    public function getCertificates()
     {
-        return $this->container['plzft_address_name'];
+        return $this->container['certificates'];
     }
 
     /**
-     * Sets plzft_address_name
+     * Sets certificates
      *
-     * @param string|null $plzft_address_name plzft_address_name
+     * @param \Plasticard\PLZFT\Model\Certificate[] $certificates Array of certificates
      *
      * @return self
      */
-    public function setPlzftAddressName($plzft_address_name)
+    public function setCertificates($certificates)
     {
-        if (is_null($plzft_address_name)) {
-            throw new \InvalidArgumentException('non-nullable plzft_address_name cannot be null');
+        if (is_null($certificates)) {
+            throw new \InvalidArgumentException('non-nullable certificates cannot be null');
         }
-        $this->container['plzft_address_name'] = $plzft_address_name;
-
-        return $this;
-    }
-
-    /**
-     * Gets plzft_address_street
-     *
-     * @return string|null
-     */
-    public function getPlzftAddressStreet()
-    {
-        return $this->container['plzft_address_street'];
-    }
-
-    /**
-     * Sets plzft_address_street
-     *
-     * @param string|null $plzft_address_street plzft_address_street
-     *
-     * @return self
-     */
-    public function setPlzftAddressStreet($plzft_address_street)
-    {
-        if (is_null($plzft_address_street)) {
-            throw new \InvalidArgumentException('non-nullable plzft_address_street cannot be null');
-        }
-        $this->container['plzft_address_street'] = $plzft_address_street;
-
-        return $this;
-    }
-
-    /**
-     * Gets plzft_address_postal_code
-     *
-     * @return string|null
-     */
-    public function getPlzftAddressPostalCode()
-    {
-        return $this->container['plzft_address_postal_code'];
-    }
-
-    /**
-     * Sets plzft_address_postal_code
-     *
-     * @param string|null $plzft_address_postal_code plzft_address_postal_code
-     *
-     * @return self
-     */
-    public function setPlzftAddressPostalCode($plzft_address_postal_code)
-    {
-        if (is_null($plzft_address_postal_code)) {
-            throw new \InvalidArgumentException('non-nullable plzft_address_postal_code cannot be null');
-        }
-        $this->container['plzft_address_postal_code'] = $plzft_address_postal_code;
-
-        return $this;
-    }
-
-    /**
-     * Gets plzft_address_city
-     *
-     * @return string|null
-     */
-    public function getPlzftAddressCity()
-    {
-        return $this->container['plzft_address_city'];
-    }
-
-    /**
-     * Sets plzft_address_city
-     *
-     * @param string|null $plzft_address_city plzft_address_city
-     *
-     * @return self
-     */
-    public function setPlzftAddressCity($plzft_address_city)
-    {
-        if (is_null($plzft_address_city)) {
-            throw new \InvalidArgumentException('non-nullable plzft_address_city cannot be null');
-        }
-        $this->container['plzft_address_city'] = $plzft_address_city;
-
-        return $this;
-    }
-
-    /**
-     * Gets plzft_address_country
-     *
-     * @return string|null
-     */
-    public function getPlzftAddressCountry()
-    {
-        return $this->container['plzft_address_country'];
-    }
-
-    /**
-     * Sets plzft_address_country
-     *
-     * @param string|null $plzft_address_country plzft_address_country
-     *
-     * @return self
-     */
-    public function setPlzftAddressCountry($plzft_address_country)
-    {
-        if (is_null($plzft_address_country)) {
-            throw new \InvalidArgumentException('non-nullable plzft_address_country cannot be null');
-        }
-        $this->container['plzft_address_country'] = $plzft_address_country;
+        $this->container['certificates'] = $certificates;
 
         return $this;
     }

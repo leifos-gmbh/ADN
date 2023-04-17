@@ -128,16 +128,16 @@ class PLZFTApi
      *
      * Send a new order
      *
-     * @param  \Plasticard\PLZFT\Model\Order $order Create a new order (required)
+     * @param  \Plasticard\PLZFT\Model\Certificates $certificates Create a new order (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['addOrder'] to see the possible values for this operation
      *
      * @throws \Plasticard\PLZFT\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return string|string|\Plasticard\PLZFT\Model\ApiResponse404|\Plasticard\PLZFT\Model\ApiResponse480|\Plasticard\PLZFT\Model\ApiResponse481|string
      */
-    public function addOrder($order, string $contentType = self::contentTypes['addOrder'][0])
+    public function addOrder($certificates, string $contentType = self::contentTypes['addOrder'][0])
     {
-        list($response) = $this->addOrderWithHttpInfo($order, $contentType);
+        list($response) = $this->addOrderWithHttpInfo($certificates, $contentType);
         return $response;
     }
 
@@ -146,16 +146,16 @@ class PLZFTApi
      *
      * Send a new order
      *
-     * @param  \Plasticard\PLZFT\Model\Order $order Create a new order (required)
+     * @param  \Plasticard\PLZFT\Model\Certificates $certificates Create a new order (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['addOrder'] to see the possible values for this operation
      *
      * @throws \Plasticard\PLZFT\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of string|string|\Plasticard\PLZFT\Model\ApiResponse404|\Plasticard\PLZFT\Model\ApiResponse480|\Plasticard\PLZFT\Model\ApiResponse481|string, HTTP status code, HTTP response headers (array of strings)
      */
-    public function addOrderWithHttpInfo($order, string $contentType = self::contentTypes['addOrder'][0])
+    public function addOrderWithHttpInfo($certificates, string $contentType = self::contentTypes['addOrder'][0])
     {
-        $request = $this->addOrderRequest($order, $contentType);
+        $request = $this->addOrderRequest($certificates, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -361,15 +361,15 @@ class PLZFTApi
      *
      * Send a new order
      *
-     * @param  \Plasticard\PLZFT\Model\Order $order Create a new order (required)
+     * @param  \Plasticard\PLZFT\Model\Certificates $certificates Create a new order (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['addOrder'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function addOrderAsync($order, string $contentType = self::contentTypes['addOrder'][0])
+    public function addOrderAsync($certificates, string $contentType = self::contentTypes['addOrder'][0])
     {
-        return $this->addOrderAsyncWithHttpInfo($order, $contentType)
+        return $this->addOrderAsyncWithHttpInfo($certificates, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -382,16 +382,16 @@ class PLZFTApi
      *
      * Send a new order
      *
-     * @param  \Plasticard\PLZFT\Model\Order $order Create a new order (required)
+     * @param  \Plasticard\PLZFT\Model\Certificates $certificates Create a new order (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['addOrder'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function addOrderAsyncWithHttpInfo($order, string $contentType = self::contentTypes['addOrder'][0])
+    public function addOrderAsyncWithHttpInfo($certificates, string $contentType = self::contentTypes['addOrder'][0])
     {
         $returnType = 'string';
-        $request = $this->addOrderRequest($order, $contentType);
+        $request = $this->addOrderRequest($certificates, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -432,19 +432,19 @@ class PLZFTApi
     /**
      * Create request for operation 'addOrder'
      *
-     * @param  \Plasticard\PLZFT\Model\Order $order Create a new order (required)
+     * @param  \Plasticard\PLZFT\Model\Certificates $certificates Create a new order (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['addOrder'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function addOrderRequest($order, string $contentType = self::contentTypes['addOrder'][0])
+    public function addOrderRequest($certificates, string $contentType = self::contentTypes['addOrder'][0])
     {
 
-        // verify the required parameter 'order' is set
-        if ($order === null || (is_array($order) && count($order) === 0)) {
+        // verify the required parameter 'certificates' is set
+        if ($certificates === null || (is_array($certificates) && count($certificates) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $order when calling addOrder'
+                'Missing the required parameter $certificates when calling addOrder'
             );
         }
 
@@ -467,12 +467,12 @@ class PLZFTApi
         );
 
         // for model (json/xml)
-        if (isset($order)) {
+        if (isset($certificates)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($order));
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($certificates));
             } else {
-                $httpBody = $order;
+                $httpBody = $certificates;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {

@@ -126,7 +126,7 @@ class adnCardVerificationHandler
             $tpl->setVariable('TXT_GUELTIGKEIT', $certificate->getValidUntil()->get(IL_CAL_FKT_DATE, 'Y-m-d'));
         }
         if ($professional->getImageHandler() instanceof adnCertifiedProfessionalImageHandler) {
-            $image = 'data:image/jpeg;base64,' . base64_encode(file_get_contents($professional->getImageHandler()->getAbsolutePath()));
+            $image = 'data:image/png;base64,' . base64_encode(file_get_contents($professional->getImageHandler()->getAbsolutePath()));
             $tpl->setVariable('PERSONAL_ICON', $image);
         }
         return self::SUCCESS;
