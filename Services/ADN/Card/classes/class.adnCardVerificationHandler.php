@@ -129,6 +129,15 @@ class adnCardVerificationHandler
             $image = 'data:image/png;base64,' . base64_encode(file_get_contents($professional->getImageHandler()->getAbsolutePath()));
             $tpl->setVariable('PERSONAL_ICON', $image);
         }
+
+        $types = [];
+        foreach (adnCertificate::getCertificateTypes() as $type => $caption) {
+            if ($certificate->getType($type)) {
+                $tpl->setCurrentBlock('cert_line');
+                $tpl->setVariable('TXT_LISTEBESCHEINIGUNGEN_LINE', $this->lng->txt('adn_subject_area_cert_' . $type));
+                $tpl->parseCurrentBlock();
+            }
+        }
         return self::SUCCESS;
     }
 

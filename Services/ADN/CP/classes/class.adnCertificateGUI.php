@@ -201,6 +201,13 @@ class adnCertificateGUI
         if ($professional->getImageHandler() instanceof adnCertifiedProfessionalImageHandler) {
             $card->setVariable('PERSONAL_ICON', $professional->getImageHandler()->getAbsolutePath());
         }
+        foreach (adnCertificate::getCertificateTypes() as $type => $caption) {
+            if ($certificate->getType($type)) {
+                $card->setCurrentBlock('cert_lines');
+                $card->setVariable('TXT_LISTEBESCHEINIGUNGEN_LINE', $lng->txt('adn_subject_area_cert_' . $type));
+                $card->parseCurrentBlock();
+            }
+        }
         $tpl->setContent($card->get());
     }
     
