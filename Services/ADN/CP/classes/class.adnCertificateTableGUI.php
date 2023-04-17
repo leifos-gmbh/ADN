@@ -174,8 +174,12 @@ class adnCertificateTableGUI extends ilTable2GUI
         if ($this->cp_id == 0 && adnPerm::check(adnPerm::CP, adnPerm::WRITE)) {
             // cr-008 start
             include_once './Services/ADN/Report/classes/class.adnReportCertificate.php';
-            if ($a_set["status"] == adnCertificate::STATUS_VALID && !adnCertificate::isDuplicate($a_set['id']) &&
-                !$a_set["is_extension"]) {
+            if (
+                $a_set["status"] == adnCertificate::STATUS_VALID &&
+                !adnCertificate::isDuplicate($a_set['id']) &&
+                !$a_set["is_extension"] &&
+                $cert->getUuid() === ''
+            ) {
                 $this->tpl->setCurrentBlock("action");
                 $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_download_certificate"));
                 $this->tpl->setVariable(
@@ -197,7 +201,10 @@ class adnCertificateTableGUI extends ilTable2GUI
         }
 
         // only show these things for valid
-        if ($this->cp_id == 0 && $a_set["status"] == adnCertificate::STATUS_VALID) {
+        if (
+            $this->cp_id == 0 &&
+            $a_set["status"] == adnCertificate::STATUS_VALID
+        ) {
             if (adnPerm::check(adnPerm::CP, adnPerm::WRITE)) {
                 // duplicate
                 if ($a_set["issued_by_wmo"] == $this->user_wmo) {
@@ -220,18 +227,24 @@ class adnCertificateTableGUI extends ilTable2GUI
                 $this->tpl->parseCurrentBlock();
 
                 // edit
-                $this->tpl->setCurrentBlock("action");
-                $this->tpl->setVariable("TXT_CMD", $lng->txt("edit"));
-                $this->tpl->setVariable(
-                    "HREF_CMD",
-                    $ilCtrl->getLinkTarget($this->parent_obj, "edit")
-                );
-                $this->tpl->parseCurrentBlock();
+                if ($cert->getUuid() === '') {
+                    $this->tpl->setCurrentBlock("action");
+                    $this->tpl->setVariable("TXT_CMD", $lng->txt("edit"));
+                    $this->tpl->setVariable(
+                        "HREF_CMD",
+                        $ilCtrl->getLinkTarget($this->parent_obj, "edit")
+                    );
+                    $this->tpl->parseCurrentBlock();
+                }
             }
 
             // download extend
             include_once './Services/ADN/Report/classes/class.adnReportCertificate.php';
-            if ($a_set["is_extension"] and adnReportCertificate::hasCertificate($a_set['id'])) {
+            if (
+                $a_set["is_extension"] &&
+                adnReportCertificate::hasCertificate($a_set['id']) &&
+                $cert->getUuid() === ''
+            ) {
                 $this->tpl->setCurrentBlock("action");
                 $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_download_extension"));
                 $this->tpl->setVariable(
@@ -242,7 +255,11 @@ class adnCertificateTableGUI extends ilTable2GUI
             }
 
             // download duplicate
-            if (adnCertificate::isDuplicate($a_set['id']) && adnReportCertificate::hasCertificate($a_set['id'])) {
+            if (
+                adnCertificate::isDuplicate($a_set['id']) &&
+                adnReportCertificate::hasCertificate($a_set['id']) &&
+                $cert->getUuid() === ''
+            ) {
                 $this->tpl->setCurrentBlock("action");
                 $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_download_duplicate"));
                 $this->tpl->setVariable(
