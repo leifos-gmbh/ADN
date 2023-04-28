@@ -1,6 +1,7 @@
 <?php
 
 use Plasticard\PLZFT\Api\PLZFTApi as PLZFTApi;
+use Plasticard\PLZFT\Model\Certificates as Certificates;
 
 class adnPlcVerification
 {
@@ -45,10 +46,9 @@ class adnPlcVerification
         return $api;
     }
 
-    protected function initOrder() : \Plasticard\PLZFT\Model\Order
+    protected function initOrder() : Certificates
     {
-        $order = new \Plasticard\PLZFT\Model\Order();
+        $order = new Certificates();
         return $order;
-
     }
 }

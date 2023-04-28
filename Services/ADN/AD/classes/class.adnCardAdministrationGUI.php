@@ -112,7 +112,7 @@ class adnCardAdministrationGUI
 
         // plasticard service
         $plc = new ilFormSectionHeaderGUI();
-        $plc->setTitle($this->lng->txt('adn_card_plc_user'));
+        $plc->setTitle($this->lng->txt('adn_card_plc_settings'));
         $form->addItem($plc);
 
         $plc_user = new ilTextInputGUI($this->lng->txt('adn_card_plc_user'),'plc_user');
