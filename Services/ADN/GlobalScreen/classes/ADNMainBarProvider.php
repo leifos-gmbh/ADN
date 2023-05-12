@@ -92,19 +92,24 @@ class ADNMainBarProvider extends AbstractStaticMainMenuProvider
                 $title = $this->dic->language()->txt("adn_ad");
             }
 
-            //$icon = $this->dic->ui()->factory()->symbol()->icon()->standard(Standard::REP, $title)->withIsOutlined(
-            //    true
-            //);
-
             $id = $this->if->identifier($key);
 
-            $items[] = $this->mainmenu->topParentItem($id)
+            $item = $this->mainmenu->topParentItem($id)
                                          ->withVisibilityCallable(function () use ($key) {
                                              return $this->checkVisibility($key);
                                          })
-                                         //->withSymbol($icon)
                                          ->withTitle($this->dic->language()->txt("adn_" . $key))
                                          ->withPosition($pos);
+            if ($this->getIconPath($key) !== "")
+            {
+                $item = $item->withSymbol(
+                    $this->dic->ui()->factory()->symbol()->icon()->custom(
+                        "./Customizing/global/skin/adn/images/" . $this->getIconPath($key),
+                        $this->dic->language()->txt("adn_" . $key)
+                    )
+                );
+            }
+            $items[] = $item;
             $pos += 2;
         }
         return $items;
@@ -122,7 +127,7 @@ class ADNMainBarProvider extends AbstractStaticMainMenuProvider
             $parent_id = $this->if->identifier($key);
             $pos = 10;
             foreach ($subs as $sub) {
-                $items[] = $this->mainmenu->link($this->if->identifier($sub))
+                $item = $this->mainmenu->link($this->if->identifier($sub))
                                           ->withAction("ilias.php?baseClass=adnBaseGUI&amp;cmd=processMenuItem&amp;" .
                                               "menu_item=" . $sub)
                                           ->withParent($parent_id)
@@ -132,6 +137,16 @@ class ADNMainBarProvider extends AbstractStaticMainMenuProvider
                                           ->withVisibilityCallable(function () use ($key, $sub) {
                                               return $this->checkSubVisibility($key, $sub);
                                           });
+                if ($this->getIconPath($sub) !== "")
+                {
+                    $item = $item->withSymbol(
+                        $this->dic->ui()->factory()->symbol()->icon()->custom(
+                            "./Customizing/global/skin/adn/images/" . $this->getIconPath($sub),
+                            $this->dic->language()->txt("adn_" . $sub)
+                        )
+                    );
+                }
+                $items[] = $item;
             }
             $pos += 10;
         }
@@ -172,6 +187,104 @@ class ADNMainBarProvider extends AbstractStaticMainMenuProvider
             return false;
         }
         return true;    // all others, are checked on the top level
+    }
+
+    protected function getIconPath(string $key) : string {
+        switch ($key) {
+            case self::TA:
+                return "01_Schulungsverwaltung/00_Schulungsverwaltung.svg";
+            case self::TA_TPS:
+                return "01_Schulungsverwaltung/01_Schulungsveranstalter.svg";
+            case self::TA_TES:
+                return "01_Schulungsverwaltung/02_Schulungstermine.svg";
+            case self::TA_ILS:
+                return "01_Schulungsverwaltung/03_Merkblaetter.svg";
+            case self::TA_AES:
+                return "01_Schulungsverwaltung/04_Fachgebiete.svg";
+            case self::ED:
+                return "02_Pruefungselemente/00_Pruefunsgelemente.svg";
+            case self::ED_OBS:
+                return "02_Pruefungselemente/01_Pruefungsziele.svg";
+            case self::ED_NQS:
+                return "02_Pruefungselemente/02_AnzahlFragen.svg";
+            case self::ED_EQS:
+                return "02_Pruefungselemente/03_Pruefungsfragen.svg";
+            case self::ED_CAS:
+                return "02_Pruefungselemente/04_Situationsbeschreibung.svg";
+            case self::ED_LIC:
+                return "02_Pruefungselemente/05_Zulassungszeugnis.svg";
+            case self::ED_GTS:
+                return "02_Pruefungselemente/06_Stoffe.svg";
+            case self::EP:
+                return "03_Pruefungsvorbereitung/00_Pruefungsvorbereitung.svg";
+            case self::EP_ILS:
+                return "03_Pruefungsvorbereitung/01_Merkblaetter.svg";
+            case self::EP_EES:
+                return "03_Pruefungsvorbereitung/02_Pruefungstermine.svg";
+            case self::EP_ECS:
+                return "03_Pruefungsvorbereitung/03_Pruefungskandidaten.svg";
+            case self::EP_CES:
+                return "03_Pruefungsvorbereitung/04_KandidatenzuTerminen.svg";
+            case self::EP_INS:
+                return "03_Pruefungsvorbereitung/05_Einladungen.svg";
+            case self::EP_ASS:
+                return "03_Pruefungsvorbereitung/06_Pruefungsboegen.svg";
+            case self::EP_ALS:
+                return "03_Pruefungsvorbereitung/07_Teilnahmelisten.svg";
+            case self::EP_ACS:
+                return "03_Pruefungsvorbereitung/08_Onlinepruefung.svg";
+            case self::ES:
+                return "04_Pruefungsnachbereitung/00_Pruefungsnachbearbeitung.svg";
+            case self::ES_SCS:
+                return "04_Pruefungsnachbereitung/01_Korrektur.svg";
+            case self::ES_CTS:
+                return "04_Pruefungsnachbereitung/02_ADN_Bescheinigungen.svg";
+            case self::ES_SNS:
+                return "04_Pruefungsnachbereitung/03_Antwortschreiben.svg";
+            case self::ES_OAS:
+                return "04_Pruefungsnachbereitung/04_Online_Antwortboegen.svg";
+            case self::CP:
+                return "05_Sachkundigenverwaltung/00_Sachkundigenverwaltung.svg";
+            case self::CP_CTS:
+                return "05_Sachkundigenverwaltung/01_Bescheinigungen.svg";
+            case self::CP_CPR:
+                return "05_Sachkundigenverwaltung/02_Personendaten.svg";
+            case self::CP_DIR:
+                return "05_Sachkundigenverwaltung/03_Verzeichnis.svg";
+            case self::CP_PDM:
+                return "05_Sachkundigenverwaltung/04_Archiv.svg";
+            case self::ST:
+                return "06_Statistiken/00_Statistiken.svg";
+            case self::ST_EXS:
+                return "06_Statistiken/01_Durchgef_Pruefungen.svg";
+            case self::ST_ERS:
+                return "06_Statistiken/02_Verlaengerung_Wiederholungskrs.svg";
+            case self::ST_EES:
+                return "06_Statistiken/03_Verlaengerung_Arbeitszeit.svg";
+            case self::ST_COS:
+                return "06_Statistiken/04_SonsigeAntraege.svg";
+            case self::ST_TGC:
+                return "06_Statistiken/05_GasChemie.svg";
+            case self::ST_TNS:
+                return "06_Statistiken/06_Summe.svg";
+            case self::MD:
+                return "07_Stammdaten/00_Stammdaten.svg";
+            case self::MD_WOS:
+                return "07_Stammdaten/01_GDWSen.svg";
+            case self::MD_CNS:
+                return "07_Stammdaten/02_Laender.svg";
+            case self::AD_MNT:
+                return "07_Stammdaten/03_Wartungsmodus.svg";
+            case self::AD_CHR:
+                return "07_Stammdaten/04_Sonderzeichen.svg";
+            case self::AD_USR:
+                return "07_Stammdaten/05_Systembenutzer.svg";
+            case self::AD_MCX:
+                return "07_Stammdaten/06_Fragen_Import.svg";
+            case self::AD_ICP:
+                return "07_Stammdaten/07_Sachkundige_importieren.svg";
+        }
+        return "";
     }
 
     protected function getAllMenuItems() : array
