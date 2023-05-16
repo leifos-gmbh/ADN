@@ -39,6 +39,7 @@ class adnCertifiedProfessionalDataGUI
         global $ilCtrl, $lng, $tpl;
 
         $tpl->setTitle($lng->txt("adn_cp") . " - " . $lng->txt("adn_cp_cpr"));
+        adnIcon::setTitleIcon("cp_cpr");
         
         $next_class = $ilCtrl->getNextClass();
         

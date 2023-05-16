@@ -41,6 +41,7 @@ class adnCaseQuestionGUI extends adnExaminationQuestionGUI
         global $ilCtrl, $ilTabs, $lng, $ilCtrl, $tpl;
 
         $tpl->setTitle($lng->txt("adn_ed") . " - " . $lng->txt("adn_ed_eqs"));
+        adnIcon::setTitleIcon("ed_eqs");
 
         $this->setTabs("case_questions");
         

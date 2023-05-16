@@ -4902,6 +4902,7 @@ return array(
     'adnGoodRelatedAnswerGUI' => $baseDir . '/Services/ADN/ED/classes/class.adnGoodRelatedAnswerGUI.php',
     'adnGoodRelatedAnswerTableGUI' => $baseDir . '/Services/ADN/ED/classes/class.adnGoodRelatedAnswerTableGUI.php',
     'adnGotoHandler' => $baseDir . '/Services/ADN/Base/classes/class.adnGotoHandler.php',
+    'adnIcon' => $baseDir . '/Services/ADN/UI/classes/class.adnIcon.php',
     'adnInformationLetter' => $baseDir . '/Services/ADN/TA/classes/class.adnInformationLetter.php',
     'adnInformationLetterGUI' => $baseDir . '/Services/ADN/TA/classes/class.adnInformationLetterGUI.php',
     'adnInformationLetterTableGUI' => $baseDir . '/Services/ADN/TA/classes/class.adnInformationLetterTableGUI.php',

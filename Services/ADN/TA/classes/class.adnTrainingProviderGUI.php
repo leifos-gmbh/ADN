@@ -40,6 +40,7 @@ class adnTrainingProviderGUI
         global $ilCtrl, $ilTabs, $tpl, $lng;
 
         $tpl->setTitle($lng->txt("adn_ta") . " - " . $lng->txt("adn_ta_tps"));
+        adnIcon::setTitleIcon("ta_tps");
 
         $next_class = $ilCtrl->getNextClass();
         

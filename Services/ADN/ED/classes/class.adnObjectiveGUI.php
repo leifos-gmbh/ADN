@@ -39,6 +39,7 @@ class adnObjectiveGUI
         global $ilCtrl, $lng, $tpl;
 
         $tpl->setTitle($lng->txt("adn_ed") . " - " . $lng->txt("adn_ed_obs"));
+        adnIcon::setTitleIcon("ed_obs");
 
         $next_class = $ilCtrl->getNextClass();
 

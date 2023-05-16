@@ -36,6 +36,7 @@ class adnCertificateScoringGUI
 
         $tpl->setTitle($lng->txt("adn_es") . " - " .
             $lng->txt("adn_es_cts"));
+        adnIcon::setTitleIcon("es_cts");
 
         $next_class = $ilCtrl->getNextClass();
         

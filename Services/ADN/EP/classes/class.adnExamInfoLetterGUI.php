@@ -39,6 +39,7 @@ class adnExamInfoLetterGUI
         global $ilCtrl, $lng, $tpl;
 
         $tpl->setTitle($lng->txt("adn_ep") . " - " . $lng->txt("adn_ep_ils"));
+        adnIcon::setTitleIcon("ep_ils");
         
         $next_class = $ilCtrl->getNextClass();
         

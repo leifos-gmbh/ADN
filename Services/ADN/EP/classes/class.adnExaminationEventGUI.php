@@ -45,6 +45,7 @@ class adnExaminationEventGUI
         global $ilCtrl, $lng, $tpl;
 
         $tpl->setTitle($lng->txt("adn_ep") . " - " . $lng->txt("adn_ep_ees"));
+        adnIcon::setTitleIcon("ep_ees");
         
         $next_class = $ilCtrl->getNextClass();
         

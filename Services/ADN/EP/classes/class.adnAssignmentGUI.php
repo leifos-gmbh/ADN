@@ -38,6 +38,7 @@ class adnAssignmentGUI
         global $ilCtrl, $lng, $tpl;
 
         $tpl->setTitle($lng->txt("adn_ep") . " - " . $lng->txt("adn_ep_ces"));
+        adnIcon::setTitleIcon("ep_ces");
         
         $next_class = $ilCtrl->getNextClass();
         

@@ -50,6 +50,7 @@ class adnQuestionTargetNumbersGUI
         global $ilCtrl, $lng, $tpl;
 
         $tpl->setTitle($lng->txt("adn_ed") . " - " . $lng->txt("adn_ed_nqs"));
+        adnIcon::setTitleIcon("ed_nqs");
         
         $next_class = $ilCtrl->getNextClass();
 

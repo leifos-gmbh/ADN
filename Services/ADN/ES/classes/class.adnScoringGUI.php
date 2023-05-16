@@ -43,6 +43,7 @@ class adnScoringGUI
 
         $tpl->setTitle($lng->txt("adn_es") . " - " .
             $lng->txt("adn_es_scs"));
+        adnIcon::setTitleIcon("es_scs");
 
         $next_class = $ilCtrl->getNextClass();
         

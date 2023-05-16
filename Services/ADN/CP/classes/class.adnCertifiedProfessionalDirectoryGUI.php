@@ -31,6 +31,7 @@ class adnCertifiedProfessionalDirectoryGUI
         global $ilCtrl, $lng, $tpl;
 
         $tpl->setTitle($lng->txt("adn_cp") . " - " . $lng->txt("adn_cp_dir"));
+        adnIcon::setTitleIcon("cp_dir");
         
         $next_class = $ilCtrl->getNextClass();
         

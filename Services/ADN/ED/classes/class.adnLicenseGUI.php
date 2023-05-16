@@ -44,6 +44,7 @@ class adnLicenseGUI
         global $ilCtrl, $lng, $tpl;
 
         $tpl->setTitle($lng->txt("adn_ed") . " - " . $lng->txt("adn_ed_lic"));
+        adnIcon::setTitleIcon("ed_lic");
         
         $next_class = $ilCtrl->getNextClass();
         

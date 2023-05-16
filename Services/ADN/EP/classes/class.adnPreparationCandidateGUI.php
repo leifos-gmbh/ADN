@@ -59,6 +59,7 @@ class adnPreparationCandidateGUI
             $tpl->setTitle($lng->txt("adn_ad_add_person"));
         } else {
             $tpl->setTitle($lng->txt("adn_ep") . " - " . $lng->txt("adn_ep_ecs"));
+            adnIcon::setTitleIcon("ep_ecs");
         }
         // cr-008 end
         

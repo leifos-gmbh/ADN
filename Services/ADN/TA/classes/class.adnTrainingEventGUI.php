@@ -57,6 +57,7 @@ class adnTrainingEventGUI
         // set page title
         if (!$this->not_overview) {
             $tpl->setTitle($lng->txt("adn_ta") . " - " . $lng->txt("adn_ta_tes"));
+            adnIcon::setTitleIcon("ta_tes");
         }
     
         $this->setTabs("current_tr_events");

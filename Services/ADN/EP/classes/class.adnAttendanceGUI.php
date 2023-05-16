@@ -23,6 +23,7 @@ class adnAttendanceGUI
         global $ilCtrl, $lng, $tpl;
 
         $tpl->setTitle($lng->txt("adn_ep") . " - " . $lng->txt("adn_ep_als"));
+        adnIcon::setTitleIcon("ep_als");
         
         $next_class = $ilCtrl->getNextClass();
         
