@@ -111,6 +111,7 @@ class adnStatisticsGUI
         );
         
         $tpl->setTitle($lng->txt("adn_st") . " - " . $lng->txt("adn_st_exs"));
+        adnIcon::setTitleIcon("st_exs");
 
         include_once "Services/ADN/ST/classes/class.adnStatisticsExamsTableGUI.php";
         $table = new adnStatisticsExamsTableGUI($this, "showExams");
@@ -157,6 +158,7 @@ class adnStatisticsGUI
         );
 
         $tpl->setTitle($lng->txt("adn_st") . " - " . $lng->txt("adn_st_ers"));
+        adnIcon::setTitleIcon("st_ers");
 
         include_once "Services/ADN/ST/classes/class.adnStatisticsExtensionsRefresherTableGUI.php";
         $table = new adnStatisticsExtensionsRefresherTableGUI($this, "showExtensionsRefresher");
@@ -203,6 +205,7 @@ class adnStatisticsGUI
         );
 
         $tpl->setTitle($lng->txt("adn_st") . " - " . $lng->txt("adn_st_ees"));
+        adnIcon::setTitleIcon("st_ees");
 
         include_once "Services/ADN/ST/classes/class.adnStatisticsExtensionsExperienceTableGUI.php";
         $table = new adnStatisticsExtensionsExperienceTableGUI($this, "showExtensionsExperience");
@@ -249,6 +252,7 @@ class adnStatisticsGUI
         );
 
         $tpl->setTitle($lng->txt("adn_st") . " - " . $lng->txt("adn_st_cos"));
+        adnIcon::setTitleIcon("st_cos");
 
         include_once "Services/ADN/ST/classes/class.adnStatisticsCertificatesOtherTableGUI.php";
         $table = new adnStatisticsCertificatesOtherTableGUI($this, "showCertificatesOther");
@@ -296,6 +300,7 @@ class adnStatisticsGUI
         );
 
         $tpl->setTitle($lng->txt("adn_st") . " - " . $lng->txt("adn_st_tns"));
+        adnIcon::setTitleIcon("st_tns");
 
         include_once "Services/ADN/ST/classes/class.adnStatisticsCertificatesTotalTableGUI.php";
         $table = new adnStatisticsCertificatesTotalTableGUI($this, "showCertificatesTotal");
@@ -343,6 +348,7 @@ class adnStatisticsGUI
         );
 
         $tpl->setTitle($lng->txt("adn_st") . " - " . $lng->txt("adn_st_tgc"));
+        adnIcon::setTitleIcon("st_tgc");
 
         include_once "Services/ADN/ST/classes/class.adnStatisticsCertificatesGasChemTableGUI.php";
         $table = new adnStatisticsCertificatesGasChemTableGUI($this, "showCertificatesGasChem");

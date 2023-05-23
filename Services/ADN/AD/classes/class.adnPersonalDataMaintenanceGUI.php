@@ -65,6 +65,7 @@ class adnPersonalDataMaintenanceGUI
         global $ilCtrl, $tpl, $lng;
 
         $tpl->setTitle($lng->txt("adn_cp") . " - " . $lng->txt("adn_cp_pdm"));
+        adnIcon::setTitleIcon("cp_pdm");
         
         $next_class = $ilCtrl->getNextClass();
         // forward command to next gui class in control flow

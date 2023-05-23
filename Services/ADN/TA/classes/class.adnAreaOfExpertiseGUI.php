@@ -39,7 +39,8 @@ class adnAreaOfExpertiseGUI
         global $ilCtrl, $tpl, $lng;
 
         $tpl->setTitle($lng->txt("adn_ta") . " - " . $lng->txt("adn_ta_aes"));
-        
+        adnIcon::setTitleIcon("ta_aes");
+
         $next_class = $ilCtrl->getNextClass();
         
         // forward command to next gui class in control flow

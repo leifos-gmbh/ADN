@@ -20,10 +20,13 @@ class adnUserGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl;
+        global $ilCtrl, $tpl, $lng;
         
         $next_class = $ilCtrl->getNextClass();
-        
+        $tpl->setTitle($lng->txt("adn_md") . " - " . $lng->txt("adn_ad_usr"));
+        adnIcon::setTitleIcon("ad_usr");
+
+
         // forward command to next gui class in control flow
         switch ($next_class) {
             // no next class:

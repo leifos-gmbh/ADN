@@ -18,10 +18,13 @@ class adnMCQuestionExportGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl;
+        global $ilCtrl, $tpl, $lng;
         
         $next_class = $ilCtrl->getNextClass();
-        
+        $tpl->setTitle($lng->txt("adn_md") . " - " . $lng->txt("adn_ad_mcx"));
+        adnIcon::setTitleIcon("ad_mcx");
+
+
         // forward command to next gui class in control flow
         switch ($next_class) {
             // no next class:

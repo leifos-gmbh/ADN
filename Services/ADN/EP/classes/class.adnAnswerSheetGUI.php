@@ -44,6 +44,7 @@ class adnAnswerSheetGUI
         global $ilCtrl, $lng, $tpl;
 
         $tpl->setTitle($lng->txt("adn_ep") . " - " . $lng->txt("adn_ep_ass"));
+        adnIcon::setTitleIcon("ep_ass");
         
         $next_class = $ilCtrl->getNextClass();
         

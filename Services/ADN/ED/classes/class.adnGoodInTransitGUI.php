@@ -44,6 +44,7 @@ class adnGoodInTransitGUI
         global $ilCtrl, $lng, $tpl;
 
         $tpl->setTitle($lng->txt("adn_ed") . " - " . $lng->txt("adn_ed_gts"));
+        adnIcon::setTitleIcon("ed_gts");
         
         $next_class = $ilCtrl->getNextClass();
         

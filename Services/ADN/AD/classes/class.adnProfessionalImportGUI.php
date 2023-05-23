@@ -39,10 +39,13 @@ class adnProfessionalImportGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl;
+        global $ilCtrl, $lng, $tpl;
         
         $next_class = $ilCtrl->getNextClass();
-        
+        $tpl->setTitle($lng->txt("adn_md") . " - " . $lng->txt("adn_ad_icp"));
+        adnIcon::setTitleIcon("ad_icp");
+
+
         // forward command to next gui class in control flow
         switch ($next_class) {
             // no next class:

@@ -39,6 +39,7 @@ class adnInformationLetterGUI
         global $ilCtrl, $tpl, $lng;
 
         $tpl->setTitle($lng->txt("adn_ta") . " - " . $lng->txt("adn_ta_ils"));
+        adnIcon::setTitleIcon("ta_ils");
         
         $next_class = $ilCtrl->getNextClass();
         

@@ -45,6 +45,7 @@ class adnCaseGUI
         global $ilCtrl, $lng, $tpl;
 
         $tpl->setTitle($lng->txt("adn_ed") . " - " . $lng->txt("adn_ed_cas"));
+        adnIcon::setTitleIcon("ed_cas");
         
         $next_class = $ilCtrl->getNextClass();
         

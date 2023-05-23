@@ -73,6 +73,8 @@ class ADNMainBarProvider extends AbstractStaticMainMenuProvider
     const AD_ICP = "ad_icp";	// import professionals
     const AD_CARD = 'ad_card';  // certification card settings
 
+    const IMAGE_PATH = "./Customizing/global/skin/adn/images";
+
     // cr-008 start
     const CP_PDM = "cp_pdm";	// maintenance personal data
     // cr-008 end
@@ -93,19 +95,24 @@ class ADNMainBarProvider extends AbstractStaticMainMenuProvider
                 $title = $this->dic->language()->txt("adn_ad");
             }
 
-            //$icon = $this->dic->ui()->factory()->symbol()->icon()->standard(Standard::REP, $title)->withIsOutlined(
-            //    true
-            //);
-
             $id = $this->if->identifier($key);
 
-            $items[] = $this->mainmenu->topParentItem($id)
+            $item = $this->mainmenu->topParentItem($id)
                                          ->withVisibilityCallable(function () use ($key) {
                                              return $this->checkVisibility($key);
                                          })
-                                         //->withSymbol($icon)
                                          ->withTitle($this->dic->language()->txt("adn_" . $key))
                                          ->withPosition($pos);
+            if ($this->getIconPath($key) !== "")
+            {
+                $item = $item->withSymbol(
+                    $this->dic->ui()->factory()->symbol()->icon()->custom(
+                        self::IMAGE_PATH . "/" . $this->getIconPath($key),
+                        $this->dic->language()->txt("adn_" . $key)
+                    )
+                );
+            }
+            $items[] = $item;
             $pos += 2;
         }
         return $items;
@@ -123,7 +130,7 @@ class ADNMainBarProvider extends AbstractStaticMainMenuProvider
             $parent_id = $this->if->identifier($key);
             $pos = 10;
             foreach ($subs as $sub) {
-                $items[] = $this->mainmenu->link($this->if->identifier($sub))
+                $item = $this->mainmenu->link($this->if->identifier($sub))
                                           ->withAction("ilias.php?baseClass=adnBaseGUI&amp;cmd=processMenuItem&amp;" .
                                               "menu_item=" . $sub)
                                           ->withParent($parent_id)
@@ -133,6 +140,16 @@ class ADNMainBarProvider extends AbstractStaticMainMenuProvider
                                           ->withVisibilityCallable(function () use ($key, $sub) {
                                               return $this->checkSubVisibility($key, $sub);
                                           });
+                if ($this->getIconPath($sub) !== "")
+                {
+                    $item = $item->withSymbol(
+                        $this->dic->ui()->factory()->symbol()->icon()->custom(
+                            "./Customizing/global/skin/adn/images/" . $this->getIconPath($sub),
+                            $this->dic->language()->txt("adn_" . $sub)
+                        )
+                    );
+                }
+                $items[] = $item;
             }
             $pos += 10;
         }
@@ -173,6 +190,10 @@ class ADNMainBarProvider extends AbstractStaticMainMenuProvider
             return false;
         }
         return true;    // all others, are checked on the top level
+    }
+
+    protected function getIconPath(string $key) : string {
+        return \adnIcon::getIconPath($key);
     }
 
     protected function getAllMenuItems() : array

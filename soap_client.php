@@ -20,7 +20,7 @@
 exit;
 
 define('WSDL','');
-define('CLIENT','adn');
+define('CLIENT','adnProd');
 define('USER','adn_user');
 define('PASS','******');
 

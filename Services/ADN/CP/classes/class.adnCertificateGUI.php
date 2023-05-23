@@ -48,6 +48,7 @@ class adnCertificateGUI
         global $ilCtrl, $tpl, $lng;
 
         $tpl->setTitle($lng->txt("adn_cp") . " - " . $lng->txt("adn_cp_cts"));
+        adnIcon::setTitleIcon("cp_cts");
         
         $next_class = $ilCtrl->getNextClass();
         

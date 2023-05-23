@@ -39,6 +39,7 @@ class adnMCQuestionGUI extends adnExaminationQuestionGUI
         global $ilCtrl, $lng, $tpl;
 
         $tpl->setTitle($lng->txt("adn_ed") . " - " . $lng->txt("adn_ed_eqs"));
+        adnIcon::setTitleIcon("ed_eqs");
 
         $this->setTabs("mc_questions");
 

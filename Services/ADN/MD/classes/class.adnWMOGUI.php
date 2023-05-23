@@ -36,9 +36,11 @@ class adnWMOGUI
      */
     public function executeCommand()
     {
-        global $ilCtrl;
+        global $ilCtrl, $tpl, $lng;
         
         $next_class = $ilCtrl->getNextClass();
+        $tpl->setTitle($lng->txt("adn_md") . " - " . $lng->txt("adn_md_wos"));
+        adnIcon::setTitleIcon("md_wos");
 
         // forward command to next gui class in control flow
         switch ($next_class) {

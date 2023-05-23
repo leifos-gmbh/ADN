@@ -34,6 +34,7 @@ class adnOnlineAnswerSheetGUI
         global $ilCtrl, $lng, $tpl;
 
         $tpl->setTitle($lng->txt("adn_es") . " - " . $lng->txt("adn_es_oas"));
+        adnIcon::setTitleIcon("es_oas");
         
         $next_class = $ilCtrl->getNextClass();
         

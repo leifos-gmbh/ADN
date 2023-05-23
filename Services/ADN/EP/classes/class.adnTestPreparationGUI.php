@@ -23,6 +23,7 @@ class adnTestPreparationGUI
         global $ilCtrl, $lng, $tpl;
 
         $tpl->setTitle($lng->txt("adn_ep") . " - " . $lng->txt("adn_ep_acs"));
+        adnIcon::setTitleIcon("ep_acs");
         
         $next_class = $ilCtrl->getNextClass();
 

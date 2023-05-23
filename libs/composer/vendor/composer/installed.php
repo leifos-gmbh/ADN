@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../../../',
         'aliases' => array(),
-        'reference' => 'a24c358f1a3518dc382a2787fde83fcf97613939',
+        'reference' => '433ff2ec8d80d036326680107ac566e9427b5871',
         'name' => 'ilias/ilias',
         'dev' => false,
     ),
@@ -115,7 +115,11 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../../../',
             'aliases' => array(),
+<<<<<<< HEAD
             'reference' => 'a24c358f1a3518dc382a2787fde83fcf97613939',
+=======
+            'reference' => '433ff2ec8d80d036326680107ac566e9427b5871',
+>>>>>>> origin/adn_7
             'dev_requirement' => false,
         ),
         'imsglobal/lti' => array(
@@ -352,8 +356,8 @@
         'psr/log-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0.0',
-                1 => '1.0|2.0',
+                0 => '1.0|2.0',
+                1 => '1.0.0',
             ),
         ),
         'psr/simple-cache' => array(

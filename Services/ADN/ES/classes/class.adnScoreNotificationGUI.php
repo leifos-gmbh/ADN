@@ -33,6 +33,7 @@ class adnScoreNotificationGUI
         global $ilCtrl, $lng, $tpl;
 
         $tpl->setTitle($lng->txt("adn_es") . " - " . $lng->txt("adn_es_sns"));
+        adnIcon::setTitleIcon("es_sns");
         
         $next_class = $ilCtrl->getNextClass();
         
