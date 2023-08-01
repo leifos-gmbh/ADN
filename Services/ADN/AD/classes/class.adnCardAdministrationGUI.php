@@ -192,18 +192,18 @@ class adnCardAdministrationGUI
     protected function validatePlcSettings() : void
     {
         $verification = new adnPlcVerification();
-        $repsonse = null;
         try {
-            $response = $verification->verify();
+            if (!$verification->verify()) {
+                ilUtil::sendFailure($this->lng->txt('adn_card_plc_con_failed'));
+                $this->settings();
+                return;
+            }
         } catch (Exception $e) {
             ilUtil::sendFailure($e->getMessage());
             $this->settings();
             return;
         }
-        $error = false;
-        if (!$error) {
-            ilUtil::sendSuccess('adn_card_plc_success');
-        }
+        ilUtil::sendSuccess($this->lng->txt('adn_card_plc_success'));
         $this->settings();
     }
 

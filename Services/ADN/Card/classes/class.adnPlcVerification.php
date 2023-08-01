@@ -1,10 +1,11 @@
 <?php
 
-use Plasticard\PLZFT\Api\PLZFTApi as PLZFTApi;
-use Plasticard\PLZFT\Model\Certificates as Certificates;
+use Plasticard\PLZFT\Api\DefaultApi as PLZFTApi;
 
 class adnPlcVerification
 {
+    private const ALIVE = 'ALIVE';
+
     public const CURL_CONNECTTIMEOUT = 3;
 
     protected ilLogger $logger;
@@ -18,15 +19,14 @@ class adnPlcVerification
         $this->settings = adnCardSettings::getInstance();
     }
 
-    public function verify()
+    public function verify() : bool
     {
         $this->logger->info('Start plc verification');
+        $response = null;
         try {
             $api = $this->initApi();
-            $order = $this->initOrder();
-            $response = $api->addOrderWithHttpInfo($order);
-            $this->logger->dump($response);
-            return $response;
+            $response = $api->services65TestV1HeartbeatGet();
+            return $response === self::ALIVE;
         } catch (\Plasticard\PLZFT\ApiException $e) {
             $this->logger->error($e->getMessage());
             throw $e;
@@ -44,11 +44,5 @@ class adnPlcVerification
 
         $api = new PLZFTApi(null, $config);
         return $api;
-    }
-
-    protected function initOrder() : Certificates
-    {
-        $order = new Certificates();
-        return $order;
     }
 }

@@ -15,11 +15,12 @@
  *
  *********************************************************************/
 
-use Plasticard\PLZFT\Api\PLZFTApi as PLZFTApi;
-use Plasticard\PLZFT\Model\Certificates as Certificates;
-use Plasticard\PLZFT\Model\Certificate as Certificate;
-use Plasticard\PLZFT\Model\ReturnAddress as ReturnAddress;
-use Plasticard\PLZFT\Model\PostalAddress as PostalAddress;
+use Plasticard\PLZFT\Api\DefaultApi as PLZFTApi;
+use ADN\Card\Api\Certificates as Certificates;
+use ADN\Card\Api\Certificate as Certificate;
+use ADN\Card\Api\PostalAddress;
+use ADN\Card\Api\ReturnAddress;
+use Plasticard\PLZFT\Api\DefaultApi as DefaultApi;
 
 /**
  * @classDescription Sends an certificate order request
@@ -49,7 +50,8 @@ class adnCardCertificateOrderHandler
         $this->logger->info('Start plc verification');
         try {
             $api = $this->initApi();
-            $response = $api->addOrderWithHttpInfo($order);
+            $this->logger->dump($order->toXml());
+            $response = $api->orderWithHttpInfo($order->toXml());
             $this->logger->dump($response);
             return $response;
         } catch (\Plasticard\PLZFT\ApiException $e) {
@@ -58,16 +60,17 @@ class adnCardCertificateOrderHandler
         }
     }
 
-    protected function initApi() : PLZFTApi
+    protected function initApi() : DefaultApi
     {
         $config = new \Plasticard\PLZFT\Configuration();
         $config->setHost($this->settings->getPlcServiceUrl());
         $config->setUsername($this->settings->getPlcUser());
         $config->setPassword($this->settings->getPlcPass());
-        #$config->setDebug(true);
-        #$config->setDebugFile('/srv/www/hal/log/slim.log');
+        $config->setDebug(true);
+        $config->setDebugFile('/srv/www/log/slim.log');
 
-        $api = new PLZFTApi(null, $config);
+
+        $api = new DefaultApi(null, $config);
         return $api;
     }
 
@@ -121,7 +124,8 @@ class adnCardCertificateOrderHandler
             }
         }
         $certificate->setCertificateTypes($types);
-        $certificate->setPhoto(base64_encode(file_get_contents($professional->getImageHandler()->getAbsolutePath())));
+        $certificate->setPhoto('base64::test');
+        //$certificate->setPhoto(base64_encode(file_get_contents($professional->getImageHandler()->getAbsolutePath())));
         $certificate->setPostalAddress($postal);
         $certificate->setReturnAddress($return);
 
