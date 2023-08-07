@@ -191,3 +191,15 @@ if (!$ilDB->tableColumnExists('adn_es_certificate', 'uuid'))
     ));
 }
 ?>
+<#18>
+<?php
+if (!$ilDB->tableColumnExists('adn_es_certificate', 'card_status'))
+{
+    $ilDB->addTableColumn('adn_es_certificate', 'card_status', array(
+        "notnull" => false
+        ,"length" => 2
+        ,"default" => "0"
+        ,"type" => "integer"
+    ));
+}
+?>

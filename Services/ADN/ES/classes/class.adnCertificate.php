@@ -12,6 +12,10 @@
  */
 class adnCertificate extends adnDBBase
 {
+    public const CARD_STATUS_UNDEFINED = 0;
+    public const CARD_STATUS_UNKNOWN = 1;
+
+
     // certificate types
     const DRY_MATERIAL = "dm";
     const TANK = "tank";
@@ -33,6 +37,7 @@ class adnCertificate extends adnDBBase
 
     protected $id; // [int]
     protected string $uuid = '';
+    protected int $card_status = self::CARD_STATUS_UNDEFINED;
     protected $number = 0; // [int]
     protected $cert_prof_id = 0; // [int]
     protected $exam_id = null; // [int]
@@ -475,6 +480,7 @@ class adnCertificate extends adnDBBase
             $this->setStatus($rec["status"]);
             $this->setIsExtension($rec["is_extension"]);
             $this->setFile($rec["cfile"]);
+            $this->setCardStatus((int) $rec['card_status']);
             foreach (self::getProofTypes() as $k => $v) {
                 $this->setProof(
                     $k,
@@ -510,6 +516,7 @@ class adnCertificate extends adnDBBase
             "is_extension" => array("integer", $this->getIsExtension()),
             "status" => array("integer", $this->getStatus()),
             "cfile" => array("integer", $this->getFile()),
+            'card_status' => ['integer', $this->getCardStatus()]
             );
 
         // proofs
@@ -1300,5 +1307,15 @@ class adnCertificate extends adnDBBase
         } else {
             return $this->getIssuedOn();
         }
+    }
+
+    public function getCardStatus() : int
+    {
+        return $this->card_status;
+    }
+
+    public function setCardStatus(int $card_status) : void
+    {
+        $this->card_status = $card_status;
     }
 }

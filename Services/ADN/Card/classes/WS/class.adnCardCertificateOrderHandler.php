@@ -55,6 +55,8 @@ class adnCardCertificateOrderHandler
             $this->logger->dump($response);
             return $response;
         } catch (\Plasticard\PLZFT\ApiException $e) {
+            $this->logger->dump('Sending order failed with message:');
+            $this->logger->dump($e->getResponseBody(), ilLogLevel::ERROR);
             $this->logger->error($e->getMessage());
             throw $e;
         }
@@ -124,8 +126,7 @@ class adnCardCertificateOrderHandler
             }
         }
         $certificate->setCertificateTypes($types);
-        $certificate->setPhoto('base64::test');
-        //$certificate->setPhoto(base64_encode(file_get_contents($professional->getImageHandler()->getAbsolutePath())));
+        $certificate->setPhoto(base64_encode(file_get_contents($professional->getImageHandler()->getAbsolutePath())));
         $certificate->setPostalAddress($postal);
         $certificate->setReturnAddress($return);
 

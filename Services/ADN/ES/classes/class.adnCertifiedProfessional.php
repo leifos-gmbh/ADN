@@ -879,6 +879,8 @@ class adnCertifiedProfessional extends adnDBBase
         $ilDB->insert("adn_cp_professional", $fields);
 
         parent::_save($id, "adn_cp_professional");
+
+        $this->image_handler = new adnCertifiedProfessionalImageHandler($id);
         
         return $id;
     }

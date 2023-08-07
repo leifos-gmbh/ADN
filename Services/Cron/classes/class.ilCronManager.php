@@ -312,6 +312,7 @@ class ilCronManager implements \ilCronManagerInterface
             $a_path = $a_component . "/classes/";
         }
         $class_file = $a_path . "class." . $a_class . ".php";
+        $mess = '';
         if (file_exists($class_file)) {
             include_once $class_file;
             if (class_exists($a_class)) {

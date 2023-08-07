@@ -45,6 +45,7 @@
 	</objects>
 	<crons>
 		<cron id="adn_pd_notification" class="adnPersonalDataNotification" />
+		<cron id="adn_card_order_status" class="adnCronCardOrderStatus" path="Services/ADN/Card/classes/Cron/" />
 	</crons>
 	<logging />
 </service>

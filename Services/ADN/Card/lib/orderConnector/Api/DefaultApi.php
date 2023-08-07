@@ -76,7 +76,7 @@ class DefaultApi
             'application/xml',
         ],
         'order' => [
-            'text/plain',
+            'application/xml',
         ],
         'orderstatus' => [
             'application/xml',
