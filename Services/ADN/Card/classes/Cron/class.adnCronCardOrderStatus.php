@@ -54,7 +54,7 @@ class adnCronCardOrderStatus extends ilCronJob
 
     public function run()
     {
-        $status = new adnCardCertificateOrderStatusHandler();
+        $status = new adnCardCertificateCardStatusHandler();
         $status->updateStatus();
         $result = new ilCronJobResult();
         $result->setStatus(ilCronJobResult::STATUS_OK);

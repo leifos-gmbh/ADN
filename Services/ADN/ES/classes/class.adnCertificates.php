@@ -45,4 +45,12 @@ class adnCertificates
         }
         return $certificates;
     }
+
+    public function updateProductionState(string $a_certificate_id, int $a_production_state): void
+    {
+        $query = 'update adn_es_certificate ' .
+            'set card_status = ' . $this->db->quote($a_production_state, ilDBConstants::T_INTEGER) . ' ' .
+            'where uuid = ' . $this->db->quote($a_certificate_id, ilDBConstants::T_TEXT);
+        $this->db->manipulate($query);
+    }
 }

@@ -31,7 +31,7 @@ class StatusCard
         $writer->openMemory();
         $writer->startDocument('1.0', 'UTF-8');
         $writer->startElementNs(self::ELEMENT_NS, 'root', self::ROOT_NAMESPACE);
-        $writer->writeElementNs(self::ELEMENT_NS, 'CertificateId', $this->getCertificateId());
+        $writer->writeElementNs(self::ELEMENT_NS, 'CertificateId', null, $this->getCertificateId());
         $writer->endElement();
         return $writer->outputMemory();
     }

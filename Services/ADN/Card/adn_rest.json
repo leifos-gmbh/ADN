@@ -193,9 +193,9 @@
         "requestBody": {
           "description": "Request body",
           "content": {
-            "application/xml": {
+            "text/plain": {
               "schema": {
-                "$ref": "#/components/schemas/CardStateRequest"
+                "type": "string"
               }
             }
           },
@@ -207,7 +207,7 @@
             "content": {
               "application/xml": {
                 "schema": {
-                  "$ref": "#/components/schemas/CardStateResponse"
+                  "type": "string"
                 }
               }
             }
@@ -230,9 +230,9 @@
         "requestBody": {
           "description": "Request body",
           "content": {
-            "application/xml": {
+            "text/plain": {
               "schema": {
-                "$ref": "#/components/schemas/OrderStateRequest"
+                "type": "string"
               }
             }
           },

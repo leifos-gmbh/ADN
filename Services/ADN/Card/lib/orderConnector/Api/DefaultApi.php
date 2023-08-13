@@ -76,10 +76,10 @@ class DefaultApi
             'application/xml',
         ],
         'order' => [
-            'application/xml',
+            'text/plain',
         ],
         'orderstatus' => [
-            'application/xml',
+            'text/plain',
         ],
         'services65TestV1HeartbeatGet' => [
             'application/json',
@@ -146,16 +146,16 @@ class DefaultApi
      *
      * Returns the current production state of one or more cards
      *
-     * @param  \Plasticard\PLZFT\Model\CardStateRequest $card_state_request Request body (required)
+     * @param  string $body Request body (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['cardstatus'] to see the possible values for this operation
      *
      * @throws \Plasticard\PLZFT\ApiException on non-2xx response
      * @throws \InvalidArgumentException
-     * @return \Plasticard\PLZFT\Model\CardStateResponse
+     * @return string
      */
-    public function cardstatus($card_state_request, string $contentType = self::contentTypes['cardstatus'][0])
+    public function cardstatus($body, string $contentType = self::contentTypes['cardstatus'][0])
     {
-        list($response) = $this->cardstatusWithHttpInfo($card_state_request, $contentType);
+        list($response) = $this->cardstatusWithHttpInfo($body, $contentType);
         return $response;
     }
 
@@ -164,16 +164,16 @@ class DefaultApi
      *
      * Returns the current production state of one or more cards
      *
-     * @param  \Plasticard\PLZFT\Model\CardStateRequest $card_state_request Request body (required)
+     * @param  string $body Request body (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['cardstatus'] to see the possible values for this operation
      *
      * @throws \Plasticard\PLZFT\ApiException on non-2xx response
      * @throws \InvalidArgumentException
-     * @return array of \Plasticard\PLZFT\Model\CardStateResponse, HTTP status code, HTTP response headers (array of strings)
+     * @return array of string, HTTP status code, HTTP response headers (array of strings)
      */
-    public function cardstatusWithHttpInfo($card_state_request, string $contentType = self::contentTypes['cardstatus'][0])
+    public function cardstatusWithHttpInfo($body, string $contentType = self::contentTypes['cardstatus'][0])
     {
-        $request = $this->cardstatusRequest($card_state_request, $contentType);
+        $request = $this->cardstatusRequest($body, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -212,23 +212,23 @@ class DefaultApi
 
             switch($statusCode) {
                 case 200:
-                    if ('\Plasticard\PLZFT\Model\CardStateResponse' === '\SplFileObject') {
+                    if ('string' === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ('\Plasticard\PLZFT\Model\CardStateResponse' !== 'string') {
+                        if ('string' !== 'string') {
                             $content = json_decode($content);
                         }
                     }
 
                     return [
-                        ObjectSerializer::deserialize($content, '\Plasticard\PLZFT\Model\CardStateResponse', []),
+                        ObjectSerializer::deserialize($content, 'string', []),
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
             }
 
-            $returnType = '\Plasticard\PLZFT\Model\CardStateResponse';
+            $returnType = 'string';
             if ($returnType === '\SplFileObject') {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
@@ -249,7 +249,7 @@ class DefaultApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Plasticard\PLZFT\Model\CardStateResponse',
+                        'string',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -264,15 +264,15 @@ class DefaultApi
      *
      * Returns the current production state of one or more cards
      *
-     * @param  \Plasticard\PLZFT\Model\CardStateRequest $card_state_request Request body (required)
+     * @param  string $body Request body (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['cardstatus'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function cardstatusAsync($card_state_request, string $contentType = self::contentTypes['cardstatus'][0])
+    public function cardstatusAsync($body, string $contentType = self::contentTypes['cardstatus'][0])
     {
-        return $this->cardstatusAsyncWithHttpInfo($card_state_request, $contentType)
+        return $this->cardstatusAsyncWithHttpInfo($body, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -285,16 +285,16 @@ class DefaultApi
      *
      * Returns the current production state of one or more cards
      *
-     * @param  \Plasticard\PLZFT\Model\CardStateRequest $card_state_request Request body (required)
+     * @param  string $body Request body (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['cardstatus'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function cardstatusAsyncWithHttpInfo($card_state_request, string $contentType = self::contentTypes['cardstatus'][0])
+    public function cardstatusAsyncWithHttpInfo($body, string $contentType = self::contentTypes['cardstatus'][0])
     {
-        $returnType = '\Plasticard\PLZFT\Model\CardStateResponse';
-        $request = $this->cardstatusRequest($card_state_request, $contentType);
+        $returnType = 'string';
+        $request = $this->cardstatusRequest($body, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -335,19 +335,19 @@ class DefaultApi
     /**
      * Create request for operation 'cardstatus'
      *
-     * @param  \Plasticard\PLZFT\Model\CardStateRequest $card_state_request Request body (required)
+     * @param  string $body Request body (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['cardstatus'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function cardstatusRequest($card_state_request, string $contentType = self::contentTypes['cardstatus'][0])
+    public function cardstatusRequest($body, string $contentType = self::contentTypes['cardstatus'][0])
     {
 
-        // verify the required parameter 'card_state_request' is set
-        if ($card_state_request === null || (is_array($card_state_request) && count($card_state_request) === 0)) {
+        // verify the required parameter 'body' is set
+        if ($body === null || (is_array($body) && count($body) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $card_state_request when calling cardstatus'
+                'Missing the required parameter $body when calling cardstatus'
             );
         }
 
@@ -370,12 +370,12 @@ class DefaultApi
         );
 
         // for model (json/xml)
-        if (isset($card_state_request)) {
+        if (isset($body)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($card_state_request));
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($body));
             } else {
-                $httpBody = $card_state_request;
+                $httpBody = $body;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {
@@ -680,16 +680,16 @@ class DefaultApi
      *
      * Returns the current production state of one or more orders
      *
-     * @param  \Plasticard\PLZFT\Model\OrderStateRequest $order_state_request Request body (required)
+     * @param  string $body Request body (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['orderstatus'] to see the possible values for this operation
      *
      * @throws \Plasticard\PLZFT\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return \Plasticard\PLZFT\Model\OrderStateResponse
      */
-    public function orderstatus($order_state_request, string $contentType = self::contentTypes['orderstatus'][0])
+    public function orderstatus($body, string $contentType = self::contentTypes['orderstatus'][0])
     {
-        list($response) = $this->orderstatusWithHttpInfo($order_state_request, $contentType);
+        list($response) = $this->orderstatusWithHttpInfo($body, $contentType);
         return $response;
     }
 
@@ -698,16 +698,16 @@ class DefaultApi
      *
      * Returns the current production state of one or more orders
      *
-     * @param  \Plasticard\PLZFT\Model\OrderStateRequest $order_state_request Request body (required)
+     * @param  string $body Request body (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['orderstatus'] to see the possible values for this operation
      *
      * @throws \Plasticard\PLZFT\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of \Plasticard\PLZFT\Model\OrderStateResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function orderstatusWithHttpInfo($order_state_request, string $contentType = self::contentTypes['orderstatus'][0])
+    public function orderstatusWithHttpInfo($body, string $contentType = self::contentTypes['orderstatus'][0])
     {
-        $request = $this->orderstatusRequest($order_state_request, $contentType);
+        $request = $this->orderstatusRequest($body, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -798,15 +798,15 @@ class DefaultApi
      *
      * Returns the current production state of one or more orders
      *
-     * @param  \Plasticard\PLZFT\Model\OrderStateRequest $order_state_request Request body (required)
+     * @param  string $body Request body (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['orderstatus'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function orderstatusAsync($order_state_request, string $contentType = self::contentTypes['orderstatus'][0])
+    public function orderstatusAsync($body, string $contentType = self::contentTypes['orderstatus'][0])
     {
-        return $this->orderstatusAsyncWithHttpInfo($order_state_request, $contentType)
+        return $this->orderstatusAsyncWithHttpInfo($body, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -819,16 +819,16 @@ class DefaultApi
      *
      * Returns the current production state of one or more orders
      *
-     * @param  \Plasticard\PLZFT\Model\OrderStateRequest $order_state_request Request body (required)
+     * @param  string $body Request body (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['orderstatus'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function orderstatusAsyncWithHttpInfo($order_state_request, string $contentType = self::contentTypes['orderstatus'][0])
+    public function orderstatusAsyncWithHttpInfo($body, string $contentType = self::contentTypes['orderstatus'][0])
     {
         $returnType = '\Plasticard\PLZFT\Model\OrderStateResponse';
-        $request = $this->orderstatusRequest($order_state_request, $contentType);
+        $request = $this->orderstatusRequest($body, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -869,19 +869,19 @@ class DefaultApi
     /**
      * Create request for operation 'orderstatus'
      *
-     * @param  \Plasticard\PLZFT\Model\OrderStateRequest $order_state_request Request body (required)
+     * @param  string $body Request body (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['orderstatus'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function orderstatusRequest($order_state_request, string $contentType = self::contentTypes['orderstatus'][0])
+    public function orderstatusRequest($body, string $contentType = self::contentTypes['orderstatus'][0])
     {
 
-        // verify the required parameter 'order_state_request' is set
-        if ($order_state_request === null || (is_array($order_state_request) && count($order_state_request) === 0)) {
+        // verify the required parameter 'body' is set
+        if ($body === null || (is_array($body) && count($body) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $order_state_request when calling orderstatus'
+                'Missing the required parameter $body when calling orderstatus'
             );
         }
 
@@ -904,12 +904,12 @@ class DefaultApi
         );
 
         // for model (json/xml)
-        if (isset($order_state_request)) {
+        if (isset($body)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($order_state_request));
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($body));
             } else {
-                $httpBody = $order_state_request;
+                $httpBody = $body;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {

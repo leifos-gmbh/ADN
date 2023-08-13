@@ -22,8 +22,10 @@ use Plasticard\PLZFT\Api\DefaultApi as DefaultApi;
 use ADN\Card\Api\StatusCard as StatusCard;
 use Plasticard\PLZFT\Model\CardStateResponse as CardStateResponse;
 
-class adnCardCertificateOrderStatusHandler
+class adnCardCertificateCardStatusHandler
 {
+    private const CARD_STATUS_NS = 'plzft';
+
     private ilLogger $logger;
     private ilLanguage $lng;
 
@@ -56,23 +58,43 @@ class adnCardCertificateOrderStatusHandler
     {
         $status_card_request = new StatusCard();
         $status_card_request->setCertificateId($certficate_id);
+        $xml = $status_card_request->toXml();
         try {
-            $request = new \Plasticard\PLZFT\Model\CardStateRequest();
-            $request->setPlzftCertificateId($certficate_id);
-            $response = $api->cardstatus($request);
+            $response = $api->cardstatus($xml);
             $this->writeStatus($response);
         } catch (\Plasticard\PLZFT\ApiException $e) {
-            $this->logger->dump('Sending order failed with message:');
+            $this->logger->dump('Sending card status failed with message:');
             $this->logger->dump($e->getResponseBody(), ilLogLevel::ERROR);
             $this->logger->error($e->getMessage());
         }
         return adnCertificate::CARD_STATUS_UNDEFINED;
     }
 
-    protected function writeStatus(CardStateResponse $response)
+    protected function writeStatus(string $response) : void
     {
-        $state = $response->getPlzftCard()->getPlzftProductionState();
-        $this->logger->warning('Current status: ' . $state);
+        $root = new SimpleXMLElement($response, 0, false, self::CARD_STATUS_NS, false);
+        $certificate_id = '';
+        $production_state = '';
+        foreach ($root->children(self::CARD_STATUS_NS, true) as $element) {
+            switch ($element->getName()) {
+                case 'CertificateId':
+                    $certificate_id = (string) $element;
+                    break;
+                case 'ProductionState':
+                    $production_state = (string) $element;
+                    break;
+
+                default:
+                    $this->logger->dump('Element name: ' . (string) $element);
+            }
+        }
+        $this->logger->dump('Found' . $certificate_id . ' ' . $production_state);
+        if (
+            $certificate_id !== '' && $production_state !== ''
+        ) {
+            $certificates = new adnCertificates();
+            $certificates->updateProductionState($certificate_id, (int) $production_state);
+        }
     }
 
     protected function initApi() : DefaultApi
@@ -81,8 +103,8 @@ class adnCardCertificateOrderStatusHandler
         $config->setHost($this->settings->getPlcServiceUrl());
         $config->setUsername($this->settings->getPlcUser());
         $config->setPassword($this->settings->getPlcPass());
-        $config->setDebug(true);
-        $config->setDebugFile('/srv/www/log/slim.log');
+        #$config->setDebug(true);
+        #$config->setDebugFile('/srv/www/log/slim.log');
         $api = new DefaultApi(null, $config);
         return $api;
     }

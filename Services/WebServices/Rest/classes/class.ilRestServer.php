@@ -36,6 +36,9 @@ class ilRestServer extends Slim\App
         $plc_mock_order_handler = new plcMockOrderHandler();
         $this->post('/services/65/test/v1/order', [$plc_mock_order_handler, 'order']);
 
+        $plc_mock_card_status_handler = new plcMockCardStatusHandler();
+        $this->post('/services/65/test/v1/status/card', [$plc_mock_card_status_handler, 'status']);
+
         $adn_rest_verification = new adnVerificationRestHandler();
         $this->get('/verification/{TAC}/{TAG_ID}/{CERTIFICATE_ID}', [$adn_rest_verification, 'verify']);
 
