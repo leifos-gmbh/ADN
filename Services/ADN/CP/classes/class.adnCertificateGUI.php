@@ -792,27 +792,18 @@ class adnCertificateGUI
                     $this->certificate->setProof($id, false);
                 }
             }
-
-            // init uuid and reset in case of error
-            $has_uuid = $this->certificate->getUuid() !== '';
-            if (!$has_uuid) {
-                $this->certificate->initUuId();
-            }
+            // create new certificate uid
+            $this->certificate->initUuid();
             $order = new adnCardCertificateOrderHandler();
             try {
                 $candidate = new adnCertifiedProfessional($this->certificate->getCertifiedProfessionalId());
                 $response = $order->send($order->initOrder($candidate, $this->certificate));
             } catch (Exception $exception) {
-                // reset uuid
-                if ($has_uuid) {
-                    $this->certificate->setUuid('');
-                }
                 $form->setValuesByPost();
                 ilUtil::sendFailure($exception->getMessage());
                 $this->duplicateCertificate($form);
                 return;
             }
-            $this->certificate->update();
             $this->certificate->createExtension();
             ilUtil::sendSuccess($lng->txt('adn_extension_created'), true);
             $this->afterExtension();

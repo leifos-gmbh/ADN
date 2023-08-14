@@ -88,6 +88,7 @@ class adnCardCertificateCardStatusHandler
                     $this->logger->dump('Element name: ' . (string) $element);
             }
         }
+        $this->logger->dump($response);
         $this->logger->dump('Found' . $certificate_id . ' ' . $production_state);
         if (
             $certificate_id !== '' && $production_state !== ''

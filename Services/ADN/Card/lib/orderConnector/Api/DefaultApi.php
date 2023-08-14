@@ -76,10 +76,10 @@ class DefaultApi
             'application/xml',
         ],
         'order' => [
-            'text/plain',
+            'application/xml',
         ],
         'orderstatus' => [
-            'text/plain',
+            'application/xml',
         ],
         'services65TestV1HeartbeatGet' => [
             'application/json',

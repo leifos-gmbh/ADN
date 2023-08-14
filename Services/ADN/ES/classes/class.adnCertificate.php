@@ -880,6 +880,7 @@ class adnCertificate extends adnDBBase
         
 
         // save current certificate as extension
+        $this->setCardStatus(self::CARD_STATUS_UNDEFINED);
         $this->setId($ilDB->nextId("adn_es_certificate"));
         $id = $this->getId();
         $this->setExaminationId(null);

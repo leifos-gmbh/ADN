@@ -68,8 +68,8 @@ class adnCardCertificateOrderHandler
         $config->setHost($this->settings->getPlcServiceUrl());
         $config->setUsername($this->settings->getPlcUser());
         $config->setPassword($this->settings->getPlcPass());
-        #$config->setDebug(true);
-        #$config->setDebugFile('/srv/www/log/slim.log');
+        $config->setDebug(true);
+        $config->setDebugFile('/srv/www/log/slim.log');
 
 
         $api = new DefaultApi(null, $config);
