@@ -861,3 +861,9 @@ adn#:#adn_card_plc_settings#:#Kartendruck-Service
 adn#:#adn_card_plc_success#:#Die Einstellungen zum Kartendruck-Service konnten erfolgreich validiert werden.
 adn#:#adn_card_his_success#:#Die Einstellungen zum HID "Trusted Tag Service" konnten erfolgreich validiert werden.
 adn#:#adn_card_plc_con_failed#:#Die Verbindung zum Kartendruck-Service konnte nicht aufgebaut werden. Bitte überprüfen Sie die Einstellungen.
+adn#:#adn_certificate_status_0#:#Druckauftrag übermittelt
+adn#:#adn_certificate_status_1#:#Druckauftrag bestätigt
+adn#:#adn_certificate_status_2#:#Druck in Bearbeitung
+adn#:#adn_certificate_status_3#:#Karte verschickt
+adn#:#adn_certificate_status#:#Status des Druckauftrags
+adn#:#adn_certificates#:#Bescheinigungen

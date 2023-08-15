@@ -61,6 +61,7 @@ class adnCertificateTableGUI extends ilTable2GUI
         $this->addColumn($this->lng->txt("adn_birthdate"), "birthdate");
         $this->addColumn($this->lng->txt("adn_valid_until"), "valid_until");
         $this->addColumn($this->lng->txt('adn_certificate_type'), 'certificate_type');
+        $this->addColumn($this->lng->txt('adn_certificate_status'), 'certificate_status');
 
         if ($this->cp_id > 0) {
             $this->addColumn($this->lng->txt("adn_archived_on"), "last_update");
@@ -322,8 +323,10 @@ class adnCertificateTableGUI extends ilTable2GUI
 
         if ($cert->getUuid() === '') {
             $this->tpl->setVariable('VAL_CERTIFICATE_TYPE', $this->lng->txt('adn_certificate_type_paper'));
+            $this->tpl->setVariable('VAL_CERTIFICATE_STATUS', '');
         } else {
             $this->tpl->setVariable('VAL_CERTIFICATE_TYPE', $this->lng->txt('adn_certificate_type_card'));
+            $this->tpl->setVariable('VAL_CERTIFICATE_STATUS', $this->lng->txt('adn_certificate_status_' . $a_set['card_status']));
         }
 
         // properties

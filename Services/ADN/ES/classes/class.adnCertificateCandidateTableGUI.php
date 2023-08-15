@@ -45,6 +45,7 @@ class adnCertificateCandidateTableGUI extends ilTable2GUI
         $this->addColumn($this->lng->txt("adn_birthdate"), "birthdate");
         $this->addColumn($this->lng->txt("adn_certificate issued_on"), "issued_on");
         $this->addColumn($this->lng->txt('adn_certificate_type'), 'certificate_type');
+        $this->addColumn($this->lng->txt('adn_certificate_status'), 'card_status');
         $this->addColumn($this->lng->txt("actions"));
     
         $this->setDefaultOrderField("last_name");
@@ -114,11 +115,16 @@ class adnCertificateCandidateTableGUI extends ilTable2GUI
                     'VAL_CERTIFICATE_TYPE',
                     $this->lng->txt('adn_certificate_type_paper')
                 );
+                $this->tpl->setVariable('VAL_CERTIFICATE_STATUS');
             } else {
 
                 $this->tpl->setVariable(
                     'VAL_CERTIFICATE_TYPE',
                     $this->lng->txt('adn_certificate_type_card')
+                );
+                $this->tpl->setVariable(
+                    'VAL_CERTIFICATE_STATUS',
+                    $this->lng->txt('adn_certificate_status_' . (string) $certificate->getCardStatus())
                 );
             }
         } else {
