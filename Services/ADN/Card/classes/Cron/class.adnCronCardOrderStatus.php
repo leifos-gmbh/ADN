@@ -24,6 +24,24 @@ class adnCronCardOrderStatus extends ilCronJob
     private const CRON_ORDER_STATUS_ID = 'adn_card_order_status';
     private const CRON_ORDER_STATUS_MINUTES = 15;
 
+    public function getTitle()
+    {
+        global $DIC;
+
+        $lng = $DIC->language();
+        $lng->loadLanguageModule('adn');
+        return $lng->txt("adn_card_order_status");
+    }
+
+    public function getDescription()
+    {
+        global $DIC;
+
+        $lng = $DIC->language();
+        $lng->loadLanguageModule('adn');
+        return $lng->txt('adn_card_order_status_desc');
+    }
+
     /**
      * @inheritDoc
      */
