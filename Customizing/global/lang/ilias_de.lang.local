@@ -857,7 +857,6 @@ adn#:#adn_certificate_pa_city#:#Ort
 adn#:#adn_certificate_pa_country#:#Land
 adn#:#adn_card_form_photo#:#Ausweisbild
 adn#:#adn_card_missing_photo_info#:#Bitte ordnen Sie der/dem Sachkundigen ein Ausweisbild zu.
-adn#:#adn_card_plc_settings#:#Kartendruck-Service
 adn#:#adn_card_plc_success#:#Die Einstellungen zum Kartendruck-Service konnten erfolgreich validiert werden.
 adn#:#adn_card_his_success#:#Die Einstellungen zum HID "Trusted Tag Service" konnten erfolgreich validiert werden.
 adn#:#adn_card_plc_con_failed#:#Die Verbindung zum Kartendruck-Service konnte nicht aufgebaut werden. Bitte überprüfen Sie die Einstellungen.
