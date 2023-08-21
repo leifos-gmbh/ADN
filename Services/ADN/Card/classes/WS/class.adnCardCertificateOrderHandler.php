@@ -52,6 +52,7 @@ class adnCardCertificateOrderHandler
             $api = $this->initApi();
             $this->logger->dump($order->toXml());
             $response = $api->orderWithHttpInfo($order->toXml());
+            //file_put_contents('/srv/www/log/z1.xml', $order->toXml());
             $this->logger->dump($response);
             return $response;
         } catch (\Plasticard\PLZFT\ApiException $e) {
@@ -104,7 +105,7 @@ class adnCardCertificateOrderHandler
         $wmo = new adnWMO($cert->getIssuedByWmo());
         $return = new ReturnAddress();
         $return->setAddressName($wmo->getName());
-        $return->setAddressStreet($wmo->getPostalStreet() . $wmo->getPostalStreetNumber());
+        $return->setAddressStreet($wmo->getPostalStreet() . ' ' . $wmo->getPostalStreetNumber());
         $return->setAddressPostalCode($wmo->getPostalZip());
         $return->setAddressCity($wmo->getPostalCity());
         $return->setAddressCountry('Deutschland');

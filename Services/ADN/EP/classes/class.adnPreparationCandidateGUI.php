@@ -651,7 +651,7 @@ class adnPreparationCandidateGUI
                 if ($upload->getDeletionFlag()) {
                     $this->candidate->getImageHandler()->delete();
                 }
-                $this->candidate->getImageHandler()->handleUpload(
+                $candidate->getImageHandler()->handleUpload(
                     $DIC->upload(),
                     $_FILES['card_photo']['tmp_name']
                 );

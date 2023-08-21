@@ -44,6 +44,6 @@ class Certificates extends CertificateElement
             $certificate->toXml($writer);
         }
         $writer->endElement();
-        return $writer->outputMemory();
+        return $writer->outputMemory(false);
     }
 }

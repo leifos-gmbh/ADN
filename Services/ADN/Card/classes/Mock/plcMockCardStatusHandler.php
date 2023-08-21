@@ -74,7 +74,7 @@ class plcMockCardStatusHandler
         $writer->writeElement('UID', self::UID);
         $writer->endElement();
         $this->logger->dump('Outgoing: ' . $writer->outputMemory(false));
-        return $writer->outputMemory();
+        return $writer->outputMemory(false);
 
     }
 
