@@ -37,6 +37,7 @@ use ILIAS\ResourceStorage\Information\Repository\InformationDBRepository;
 use ILIAS\ResourceStorage\Stakeholder\Repository\StakeholderDBRepository;
 use ILIAS\ResourceStorage\Preloader\DBRepositoryPreloader;
 use ILIAS\FileUpload\Processor\InsecureFilenameSanitizerPreProcessor;
+use ILIAS\FileUpload\Processor\SVGBlacklistPreProcessor;
 
 require_once("libs/composer/vendor/autoload.php");
 
@@ -100,7 +101,7 @@ class ilInitialisation
             )
         );
     }
-    
+
     /**
      * get common include code files
      */
@@ -110,17 +111,17 @@ class ilInitialisation
         if (ilContext::usesTemplate()) {
             require_once "./Services/UICore/classes/class.ilTemplate.php";
         }
-                
+
         // really always required?
         require_once "./Services/Utilities/classes/class.ilUtil.php";
         require_once "./Services/Calendar/classes/class.ilDatePresentation.php";
         require_once "include/inc.ilias_version.php";
-        
+
         include_once './Services/Authentication/classes/class.ilAuthUtils.php';
-        
+
         self::initGlobal("ilBench", "ilBenchmark", "./Services/Utilities/classes/class.ilBenchmark.php");
     }
-    
+
     /**
      * This is a hack for  authentication.
      *
@@ -379,6 +380,7 @@ class ilInitialisation
             $fileUploadImpl->register(new FilenameSanitizerPreProcessor());
             $fileUploadImpl->register(new InsecureFilenameSanitizerPreProcessor());
             $fileUploadImpl->register(new BlacklistExtensionPreProcessor(ilFileUtils::getExplicitlyBlockedFiles(), $c->language()->txt("msg_info_blacklisted")));
+            $fileUploadImpl->register(new SVGBlacklistPreProcessor());
 
             return $fileUploadImpl;
         };
@@ -428,12 +430,15 @@ class ilInitialisation
             }
         }
 
-        $iliasHttpPath = ilContext::modifyHttpPath(implode('', [$protocol, $host, $uri]));
+        $ilias_http_path = ilContext::modifyHttpPath(implode('', [$protocol, $host, $uri]));
+
+        // remove everything after the first .php in the path
+        $ilias_http_path = preg_replace('/(http|https)(:\/\/)(.*?\/.*?\.php).*/', '$1$2$3', $ilias_http_path);
 
         $f = new \ILIAS\Data\Factory();
-        $uri = $f->uri(ilUtil::removeTrailingPathSeparators($iliasHttpPath));
+        $uri = $f->uri(ilUtil::removeTrailingPathSeparators($ilias_http_path));
 
-        // begin-patch adn 
+        // begin-patch adn
         $proxy_uri = '';
         if (getenv('ADN_PROXY_URI')) {
             $proxy_uri = getenv('ADN_PROXY_URI');
@@ -445,33 +450,33 @@ class ilInitialisation
      * This method determines the current client and sets the
      * constant CLIENT_ID.
      */
-    protected static function determineClient()
+    protected static function determineClient() : void
     {
         global $ilIliasIniFile;
+
+        if (defined('CLIENT_ID')) {
+            return;
+        }
 
         // check whether ini file object exists
         if (!is_object($ilIliasIniFile)) {
             self::abortAndDie('Fatal Error: ilInitialisation::determineClient called without initialisation of ILIAS ini file object.');
         }
 
-        if (isset($_GET['client_id']) && strlen($_GET['client_id']) > 0) {
-            $_GET['client_id'] = \ilUtil::getClientIdByString((string) $_GET['client_id'])->toString();
-            if (!defined('IL_PHPUNIT_TEST')) {
-                if (ilContext::supportsPersistentSessions()) {
-                    ilUtil::setCookie('ilClientId', $_GET['client_id']);
-                }
-            }
-        } elseif (!isset($_COOKIE['ilClientId'])) {
-            ilUtil::setCookie('ilClientId', $ilIliasIniFile->readVariable('clients', 'default'));
+        $default_client_id = $ilIliasIniFile->readVariable('clients', 'default');
+
+        $client_id_to_use = '';
+        if (isset($_GET['client_id']) && is_string($_GET['client_id'])) {
+            $client_id_to_use = $_GET['client_id'];
+        }
+        
+        if ($client_id_to_use === '' && isset($_COOKIE['ilClientId']) && is_string($_COOKIE['ilClientId'])) {
+            $client_id_to_use = $_COOKIE['ilClientId'];
         }
 
-        if (!defined('IL_PHPUNIT_TEST') && ilContext::supportsPersistentSessions()) {
-            $clientId = $_COOKIE['ilClientId'];
-        } else {
-            $clientId = $_GET['client_id'];
-        }
+        $client_id_to_use = $client_id_to_use ?: $default_client_id;
 
-        define('CLIENT_ID', \ilUtil::getClientIdByString((string) $clientId)->toString());
+        define('CLIENT_ID', ilUtil::getClientIdByString($client_id_to_use)->toString());
     }
 
     /**
@@ -508,10 +513,8 @@ class ilInitialisation
 
         // invalid client id / client ini
         if ($ilClientIniFile->ERROR != "") {
-            $c = $_COOKIE["ilClientId"];
             $default_client = $ilIliasIniFile->readVariable("clients", "default");
-            ilUtil::setCookie("ilClientId", $default_client);
-            if (CLIENT_ID != "" && CLIENT_ID != $default_client) {
+            if (CLIENT_ID !== $default_client) {
                 $mess = array("en" => "Client does not exist.",
                         "de" => "Mandant ist ungültig.");
                 self::redirect("index.php?client_id=" . $default_client, null, $mess);
@@ -661,6 +664,15 @@ class ilInitialisation
         define('IL_COOKIE_DOMAIN', '');
     }
 
+    private static function setClientIdCookie() : void
+    {
+        if (defined('CLIENT_ID') &&
+            !defined('IL_PHPUNIT_TEST') &&
+            ilContext::supportsPersistentSessions()) {
+            ilUtil::setCookie('ilClientId', CLIENT_ID);
+        }
+    }
+
     /**
      * set session cookie params
      */
@@ -676,13 +688,22 @@ class ilInitialisation
             $cookie_secure = !$ilSetting->get('https', 0) && ilHTTPS::getInstance()->isDetected();
             define('IL_COOKIE_SECURE', $cookie_secure); // Default Value
 
-            session_set_cookie_params(
-                IL_COOKIE_EXPIRE,
-                IL_COOKIE_PATH,
-                IL_COOKIE_DOMAIN,
-                IL_COOKIE_SECURE,
-                IL_COOKIE_HTTPONLY
-            );
+            $cookie_parameters = [
+                'lifetime' => IL_COOKIE_EXPIRE,
+                'path' => IL_COOKIE_PATH,
+                'domain' => IL_COOKIE_DOMAIN,
+                'secure' => IL_COOKIE_SECURE,
+                'httponly' => IL_COOKIE_HTTPONLY,
+            ];
+
+            if (
+                $cookie_secure &&
+                (!isset(session_get_cookie_params()['samesite']) || strtolower(session_get_cookie_params()['samesite']) !== 'strict')
+            ) {
+                $cookie_parameters['samesite'] = 'Lax';
+            }
+
+            session_set_cookie_params($cookie_parameters);
         }
     }
 
@@ -987,7 +1008,7 @@ class ilInitialisation
             ilSession::setClosingContext(ilSession::SESSION_CLOSE_LOGIN);
         }
 
-        $script = "login.php?target=" . $_GET["target"] . "&client_id=" . $_COOKIE["ilClientId"] .
+        $script = "login.php?target=" . $_GET["target"] . "&client_id=" . CLIENT_ID .
             "&auth_stat=" . $a_auth_stat;
 
         self::redirect(
@@ -1351,6 +1372,7 @@ class ilInitialisation
         );
 
         self::setSessionCookieParams();
+        self::setClientIdCookie();
 
         // Init GlobalScreen
         self::initGlobalScreen($DIC);
@@ -1854,7 +1876,7 @@ class ilInitialisation
         }
     }
 
-    protected static function getCurrentCmd(): string
+    protected static function getCurrentCmd() : string
     {
         $cmd = $_POST['cmd'] ?? ($_GET['cmd'] ?? '');
 
@@ -1921,7 +1943,7 @@ class ilInitialisation
             }
             $cmd = self::getCurrentCmd();
             if (
-                $cmd == "showTermsOfService" || $cmd == "showClientList" ||
+                $cmd == "showTermsOfService" ||
                 $cmd == 'showAccountMigration' || $cmd == 'migrateAccount' ||
                 $cmd == 'processCode' || $cmd == 'showLoginPage' || $cmd == 'showLogout' ||
                 $cmd == 'doStandardAuthentication' || $cmd == 'doCasAuthentication'
