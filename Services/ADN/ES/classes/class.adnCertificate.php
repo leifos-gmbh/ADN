@@ -13,7 +13,11 @@
 class adnCertificate extends adnDBBase
 {
     public const CARD_STATUS_UNDEFINED = 0;
-    public const CARD_STATUS_UNKNOWN = 1;
+    public const CARD_STATUS_RECEIVED = 1;
+
+    public const CARS_STATUS_PRODUCTION = 2;
+
+    public const CARD_STATUS_SHIPPED = 3;
 
 
     // certificate types

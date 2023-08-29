@@ -25,6 +25,8 @@ class adnCardSettings
     private string $plc_pass = '';
     private string $plc_service_url = '';
 
+    private string $plc_proxy = '';
+
     protected function __construct()
     {
         global $DIC;
@@ -49,6 +51,7 @@ class adnCardSettings
         $this->setPlcUser($this->storage->get('plc_user', $this->getPlcUser()));
         $this->setPlcPass($this->storage->get('plc_pass', $this->getPlcPass()));
         $this->setPlcServiceUrl($this->storage->get('plc_service_url', $this->getPlcServiceUrl()));
+        $this->setPlcProxy($this->storage->get('plc_proxy', $this->getPlcProxy()));
     }
 
     public function update()
@@ -59,6 +62,7 @@ class adnCardSettings
         $this->storage->set('plc_user', $this->getPlcUser());
         $this->storage->set('plc_pass', $this->getPlcPass());
         $this->storage->set('plc_service_url', $this->getPlcServiceUrl());
+        $this->storage->set('plc_proxy', $this->getPlcProxy());
     }
 
     public function getNfcUser() : string
@@ -135,6 +139,16 @@ class adnCardSettings
     public function setPlcServiceUrl(string $plc_service_url) : void
     {
         $this->plc_service_url = $plc_service_url;
+    }
+
+    public function getPlcProxy() : string
+    {
+        return $this->plc_proxy;
+    }
+
+    public function setPlcProxy(string $plc_proxy) : void
+    {
+        $this->plc_proxy = $plc_proxy;
     }
 
 }

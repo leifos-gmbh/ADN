@@ -52,7 +52,6 @@ class adnCardCertificateOrderHandler
             $api = $this->initApi();
             $this->logger->dump($order->toXml());
             $response = $api->orderWithHttpInfo($order->toXml());
-            //file_put_contents('/srv/www/log/z1.xml', $order->toXml());
             $this->logger->dump($response);
             return $response;
         } catch (\Plasticard\PLZFT\ApiException $e) {
@@ -72,8 +71,16 @@ class adnCardCertificateOrderHandler
         //$config->setDebug(true);
         //$config->setDebugFile('/srv/www/log/slim.log');
 
-
-        $api = new DefaultApi(null, $config);
+        if (strlen($this->settings->getPlcProxy())) {
+            $client = new \GuzzleHttp\Client(
+                [
+                    'proxy' => $this->settings->getPlcProxy()
+                ]
+            );
+        } else {
+            $client = new \GuzzleHttp\Client();
+        }
+        $api = new DefaultApi($client, $config);
         return $api;
     }
 

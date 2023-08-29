@@ -47,10 +47,7 @@ class adnCardCertificateCardStatusHandler
         $api = $this->initApi();
         $certificates = new adnCertificates();
         foreach ($certificates->getCertificatesByCardOrderStatus(adnCertificate::CARD_STATUS_UNDEFINED) as $certificate) {
-            $status = $this->readProductionStatus($api, $certificate->getUuid());
-            if ($status !== adnCertificate::CARD_STATUS_UNKNOWN) {
-
-            }
+            $this->readProductionStatus($api, $certificate->getUuid());
         }
     }
 
@@ -72,29 +69,21 @@ class adnCardCertificateCardStatusHandler
 
     protected function writeStatus(string $response) : void
     {
-        $root = new SimpleXMLElement($response, 0, false, self::CARD_STATUS_NS, false);
+        $this->logger->debug($response);
+        $root = new SimpleXMLElement($response);
         $certificate_id = '';
         $production_state = '';
-        foreach ($root->children(self::CARD_STATUS_NS, true) as $element) {
-            switch ($element->getName()) {
-                case 'CertificateId':
-                    $certificate_id = (string) $element;
-                    break;
-                case 'ProductionState':
-                    $production_state = (string) $element;
-                    break;
-
-                default:
-                    $this->logger->dump('Element name: ' . (string) $element);
-            }
+        foreach ($root->children(self::CARD_STATUS_NS, true) as $child) {
+            $certificate_id = (string) $child->CertificateId;
+            $production_state = (int) $child->ProductionState;
+            $this->logger->dump('Received certificate id: ' . $certificate_id);
+            $this->logger->dump('Received profduction state: ' . $production_state);
         }
-        $this->logger->dump($response);
-        $this->logger->dump('Found' . $certificate_id . ' ' . $production_state);
-        if (
-            $certificate_id !== '' && $production_state !== ''
-        ) {
+        
+        if ($certificate_id !== '') {
             $certificates = new adnCertificates();
-            $certificates->updateProductionState($certificate_id, (int) $production_state);
+            // increment status by one
+            $certificates->updateProductionState($certificate_id, ((int) $production_state) + 1);
         }
     }
 
@@ -106,7 +95,18 @@ class adnCardCertificateCardStatusHandler
         $config->setPassword($this->settings->getPlcPass());
         #$config->setDebug(true);
         #$config->setDebugFile('/srv/www/log/slim.log');
-        $api = new DefaultApi(null, $config);
+
+
+        if (strlen($this->settings->getPlcProxy())) {
+            $client = new \GuzzleHttp\Client(
+                [
+                    'proxy' => $this->settings->getPlcProxy()
+                ]
+            );
+        } else {
+            $client = new \GuzzleHttp\Client();
+        }
+        $api = new DefaultApi($client, $config);
         return $api;
     }
 

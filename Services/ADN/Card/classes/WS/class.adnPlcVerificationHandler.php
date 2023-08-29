@@ -1,6 +1,6 @@
 <?php
 
-use Plasticard\PLZFT\Api\DefaultApi as PLZFTApi;
+use Plasticard\PLZFT\Api\DefaultApi as DefaultApi;
 
 class adnPlcVerification
 {
@@ -33,16 +33,24 @@ class adnPlcVerification
         }
     }
 
-    protected function initApi() : PLZFTApi
+    protected function initApi() : DefaultApi
     {
         $config = new \Plasticard\PLZFT\Configuration();
         $config->setHost($this->settings->getPlcServiceUrl());
         $config->setUsername($this->settings->getPlcUser());
         $config->setPassword($this->settings->getPlcPass());
         $config->setDebug(false);
-        //$config->setDebugFile('/srv/www/hal/log/slim.log');
 
-        $api = new PLZFTApi(null, $config);
+        if (strlen($this->settings->getPlcProxy())) {
+            $client = new \GuzzleHttp\Client(
+                [
+                    'proxy' => $this->settings->getPlcProxy()
+                ]
+            );
+        } else {
+            $client = new \GuzzleHttp\Client();
+        }
+        $api = new DefaultApi($client, $config);
         return $api;
     }
 }

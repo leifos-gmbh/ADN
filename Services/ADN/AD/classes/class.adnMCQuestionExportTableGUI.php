@@ -31,7 +31,7 @@ class adnMCQuestionExportTableGUI extends ilTable2GUI
         
         $this->addColumn("", "");
         $this->addColumn($this->lng->txt("file"), "name");
-        $this->addColumn($this->lng->txt("date"), "date");
+        $this->addColumn($this->lng->txt("date"), "date_sort");
         $this->addColumn($this->lng->txt("actions"));
         
         $this->setDefaultOrderField("file");
@@ -52,14 +52,10 @@ class adnMCQuestionExportTableGUI extends ilTable2GUI
     {
         include_once "Services/ADN/ED/classes/class.adnQuestionExport.php";
         $files = adnQuestionExport::getAllFiles();
-
-        // value mapping (to have correct sorting)
-        if (sizeof($files)) {
-            foreach ($files as $idx => $item) {
-                $files[$idx]["date"] = ilDatePresentation::formatDate($item["date"], IL_CAL_DATETIME);
-            }
+        foreach ((array) $files as $idx => $item) {
+            $files[$idx]['date'] = ilDatePresentation::formatDate($item['date']);
+            $files[$idx]['date_sort'] = $item['date']->get(IL_CAL_UNIX);
         }
-        
         $this->setData($files);
         $this->setMaxCount(sizeof($files));
     }

@@ -868,3 +868,5 @@ adn#:#adn_certificate_status#:#Status des Druckauftrags
 adn#:#adn_certificates#:#Bescheinigungen
 adn#:#adn_card_order_status#:#Status der Druckaufträge der Sachkundigen-Karten
 adn#:#adn_card_order_status_desc#:#Liest den Status der Druckaufträge über den Druck-Webservice aus.
+adn#:#adn_card_plc_proxy#:#Proxy
+adn#:#adn_card_plc_proxy_info#:#Optionaler "Proxy Host : Port" falls der Aufruf der Druckservice-Url über einen Proxy erfolgen muss.
