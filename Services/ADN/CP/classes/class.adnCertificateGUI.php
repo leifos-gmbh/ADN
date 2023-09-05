@@ -900,7 +900,7 @@ class adnCertificateGUI
             $order = new adnCardCertificateOrderHandler();
             try {
                 $candidate = new adnCertifiedProfessional($this->certificate->getCertifiedProfessionalId());
-                $response = $order->send($order->initOrder($candidate, $this->certificate));
+                $response = $order->send($order->initOrder($candidate, $this->certificate, true));
             } catch (Exception $exception) {
                 // reset uuid
                 if ($has_uuid) {

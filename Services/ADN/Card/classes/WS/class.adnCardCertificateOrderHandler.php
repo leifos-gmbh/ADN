@@ -84,7 +84,7 @@ class adnCardCertificateOrderHandler
         return $api;
     }
 
-    public function initOrder(adnCertifiedProfessional $professional, adnCertificate $cert) : Certificates
+    public function initOrder(adnCertifiedProfessional $professional, adnCertificate $cert, bool $is_duplicate = false) : Certificates
     {
         $certificates = new Certificates();
 
@@ -118,14 +118,20 @@ class adnCardCertificateOrderHandler
         $return->setAddressCountry('Deutschland');
 
         $certificate->setCertificateId($cert->getUuid());
-        $number = $cert->determineNextNumber();
-        $certificate->setCertificateNumber(
-            adnCertificate::_getFullCertificateNumber(
-                $cert->getIssuedByWmo(),
-                $number,
-                $cert->getIssuedOn()
-            )
-        );
+        if (!$is_duplicate) {
+            $number = $cert->determineNextNumber();
+            $certificate->setCertificateNumber(
+                adnCertificate::_getFullCertificateNumber(
+                    $cert->getIssuedByWmo(),
+                    $number,
+                    $cert->getIssuedOn()
+                )
+            );
+        } else {
+            $certificate->setCertificateNumber(
+                $cert->getFullCertificateNumber()
+            );
+        }
         $certificate->setLastname($professional->getLastName());
         $certificate->setFirstname($professional->getFirstName());
         $country = new adnCountry($professional->getCitizenship());

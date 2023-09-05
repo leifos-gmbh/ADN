@@ -60,12 +60,12 @@ class adnCertificateTableGUI extends ilTable2GUI
         $this->addColumn($this->lng->txt("adn_first_name"), "first_name");
         $this->addColumn($this->lng->txt("adn_birthdate"), "birthdate");
         $this->addColumn($this->lng->txt("adn_valid_until"), "valid_until");
-        $this->addColumn($this->lng->txt('adn_certificate_type'), 'certificate_type');
-        $this->addColumn($this->lng->txt('adn_certificate_status'), 'certificate_status');
-
         if ($this->cp_id > 0) {
             $this->addColumn($this->lng->txt("adn_archived_on"), "last_update");
         }
+        $this->addColumn($this->lng->txt('adn_certificate_type'), 'certificate_type');
+        $this->addColumn($this->lng->txt('adn_certificate_status'), 'certificate_status');
+
         $this->addColumn($this->lng->txt("actions"));
         $this->setDefaultOrderField("full_nr");
         $this->setDefaultOrderDirection("asc");
