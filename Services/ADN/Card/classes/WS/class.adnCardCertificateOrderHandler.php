@@ -118,7 +118,14 @@ class adnCardCertificateOrderHandler
         $return->setAddressCountry('Deutschland');
 
         $certificate->setCertificateId($cert->getUuid());
-        $certificate->setCertificateNumber($cert->getFullCertificateNumber());
+        $number = $cert->determineNextNumber();
+        $certificate->setCertificateNumber(
+            adnCertificate::_getFullCertificateNumber(
+                $cert->getIssuedByWmo(),
+                $number,
+                $cert->getIssuedOn()
+            )
+        );
         $certificate->setLastname($professional->getLastName());
         $certificate->setFirstname($professional->getFirstName());
         $country = new adnCountry($professional->getCitizenship());
