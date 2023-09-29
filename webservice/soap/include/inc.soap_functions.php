@@ -919,7 +919,13 @@ class ilSoapFunctions
         foreach ($dirs as $dir) {
             $uri = dirname($uri);
         }
-        return ilUtil::removeTrailingPathSeparators($protocol . $host . $uri);
+        // begin-patch adn
+        $uri = ilUtil::removeTrailingPathSeparators($protocol . $host . $uri);
+        $proxy_uri = '';
+        if (getenv('ADN_PROXY_URI')) {
+            $proxy_uri = getenv('ADN_PROXY_URI');
+        }
+        return $uri . $proxy_uri;
     }
 
     public static function getSCORMCompletionStatus($sid, $usr_id, $a_ref_id)
