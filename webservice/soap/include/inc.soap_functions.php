@@ -903,7 +903,7 @@ class ilSoapFunctions
         if ($https->isDetected()) {
             $protocol = 'https://';
         } else {
-            $protocol = 'http://';
+            $protocol = 'https://';
         }
         // end-patch adn
 
