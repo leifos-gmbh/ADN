@@ -47,6 +47,15 @@ class adnCardCertificateCardStatusHandler
         $api = $this->initApi();
         $certificates = new adnCertificates();
         foreach ($certificates->getCertificatesByCardOrderStatus(adnCertificate::CARD_STATUS_UNDEFINED) as $certificate) {
+            $this->logger->info('Trying to update card status undefined');
+            $this->readProductionStatus($api, $certificate->getUuid());
+        }
+        foreach ($certificates->getCertificatesByCardOrderStatus(adnCertificate::CARD_STATUS_RECEIVED) as $certificate) {
+            $this->logger->info('Trying to update card status received');
+            $this->readProductionStatus($api, $certificate->getUuid());
+        }
+        foreach ($certificates->getCertificatesByCardOrderStatus(adnCertificate::CARD_STATUS_PRODUCTION) as $certificate) {
+            $this->logger->info('Trying to update card status production');
             $this->readProductionStatus($api, $certificate->getUuid());
         }
     }
@@ -77,7 +86,7 @@ class adnCardCertificateCardStatusHandler
             $certificate_id = (string) $child->CertificateId;
             $production_state = (int) $child->ProductionState;
             $this->logger->dump('Received certificate id: ' . $certificate_id);
-            $this->logger->dump('Received profduction state: ' . $production_state);
+            $this->logger->dump('Received production state: ' . $production_state);
         }
         
         if ($certificate_id !== '') {
