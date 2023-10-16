@@ -166,19 +166,19 @@ class adnCertifiedProfessionalDirectoryTableGUI extends ilTable2GUI
         $a_csv->addColumn($a_set["full_nr"]);
         $a_csv->addColumn($a_set["last_name"]);
         $a_csv->addColumn($a_set["first_name"]);
-        $a_csv->addColumn($a_set["citizenship"]);
-        $a_csv->addColumn($a_set["type"]);
         $a_csv->addColumn(
             ilDatePresentation::formatDate(
                 new ilDate($a_set['birthdate'], IL_CAL_DATE))
         );
-        $a_csv->addColumn(
-            ilDatePresentation::formatDate(
-                new ilDate($a_set['issued_on'], IL_CAL_DATE))
-        );
+        $a_csv->addColumn($a_set["citizenship"]);
+        $a_csv->addColumn($a_set["type"]);
         $a_csv->addColumn(
             ilDatePresentation::formatDate(
                 new ilDate($a_set['valid_until'], IL_CAL_DATE))
+        );
+        $a_csv->addColumn(
+            ilDatePresentation::formatDate(
+                new ilDate($a_set['issued_on'], IL_CAL_DATE))
         );
         $a_csv->addColumn($a_set["signed_by"]);
         $a_csv->addRow();
