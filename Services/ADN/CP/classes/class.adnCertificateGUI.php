@@ -190,14 +190,25 @@ class adnCertificateGUI
         $card->setVariable('TXT_NAME', $professional->getLastName());
         $card->setVariable('TXT_VORNAME', $professional->getFirstName());
         if ($professional->getBirthdate() instanceof ilDate) {
-            $card->setVariable('TXT_GEBURTSDATUM', $professional->getBirthdate()->get(IL_CAL_FKT_DATE, 'Y-m-d'));
+            $card->setVariable(
+                'TXT_GEBURTSDATUM',
+                $professional->getBirthdate()->get(IL_CAL_FKT_DATE, 'd. ') .
+                $lng->txt('month_' . $professional->getBirthdate()->get(IL_CAL_FKT_DATE, 'm') . '_long') .
+                $professional->getBirthdate()->get(IL_CAL_FKT_DATE, ' Y')
+            );
         }
         $country = new adnCountry($professional->getCitizenship());
         $card->setVariable('TXT_STAATSANGEHOERIGKEIT', $country->getName());
         $wmo = new adnWMO($certificate->getIssuedByWmo());
         $card->setVariable('TXT_BEHOERDE', $wmo->getName());
         if ($certificate->getValidUntil() instanceof ilDate) {
-            $card->setVariable('TXT_GUELTIGKEIT', $certificate->getValidUntil()->get(IL_CAL_FKT_DATE, 'Y-m-d'));
+            $card->setVariable(
+                'TXT_GUELTIGKEIT',
+                ilStr::strToUpper($lng->txt('adn_valid_until')) . ': ' .
+                $certificate->getValidUntil()->get(IL_CAL_FKT_DATE, 'd. ') .
+                $lng->txt('month_' . $certificate->getValidUntil()->get(IL_CAL_FKT_DATE, 'm') . '_long') .
+                $certificate->getValidUntil()->get(IL_CAL_FKT_DATE, ' Y')
+            );
         }
         if ($professional->getImageHandler() instanceof adnCertifiedProfessionalImageHandler) {
             $card->setVariable('PERSONAL_ICON', $professional->getImageHandler()->getAbsolutePath());
