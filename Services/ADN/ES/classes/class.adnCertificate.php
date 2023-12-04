@@ -456,7 +456,7 @@ class adnCertificate extends adnDBBase
         $year = substr($a_issued_on->get(IL_CAL_DATE), 0, 4);
         include_once("./Services/ADN/MD/classes/class.adnWMO.php");
         $number_str = adnWMO::lookupCode($a_wmo_id) . "-" .
-            str_pad($a_number, 3, "0", STR_PAD_LEFT) . "-" .
+            str_pad($a_number, 4, "0", STR_PAD_LEFT) . "-" .
             $year;
 
         return $number_str;
@@ -706,7 +706,7 @@ class adnCertificate extends adnDBBase
         $certificate = array();
         while ($rec = $ilDB->fetchAssoc($set)) {
             $full_nr = $rec["wmo_code_nr"] . "-" .
-                str_pad($rec["nr"], 3, "0", STR_PAD_LEFT) . "-" .
+                str_pad($rec["nr"], 4, "0", STR_PAD_LEFT) . "-" .
                 substr($rec["issued_on"], 0, 4);
 
             if (isset($a_filter["number"]) && $a_filter["number"] &&
@@ -1239,7 +1239,7 @@ class adnCertificate extends adnDBBase
             $result[$id] = $row;
             $result[$id]['full_nr'] =
                 $row['code_nr'] . '-' .
-                str_pad($row['nr'], 3, "0", STR_PAD_LEFT) . '-' .
+                str_pad($row['nr'], 4, "0", STR_PAD_LEFT) . '-' .
                 substr($row['issued_on'], 0, 4);
         }
         return $result;

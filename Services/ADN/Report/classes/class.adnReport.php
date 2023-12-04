@@ -131,7 +131,7 @@ abstract class adnReport
         
         if ($this->getCertificate() instanceof adnCertificate) {
             $full_nr = $wmo->getCode() . "-" .
-                str_pad($this->getCertificate()->getNumber(), 3, "0", STR_PAD_LEFT) . "-" .
+                str_pad($this->getCertificate()->getNumber(), 4, "0", STR_PAD_LEFT) . "-" .
                 $this->getCertificate()->getIssuedOn()->get(IL_CAL_FKT_DATE, 'Y');
             $map['rgt_cert_number'] = $full_nr;
         }
