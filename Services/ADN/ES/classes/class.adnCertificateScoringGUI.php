@@ -296,6 +296,22 @@ class adnCertificateScoringGUI
             $form->addItem($ne);
         }
 
+        if ($candidate->getImageHandler()->getAbsolutePath() !== '') {
+            $pic = new ilImageFileInputGUI($lng->txt('adn_card_form_photo'), 'card_photo');
+            $pic->setRequired(true);
+            $pic->setDisabled(true);
+            $pic->setALlowDeletion(false);
+            $pic->setUseCache(false);
+            $pic->setImage($candidate->getImageHandler()->getAbsolutePath() ?? '');
+            $form->addItem($pic);
+        } else {
+            $pic = new ilTextInputGUI($lng->txt('adn_card_form_photo'), 'card_photo');
+            $pic->setRequired(true);
+            $pic->setDisabled(true);
+            $pic->setAlert($lng->txt('adn_card_missing_photo_info'));
+            $form->addItem($pic);
+        }
+
         // certificate type
         $type = new ilCheckboxGroupInputGUI(
             $lng->txt("adn_type_of_cert"),
@@ -394,6 +410,44 @@ class adnCertificateScoringGUI
             }
         }
 
+        // show postal address read only
+        $postal_address = new ilFormSectionHeaderGUI();
+        $postal_address->setTitle($lng->txt('adn_certificate_pa'));
+        $form->addItem($postal_address);
+
+        $name = new ilTextInputGUI($lng->txt('adn_certificate_pa_name'), 'unused_name');
+        $name->setDisabled(true);
+        $name->setRequired(true);
+        $form->addItem($name);
+
+        $street = new ilTextInputGUI($lng->txt('adn_certificate_pa_street'), 'unused_street');
+        $street->setDisabled(true);
+        $street->setRequired(true);
+        $form->addItem($street);
+
+        $city = new ilTextInputGUI($lng->txt('adn_certificate_pa_city'), 'unused_city');
+        $city->setDisabled(true);
+        $city->setRequired(true);
+        $form->addItem($city);
+
+        $country = new ilTextInputGUI($lng->txt('adn_certificate_pa_country'), 'unused_country');
+        $country->setDisabled(true);
+        $country->setRequired(true);
+        $form->addItem($country);
+
+        if ($candidate->isShippingActive()) {
+            $name->setValue($candidate->getShippingFirstName() . ' ' . $candidate->getShippingLastName());
+            $street->setValue($candidate->getShippingStreet() . ' ' . $candidate->getShippingStreetNumber());
+            $city->setValue($candidate->getShippingCode() . ' ' . $candidate->getShippingCity());
+            $country_handler = new adnCountry($candidate->getShippingCountry());
+            $country->setValue($country_handler->getName());
+        } else {
+            $name->setValue($candidate->getFirstName() . ' ' . $candidate->getLastName());
+            $street->setValue($candidate->getPostalStreet() . ' ' . $candidate->getPostalStreetNumber());
+            $city->setValue($candidate->getPostalCode() . ' ' . $candidate->getPostalCity());
+            $country_handler = new adnCountry($candidate->getPostalCountry());
+            $country->setValue($country_handler->getName());
+        }
 
         // form buttons
         if ($a_mode == "create") {
@@ -419,7 +473,6 @@ class adnCertificateScoringGUI
 
         $form = $this->initCertificateForm("create", true);
 
-        include_once("./Services/ADN/ED/classes/class.adnSubjectArea.php");
 
         // get assignment
         //$assignment_id = (int)$_GET["ass_id"];
@@ -515,19 +568,15 @@ class adnCertificateScoringGUI
         }
         // cr-008 end
 
-        //include_once("./Services/ADN/ES/classes/class.adnCertifiedProfessional.php");
-        //$candidate = new adnCertifiedProfessional($candidate_id);
+        $candidate = new adnCertifiedProfessional($candidate_id);
 
         // check input
         if ($form->checkInput()) {
-            include_once("./Services/ADN/ES/classes/class.adnCertificate.php");
 
             // create new certificate
             $cert = new adnCertificate();
-
-            // certified professional
+            $cert->initUuid();
             $cert->setCertifiedProfessionalId($candidate_id);
-
             // examination cr-008 added if
             if ($_GET["ass_id"] > 0) {
                 $cert->setExaminationId($assignment->getEvent());
@@ -542,21 +591,25 @@ class adnCertificateScoringGUI
                 }
             }
 
-            // issued by wmo
             $cert->setIssuedByWmo($form->getInput("issued_by_wmo"));
-
-            // signed by
             $cert->setSignedBy($form->getInput("signed_by"));
-
-            // issued on
             $issued_date = $form->getItemByPostVar("issued_on");
             $cert->setIssuedOn($issued_date->getDate());
-
-            // valid until
             $issued_date = $form->getItemByPostVar("valid_until");
             $cert->setValidUntil($issued_date->getDate());
 
-            // save certificate
+            $order = new adnCardCertificateOrderHandler();
+            try {
+                $response = $order->send($order->initOrder($candidate, $cert));
+            } catch (Exception $exception) {
+                // resyet uuid
+                $cert->setUuid('');
+                $form->setValuesByPost();
+                ilUtil::sendFailure($exception->getMessage());
+                $this->createCertificate($form);
+                return;
+            }
+
             $cert->save();
 
             // show success message and return to list
@@ -587,7 +640,6 @@ class adnCertificateScoringGUI
                 $issued_date->getDate()
             )
         );
-
         $this->createCertificate($form);
     }
 
@@ -625,15 +677,8 @@ class adnCertificateScoringGUI
                 }
             }
 
-            // issued by wmo
-            //$cert->setIssuedByWmo($form->getInput("issued_by_wmo"));
-
             // signed by
             $cert->setSignedBy($form->getInput("signed_by"));
-
-            // issued on
-            //$issued_date = $form->getItemByPostVar("issued_on");
-            //$cert->setIssuedOn($issued_date->getDate());
 
             // valid until
             $issued_date = $form->getItemByPostVar("valid_until");
@@ -643,7 +688,7 @@ class adnCertificateScoringGUI
             $cert->update();
 
             // show success message and return to list
-            ilUtil::sendSuccess($lng->txt("adn_certificate_updated"), true);
+            ilUtil::sendSuccess($lng->txt("adn_certificate_updated") . $cert->getUUid(), true);
             $ilCtrl->redirect($this, "listCandidates");
         }
 

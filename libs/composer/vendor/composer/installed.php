@@ -1,7 +1,7 @@
 <?php return array(
     'root' => array(
-        'pretty_version' => 'dev-adn_7',
-        'version' => 'dev-adn_7',
+        'pretty_version' => 'dev-adn_7_card',
+        'version' => 'dev-adn_7_card',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../../../',
         'aliases' => array(),
@@ -83,12 +83,12 @@
             'dev_requirement' => false,
         ),
         'guzzlehttp/guzzle' => array(
-            'pretty_version' => '6.5.7',
-            'version' => '6.5.7.0',
+            'pretty_version' => '7.4.4',
+            'version' => '7.4.4.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../guzzlehttp/guzzle',
             'aliases' => array(),
-            'reference' => '724562fa861e21a4071c652c8a159934e4f05592',
+            'reference' => 'e3ff079b22820c2029d4c2a87796b6a0b8716ad8',
             'dev_requirement' => false,
         ),
         'guzzlehttp/promises' => array(
@@ -110,12 +110,16 @@
             'dev_requirement' => false,
         ),
         'ilias/ilias' => array(
-            'pretty_version' => 'dev-adn_7',
-            'version' => 'dev-adn_7',
+            'pretty_version' => 'dev-adn_7_card',
+            'version' => 'dev-adn_7_card',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../../../',
             'aliases' => array(),
+<<<<<<< HEAD
+            'reference' => 'a24c358f1a3518dc382a2787fde83fcf97613939',
+=======
             'reference' => '433ff2ec8d80d036326680107ac566e9427b5871',
+>>>>>>> origin/adn_7
             'dev_requirement' => false,
         ),
         'imsglobal/lti' => array(
@@ -309,6 +313,12 @@
             'aliases' => array(),
             'reference' => '2dfb5f6c5eff0e91e20e913f8c5452ed95b86621',
             'dev_requirement' => false,
+        ),
+        'psr/http-client-implementation' => array(
+            'dev_requirement' => false,
+            'provided' => array(
+                0 => '1.0',
+            ),
         ),
         'psr/http-factory' => array(
             'pretty_version' => '1.0.1',

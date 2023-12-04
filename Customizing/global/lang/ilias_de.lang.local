@@ -793,7 +793,6 @@ adn#:#adn_ad_equal_birthdate#:#Gleiches Geburtsdatum
 adn#:#adn_ad_equal_city#:#Gleicher Wohnort
 adn#:#adn_ad_equal_street#:#Gleiche Straße
 adn#:#adn_exam_candidate#:#Prüfungskandidat
-adn#:#adn_certificates#:#Bescheinigungen
 adn#:#adn_invoices#:#Kostenbescheide
 adn#:#adn_no_entries#:#Keine Einträge
 adn#:#adn_cp_pdm#:#Sachkundige/Archivdaten
@@ -829,3 +828,45 @@ adn#:#adn_question_x_of_y#:#Frage %x von %y
 adn#:#adn_hh_mm#:#Format: hh:mm
 adn#:#adn_oex_examination_info#:#Prüfungsdaten
 adn#:#adn_oex_professional_info#:#Benutzerzugangsdaten
+adn#:#adn_ad_card#:#Kartendruck
+adn#:#adn_card_settings_form#:#Einstellungen zum Kartendruck
+adn#:#adn_card_plc_settings#:#Kartendruck-Service
+adn#:#adn_card_plc_user#:#Benutzername
+adn#:#adn_card_plc_pass#:#Passwort
+adn#:#adn_card_plc_service#:#Service-Url
+adn#:#adn_card_nfc_settings#:#HID "Trusted Tag Service"
+adn#:#adn_card_nfc_user#:#Benutzername
+adn#:#adn_card_nfc_pass#:#Passwort
+adn#:#adn_card_nfc_service#:#Service-Url
+adn#:#adn_card_plc_button_validation#:#Überprüfung Kartendruck-Service
+adn#:#adn_card_nfc_button_validation#:#Überprüfung "Trusted-Tag-Service"
+adn#:#adn_card_hid_success#:#Es konnte kein Fehler festgestellt werden. Die Einstellungen sind korrekt.
+adn#:#adn_card_hid_error_pwd#:#Benutzername oder Passwort sind nicht korrekt. Bitte überprüfen Sie die Eingaben.
+adn#:#adn_card_hid_error_username#:#Der Benutzername ist nicht korrekt. Bitte überprüfen Sie die Eingabe.
+adn#:#adn_card_verify_error_code#:#Fehlercode %s
+adn#:#adn_card_verify_generic#:#Die Gültigkeit der ADN-Bescheinigung konnte nicht bestätigt werden!
+adn#:#adn_card_verify_success#:#Die Gültigkeit der ADN-Bescheinigung konnte bestätigt werden.
+adn#:#adn_card_verify_success_info#:#Bitte überprüfen Sie die Personendaten und das Gültigkeitsdatum.
+adn#:#adn_certificate_type_paper#:#Bescheinigung
+adn#:#adn_certificate_type_card#:#Karte
+adn#:#adn_certificate_type#:#Art der Bescheinigung
+adn#:#adn_certificate_pa#:#Zustelladresse
+adn#:#adn_certificate_pa_name#:#Name
+adn#:#adn_certificate_pa_street#:#Straße
+adn#:#adn_certificate_pa_city#:#Ort
+adn#:#adn_certificate_pa_country#:#Land
+adn#:#adn_card_form_photo#:#Ausweisbild
+adn#:#adn_card_missing_photo_info#:#Bitte ordnen Sie der/dem Sachkundigen ein Ausweisbild zu.
+adn#:#adn_card_plc_success#:#Die Einstellungen zum Kartendruck-Service konnten erfolgreich validiert werden.
+adn#:#adn_card_his_success#:#Die Einstellungen zum HID "Trusted Tag Service" konnten erfolgreich validiert werden.
+adn#:#adn_card_plc_con_failed#:#Die Verbindung zum Kartendruck-Service konnte nicht aufgebaut werden. Bitte überprüfen Sie die Einstellungen.
+adn#:#adn_certificate_status_0#:#Druckauftrag übermittelt
+adn#:#adn_certificate_status_1#:#Druckauftrag bestätigt
+adn#:#adn_certificate_status_2#:#Druck in Bearbeitung
+adn#:#adn_certificate_status_3#:#Karte verschickt
+adn#:#adn_certificate_status#:#Status des Druckauftrags
+adn#:#adn_certificates#:#Bescheinigungen
+adn#:#adn_card_order_status#:#Status der Druckaufträge der Sachkundigen-Karten
+adn#:#adn_card_order_status_desc#:#Liest den Status der Druckaufträge über den Druck-Webservice aus.
+adn#:#adn_card_plc_proxy#:#Proxy
+adn#:#adn_card_plc_proxy_info#:#Optionaler "Proxy Host : Port" falls der Aufruf der Druckservice-Url über einen Proxy erfolgen muss.

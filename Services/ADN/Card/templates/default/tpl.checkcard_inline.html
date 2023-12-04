@@ -1,0 +1,87 @@
+        <div class="PageLayout">
+            <!-- BEGIN has_card -->
+            <div class="Card">
+                <div class="CardHeader">
+                    <div class="CardMarker">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <h2>Bescheinigung über besondere Kenntnisse des ADN</h2>
+                </div>
+                <div class="CardBody">
+                    <div class="CardSection">
+                        <h2 class="CardSectionHead">1. {TXT_BESCHEINIGUNGSNUMMER}</h2>
+                        <!-- BEGIN bescheinigungsnummer_line -->
+                        {TXT_BESCHEINIGUNGSNUMMER_LINE}<br />
+                        <!-- END escheinigungsnummer_line -->
+                    </div>
+                    <div class="CardSection">
+                        <h2 class="CardSectionHead">2. {TXT_NAME}</h2>
+                        <!-- BEGIN name_line -->
+                        {TXT_NAME_LINE}<br />
+                        <!-- END name_line -->
+                    </div>
+                    <div class="CardSection">
+                        <h2 class="CardSectionHead">3. {TXT_VORNAME}</h2>
+                        <!-- BEGIN vorname_line -->
+                        {TXT_VORNAME_LINE}<br />
+                        <!-- END vorname_line -->
+                    </div>
+                    <div class="CardSection">
+                        <h2 class="CardSectionHead">4. {TXT_GEBURTSDATUM}</h2>
+                        <!-- BEGIN geburtsdatum_line -->
+                        {TXT_GEBURTSDATUM_LINE}<br />
+                        <!-- END geburtsdatum_line -->
+                    </div>
+                    <div class="CardSection">
+                        <h2 class="CardSectionHead">5. {TXT_STAATSANGEHOERIGKEIT}</h2>
+                        <!-- BEGIN staatsangehörigkeit_line -->
+                        {TXT_STAATSANGEHOERIGKEIT_LINE}<br />
+                        <!-- END staatsangehörigkeit_line -->
+                    </div>
+                    <div class="CardSection">
+                        <h2 class="CardSectionHead">6.</h2>
+                    </div>
+                    <div class="CardSection">
+                        <h2 class="CardSectionHead">7. {TXT_BEHOERDE}</h2>
+                        <!-- BEGIN behoerde_line -->
+                        {TXT_BEHOERDE_LINE}<br />
+                        <!-- END behoerde_line -->
+                    </div>
+                    <div class="CardSection">
+                        <h2 class="CardSectionHead">8. {TXT_GUELTIGKEIT}</h2>
+                        <!-- BEGIN gueltigkeit_line -->
+                        {TXT_GUELTIGKEIT_LINE}<br />
+                        <!-- END gueltigkeit_line -->
+                    </div>
+                </div>
+                <div class="CardImage">
+                    <!-- BEGIN im_icon -->
+                    <img src="{PERSONAL_ICON}" alt="{TXT_ICON}" title="{TXT_ICON}"/>
+                    <!-- END im_icon -->
+                </div>
+
+            </div>
+            <div class="Card">
+                <div class="CardBody">
+                    <h1>1. {TXT_BESCHEINIGUNGSNUMMER}</h1>
+                    <p>Diese Bescheinigung ist gültig für besondere Kenntniss des ADN gemäß:</p>
+                    <div class="CardSection">
+                        <!-- BEGIN cert_lines -->
+                        {TXT_LISTEBESCHEINIGUNGEN_LINE}<br />
+                        <!-- END cert_lines -->
+                    </div>
+                </div>
+                <div class="CardFooter">
+                    <div class="PrimaryLogo">
+                        <img src="./Services/ADN/Card/templates/default/images/wsv_logo.png" alt="WSV Logo" title="WSV Logo"/>
+                    </div>
+                    <div class="SecondaryLogo">
+                        <img src="./Services/ADN/Card/templates/default/images/nfc_logo.png" alt="NFC Logo" title="NFC Logo"/>
+                    </div>
+                </div>
+            </div>
+            <!-- END has_card -->
+        </div>

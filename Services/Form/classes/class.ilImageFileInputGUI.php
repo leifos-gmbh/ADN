@@ -161,14 +161,18 @@ class ilImageFileInputGUI extends ilFileInputGUI
                 ": " . htmlentities($pending));
             $i_tpl->parseCurrentBlock();
         }
+
+        // begin-patch adn
+        if (!$this->getDisabled()) {
+            $i_tpl->setVariable("POST_VAR", $this->getPostVar());
+            $i_tpl->setVariable("ID", $this->getFieldId());
+            /* experimental: bootstrap'ed file upload */
+            $i_tpl->setVariable("TXT_BROWSE", $lng->txt("select_file"));
+        }
+        // end-patch adn
+
         
-        $i_tpl->setVariable("POST_VAR", $this->getPostVar());
-        $i_tpl->setVariable("ID", $this->getFieldId());
-        
-        
-        /* experimental: bootstrap'ed file upload */
-        $i_tpl->setVariable("TXT_BROWSE", $lng->txt("select_file"));
-        
+
         
         if (!$quota_exceeded) {
             $i_tpl->setVariable("TXT_MAX_SIZE", $lng->txt("file_notice") . " " .
@@ -178,14 +182,18 @@ class ilImageFileInputGUI extends ilFileInputGUI
         } else {
             $i_tpl->setVariable("TXT_MAX_SIZE", $quota_exceeded);
         }
-            
+
+        // begin-patch adn
         if ($this->getDisabled() || $quota_exceeded) {
+            /**
             $i_tpl->setVariable(
                 "DISABLED",
                 " disabled=\"disabled\""
             );
+             */
         }
-            
+        // end-patch adn
+
         $a_tpl->setCurrentBlock("prop_generic");
         $a_tpl->setVariable("PROP_GENERIC", $i_tpl->get());
         $a_tpl->parseCurrentBlock();

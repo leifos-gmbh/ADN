@@ -25,12 +25,23 @@ class ilRestServer extends Slim\App
      */
     public function init()
     {
-        $callback_obj = new ilRestFileStorage();
-        
-        $this->get('/fileStorage', array($callback_obj,'getFile'));
-        $this->post('/fileStorage', array($callback_obj,'createFile'));
+        // begin-patch adn
+        $adn_rest_test = new adnHidRestConnector();
+        $this->post('/testHidVerification', [$adn_rest_test, 'verify']);
+        $this->post('/services/65/prod/v1', [$adn_rest_test, 'verifyOrder']);
 
+        $plc_mock_connection_handler = new plcMockConnectionHandler();
+        $this->get('/services/65/test/v1/heartbeat', [$plc_mock_connection_handler, 'heartbeat']);
 
-        $callback_obj->deleteDeprecated();
+        $plc_mock_order_handler = new plcMockOrderHandler();
+        $this->post('/services/65/test/v1/order', [$plc_mock_order_handler, 'order']);
+
+        $plc_mock_card_status_handler = new plcMockCardStatusHandler();
+        $this->post('/services/65/test/v1/status/card', [$plc_mock_card_status_handler, 'status']);
+
+        $adn_rest_verification = new adnVerificationRestHandler();
+        $this->get('/verification/{TAC}/{TAG_ID}/{CERTIFICATE_ID}', [$adn_rest_verification, 'verify']);
+
+        #$callback_obj->deleteDeprecated();
     }
 }

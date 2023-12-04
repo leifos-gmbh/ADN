@@ -264,12 +264,12 @@ class adnReportInvitation extends adnReport
             $e_cost = $wmo->getCostExam();
         }
         $costs += $e_cost['value'];
-        $map['exam_charge'] = sprintf('%01.2f EUR', $costs);
+        $map['exam_charge'] = sprintf('%01.2f €', $costs);
         $map['exam_charge'] = str_replace('.', ',', $map['exam_charge']);
         
 
         $cost = $wmo->getCostCertificate();
-        $map['cert_charge'] = sprintf('%01.2f EUR', $cost['value']);
+        $map['cert_charge'] = sprintf('%01.2f €', $cost['value']);
         $map['cert_charge'] = str_replace('.', ',', $map['cert_charge']);
         
         // Date of exam

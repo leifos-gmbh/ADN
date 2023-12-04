@@ -196,7 +196,7 @@ class adnAnswerSheetAssignmentTableGUI extends ilTable2GUI
             }
             // read-only
             elseif ($a_set["assigned"]) {
-                $all = "";
+                $all = [];
                 foreach ($a_set["assigned"] as $sheet_id) {
                     $all[] = $this->map["sheets"][$sheet_id];
                 }

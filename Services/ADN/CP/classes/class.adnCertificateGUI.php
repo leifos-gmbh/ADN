@@ -73,6 +73,7 @@ class adnCertificateGUI
                     case 'resetFilter':
                     case 'confirmSaveExtension':
                     case 'afterExtension':
+                    case 'showCard':
                         if (adnPerm::check(adnPerm::CP, adnPerm::READ)) {
                             $this->$cmd();
                         }
@@ -162,6 +163,53 @@ class adnCertificateGUI
         $table->resetFilter();
 
         $this->listCertificates();
+    }
+
+    protected function showCard()
+    {
+        global $DIC;
+
+        $tabs = $DIC->tabs();
+        $lng = $DIC->language();
+        $ctrl = $DIC->ctrl();
+        $tpl = $DIC->ui()->mainTemplate();
+
+
+        $tabs->setBackTarget(
+            $lng->txt('back'),
+            $ctrl->getLinkTarget($this, 'listCertificates')
+        );
+
+        $tpl->addCss('Services/ADN/Card/templates/default/checkcard.css');
+        $card = new ilTemplate('tpl.checkcard_inline.html', true, true, 'Services/ADN/Card');
+
+        $certificate = new adnCertificate((int) $_GET['ct_id']);
+        $professional = new adnCertifiedProfessional($certificate->getCertifiedProfessionalId());
+
+        $card->setVariable('TXT_BESCHEINIGUNGSNUMMER', $certificate->getFullCertificateNumber());
+        $card->setVariable('TXT_NAME', $professional->getLastName());
+        $card->setVariable('TXT_VORNAME', $professional->getFirstName());
+        if ($professional->getBirthdate() instanceof ilDate) {
+            $card->setVariable('TXT_GEBURTSDATUM', $professional->getBirthdate()->get(IL_CAL_FKT_DATE, 'Y-m-d'));
+        }
+        $country = new adnCountry($professional->getCitizenship());
+        $card->setVariable('TXT_STAATSANGEHOERIGKEIT', $country->getName());
+        $wmo = new adnWMO($certificate->getIssuedByWmo());
+        $card->setVariable('TXT_BEHOERDE', $wmo->getName());
+        if ($certificate->getValidUntil() instanceof ilDate) {
+            $card->setVariable('TXT_GUELTIGKEIT', $certificate->getValidUntil()->get(IL_CAL_FKT_DATE, 'Y-m-d'));
+        }
+        if ($professional->getImageHandler() instanceof adnCertifiedProfessionalImageHandler) {
+            $card->setVariable('PERSONAL_ICON', $professional->getImageHandler()->getAbsolutePath());
+        }
+        foreach (adnCertificate::getCertificateTypes() as $type => $caption) {
+            if ($certificate->getType($type)) {
+                $card->setCurrentBlock('cert_lines');
+                $card->setVariable('TXT_LISTEBESCHEINIGUNGEN_LINE', $lng->txt('adn_subject_area_cert_' . $type));
+                $card->parseCurrentBlock();
+            }
+        }
+        $tpl->setContent($card->get());
     }
     
     /**
@@ -259,6 +307,24 @@ class adnCertificateGUI
                 )
             );
             $form->addItem($ne);
+        }
+
+        if ($a_mode == 'extend' || $a_mode == 'duplicate') {
+            if ($cp->getImageHandler()->getAbsolutePath() !== '') {
+                $pic = new ilImageFileInputGUI($lng->txt('adn_card_form_photo'), 'card_photo');
+                $pic->setRequired(true);
+                $pic->setDisabled(true);
+                $pic->setALlowDeletion(false);
+                $pic->setUseCache(false);
+                $pic->setImage($cp->getImageHandler()->getAbsolutePath() ?? '');
+                $form->addItem($pic);
+            } else {
+                $pic = new ilTextInputGUI($lng->txt('adn_card_form_photo'), 'card_photo');
+                $pic->setRequired(true);
+                $pic->setDisabled(true);
+                $pic->setAlert($lng->txt('adn_card_missing_photo_info'));
+                $form->addItem($pic);
+            }
         }
 
         // last name
@@ -422,6 +488,47 @@ class adnCertificateGUI
                 $status->setValue($lng->txt("adn_invalid"));
             } else {
                 $status->setValue($lng->txt("adn_valid"));
+            }
+        }
+
+        if ($a_mode == 'extend' || $a_mode == 'duplicate') {
+            // show postal address read only
+            $postal_address = new ilFormSectionHeaderGUI();
+            $postal_address->setTitle($lng->txt('adn_certificate_pa'));
+            $form->addItem($postal_address);
+
+            $name = new ilTextInputGUI($lng->txt('adn_certificate_pa_name'), 'unused_name');
+            $name->setDisabled(true);
+            $name->setRequired(true);
+            $form->addItem($name);
+
+            $street = new ilTextInputGUI($lng->txt('adn_certificate_pa_street'), 'unused_street');
+            $street->setDisabled(true);
+            $street->setRequired(true);
+            $form->addItem($street);
+
+            $city = new ilTextInputGUI($lng->txt('adn_certificate_pa_city'), 'unused_city');
+            $city->setDisabled(true);
+            $city->setRequired(true);
+            $form->addItem($city);
+
+            $country = new ilTextInputGUI($lng->txt('adn_certificate_pa_country'), 'unused_country');
+            $country->setDisabled(true);
+            $country->setRequired(true);
+            $form->addItem($country);
+
+            if ($cp->isShippingActive()) {
+                $name->setValue($cp->getShippingFirstName() . ' ' . $cp->getShippingLastName());
+                $street->setValue($cp->getShippingStreet() . ' ' . $cp->getShippingStreetNumber());
+                $city->setValue($cp->getShippingCode() . ' ' . $cp->getShippingCity());
+                $country_handler = new adnCountry($cp->getShippingCountry());
+                $country->setValue($country_handler->getName());
+            } else {
+                $name->setValue($cp->getFirstName() . ' ' . $cp->getLastName());
+                $street->setValue($cp->getPostalStreet() . ' ' . $cp->getPostalStreetNumber());
+                $city->setValue($cp->getPostalCode() . ' ' . $cp->getPostalCity());
+                $country_handler = new adnCountry($cp->getPostalCountry());
+                $country->setValue($country_handler->getName());
             }
         }
 
@@ -672,21 +779,12 @@ class adnCertificateGUI
                 }
             }
 
-            // issued by wmo
             $this->certificate->setIssuedByWmo($form->getInput("issued_by_wmo"));
-
-            // signed by
             $this->certificate->setSignedBy($form->getInput("signed_by"));
-
-            // issued on
             $issued_date = $form->getItemByPostVar("issued_on");
             $this->certificate->setIssuedOn($issued_date->getDate());
-
-            // valid until
             $issued_date = $form->getItemByPostVar("valid_until");
             $this->certificate->setValidUntil($issued_date->getDate());
-
-            // proof
             foreach (adnCertificate::getProofTypes() as $id => $caption) {
                 if (in_array($id, $_POST["proof"])) {
                     $this->certificate->setProof($id, true);
@@ -694,24 +792,23 @@ class adnCertificateGUI
                     $this->certificate->setProof($id, false);
                 }
             }
-
-            // save certificate
-            $this->certificate->createExtension();
-            
-            include_once './Services/ADN/Report/exceptions/class.adnReportException.php';
+            // create new certificate uid
+            $this->certificate->initUuid();
+            $order = new adnCardCertificateOrderHandler();
             try {
-                include_once("./Services/ADN/Report/classes/class.adnReportCertificate.php");
-                $report = new adnReportCertificate();
-                $report->createExtension($this->certificate->getId());
-                
-                ilUtil::sendSuccess($lng->txt('adn_extension_created'), true);
-                $this->afterExtension();
-            } catch (adnReportException $e) {
-                ilUtil::sendFailure($e->getMessage(), true);
-                $this->afterExtension();
+                $candidate = new adnCertifiedProfessional($this->certificate->getCertifiedProfessionalId());
+                $response = $order->send($order->initOrder($candidate, $this->certificate));
+            } catch (Exception $exception) {
+                $form->setValuesByPost();
+                ilUtil::sendFailure($exception->getMessage());
+                $this->duplicateCertificate($form);
+                return;
             }
+            $this->certificate->createExtension();
+            ilUtil::sendSuccess($lng->txt('adn_extension_created'), true);
+            $this->afterExtension();
+            return;
         }
-
         // input not valid: show form again
         $form->setValuesByPost();
 
@@ -729,7 +826,6 @@ class adnCertificateGUI
                 $issued_date->getDate()
             )
         );
-
         $this->extendCertificate($form);
     }
 
@@ -792,30 +888,33 @@ class adnCertificateGUI
 
         // check input
         if ($form->checkInput()) {
-            // signed by
             $this->certificate->setSignedBy($form->getInput("signed_by"));
-
-            // issued on
             $duplicate_issued_date = $form->getItemByPostVar("duplicate_issued_on");
-
-            // save certificate
             $this->certificate->createDuplicate($duplicate_issued_date->getDate());
 
-            // create report
-            include_once './Services/ADN/Report/exceptions/class.adnReportException.php';
-            try {
-                include_once("./Services/ADN/Report/classes/class.adnReportCertificate.php");
-                $report = new adnReportCertificate();
-                $report->createDuplicate($this->certificate->getId());
-                
-                ilUtil::sendSuccess($lng->txt('adn_duplicate_created'), true);
-                $ilCtrl->redirect($this, 'listCertificates');
-            } catch (adnReportException $e) {
-                ilUtil::sendFailure($e->getMessage(), true);
-                $ilCtrl->redirect($this, 'listCertificates');
+            // init uuid and reset in case of error
+            $has_uuid = $this->certificate->getUUid() !== '';
+            if (!$has_uuid) {
+                $this->certificate->initUUId();
             }
+            $order = new adnCardCertificateOrderHandler();
+            try {
+                $candidate = new adnCertifiedProfessional($this->certificate->getCertifiedProfessionalId());
+                $response = $order->send($order->initOrder($candidate, $this->certificate, true));
+            } catch (Exception $exception) {
+                // reset uuid
+                if ($has_uuid) {
+                    $this->certificate->setUuid('');
+                }
+                $form->setValuesByPost();
+                ilUtil::sendFailure($exception->getMessage());
+                $this->duplicateCertificate($form);
+                return;
+            }
+            $this->certificate->update();
+            ilUtil::sendSuccess($lng->txt('adn_duplicate_created'), true);
+            $ilCtrl->redirect($this, 'listCertificates');
         }
-
         // input not valid: show form again
         $form->getItemByPostVar("signed_by")->setValue($form->getInput("signed_by"));
         $this->duplicateCertificate($form);

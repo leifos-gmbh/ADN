@@ -1,0 +1,191 @@
+openapi: 3.0.3
+info:
+  title: ADN/leifos - OpenAPI 3.0
+  description: Definition of the REST API for ADN/leifos
+  contact:
+    email: developer@plasticard.de
+  version: 0.1.0
+externalDocs:
+  description: Plasticard-ZFT GmbH & Co. KG
+  url: https://www.plasticard.de
+servers:
+  - url: https://edi3.plasticard.de
+  - url: https://edi3-development.plasticard.de
+tags:
+  - name: PLZFT
+    description: Plasticard-API
+paths:
+  /services/65/prod/v1:
+    post:
+      tags:
+        - PLZFT
+      summary: Send a new order
+      description: Sends a new order to PLZFT
+      operationId: addOrder
+      requestBody:
+        description: Create a new order
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Order'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: OK
+        '401':
+          description: Unauthorized
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: UNAUTHORIZED
+        '404':
+          description: Ressource not found
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ApiResponse404'
+        '480':
+          description: An error occured during the processing of the order
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ApiResponse480'
+        '481':
+          description: The XML validation of the order was unsuccessful
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ApiResponse481'
+        '500':
+          description: Undefined server error
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: SERVER ERROR
+      security:
+        - BasicAuth: []
+components:
+  schemas:
+    Order:
+      type: object
+      properties:
+        plzft:Certificate:
+          type: object
+          properties:
+            plzft:CertificateId:
+              type: string
+              example: f47ac10b-58cc-4372-a567-0e02b2c3d479
+            plzft:CertificateNumber:
+              type: string
+              example: 022-0-0001
+            plzft:Lastname:
+              type: string
+              example: Lastname0
+            plzft:Firstname:
+              type: string
+              format: string
+              example: Firstname0
+            plzft:Nationality:
+              type: string
+              example: Nationality0
+            plzft:Birthday:
+              type: string
+              format: date
+              example: 1999-05-04
+            plzft:IssuedBy:
+              type: string
+              example: IssuedBy0
+            plzft:ValidUntil:
+              type: string
+              format: date
+              example: 2024-05-04
+            plzft:CertificateTypes:
+              type: object
+              properties: 
+                  plzft:CertificateType: 
+                    type: string
+                    example: 8.2.2.3.1.3 Nur Tankschiffe
+            plzft:Photo:
+              type: string
+            plzft:PostalAddress:
+              type: object
+              properties:
+                plzft:AddressName:
+                  type: string
+                  example: Max Mustermann
+                plzft:AddressStreet:
+                  type: string
+                  example: Musterstrasse 1
+                plzft:AddressPostalCode:
+                  type: string
+                  example: 12345
+                plzft:AddressCity:
+                  type: string
+                  example: Musterstadt
+                plzft:AddressCountry:
+                  type: string
+                  example: Deutschland
+            plzft:ReturnAddress:
+              type: object
+              properties:
+                plzft:AddressName:
+                  type: string
+                  example: GDWS Süd
+                plzft:AddressStreet:
+                  type: string
+                  example: Hafenstrasse 1
+                plzft:AddressPostalCode:
+                  type: string
+                  example: 12346
+                plzft:AddressCity:
+                  type: string
+                  example: Lübeck
+                plzft:AddressCountry:
+                  type: string
+                  example: Deutschland
+      xml:
+        name: plzft:root
+    ApiResponse404:
+      type: object
+      properties:
+        uri:
+          type: string
+          example: /
+        method:
+          type: string
+          example: GET
+        status:
+          type: string
+          example: 405
+        error:
+          type: string
+          example: HTTP 405 Method Not Allowed
+      xml:
+        name: 'error'
+    ApiResponse480:
+      type: object
+      properties:
+        message:
+          type: string
+          example: An error occured during order processing
+      xml:
+        name: 'error'
+    ApiResponse481:
+      type: object
+      properties:
+        message:
+          type: string
+          example: There is an Error on line 4 cvc-complex-type.2.4.a
+      xml:
+        name: 'error'
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

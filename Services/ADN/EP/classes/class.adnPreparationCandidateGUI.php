@@ -1,6 +1,9 @@
 <?php
 /* Copyright (c) 2010 Leifos, GPL, see docs/LICENSE */
 
+use ILIAS\FileUpload\FileUpload;
+use ILIAS\FileUpload\Exception\IllegalStateException;
+
 /**
  * Candidate GUI class (preparation context)
  *
@@ -29,13 +32,18 @@ class adnPreparationCandidateGUI
      */
     protected $mode = "";
     // cr-008 end
+
+    protected ilLogger $logger;
     
     /**
      * Constructor
      */
     public function __construct()
     {
+        global $DIC;
         global $ilCtrl;
+
+        $this->logger = $DIC->logger()->adn();
 
         // save candidate ID through requests, cr-008 added mode
         $ilCtrl->saveParameter($this, array("cd_id", "mode"));
@@ -277,6 +285,14 @@ class adnPreparationCandidateGUI
         $first_name->setRequired(true);
         $form->addItem($first_name);
 
+        $pic = new ilImageFileInputGUI($lng->txt('adn_card_form_photo'), 'card_photo');
+        $pic->setALlowDeletion(true);
+        $pic->setUseCache(false);
+        if ($this->candidate instanceof adnCertifiedProfessional) {
+            $pic->setImage($this->candidate->getImageHandler()->getAbsolutePath() ?? '');
+        }
+        $form->addItem($pic);
+
         $birthdate = new ilDateTimeInputGUI($lng->txt("adn_birthdate"), "birthdate");
         $birthdate->setRequired(true);
         $birthdate->setStartYear(date("Y") - 100);
@@ -400,46 +416,54 @@ class adnPreparationCandidateGUI
         $header->setTitle($lng->txt("adn_shipping_address"));
         $form->addItem($header);
 
-        $ssalutation = new ilSelectInputGUI($lng->txt("adn_salutation"), "ssalutation");
-        $ssalutation->setOptions(array("m" => $lng->txt("salutation_m"),
-            "f" => $lng->txt("salutation_f")));
-        $form->addItem($ssalutation);
-
-        $sname = new ilTextInputGUI($lng->txt("adn_last_name"), "slast_name");
-        $sname->setMaxLength(50);
-        $form->addItem($sname);
-
-        $sfirst_name = new ilTextInputGUI($lng->txt("adn_first_name"), "sfirst_name");
-        $sfirst_name->setMaxLength(50);
-        $form->addItem($sfirst_name);
-
-        $scountry = new ilSelectInputGUI($lng->txt("adn_country"), "scountry");
-        $scountry->setOptions($countries);
-        $form->addItem($scountry);
-
-        $szip = new ilTextInputGUI($lng->txt("adn_zip"), "szip");
-        $szip->setMaxLength(10);
-        $szip->setSize(10);
-        $form->addItem($szip);
-
-        $scity = new ilTextInputGUI($lng->txt("adn_city"), "scity");
-        $scity->setMaxLength(50);
-        $form->addItem($scity);
-
-        $sstreet = new ilTextInputGUI($lng->txt("adn_street"), "sstreet");
-        $sstreet->setMaxLength(50);
-        $form->addItem($sstreet);
-
-        $shno = new ilTextInputGUI($lng->txt("adn_house_number"), "shno");
-        $shno->setMaxLength(10);
-        $shno->setSize(10);
-        $form->addItem($shno);
-
         $cb = new ilCheckboxInputGUI(
             $lng->txt("adn_shipping_address_activated"),
             "shipping_address_activated"
         );
         $form->addItem($cb);
+
+        $ssalutation = new ilSelectInputGUI($lng->txt("adn_salutation"), "ssalutation");
+        $ssalutation->setRequired(true);
+        $ssalutation->setOptions(array("m" => $lng->txt("salutation_m"),
+            "f" => $lng->txt("salutation_f")));
+        $cb->addSubItem($ssalutation);
+
+        $sname = new ilTextInputGUI($lng->txt("adn_last_name"), "slast_name");
+        $sname->setRequired(true);
+        $sname->setMaxLength(50);
+        $cb->addSubItem($sname);
+
+        $sfirst_name = new ilTextInputGUI($lng->txt("adn_first_name"), "sfirst_name");
+        $sfirst_name->setRequired(true);
+        $sfirst_name->setMaxLength(50);
+        $cb->addSubItem($sfirst_name);
+
+        $scountry = new ilSelectInputGUI($lng->txt("adn_country"), "scountry");
+        $scountry->setRequired(true);
+        $scountry->setOptions($countries);
+        $cb->addSubItem($scountry);
+
+        $szip = new ilTextInputGUI($lng->txt("adn_zip"), "szip");
+        $szip->setRequired(true);
+        $szip->setMaxLength(10);
+        $szip->setSize(10);
+        $cb->addSubItem($szip);
+
+        $scity = new ilTextInputGUI($lng->txt("adn_city"), "scity");
+        $scity->setRequired(true);
+        $scity->setMaxLength(50);
+        $cb->addSubItem($scity);
+
+        $sstreet = new ilTextInputGUI($lng->txt("adn_street"), "sstreet");
+        $sstreet->setRequired(true);
+        $sstreet->setMaxLength(50);
+        $cb->addSubItem($sstreet);
+
+        $shno = new ilTextInputGUI($lng->txt("adn_house_number"), "shno");
+        $shno->setRequired(true);
+        $shno->setMaxLength(10);
+        $shno->setSize(10);
+        $cb->addSubItem($shno);
 
         if ($a_mode == "create") {
             // preset: wmo of current user
@@ -564,7 +588,7 @@ class adnPreparationCandidateGUI
      */
     protected function saveCandidate($a_edit_training = false)
     {
-        global $tpl, $lng, $ilCtrl;
+        global $DIC, $tpl, $lng, $ilCtrl;
 
         $form = $this->initCandidateForm("create");
 
@@ -623,6 +647,15 @@ class adnPreparationCandidateGUI
             }
 
             if ($candidate->save()) {
+                $upload = $form->getItemByPostVar('card_photo');
+                if ($upload->getDeletionFlag()) {
+                    $this->candidate->getImageHandler()->delete();
+                }
+                $candidate->getImageHandler()->handleUpload(
+                    $DIC->upload(),
+                    $_FILES['card_photo']['tmp_name']
+                );
+
                 if (!$a_edit_training) {
                     // show success message and return to list
                     ilUtil::sendSuccess($lng->txt("adn_candidate_created"), true);
@@ -657,7 +690,7 @@ class adnPreparationCandidateGUI
      */
     protected function updateCandidate($a_edit_training = false)
     {
-        global $tpl, $lng, $ilCtrl;
+        global $DIC, $tpl, $lng, $ilCtrl;
 
         $form = $this->initCandidateForm("edit");
 
@@ -712,6 +745,16 @@ class adnPreparationCandidateGUI
             }
 
             if ($this->candidate->update()) {
+
+                $upload = $form->getItemByPostVar('card_photo');
+                if ($upload->getDeletionFlag()) {
+                    $this->candidate->getImageHandler()->delete();
+                }
+                $this->candidate->getImageHandler()->handleUpload(
+                    $DIC->upload(),
+                    $_FILES['card_photo']['tmp_name']
+                );
+
                 if ($this->last_event_dialog === true) {
                     return $this->showProviderList();
                 } elseif (!$a_edit_training) {

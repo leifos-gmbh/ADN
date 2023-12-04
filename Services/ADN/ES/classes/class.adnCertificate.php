@@ -12,6 +12,14 @@
  */
 class adnCertificate extends adnDBBase
 {
+    public const CARD_STATUS_UNDEFINED = 0;
+    public const CARD_STATUS_RECEIVED = 1;
+
+    public const CARD_STATUS_PRODUCTION = 2;
+
+    public const CARD_STATUS_SHIPPED = 3;
+
+
     // certificate types
     const DRY_MATERIAL = "dm";
     const TANK = "tank";
@@ -32,6 +40,8 @@ class adnCertificate extends adnDBBase
     const STATUS_INVALID = 1;
 
     protected $id; // [int]
+    protected string $uuid = '';
+    protected int $card_status = self::CARD_STATUS_UNDEFINED;
     protected $number = 0; // [int]
     protected $cert_prof_id = 0; // [int]
     protected $exam_id = null; // [int]
@@ -71,6 +81,36 @@ class adnCertificate extends adnDBBase
             $this->setId($a_id);
             $this->read();
         }
+    }
+
+    public static function lookupIdByUuid(string $uuid) : int
+    {
+        global $DIC;
+
+        $db = $DIC->database();
+        $query = 'select id from adn_es_certificate ' .
+            'where uuid = ' . $db->quote($uuid, ilDBConstants::T_TEXT);
+        $res = $db->query($query);
+        while ($row = $res->fetchRow(ilDBConstants::FETCHMODE_OBJECT)) {
+            return (int) $row->id;
+        }
+        return 0;
+    }
+
+    public function initUuid() : void
+    {
+        $uuid_factory = new adnCardCertificateIdentification();
+        $this->uuid = $uuid_factory->identificator();
+    }
+
+    public function getUuid() : string
+    {
+        return $this->uuid;
+    }
+
+    public function setUuid(string $uuid) : void
+    {
+        $this->uuid = $uuid;
     }
 
     /**
@@ -409,6 +449,10 @@ class adnCertificate extends adnDBBase
      */
     public static function _getFullCertificateNumber($a_wmo_id, $a_number, $a_issued_on)
     {
+        if (!$a_issued_on instanceof ilDate) {
+            return '';
+        }
+
         $year = substr($a_issued_on->get(IL_CAL_DATE), 0, 4);
         include_once("./Services/ADN/MD/classes/class.adnWMO.php");
         $number_str = adnWMO::lookupCode($a_wmo_id) . "-" .
@@ -430,6 +474,7 @@ class adnCertificate extends adnDBBase
             " WHERE id = " . $ilDB->quote($this->getId(), "integer"));
         if ($rec = $ilDB->fetchAssoc($set)) {
             $this->setNumber($rec["nr"]);
+            $this->setUuid((string) $rec['uuid']);
             $this->setCertifiedProfessionalId($rec["cp_professional_id"]);
             $this->setExaminationId($rec["ep_exam_id"]);
             $this->setValidUntil(new ilDate($rec["valid_until"], IL_CAL_DATE));
@@ -439,6 +484,7 @@ class adnCertificate extends adnDBBase
             $this->setStatus($rec["status"]);
             $this->setIsExtension($rec["is_extension"]);
             $this->setFile($rec["cfile"]);
+            $this->setCardStatus((int) $rec['card_status']);
             foreach (self::getProofTypes() as $k => $v) {
                 $this->setProof(
                     $k,
@@ -466,6 +512,7 @@ class adnCertificate extends adnDBBase
     {
         $fields = array(
             "cp_professional_id" => array("integer", $this->getCertifiedProfessionalId()),
+            'uuid' => ['text', $this->getUuid()],
             "ep_exam_id" => array("integer", $this->getExaminationId()),
             "nr" => array("integer", $this->getNumber()),
             "signed_by" => array("text", $this->getSignedBy()),
@@ -473,6 +520,7 @@ class adnCertificate extends adnDBBase
             "is_extension" => array("integer", $this->getIsExtension()),
             "status" => array("integer", $this->getStatus()),
             "cfile" => array("integer", $this->getFile()),
+            'card_status' => ['integer', $this->getCardStatus()]
             );
 
         // proofs
@@ -738,6 +786,10 @@ class adnCertificate extends adnDBBase
     {
         global $ilDB;
 
+        if (!$a_issued_on instanceof ilDate) {
+            return 0;
+        }
+
         $year = substr($a_issued_on->get(IL_CAL_DATE), 0, 4);
         $from = $year . "-01-01 00:00:00";
         $to = $year . "-12-31 23:59:59";
@@ -832,6 +884,7 @@ class adnCertificate extends adnDBBase
         
 
         // save current certificate as extension
+        $this->setCardStatus(self::CARD_STATUS_UNDEFINED);
         $this->setId($ilDB->nextId("adn_es_certificate"));
         $id = $this->getId();
         $this->setExaminationId(null);
@@ -1259,5 +1312,15 @@ class adnCertificate extends adnDBBase
         } else {
             return $this->getIssuedOn();
         }
+    }
+
+    public function getCardStatus() : int
+    {
+        return $this->card_status;
+    }
+
+    public function setCardStatus(int $card_status) : void
+    {
+        $this->card_status = $card_status;
     }
 }

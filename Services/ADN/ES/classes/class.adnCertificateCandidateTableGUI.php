@@ -44,6 +44,8 @@ class adnCertificateCandidateTableGUI extends ilTable2GUI
         $this->addColumn($this->lng->txt("adn_first_name"), "first_name");
         $this->addColumn($this->lng->txt("adn_birthdate"), "birthdate");
         $this->addColumn($this->lng->txt("adn_certificate issued_on"), "issued_on");
+        $this->addColumn($this->lng->txt('adn_certificate_type'), 'certificate_type');
+        $this->addColumn($this->lng->txt('adn_certificate_status'), 'card_status');
         $this->addColumn($this->lng->txt("actions"));
     
         $this->setDefaultOrderField("last_name");
@@ -81,23 +83,6 @@ class adnCertificateCandidateTableGUI extends ilTable2GUI
             $a_set["cp_professional_id"],
             $a_set["ep_exam_event_id"]
         )) {
-            // edit link
-            if (adnPerm::check(adnPerm::ES, adnPerm::WRITE)) {
-                $ilCtrl->setParameter($this->parent_obj, "ct_id", $ct_id);
-                $this->tpl->setCurrentBlock("action");
-                $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_edit_certificate"));
-                $this->tpl->setVariable(
-                    "HREF_CMD",
-                    $ilCtrl->getLinkTarget($this->parent_obj, "editCertificate")
-                );
-                $this->tpl->parseCurrentBlock();
-                $ilCtrl->setParameter($this->parent_obj, "ct_id", "");
-            }
-
-            // checkbox
-            $this->tpl->setCurrentBlock("cb");
-            $this->tpl->setVariable("CID", $ct_id);
-            $this->tpl->parseCurrentBlock();
 
             // issued on date
             $certificate = new adnCertificate($ct_id);
@@ -107,6 +92,41 @@ class adnCertificateCandidateTableGUI extends ilTable2GUI
                     $certificate->getIssuedOn()
                 )
             );
+            if ($certificate->getUuid() === '') {
+                // checkbox only for certificate type "paper"
+                $this->tpl->setCurrentBlock("cb");
+                $this->tpl->setVariable("CID", $ct_id);
+                $this->tpl->parseCurrentBlock();
+
+                // edit link
+                if (adnPerm::check(adnPerm::ES, adnPerm::WRITE)) {
+                    $ilCtrl->setParameter($this->parent_obj, "ct_id", $ct_id);
+                    $this->tpl->setCurrentBlock("action");
+                    $this->tpl->setVariable("TXT_CMD", $lng->txt("adn_edit_certificate"));
+                    $this->tpl->setVariable(
+                        "HREF_CMD",
+                        $ilCtrl->getLinkTarget($this->parent_obj, "editCertificate")
+                    );
+                    $this->tpl->parseCurrentBlock();
+                    $ilCtrl->setParameter($this->parent_obj, "ct_id", "");
+                }
+
+                $this->tpl->setVariable(
+                    'VAL_CERTIFICATE_TYPE',
+                    $this->lng->txt('adn_certificate_type_paper')
+                );
+                $this->tpl->setVariable('VAL_CERTIFICATE_STATUS');
+            } else {
+
+                $this->tpl->setVariable(
+                    'VAL_CERTIFICATE_TYPE',
+                    $this->lng->txt('adn_certificate_type_card')
+                );
+                $this->tpl->setVariable(
+                    'VAL_CERTIFICATE_STATUS',
+                    $this->lng->txt('adn_certificate_status_' . (string) $certificate->getCardStatus())
+                );
+            }
         } else {
             // create link
             if (adnPerm::check(adnPerm::ES, adnPerm::WRITE)) {

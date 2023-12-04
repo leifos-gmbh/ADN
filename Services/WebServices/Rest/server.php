@@ -6,7 +6,7 @@ chdir('../../..');
 include_once 'Services/Context/classes/class.ilContext.php';
 ilContext::init(ilContext::CONTEXT_REST);
 
-$_COOKIE['client_id'] = $_GET['client_id'] = $_REQUEST['client_id'];
+$_COOKIE['ilClientId'] = $_GET['client_id'] = $_REQUEST['client_id'] = 'adn';
 
 include_once './include/inc.header.php';
 

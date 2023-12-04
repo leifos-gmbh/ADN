@@ -17,6 +17,20 @@
             <plzft:CertificateType>8.2.2.3.3.2</plzft:CertificateType>
         </plzft:CertificateTypes>
         <plzft:Photo>ZGVmYXVsdA==</plzft:Photo>
+        <plzft:PostalAddress>
+            <plzft:AddressName>Max Mustermann</plzft:AddressName>
+            <plzft:AddressStreet>Musterstr. 1</plzft:AddressStreet>
+            <plzft:AddressPostalCode>12345</plzft:AddressPostalCode>
+            <plzft:AddressCity>Musterstadt</plzft:AddressCity>
+            <plzft:AddressCountry>Mauritius</plzft:AddressCountry>
+        </plzft:PostalAddress>
+        <plzft:ReturnAddress>
+            <plzft:AddressName>GDWS Süd</plzft:AddressName>
+            <plzft:AddressStreet>Wasserstr. 1</plzft:AddressStreet>
+            <plzft:AddressPostalCode>12346</plzft:AddressPostalCode>
+            <plzft:AddressCity>Lübeck</plzft:AddressCity>
+            <plzft:AddressCountry>Deutschland</plzft:AddressCountry>
+        </plzft:ReturnAddress>
     </plzft:Certificate>
     <plzft:Certificate>
         <plzft:CertificateId>f47ac10b-58cc-4372-a567-0e02b2c3d478</plzft:CertificateId>
@@ -32,5 +46,19 @@
             <plzft:CertificateType>8.2.2.3.3.2</plzft:CertificateType>
         </plzft:CertificateTypes>
         <plzft:Photo>ZGVmYXVsdA==</plzft:Photo>
+        <plzft:PostalAddress>
+            <plzft:AddressName>Max Mustermann</plzft:AddressName>
+            <plzft:AddressStreet>Musterstr. 1</plzft:AddressStreet>
+            <plzft:AddressPostalCode>12345</plzft:AddressPostalCode>
+            <plzft:AddressCity>Musterstadt</plzft:AddressCity>
+            <plzft:AddressCountry>Mauritius</plzft:AddressCountry>
+        </plzft:PostalAddress>
+        <plzft:ReturnAddress>
+            <plzft:AddressName>GDWS Süd</plzft:AddressName>
+            <plzft:AddressStreet>Wasserstr. 1</plzft:AddressStreet>
+            <plzft:AddressPostalCode>12346</plzft:AddressPostalCode>
+            <plzft:AddressCity>Lübeck</plzft:AddressCity>
+            <plzft:AddressCountry>Deutschland</plzft:AddressCountry>
+        </plzft:ReturnAddress>
     </plzft:Certificate>
 </plzft:root>

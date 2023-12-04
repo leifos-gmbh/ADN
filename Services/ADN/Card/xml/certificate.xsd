@@ -30,8 +30,39 @@
                                     </xs:sequence>
                                 </xs:complexType>
                             </xs:element>
-                            <xs:element maxOccurs="1" minOccurs="1" name="Photo"
-                                type="xs:base64Binary"/>
+                            <xs:element maxOccurs="1" minOccurs="1" name="Photo" type="xs:base64Binary"/>
+                            <xs:element maxOccurs="1" minOccurs="1" name="PostalAddress">
+                                <xs:complexType>
+                                    <xs:all>
+                                        <xs:element maxOccurs="1" minOccurs="1" name="AddressName"
+                                                    type="plzft:String50Type" />
+                                        <xs:element maxOccurs="1" minOccurs="1" name="AddressStreet"
+                                                    type="plzft:String50Type" />
+                                        <xs:element maxOccurs="1" minOccurs="1" name="AddressPostalCode"
+                                                    type="plzft:String50Type" />
+                                        <xs:element maxOccurs="1" minOccurs="1" name="AddressCity"
+                                                    type="plzft:String50Type" />
+                                        <xs:element maxOccurs="1" minOccurs="1" name="AddressCountry"
+                                                    type="plzft:String50Type" />
+                                    </xs:all>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="1" name="ReturnAddress">
+                                <xs:complexType>
+                                    <xs:all>
+                                        <xs:element maxOccurs="1" minOccurs="1" name="AddressName"
+                                                    type="plzft:String50Type" />
+                                        <xs:element maxOccurs="1" minOccurs="1" name="AddressStreet"
+                                                    type="plzft:String50Type" />
+                                        <xs:element maxOccurs="1" minOccurs="1" name="AddressPostalCode"
+                                                    type="plzft:String50Type" />
+                                        <xs:element maxOccurs="1" minOccurs="1" name="AddressCity"
+                                                    type="plzft:String50Type" />
+                                        <xs:element maxOccurs="1" minOccurs="1" name="AddressCountry"
+                                                    type="plzft:String50Type" />
+                                    </xs:all>
+                                </xs:complexType>
+                            </xs:element>
                         </xs:all>
                     </xs:complexType>
                 </xs:element>

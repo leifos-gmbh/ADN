@@ -1,0 +1,459 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Order API ADN/Leifos",
+    "version": "1.1.0",
+    "description": "### This API receives and processes orders for ADN/Leifos\nDEVELOPMENT ENVIROMENT\n",
+    "contact": {
+      "name": "Plasticard-ZFT GmbH & Co. KG",
+      "email": "developer@plasticard.de"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://edi3-development.plasticard.de",
+      "description": "Test/Development Enviroment"
+    }
+  ],
+  "paths": {
+    "/services": {},
+    "/services/65": {},
+    "/services/65/test": {},
+    "/services/65/test/v1": {},
+    "/services/65/test/v1/heartbeat": {
+      "get": {
+        "summary": "Signals if the API is active",
+        "responses": {
+          "200": {
+            "description": "API is alive",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "example": "ALIVE"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/services/65/test/v1/order": {
+      "post": {
+        "summary": "Sends an order and validates against an XML schema",
+        "operationId": "order",
+        "requestBody": {
+          "description": "Request body",
+          "content": {
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/orderrequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Order successfully validated and accepted",
+            "content": {
+              "text/plain": {
+                "example": "OK"
+              }
+            }
+          },
+          "404": {
+            "description": "Ressource not found",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/orderrequest404"
+                }
+              }
+            }
+          },
+          "480": {
+            "description": "Order Processing Error",
+            "content": {
+              "text/plain": {
+                "example": "ERROR WHILE PROCESSING THE ORDER HEADER"
+              }
+            }
+          },
+          "481": {
+            "description": "XML Validation Error",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/orderrequest481"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/services/65/test/v1/xmlschema": {
+      "get": {
+        "summary": "Returns the most recent XML schema",
+        "operationId": "xmlschema",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/xmlschema"
+                }
+              }
+            }
+          },
+          "480": {
+            "description": "Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "example": "ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/services/65/test/v1/xmlschema/download": {
+      "get": {
+        "summary": "Returns the most recent XML schema as file",
+        "operationId": "xmlschemadownload",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/xmlschema"
+                }
+              }
+            }
+          },
+          "480": {
+            "description": "Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "example": "ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/services/65/test/v1/swagger": {
+      "get": {
+        "summary": "Returns the most recent Swagger OpenAPI 3 definition",
+        "operationId": "swagger",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "openapi": "3.0.1",
+                    "info": {
+                      "title": "Order API ADN/Leifos"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "480": {
+            "description": "Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "example": "ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/services/65/test/v1/status/card": {
+      "post": {
+        "summary": "Returns the current production state of one or more cards",
+        "operationId": "cardstatus",
+        "requestBody": {
+          "description": "Request body",
+          "content": {
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/CardStateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Requested card(s) found",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/CardStateResponse"
+                }
+              }
+            }
+          },
+          "480": {
+            "description": "Requested card(s) not found or error while processing the request",
+            "content": {
+              "text/plain": {
+                "example": "ERROR WHILE PROCESSING CARD STATUS REQUEST"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/services/65/test/v1/status/order": {
+      "post": {
+        "summary": "Returns the current production state of one or more orders",
+        "operationId": "orderstatus",
+        "requestBody": {
+          "description": "Request body",
+          "content": {
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderStateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Requested order(s) found",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderStateResponse"
+                }
+              }
+            }
+          },
+          "480": {
+            "description": "Requested order(s) not found or error while processing the request",
+            "content": {
+              "text/plain": {
+                "example": "ERROR WHILE PROCESSING ORDER STATUS REQUEST"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "basicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "orderrequest": {
+        "type": "object",
+        "xml": {
+          "name": "plzft:root"
+        },
+        "properties": {
+          "plzft:Certificate": {
+            "type": "object",
+            "properties": {
+              "plzft:CertificateId": {
+                "type": "string",
+                "example": "w1w1w1w1-x2x2-y3y3-z4z4z4z4z4z4z4"
+              },
+              "plzft:CertificateNumber": {
+                "type": "string",
+                "example": "000-1-2222"
+              }
+            }
+          }
+        }
+      },
+      "orderrequest404": {
+        "type": "object",
+        "xml": {
+          "name": "root"
+        },
+        "properties": {
+          "uri": {
+            "type": "string",
+            "example": "v0/order"
+          },
+          "method": {
+            "type": "string",
+            "example": "POST"
+          },
+          "status": {
+            "type": "integer",
+            "example": 404
+          },
+          "error": {
+            "type": "string",
+            "example": "HTTP 404 Not Found"
+          }
+        }
+      },
+      "orderrequest481": {
+        "type": "object",
+        "xml": {
+          "name": "error"
+        },
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "v0/order"
+          },
+          "method": {
+            "type": "string",
+            "example": "POST"
+          },
+          "status": {
+            "type": "integer",
+            "example": 404
+          },
+          "error": {
+            "type": "string",
+            "example": "The value 022-0-000033 of element plzft:CertificateNumber is not valid."
+          }
+        }
+      },
+      "xmlschema": {
+        "type": "object",
+        "format": "binary",
+        "xml": {
+          "name": "xs:schema"
+        },
+        "properties": {
+          "xs:element name=\"root\"": {
+            "type": "object"
+          }
+        }
+      },
+      "CardStateRequest": {
+        "type": "object",
+        "xml": {
+          "name": "plzft:root"
+        },
+        "properties": {
+          "plzft:CertificateId": {
+            "type": "string",
+            "example": "w1w1w1w1-x2x2-y3y3-z4z4z4z4z4z4z4"
+          }
+        }
+      },
+      "CardStateResponse": {
+        "type": "object",
+        "xml": {
+          "name": "plzft:CardStateResponse"
+        },
+        "properties": {
+          "plzft:Card": {
+            "type": "object",
+            "properties": {
+              "plzft:Id": {
+                "type": "integer",
+                "example": "99"
+              },
+              "plzft:CertificateId": {
+                "type": "string",
+                "example": "00000000-0000-0000-0000-000000000000"
+              },
+              "plzft:ProductionState": {
+                "type": "integer",
+                "example": "0"
+              },
+              "plzft:UID": {
+                "type": "string",
+                "example": "A0A1B2C3D4E5F"
+              }
+            }
+          }
+        }
+      },
+      "OrderStateRequest": {
+        "type": "object",
+        "xml": {
+          "name": "plzft:root"
+        },
+        "properties": {
+          "plzft:OrderId": {
+            "type": "string",
+            "example": "12345678901234567890123456789012"
+          }
+        }
+      },
+      "OrderStateResponse": {
+        "type": "object",
+        "xml": {
+          "name": "plzft:OrderStateResponse"
+        },
+        "properties": {
+          "plzft:Order": {
+            "type": "object",
+            "properties": {
+              "plzft:Id": {
+                "type": "integer",
+                "example": "99"
+              },
+              "plzft:OrderId": {
+                "type": "string",
+                "example": "12345678901234567890123456789012"
+              },
+              "plzft:ProductionState": {
+                "type": "integer",
+                "example": "0"
+              },
+              "plzft:Card": {
+                "type": "object",
+                "properties": {
+                  "plzft:Id": {
+                    "type": "integer",
+                    "example": "0"
+                  },
+                  "plzft:CertificateId": {
+                    "type": "string",
+                    "example": "w1w1w1w1-x2x2-y3y3-z4z4z4z4z4z4z4"
+                  },
+                  "plzft:ProductionState": {
+                    "type": "integer",
+                    "example": "0"
+                  },
+                  "plzft:UID": {
+                    "type": "string",
+                    "example": "0A1B2C3D4E5F"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "basicAuth": []
+    }
+  ]
+}

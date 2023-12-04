@@ -41,15 +41,15 @@ class adnCertifiedProfessionalDirectoryTableGUI extends ilTable2GUI
     public function __construct($a_parent_obj, $a_parent_cmd, ilDate $a_date_from, ilDate $a_date_to, $a_wmo)
     {
         global $ilCtrl, $lng;
-        
+
+        $this->setId("adn_tbl_cpd");
+
         parent::__construct($a_parent_obj, $a_parent_cmd);
 
         $this->date_from = $a_date_from;
         $this->date_to = $a_date_to;
         $this->wmo = (int) $a_wmo;
 
-        $this->setId("adn_tbl_cpd");
-        
         $title = $lng->txt("adn_certified_professional_directory") . ": " .
             ilDatePresentation::formatDate($this->date_from) . " - " .
             ilDatePresentation::formatDate($this->date_to);
@@ -80,6 +80,7 @@ class adnCertifiedProfessionalDirectoryTableGUI extends ilTable2GUI
 
         $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.directory_row.html", "Services/ADN/CP");
+        $this->setExportFormats([self::EXPORT_CSV]);
 
         $this->importData();
     }
@@ -158,5 +159,28 @@ class adnCertifiedProfessionalDirectoryTableGUI extends ilTable2GUI
         $this->tpl->setVariable("VAL_VALID_UNTIL", ilDatePresentation::formatDate(
             new ilDate($a_set["valid_until"], IL_CAL_DATE)
         ));
+    }
+
+    protected function fillRowCSV($a_csv, $a_set)
+    {
+        $a_csv->addColumn($a_set["full_nr"]);
+        $a_csv->addColumn($a_set["last_name"]);
+        $a_csv->addColumn($a_set["first_name"]);
+        $a_csv->addColumn(
+            ilDatePresentation::formatDate(
+                new ilDate($a_set['birthdate'], IL_CAL_DATE))
+        );
+        $a_csv->addColumn($a_set["citizenship"]);
+        $a_csv->addColumn($a_set["type"]);
+        $a_csv->addColumn(
+            ilDatePresentation::formatDate(
+                new ilDate($a_set['valid_until'], IL_CAL_DATE))
+        );
+        $a_csv->addColumn(
+            ilDatePresentation::formatDate(
+                new ilDate($a_set['issued_on'], IL_CAL_DATE))
+        );
+        $a_csv->addColumn($a_set["signed_by"]);
+        $a_csv->addRow();
     }
 }

@@ -45,6 +45,7 @@ class adnCertifiedProfessional extends adnDBBase
     protected $blocked_until; // [ilDate]
     protected $ilias_user_id; // [int]
     protected $foreign_cert_handed_in; // [bool]	// Bescheinigung aus dem Ausland vorgelegt #13
+    protected ?adnCertifiedProfessionalImageHandler $image_handler = null;
 
     /**
      * Constructor
@@ -57,6 +58,14 @@ class adnCertifiedProfessional extends adnDBBase
             $this->setId($a_id);
             $this->read();
         }
+    }
+
+    public function getImageHandler() : ?adnCertifiedProfessionalImageHandler
+    {
+        if (!$this->image_handler instanceof adnCertifiedProfessionalImageHandler && $this->getId()) {
+            $this->image_handler = new adnCertifiedProfessionalImageHandler($this->getId());
+        }
+        return $this->image_handler;
     }
 
     /**
@@ -870,6 +879,8 @@ class adnCertifiedProfessional extends adnDBBase
         $ilDB->insert("adn_cp_professional", $fields);
 
         parent::_save($id, "adn_cp_professional");
+
+        $this->image_handler = new adnCertifiedProfessionalImageHandler($id);
         
         return $id;
     }
