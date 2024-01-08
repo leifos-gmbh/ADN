@@ -277,7 +277,7 @@ class adnExaminationEventGUI
         $form->addItem($cochair1);
 
         $cochair2 = new ilSelectInputGUI($lng->txt("adn_cochair") . " 2", "cochair2");
-        $cochair2->setOptions(['' => $lng->txt('select_one')] + $cochairs);
+        $cochair2->setOptions(['' => ''] + $cochairs);
         $form->addItem($cochair2);
 
         $cost = new ilNumberInputGUI($lng->txt("adn_additional_costs"), "cost");
