@@ -679,6 +679,11 @@ class adnCertificate extends adnDBBase
                 ")";
         }
 
+        if (isset($a_filter['card_status']) && $a_filter['card_status'] !== false) {
+            $where[] = '( ct.card_status = ' . $ilDB->quote($a_filter['card_status'], ilDBConstants::T_INTEGER) .' AND  ' .
+                'ct.uuid IS NOT NULL ) ';
+        }
+
         // filter only one professional
         if (isset($a_filter["cp_professional_id"]) && $a_filter["cp_professional_id"] > 0) {
             $where[] = "ct.cp_professional_id = " .

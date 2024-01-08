@@ -21,6 +21,8 @@ class adnCertificateTableGUI extends ilTable2GUI
     // [object] certified professional
     protected $cp;
 
+    protected $is_admin = false;
+
     /**
      * Constructor
      *
@@ -30,7 +32,7 @@ class adnCertificateTableGUI extends ilTable2GUI
      */
     public function __construct($a_parent_obj, $a_parent_cmd, $a_cp_id = 0)
     {
-        global $ilCtrl, $lng;
+        global $ilCtrl, $lng, $DIC;
 
         $this->setId("adn_tbl_crt");
 
@@ -45,6 +47,11 @@ class adnCertificateTableGUI extends ilTable2GUI
         // title
         if ($this->cp_id == 0) {
             $this->setTitle($lng->txt("adn_certificates"));
+            // adn-patch admin role can create multiple duplicates
+            $this->is_admin = $DIC->rbac()->review()->isAssigned(
+                $DIC->user()->getId(),
+                SYSTEM_ROLE_ID
+            );
         } else {
             $this->setTitle($lng->txt("adn_certificates") . ": " .
                 $this->cp->getLastname() . ", " . $this->cp->getFirstname());
@@ -55,6 +62,9 @@ class adnCertificateTableGUI extends ilTable2GUI
         $this->user_wmo = adnUser::lookupWmoId();
 
         // table columns
+        if ($this->is_admin) {
+            $this->addColumn('', 'cp_id');
+        }
         $this->addColumn($this->lng->txt("adn_number"), "full_nr");
         $this->addColumn($this->lng->txt("adn_last_name"), "last_name");
         $this->addColumn($this->lng->txt("adn_first_name"), "first_name");
@@ -73,6 +83,11 @@ class adnCertificateTableGUI extends ilTable2GUI
         $this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
         $this->setRowTemplate("tpl.certificates_row.html", "Services/ADN/CP");
 
+        if ($this->is_admin) {
+            $this->enable('select_all');
+            $this->setSelectAllCheckbox('ct_ids');
+            $this->addMultiCommand('createDuplicates', $this->lng->txt('adn_card_create_duplicates'));
+        }
         $this->importData();
     }
 
@@ -86,6 +101,9 @@ class adnCertificateTableGUI extends ilTable2GUI
         if ($this->cp_id == 0) {
             $this->initFilter();
             $cert_filter = $this->filter;
+            if (($cert_filter['card_status'] ?? false) !== false) {
+                $cert_filter['card_status'] -= 1;
+            }
         } else {
             $cert_filter = array("cp_professional_id" => $this->cp_id);
             $include_invalids = true;
@@ -137,6 +155,22 @@ class adnCertificateTableGUI extends ilTable2GUI
         );
         $first_name->readFromSession();
         $this->filter["first_name"] = $first_name->getValue();
+
+        $card_status = $this->addFilterItemByMetaType(
+            'card_status',
+            self::FILTER_SELECT,
+            false,
+            $this->lng->txt('adn_certificate_status')
+        );
+        $card_status->setOptions([
+            0 => $this->lng->txt('adn_certificate_status_all'),
+            1  => $this->lng->txt('adn_certificate_status_0'),
+            2  => $this->lng->txt('adn_certificate_status_1'),
+            3  => $this->lng->txt('adn_certificate_status_2'),
+            4  => $this->lng->txt('adn_certificate_status_3')
+        ]);
+        $card_status->readFromSession();
+        $this->filter['card_status'] = $card_status->getValue();
     }
     
     /**
@@ -152,6 +186,18 @@ class adnCertificateTableGUI extends ilTable2GUI
         $ilCtrl->setParameter($this->parent_obj, "ct_id", $a_set["id"]);
 
         $cert = new adnCertificate($a_set['id']);
+        if (
+            $this->is_admin === true &&
+            $this->cp_id == 0 &&
+            $a_set['status'] == adnCertificate::STATUS_VALID &&
+            $a_set['issued_by_wmo'] == $this->user_wmo
+        ) {
+            $this->tpl->setVariable('CT_ID', $a_set['id']);
+        } elseif ($this->is_admin) {
+            $this->tpl->setCurrentBlock('no_check');
+            $this->tpl->setVariable('NO_CHECKBOX', '');
+            $this->tpl->parseCurrentBlock();
+        }
 
         // details
         $this->tpl->setCurrentBlock("action");

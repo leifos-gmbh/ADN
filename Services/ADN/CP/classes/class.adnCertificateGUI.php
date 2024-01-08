@@ -83,7 +83,9 @@ class adnCertificateGUI
                     case "extendCertificate":
                     case "saveExtension":
                     case "duplicateCertificate":
+                    case 'createDuplicates':
                     case "saveDuplicate":
+                    case 'saveDuplicates':
                     case "generateInvoice":
                     case "saveInvoice":
                     case "edit":
@@ -184,6 +186,18 @@ class adnCertificateGUI
         $card = new ilTemplate('tpl.checkcard_inline.html', true, true, 'Services/ADN/Card');
 
         $certificate = new adnCertificate((int) $_GET['ct_id']);
+        if ($certificate->getDuplicateDates() !== []) {
+            $dates = [];
+            foreach ($certificate->getDuplicateDates() as $dt) {
+                $dates[] = ilDatePresentation::formatDate($dt);
+            }
+            $card->setVariable(
+                'DUPLICATE_CREATED_ON',
+                $lng->txt('adn_duplicated_on') . ' ' . implode(', ', $dates)
+            );
+        }
+
+
         $professional = new adnCertifiedProfessional($certificate->getCertifiedProfessionalId());
 
         $card->setVariable('TXT_BESCHEINIGUNGSNUMMER', $certificate->getFullCertificateNumber());
@@ -884,6 +898,79 @@ class adnCertificateGUI
             $form = $this->initCertificateForm("duplicate");
         }
         $tpl->setContent($form->getHTML());
+    }
+
+    public function createDuplicates() : void
+    {
+        global $DIC;
+
+        $ctrl = $DIC->ctrl();
+        $lng = $DIC->language();
+        $tpl = $DIC->ui()->mainTemplate();
+
+        $ct_ids = $DIC->http()->request()->getParsedBody()['ct_ids'] ?? [];
+        if ($ct_ids === []) {
+            ilUtil::sendFailure($DIC->language()->txt('select_one'), true);
+            $DIC->ctrl()->redirect($this, 'listCertificates');
+        }
+
+        $confirmation_gui = new ilConfirmationGUI();
+        $confirmation_gui->setFormAction($ctrl->getFormAction($this));
+        $confirmation_gui->setHeaderText($lng->txt('adn_card_create_duplicates_sure'));
+        $confirmation_gui->setCancel($lng->txt('cancel'), 'listCertificates');
+        $confirmation_gui->setConfirm($lng->txt('adn_card_create_duplicates'), 'saveDuplicates');
+
+        foreach ($ct_ids as $certificate_id) {
+            $certificate = new adnCertificate($certificate_id);
+            $professional = new adnCertifiedProfessional($certificate->getCertifiedProfessionalId());
+
+            $confirmation_gui->addItem(
+                'ct_ids[]',
+                $certificate_id,
+                $certificate->getFullCertificateNumber(). ': ' .
+                $professional->getLastName() . ', ' . $professional->getFirstName()
+            );
+        }
+        $tpl->setContent($confirmation_gui->getHTML());
+
+    }
+
+    protected function saveDuplicates()
+    {
+        global $DIC;
+
+        $ctrl = $DIC->ctrl();
+        $lng = $DIC->language();
+        $tpl = $DIC->ui()->mainTemplate();
+
+        $ct_ids = $DIC->http()->request()->getParsedBody()['ct_ids'] ?? [];
+        if ($ct_ids === []) {
+            ilUtil::sendFailure($DIC->language()->txt('select_one'), true);
+            $DIC->ctrl()->redirect($this, 'listCertificates');
+        }
+
+        foreach ($ct_ids as $certificate_id) {
+            $certificate = new adnCertificate($certificate_id);
+            $has_uuid = $certificate->getUuid() !== '';
+            if (!$has_uuid) {
+                $certificate->initUuid();
+            }
+            $order = new adnCardCertificateOrderHandler();
+            try {
+                $candidate = new adnCertifiedProfessional($certificate->getCertifiedProfessionalId());
+                $response = $order->send($order->initOrder($candidate, $certificate, true));
+            } catch (Exception $e) {
+                if ($has_uuid) {
+                    $certificate->setUuid('');
+                    ilUtil::sendFailure($e->getMessage(), true);
+                    $ctrl->redirect($this, 'listCertificates');
+                }
+            }
+            $certificate->createDuplicate(new ilDate(time(), IL_CAL_UNIX));
+            $certificate->update();
+        }
+        ilUtil::sendSuccess($lng->txt('adn_duplicates_created'));
+        $ctrl->redirect($this, 'listCertificates');
     }
 
     /**

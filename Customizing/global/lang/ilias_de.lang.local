@@ -860,6 +860,7 @@ adn#:#adn_card_missing_photo_info#:#Bitte ordnen Sie der/dem Sachkundigen ein Au
 adn#:#adn_card_plc_success#:#Die Einstellungen zum Kartendruck-Service konnten erfolgreich validiert werden.
 adn#:#adn_card_his_success#:#Die Einstellungen zum HID "Trusted Tag Service" konnten erfolgreich validiert werden.
 adn#:#adn_card_plc_con_failed#:#Die Verbindung zum Kartendruck-Service konnte nicht aufgebaut werden. Bitte überprüfen Sie die Einstellungen.
+adn#:#adn_certificate_status_all#:#-Alle-
 adn#:#adn_certificate_status_0#:#Druckauftrag übermittelt
 adn#:#adn_certificate_status_1#:#Druckauftrag bestätigt
 adn#:#adn_certificate_status_2#:#Druck in Bearbeitung
@@ -870,3 +871,6 @@ adn#:#adn_card_order_status#:#Status der Druckaufträge der Sachkundigen-Karten
 adn#:#adn_card_order_status_desc#:#Liest den Status der Druckaufträge über den Druck-Webservice aus.
 adn#:#adn_card_plc_proxy#:#Proxy
 adn#:#adn_card_plc_proxy_info#:#Optionaler "Proxy Host : Port" falls der Aufruf der Druckservice-Url über einen Proxy erfolgen muss.
+adn#:#adn_card_create_duplicates#:#Ersatzausfertigungen erstellen
+adn#:#adn_card_create_duplicates_sure#:#Sind Sie sicher, dass Sie für die folgenden Sachkundigen Ersatzausfertigungen austellen möchten?
+adn#:#adn_duplicates_created#:#Für die ausgewählten Sachkundigen wurden Ersatzausfertigungen bestellt.

@@ -221,7 +221,7 @@ class adnCardAdministrationGUI
     protected function showToolbar()
     {
         $this->toolbar->setFormAction($this->ctrl->getFormAction($this));
-        if ($this->settings->hasNfCSettings()) {
+        if ($this->settings->hasPlcSettings()) {
             $validation_button = $this->ui_factory->button()->standard(
                 $this->lng->txt('adn_card_plc_button_validation'),
                 $this->ctrl->getLinkTarget($this, 'validatePlcSettings')
