@@ -97,7 +97,13 @@ class ilNusoapUserAdministrationAdapter
     // PRIVATE
     public function __enableWSDL()
     {
-        $this->server->configureWSDL(SERVICE_NAME, SERVICE_NAMESPACE);
+        // begin-patch adn
+        $this->server->configureWSDL(
+            SERVICE_NAME,
+            SERVICE_NAMESPACE,
+            ilSoapFunctions::buildHTTPPath() . '/webservice/soap/server.php'
+        );
+        // end-patch adn
 
         return true;
     }

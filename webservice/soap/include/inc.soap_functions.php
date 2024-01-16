@@ -920,6 +920,9 @@ class ilSoapFunctions
             $uri = dirname($uri);
         }
         // begin-patch adn
+        if (getenv('ADN_PROXY_HOST')) {
+            $host = getenv('ADN_PROXY_HOST');
+        }
         $uri = ilUtil::removeTrailingPathSeparators($protocol . $host . $uri);
         $proxy_uri = '';
         if (getenv('ADN_PROXY_URI')) {
