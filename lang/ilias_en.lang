@@ -1461,7 +1461,8 @@ assessment#:#tst_finished#:#Finished
 assessment#:#tst_form_dynamic_question_set_config#:#Continues Question Selection
 assessment#:#tst_gap_analysis#:#Gap Analysis
 assessment#:#tst_general_properties#:#General Settings
-assessment#:#tst_header_participant#:#Your Answer:
+assessment#:#tst_header_participant#:#Question and your answer:
+assessment#:#tst_header_participant_no_answer#:#Question - not answered
 assessment#:#tst_header_solution#:#Best Solution:
 assessment#:#tst_heading_scoring#:#Scoring
 assessment#:#tst_hide_side_list#:#Hide List of Questions
@@ -13334,6 +13335,7 @@ rbac#:#mobs_visible#:#Media Objects/Pools administration is visible
 rbac#:#mobs_write#:#User can edit settings in Media Objects/Pools administration
 rbac#:#moderate#:#Moderate
 rbac#:#moderate_frm#:#Moderate
+rbac#:#msg_anonymous_cannot_be_assigned#:#Anonymous cannot be assigned to a role.
 rbac#:#msg_no_roles_of_type#:#No Roles available with selected filter setting
 rbac#:#news_add_news#:#Add News
 rbac#:#nots_edit_permissions#:#User can change permission settings of Notes administration.
