@@ -272,8 +272,7 @@ class adnExaminationEventGUI
         $form->addItem($chair);
 
         $cochair1 = new ilSelectInputGUI($lng->txt("adn_cochair") . " 1", "cochair1");
-        $cochair1->setRequired(true);
-        $cochair1->setOptions($cochairs);
+        $cochair1->setOptions(['' => ''] + $cochairs);
         $form->addItem($cochair1);
 
         $cochair2 = new ilSelectInputGUI($lng->txt("adn_cochair") . " 2", "cochair2");
